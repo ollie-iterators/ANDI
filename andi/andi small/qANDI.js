@@ -49,33 +49,5 @@ function init_module() {
         });
     };
 
-    //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-    qANDI.results = function () {
-        andiBar.updateResultsSummary("Landmarks: " + qANDI.landmarks.count);
-        if (!andiBar.focusIsOnInspectableElement()) {
-            andiBar.showElementControls();
-            andiBar.showStartUpSummary("Landmark structure found.<br />Ensure that each landmark is applied appropriately to the corresponding section of the page.", true);
-        }
-
-        andiAlerter.updateAlertList();
-
-        $("#ANDI508").focus();
-    };
-
-    //This function will update the info in the Active Element Inspection.
-    //Should be called after the mouse hover or focus in event.
-    AndiModule.inspect = function (element) {
-        if ($(element).hasClass("ANDI508-element")) {
-            andiBar.prepareActiveElementInspection(element);
-
-            var elementData = $(element).data("andi508");
-            var addOnProps = AndiData.getAddOnProps(element, elementData, ["aria-busy", "aria-relevant"]);
-
-            andiBar.displayTable(elementData, element, addOnProps);
-
-            andiBar.displayOutput(elementData, element, addOnProps);
-        }
-    };
     qANDI.analyze();
-    qANDI.results();
 }//end init
