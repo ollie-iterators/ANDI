@@ -1,0 +1,61 @@
+# Notes about how to edit code
+  - There are levels that dictate how much the code can be altered.
+    - 1. DO NOT ALTER:
+         - This refers to all the code that came with the standard ANDI version (except for changing allVisibleElements
+           to allElements, changing the source_url for andi)
+             - NOTE: This may possibly include changing the condition to test the code to use whether it is tabbable to
+               replace ":focusable,canvas" as the condition for fandi because it makes the code look the same whether or
+               not all of the elements are being checked
+    - 2. Improve formatting, Remove code that blocks things from being seen, DO NOT REMOVE FUNCTIONALITY FROM THE FILE
+         - This refers to the files with capitalized ANDI in the filename in the main andi file
+           - This means you can remove code that does not show things if there are no lists, or links, ..., but not things
+             that change how the page looks, or highlights various elements
+         - This has exceptions. If the functionality applies to all elements on the page, then it can go to the vANDI file
+           that works with all the attributes on the site
+    - 3. Can remove code if it does not add alerts
+         - This refers to the code in the folder named "small andi". This code is where it it is shown how the alerts are made
+         - so that alteration to the code can be easily checked to see how important it is.
+           - If the alteration is in an alert making section, then it is important to understand how it works and move it to the
+           - lower levels (2 and 3)
+           - If it is not, then it should be moved to level 2 (It should not be in level 3)
+  - Do not edit code for non andi.js areas (except for removing allVisibleElements), move the code to another file, 
+    change the name so that any changes in the code won't alter it, and make sure to be alert about documenting how
+    the code changes so that you can add code to the other areas
+
+List of ANDI that should not be altered (except for allVisibleElements)
+ANDI File Name - ANDI Test
+andi  - Main Module
+candi - Color Contrast
+fandi - Focusable Elements
+gandi - Graphics / Images
+handi - Hidden Content
+iandi - iFrames
+landi - Links / Buttons
+  - Separated into two areas
+sandi - Structures (Headers, Lists, Landmarks, Live Regions)
+  - Separated into four areas
+tandi - Tables
+
+
+List of ANDI that can be altered
+ANDI File Name - ANDI Test
+bANDI  - Color Contrast
+dANDI  - Focusable Elements
+eANDI  - Graphics / Images
+jANDI  - Hidden Content
+kANDI  - iFrames
+mANDI  - Links
+nANDI  - Buttons
+oANDI  - Headers
+pANDI  - Lists
+qANDI  - Landmarks
+rANDI  - Live Regions
+uANDI  - Tables
+vANDI  - Attributes
+wANDI  - Main Module (Fixed Code)
+xANDI  - Main Module (Minimum Code)
+
+# NOTE: Think about putting attributes like role and lang, ... into their own file
+    - role and lang apply to all elemens on the page
+# NOTE: Work on making the filenames match how they look in the folder when testing the page
+# NOTE: Check on aria-live and aria-atomic

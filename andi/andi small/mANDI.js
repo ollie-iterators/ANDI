@@ -1,0 +1,392 @@
+//==========================================//
+//mANDI: links ANDI (small version)         //
+//Created By Social Security Administration //
+//==========================================//
+//NOTE: This only contains the code for finding errors and none for displaying the error code
+function init_module() {
+    //create mANDI instance
+    var mANDI = new AndiModule("8.1.0", "m");
+
+    //This function removes markup in the test page that was added by this module
+    AndiModule.cleanup = function (testPage, element) {
+        if (element)
+            $(element).removeClass("mANDI508-internalLink mANDI508-externalLink mANDI508-ambiguous mANDI508-anchorTarget");
+    };
+
+    //This object class is used to store data about each link. Object instances will be placed into an array.
+    function Link(href, nameDescription, index, alerts, target, linkPurpose, ambiguousIndex, element) {
+        this.href = href;
+        this.nameDescription = nameDescription;
+        this.index = index;
+        this.alerts = alerts;
+        this.target = target;
+        this.linkPurpose = linkPurpose;
+        this.ambiguousIndex = undefined;
+        this.element = element;
+    }
+
+    //This object class is used to keep track of the links on the page
+    function Links() {
+        this.list = [];
+        this.count = 0;
+        this.ambiguousIndex = 0;
+        this.ambiguousCount = 0;
+        this.internalCount = 0;
+        this.externalCount = 0;
+    }
+
+    //Alert icons for the links list table
+    //Ignore the jslint warning about the "new" declaration. It is needed.
+    var alertIcons = new function () {//new is intentional
+        this.danger_noAccessibleName = makeIcon("danger", "No accessible name");
+        this.danger_anchorTargetNotFound = makeIcon("warning", "In-page anchor target not found");
+        this.warning_ambiguous = makeIcon("warning", "Ambiguous: same name, different href");
+        this.caution_ambiguous = makeIcon("caution", "Ambiguous: same name, different href");
+        this.caution_vagueText = makeIcon("caution", "Vague: does not identify link purpose.");
+        this.warning_tabOrder = makeIcon("warning", "Element not in tab order");
+
+        function makeIcon(alertLevel, titleText) {
+            //The sortPriority number allows alert icon sorting
+            var sortPriority = "3"; //default to caution
+            if (alertLevel == "warning") {
+                sortPriority = "2";
+            } else if (alertLevel == "danger") {
+                sortPriority = "1";
+            }
+            return "<img src='" + icons_url + alertLevel + ".png' alt='" + alertLevel + "' title='Accessibility Alert: " + titleText + "' /><i>" + sortPriority + " </i>";
+        }
+    };
+
+    mANDI.viewList_tableReady = false;
+
+    //This function will analyze the test page for link related markup relating to accessibility
+    mANDI.analyze = function () {
+
+        mANDI.links = new Links();
+
+        //Variables used to build the links list array.
+        var href, nameDescription, alerts, target, linkPurpose, alertIcon, alertObject, relatedElement, ambiguousIndex;
+
+        //Loop through every visible element and run tests
+        $(TestPageData.allElements).each(function () {
+            //ANALYZE LINKS
+            if ($(this).isSemantically("[role=link]", "a[href],a[tabindex],area")) {
+                if (!andiCheck.isThisElementDisabled(this)) {
+
+                    mANDI.links.count++;
+
+                    andiData = new AndiData(this);
+
+                    if ($(this).is("a,area") || andiData.role === "link") {
+                        //set nameDescription
+                        nameDescription = getNameDescription(andiData.accName, andiData.accDesc);
+
+                        href = ($(this).is("a,area")) ? mANDI.normalizeHref(this) : "";
+                        alerts = "";
+                        linkPurpose = ""; //i=internal, e=external
+                        target = $.trim($(this).attr("target"));
+                        alertIcon = "";
+                        alertObject = "";
+                        ambiguousIndex = undefined;
+
+                        if (isLinkKeyboardAccessible(href, this)) {
+                            if (nameDescription) {
+
+                                ambiguousIndex = scanForAmbiguity(this, nameDescription, href);
+
+                                determineLinkPurpose(href, this);
+
+                                testForVagueLinkText(nameDescription);
+
+                                if (!alerts) //Add this for sorting purposes
+                                    alerts = "<i>4</i>";
+                            } else { //No accessible name or description
+                                alerts = alertIcons.danger_noAccessibleName;
+                                nameDescription = "<span class='ANDI508-display-danger'>No Accessible Name</span>";
+                            }
+
+                            if (href) {
+                                //create Link object and add to array
+                                mANDI.links.list.push(
+                                    new Link(href,
+                                        nameDescription,
+                                        andiData.andiElementIndex,
+                                        alerts,
+                                        target,
+                                        linkPurpose,
+                                        ambiguousIndex,
+                                        this));
+                            } else if (andiData.role === "link") {
+                                //create Link object and add to array
+                                mANDI.links.list.push(
+                                    new Link(href,
+                                        nameDescription,
+                                        andiData.andiElementIndex,
+                                        alerts,
+                                        target,
+                                        linkPurpose,
+                                        ambiguousIndex,
+                                        this));
+
+                                isElementInTabOrder(this, "link");
+                            } else if (!andiData.role) {
+                                //link as no role and no href, suggest using role=link or href
+                                andiAlerter.throwAlert(alert_0168);
+                            }
+
+                            andiCheck.commonFocusableElementChecks(andiData, $(this));
+                        }
+                    }
+
+                    AndiData.attachDataToElement(this);
+                }
+            } else if ($(this).is("a")) { //Analyze elements that might be links
+                andiData = new AndiData(this);
+                isLinkKeyboardAccessible(undefined, this);
+                AndiData.attachDataToElement(this);
+                //Don't allow element to appear in next/prev flow or hover. Also remove highlight.
+                $(this).addClass("ANDI508-exclude-from-inspection").removeClass("ANDI508-highlight");
+            }
+        });
+
+        //Detect disabled links
+        andiCheck.areThereDisabledElements("links");
+
+        //This function returns true if the link is keyboard accessible
+        function isLinkKeyboardAccessible(href, element) {
+            if (typeof href === "undefined" && !$(element).attr("tabindex")) {
+                //There is no href and no tabindex
+                var name = $(element).attr("name");
+                var id = element.id;
+
+                if (element.onclick !== null || $._data(element, "events").click !== undefined) {
+                    //Link is clickable but not keyboard accessible
+                    andiAlerter.throwAlert(alert_0164);
+                    //No click event could be detected
+                } else if (!id && !name) {//Link doesn't have id or name
+                    andiAlerter.throwAlert(alert_0128);
+                } else { //Link has id or name
+                    //Determine if the link is an anchor for another link
+                    var isDefinitelyAnAnchor = false;
+                    var referencingHref = "";
+
+                    //Look through all hrefs to see if any is referencing this element's id or name
+                    $("#ANDI508-testPage a[href]").each(function () {
+                        referencingHref = $(this).attr("href");
+                        if (referencingHref.charAt(0) === "#") {
+                            if (referencingHref.slice(1) === id || referencingHref.slice(1) === name) {
+                                isDefinitelyAnAnchor = true;
+                                return false; //break out of loop
+                            }
+                        }
+                    });
+                    if (!isDefinitelyAnAnchor) {
+                        if (element.onclick === null && $._data(element, "events").click === undefined) {
+                            andiAlerter.throwAlert(alert_0129);
+                        } else { //Link is clickable but not keyboard accessible
+                            andiAlerter.throwAlert(alert_0164);
+                        }
+                    } else if (name) { //name is deprecated
+                        andiAlerter.throwAlert(alert_007B, [name]);
+                    } else {
+                        andiAlerter.throwAlert(alert_012A); //definitely an anchor, but not focusable
+                    }
+                }
+                return false; //not keyboard accessible
+            }
+            return true;
+        }
+
+        //This function will seach through Links Array for same name different href
+        function scanForAmbiguity(element, nameDescription, href) {
+            var regEx = /^https?:\/\//; //Strip out the http:// or https:// from the compare
+
+            for (var x = 0; x < mANDI.links.list.length; x++) {
+                if (nameDescription.toLowerCase() == mANDI.links.list[x].nameDescription.toLowerCase()) { //nameDescription match
+
+                    if (href.toLowerCase().replace(regEx, "") != mANDI.links.list[x].href.toLowerCase().replace(regEx, "")) { //href doesn't match, throw alert
+
+                        //Determine which alert level should be thrown
+                        if (href.charAt(0) == "#" || mANDI.links.list[x].href.charAt(0) == "#") {
+                            //One link is internal
+                            alertIcon = alertIcons.caution_ambiguous;
+                            alertObject = alert_0162;
+                        } else {
+                            alertIcon = alertIcons.warning_ambiguous;
+                            alertObject = alert_0161;
+                        }
+
+                        //Throw the alert
+                        if (!mANDI.links.list[x].alerts.includes(alertIcon)) {
+                            //Throw alert on first instance only one time
+                            andiAlerter.throwAlertOnOtherElement(mANDI.links.list[x].index, alertObject);
+                            mANDI.links.list[x].alerts = alertIcon;
+                        }
+
+                        //Set the ambiguousIndex
+                        var i; //will store the ambiguousIndex for this match
+                        //Does the first instance already have an ambiguousIndex?
+                        relatedElement = $(mANDI.links.list[x].element);
+                        if (mANDI.links.list[x].ambiguousIndex) {
+                            //Yes. Copy the ambiguousIndex from the first instance
+                            i = mANDI.links.list[x].ambiguousIndex;
+                            mANDI.links.ambiguousCount++;
+                        } else { //No. increment ambiguousIndex and add it to the first instance.
+                            mANDI.links.ambiguousCount = mANDI.links.ambiguousCount + 2;
+                            mANDI.links.ambiguousIndex++;
+                            i = mANDI.links.ambiguousIndex;
+                            mANDI.links.list[x].ambiguousIndex = i;
+                            $(relatedElement).addClass("mANDI508-ambiguous");
+                        }
+
+                        $(element).addClass("mANDI508-ambiguous");
+                        alerts += alertIcon;
+                        andiAlerter.throwAlert(alertObject);
+                        return i;//prevents alert from being thrown more than once on an element
+                    }
+                }
+            }
+            return false;
+        }
+
+        //This function searches for anchor target if href is internal and greater than 1 character e.g. href="#x"
+        function determineLinkPurpose(href, element) {
+            if (typeof href !== "undefined") {
+                if (href.charAt(0) === "#" && href.length > 1) {
+                    var idRef = href.slice(1); //do not convert to lowercase
+                    if (!isAnchorTargetFound(idRef)) {
+                        if (element.onclick === null && $._data(element, 'events').click === undefined) {//no click events
+                            //Throw Alert, Anchor Target not found
+                            alerts += alertIcons.danger_anchorTargetNotFound;
+                            andiAlerter.throwAlert(alert_0069, [idRef]);
+                        }
+                    } else { //link is internal and anchor target found
+                        mANDI.links.internalCount++;
+                        linkPurpose = "i";
+                        $(element).addClass("mANDI508-internalLink");
+                    }
+                } else if (href.charAt(0) !== "#" && !mANDI.isScriptedLink(href)) {//this is an external link
+                    mANDI.links.externalCount++;
+                    linkPurpose = "e";
+                    $(element).addClass("mANDI508-externalLink");
+                }
+            }
+
+            //This function searches allIds list to check if anchor target exists. return true if found.
+            function isAnchorTargetFound(idRef) {
+                //for(var z=0; z<testPageData.allIds.length; z++){
+                //	if(testPageData.allIds[z].id.toString().toLowerCase() == idRef)
+                //		return true;
+                //}
+                var anchorTarget = document.getElementById(idRef) || document.getElementsByName(idRef)[0];
+                if ($(anchorTarget).is(":visible")) {
+                    $(anchorTarget).addClass("mANDI508-anchorTarget");
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        //This function checks the link text for vagueness
+        function testForVagueLinkText(nameDescription) {
+            var regEx = /^(click here|here|link|edit|select|more|more info|more information|go)$/g;
+            if (regEx.test(nameDescription.toLowerCase())) {
+                alerts += alertIcons.caution_vagueText;
+                andiAlerter.throwAlert(alert_0163);
+            }
+        }
+
+        //This function determines if an element[role] is in tab order
+        function isElementInTabOrder(element, role) {
+            if (!!$(element).prop("tabIndex") && !$(element).is(":tabbable")) {//Element is not tabbable and has no tabindex
+                //Throw Alert: Element with role=link|button not in tab order
+                alerts += alertIcons.warning_tabOrder;
+                andiAlerter.throwAlert(alert_0125, [role]);
+            }
+        }
+
+        //this function will normalize the accessible name and description so that the raw string can be analyzed.
+        function getNameDescription(name, desc) {
+            var n = "";
+            var d = "";
+            if (name)
+                n = andiUtility.normalizeOutput(name);
+            if (desc) {
+                d = andiUtility.normalizeOutput(desc);
+                if (n === d) { //matchingTest
+                    d = "";
+                } else {
+                    d = " " + d; //add space
+                }
+
+            }
+            return n + d;
+        }
+    };
+
+    //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
+    mANDI.results = function () {
+        andiBar.updateResultsSummary("Links Found: " + mANDI.links.count);
+
+        //Show Startup Summary
+        if (!andiBar.focusIsOnInspectableElement()) {
+            andiBar.showElementControls();
+            andiBar.showStartUpSummary("Discover accessibility markup for <span class='ANDI508-module-name-l'>links</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every link.", true);
+        }
+
+        andiAlerter.updateAlertList();
+
+        $("#ANDI508").focus();
+    };
+
+    //This function will update the info in the Active Element Inspection.
+    //Should be called after the mouse hover or focus in event.
+    AndiModule.inspect = function (element) {
+        if ($(element).hasClass("ANDI508-element")) {
+
+            andiBar.prepareActiveElementInspection(element);
+
+            var elementData = $(element).data("andi508");
+            var addOnProps = AndiData.getAddOnProps(element, elementData,
+                [
+                    ["href", mANDI.normalizeHref(element)],
+                    "rel",
+                    "download",
+                    "media",
+                    "target",
+                    "type"
+                ]
+            );
+
+            andiBar.displayOutput(elementData, element, addOnProps);
+            andiBar.displayTable(elementData, element, addOnProps);
+        }
+    };
+
+    //This function gets the href
+    //if href length is greater than 1 and last char is a slash
+    //This elimates false positives during comparisons since with or without slash is essentially the same
+    mANDI.normalizeHref = function (element) {
+        var href = $(element).attr("href");
+        if (typeof href != "undefined") {
+            href = $.trim($(element).attr("href"));
+            if (href === "") {
+                href = "\"\"";
+            } else if (href.length > 1 && href.charAt(href.length - 1) == "/")
+                href = href.slice(0, -1);
+        }
+        return href;
+    };
+
+    //This function returns true if the href is a link that fires a script
+    mANDI.isScriptedLink = function (href) {
+        if (typeof href == "string") {
+            //broken up into three substrings so its not flagged in jslint
+            return (href.toLowerCase().substring(0, 3) === "jav" && href.toLowerCase().substring(3, 5) === "ascri" && href.toLowerCase().substring(8, 3) === "pt:");
+        }
+        return false;
+    };
+
+    mANDI.analyze();
+    mANDI.results();
+}//end init

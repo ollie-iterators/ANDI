@@ -2,6 +2,7 @@
 //ANDI: Accessible Name & Description Inspector//
 //Created By Social Security Administration    //
 //=============================================//
+// NOTE: For now, this is the only place to alter andi.js
 var andiVersionNumber = "27.4.0";
 
 //==============//
