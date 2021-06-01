@@ -288,11 +288,6 @@ function init_module() {
             else
                 $("#ANDI508-pageAnalysis").show();
         }
-        else {
-            //No Tables Found
-            andiBar.hideElementControls();
-            andiBar.showStartUpSummary("No <span class='ANDI508-module-name-t'>tables</span> were found on this page.");
-        }
         andiAlerter.updateAlertList();
         if (!AndiModule.activeActionButtons.viewTableList && testPageData.numberOfAccessibilityAlertsFound > 0)
             $("#ANDI508-alerts-list").show();
