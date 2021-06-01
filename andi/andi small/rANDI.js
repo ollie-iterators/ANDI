@@ -58,50 +58,6 @@ function init_module() {
             }
         });
     };
-}
-
-//This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-rANDI.results = function () {
-    andiBar.updateResultsSummary("Live Regions: " + rANDI.liveRegions.count);
-    if (!andiBar.focusIsOnInspectableElement()) {
-        andiBar.showElementControls();
-
-        andiBar.showStartUpSummary("<span class='ANDI508-module-name-s'>Live regions</span> found.<br />Discover the Output of the <span class='ANDI508-module-name-s'>live regions</span> by hovering over the highlighted areas or using the next/previous buttons. For updated Output, refresh ANDI whenever the Live Region changes.", true);
-    }
-
-    var liveRegionsSelectionLinks = "";
-    for (var x = 0; x < rANDI.liveRegions.list.length; x++) {
-        liveRegionsSelectionLinks += "<li><a href='javascript:void(0)' data-andi508-relatedindex='" + $(this).attr('data-andi508-index') + "'>" +
-            '"' + rANDI.liveRegions.list[x].element + '" ' +
-            '"' + rANDI.liveRegions.list[x].index + '" ' +
-            '"' + rANDI.liveRegions.list[x].containerElement + '" ' +
-            '"' + rANDI.liveRegions.list[x].innerText + '" ' +
-            '"' + rANDI.liveRegions.list[x].containsForm + '" ' +
-            '"' + rANDI.liveRegions.list[x].alerts + '" ' +
-            "</a></li>";
-    }
-
-    //This function will update the info in the Active Element Inspection.
-    //Should be called after the mouse hover or focus in event.
-    AndiModule.inspect = function (element) {
-        if ($(element).hasClass("ANDI508-element")) {
-            andiBar.prepareActiveElementInspection(element);
-
-            var elementData = $(element).data("andi508");
-            var addOnProps = AndiData.getAddOnProps(element, elementData, ["aria-busy", "aria-relevant"]);
-
-            andiBar.displayTable(elementData, element, addOnProps);
-
-            //Copy from the AC table
-            var innerText = $("#ANDI508-accessibleComponentsTable td.ANDI508-display-innerText").first().html();
-            if (innerText) {
-                elementData.accName = "<span class='ANDI508-display-innerText'>" + innerText + "</span>";
-            }
-            andiBar.displayOutput(elementData, element, addOnProps);
-        }
-    };
-
     rANDI.analyze();
-    rANDI.results();
 
 }//end init
