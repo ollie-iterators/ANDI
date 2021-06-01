@@ -48,7 +48,6 @@ AndiModule.module = "f";
 var andiResetter = 		new AndiResetter();		//Resets things ANDI changed
 var andiSettings = 		new AndiSettings();		//Stores Settings
 var andiBar = 			new AndiBar();			//Main Display
-var andiHotkeyList = 	new AndiHotkeyList();	//Hotkey assignments/display panel
 var andiCheck = 		new AndiCheck();		//Alert Testing
 var andiAlerter = 		new AndiAlerter();		//Alert Throwing
 var andiLaser = 		new AndiLaser();		//Laser Functionality
@@ -140,7 +139,6 @@ function launchAndi(){(window.andi508 = function(){
 //==============//
 // ANDI MODULE: //
 //==============//
-
 //This class defines an Andi Module.
 //Should be instantiated in the module's js file.
 //All ANDI modules (besides the default) should have a *andi.css file which will be loaded when the module is launched.
@@ -626,7 +624,6 @@ function andiReady(){
 				return false;
 			})
 			.focus(andiSettings.hideSettingsList);
-
 		//ANDI Settings
 		$("#ANDI508-button-settings")
 			.click(function(){
@@ -636,22 +633,6 @@ function andiReady(){
 					andiSettings.hideSettingsList();
 			})
 			.focus(andiHotkeyList.hideHotkeysList);
-		//Hotkeys List Button
-		$("#ANDI508-button-keys")
-			.click(function(){
-				var hotkeyList = $("#ANDI508-hotkeyList");
-				if(!$(hotkeyList).html()){
-					//build the hotkeyList after first click
-					andiHotkeyList.buildHotkeyList();
-					//andiHotkeyList.addArrowNavigation();
-					andiHotkeyList.showHotkeysList();
-				}
-				else if($(hotkeyList).css("display") === "none")
-					andiHotkeyList.showHotkeysList();
-				else
-					andiHotkeyList.hideHotkeysList();
-			})
-			.focus(andiSettings.hideSettingsList);
 		//ANDI Help Button
 		$("#ANDI508-button-help")
 			.click(function(){
@@ -1264,70 +1245,6 @@ function AndiResetter(){
 	};
 }
 
-//This class is used to handle ANDI's own hotkeys
-function AndiHotkeyList(){
-	//This class is used to create a hotkey
-	function AndiHotkey(key, sp, code){
-		this.key = key;		//key character
-		this.sp = sp;		//spelling
-		this.code = code;	//keyCode (optional)
-	}
-
-	//Set the hotkeys/accesskeys
-	this.key_jump = new AndiHotkey("`","grave",192);
-	this.key_prev = new AndiHotkey(",","comma");
-	this.key_next = new AndiHotkey(".","period");
-	this.key_output = new AndiHotkey("&apos;","apostrophe");
-	this.key_relaunch = new AndiHotkey("=","equals");
-	this.key_active = new AndiHotkey("/","slash",191);
-
-	//These functions Show or Hide the ANDI508-hotkeyList
-	this.showHotkeysList = function(){
-		$("#ANDI508-hotkeyList").slideDown(AndiSettings.andiAnimationSpeed).find("a").first().focus();
-		$("#ANDI508-button-keys").attr("aria-expanded","true").children("img").attr("src",icons_url+"keys-on.png");
-	};
-	this.hideHotkeysList = function(){
-		$("#ANDI508-hotkeyList").slideUp(AndiSettings.andiAnimationSpeed);
-		$("#ANDI508-button-keys").attr("aria-expanded","false").children("img").attr("src",icons_url+"keys-off.png");
-	};
-
-	//This function builds ANDI's hotkey list html
-	this.buildHotkeyList = function(){
-
-		var isMac = navigator.platform.toLowerCase().indexOf('mac') >= 0;
-		var isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
-
-		var hotkeyTrigger = (isMac) ? "ctrl+alt+" : (isFirefox) ? "shift+alt+" : "alt+";
-
-		var hotkeyList = "<div id='ANDI508-hotkeyList'>"+
-			"<h3><a rel='help' href='"+ help_url + "howtouse.html#Hotkeys' target='_blank'>Hotkeys:</a></h3>"+
-			"<span class='ANDI508-code' aria-hidden='true'>&nbsp;"+hotkeyTrigger+"</span>"+
-			"<ul id='ANDI508-hotkeyList-items' aria-label='These hotkeys will help you navigate ANDI.'>"+
-			insertHotkeyListItem("Relaunch", andiHotkeyList.key_relaunch.key, andiHotkeyList.key_relaunch.sp)+
-			insertHotkeyListItem("Next Element", andiHotkeyList.key_next.key, andiHotkeyList.key_next.sp)+
-			insertHotkeyListItem("Prev Element", andiHotkeyList.key_prev.key, andiHotkeyList.key_prev.sp)+
-			insertHotkeyListItem("Active Element", andiHotkeyList.key_active.key, andiHotkeyList.key_active.sp)+
-			insertHotkeyListItem("ANDI Output", andiHotkeyList.key_output.key, andiHotkeyList.key_output.sp)+
-			insertHotkeyListItem("Section Jump", andiHotkeyList.key_jump.key, andiHotkeyList.key_jump.sp);
-
-		hotkeyList += "</ul><h3><a rel='help' href='"+ help_url + "howtouse.html#HoverLock' target='_blank'>Hover Lock:</a></h3><ul aria-label='Hover lock is a feature for mouse users.'><li>&nbsp;&nbsp;&nbsp;hold shift</li></ul></div>";
-
-		$("#ANDI508-button-keys").after(hotkeyList);
-
-		$("#ANDI508-hotkeyList").keydown(function(e){
-			if(e.keyCode === 27){//esc
-				andiHotkeyList.hideHotkeysList();
-				$("#ANDI508-button-keys").focus();
-			}
-		});
-
-		//This function will insert a hotkey list item.
-		function insertHotkeyListItem(purpose,key,key_sp){
-			return "<li><span class='ANDI508-screenReaderOnly'>"+hotkeyTrigger+key_sp+" </span><span class='ANDI508-code' aria-hidden='true'>"+key+"</span>&nbsp;"+purpose+"</li>";
-		}
-	};
-}
-
 //This class is used to keep track of ANDI settings
 function AndiSettings(){
 
@@ -1337,8 +1254,6 @@ function AndiSettings(){
 		if(typeof(Storage) !== "undefined"){
 			try{
 				if(window.localStorage){
-					//Save the current minimode selection
-					localStorage.setItem("ANDI508-minimode", $("#ANDI508-button-minimode").attr("aria-checked"));
 					//Save the linearize selection
 					localStorage.setItem("ANDI508-linearize", $("#ANDI508-button-linearize").attr("aria-checked"));
 				}
@@ -1347,7 +1262,6 @@ function AndiSettings(){
 	};
 	//This function will load ANDI settings
 	//If no saved settings were found, it will load with the default settings.
-	//Default Minimode: false
 	this.loadANDIsettings = function(){
 		buildSettingsList();
 		addSettingListNavigation();
@@ -1357,16 +1271,6 @@ function AndiSettings(){
 		if(typeof(Storage) !== "undefined"){
 			try{
 				if(window.localStorage){
-					//Load the Minimode
-					if(!localStorage.getItem("ANDI508-minimode"))
-						//Default minimode to false
-						andiSettings.minimode(false);
-					else{//load from local storage
-						if(localStorage.getItem("ANDI508-minimode") == "true")
-							andiSettings.minimode(true);
-						else
-							andiSettings.minimode(false);
-					}
 					//Load the Linearize
 					if(!localStorage.getItem("ANDI508-linearize"))
 						//Default linearize to false
@@ -1382,22 +1286,6 @@ function AndiSettings(){
 					andiSettings.linearize(false);
 			}catch(err){console.error(err);}
 		}
-	};
-
-	//This function will toggle the state of mini mode
-	//	state: true or false
-	this.minimode = function(state){
-		if(state){//minimode on
-			$("#ANDI508-body").addClass("ANDI508-minimode");
-			document.getElementById("ANDI508-accessibleComponentsTableContainer").style.display = "none";
-			andiSettings.setting_on(document.getElementById("ANDI508-button-minimode"));
-		}
-		else{//minimode off
-			$("#ANDI508-body").removeClass("ANDI508-minimode");
-			document.getElementById("ANDI508-accessibleComponentsTableContainer").style.display = "block";
-			andiSettings.setting_off(document.getElementById("ANDI508-button-minimode"));
-		}
-		andiResetter.resizeHeights(true);
 	};
 
 	//This function will toggle the state of linearize
@@ -1456,7 +1344,6 @@ function AndiSettings(){
 			"<a rel='help' href='"+ help_url + "howtouse.html#AdvancedSettings' aria-label='Advanced Settings Help' target='_blank'>Advanced Settings:</a>"+
 			"<button id='ANDI508-button-highlights' aria-checked='true' role='checkbox'><img src='"+icons_url+"checked-on.png' alt='' /> Element Highlights</button>"+
 			"<button id='ANDI508-button-linearize' aria-checked='false' role='checkbox'><img src='"+icons_url+"checked-off.png' alt='' /> Linearize Page</button>"+
-			"<button id='ANDI508-button-minimode' aria-checked='false' role='checkbox'><img src='"+icons_url+"checked-off.png' alt='' /> Minimode</button>"+
 			"</div>";
 		$("#ANDI508-button-settings").after(settingsList);
 	}
@@ -1487,16 +1374,6 @@ function AndiSettings(){
 				andiSettings.linearize(true);
 			else
 				andiSettings.linearize(false);
-			andiSettings.saveANDIsettings();
-			return false;
-		});
-
-		//Mini Mode Button
-		$("#ANDI508-button-minimode").click(function(){
-			if($("#ANDI508-body").hasClass("ANDI508-minimode"))
-				andiSettings.minimode(false);
-			else
-				andiSettings.minimode(true);
 			andiSettings.saveANDIsettings();
 			return false;
 		});
