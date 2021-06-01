@@ -34,8 +34,7 @@ function init_module() {
 
             if ($(this).is("img[src],input:image[src],svg,canvas")) {
                 imgCount++;
-            }
-            else {
+            } else {
                 if (hasTextExcludingChildren(this)) {
                     if (!hasAdditionalHidingTechniques(this)) {
                         //Element is not hidden and contains text.
@@ -139,8 +138,7 @@ function init_module() {
                 bANDI.playground_open();
                 $("#bANDI508-contrastPlayground").slideDown(AndiSettings.andiAnimationSpeed).focus();
                 AndiModule.activeActionButtons.contrastPlayground = true;
-            }
-            else {
+            } else {
                 //hide Contrast Playground, show alert list
                 $("#bANDI508-contrastPlayground").slideUp(AndiSettings.andiAnimationSpeed);
                 if (testPageData.numberOfAccessibilityAlertsFound > 0)
@@ -199,8 +197,7 @@ function init_module() {
                 $(this).attr("aria-pressed", "true").addClass("ANDI508-module-action-active");
                 $("#ANDI508-testPage").addClass("bANDI508-grayscale");
                 AndiModule.activeActionButtons.grayscale = true;
-            }
-            else {
+            } else {
                 $(this).attr("aria-pressed", "false").removeClass("ANDI508-module-action-active");
                 $("#ANDI508-testPage").removeClass("bANDI508-grayscale");
                 AndiModule.activeActionButtons.grayscale = false;
@@ -216,8 +213,7 @@ function init_module() {
             }
             if (testPageData.disabledElementsCount > 0)
                 andiAlerter.throwAlert(alert_0251, [testPageData.disabledElementsCount], 0);
-        }
-        else {
+        } else {
             //No text containing elements were found
             andiBar.hideElementControls();
             andiBar.showStartUpSummary("No elements containing text were found on this page.");
@@ -310,8 +306,7 @@ function init_module() {
                 if (color.rgba[l] < 255)
                     color.rgba[l]++;
             }
-        }
-        else { //darker
+        } else { //darker
             for (var d = 0; d < 3; d++) {
                 if (color.rgba[d] > 0)
                     color.rgba[d]--;
@@ -391,8 +386,7 @@ function init_module() {
                 //Set this element's color selector box
                 $(colorSelectorBox).attr("style", "background-color:" + value + " !important; background-image:none;");
                 $(this).removeAttr("aria-invalid");
-            }
-            else {
+            } else {
                 $(this).attr("aria-invalid", "true");
                 $(colorSelectorBox).attr("style", "background:black url(" + icons_url + "invalid.png) no-repeat top !important; background-size:1.3em !important");
                 valid = false;
@@ -401,8 +395,7 @@ function init_module() {
 
         if (valid) {
             return true;
-        }
-        else {
+        } else {
             //Cannot calculate the contrast ratio
             $("#bANDI508-playground-ratio").addClass("bANDI508-invalid").html("?");
             $("#bANDI508-playground-suggest-large").css("visibility", "hidden");
@@ -428,8 +421,7 @@ function init_module() {
             if (bANDI.suggestForegroundChange(bANDI_data, suggestedFgColor, suggestedBgColor)) {
                 //Suggest Foreground Color
                 displayColorValue("#bANDI508-playground-fg", suggestedFgColor);
-            }
-            else {
+            } else {
                 //Suggest Background Color
                 displayColorValue("#bANDI508-playground-bg", suggestedBgColor);
             }
@@ -500,8 +492,7 @@ function init_module() {
                 //No, Display PASS/FAIL Result and Requirement Ratio
                 if (bANDI_data.ratio >= bANDI_data.minReq) {
                     bANDI_data.result = "PASS";
-                }
-                else {
+                } else {
                     bANDI_data.result = "FAIL";
                 }
             }
@@ -517,8 +508,7 @@ function init_module() {
 
             if ($(element).css("background-image") !== "none") {
                 return element;
-            }
-            else {
+            } else {
                 //Store this background color
                 var thisBgColor = new Color($(element).css("background-color"));
 
@@ -591,8 +581,7 @@ function init_module() {
                 //Suggest Foreground Color
                 suggestedColor = suggestedFgColor;
                 suggestedColorHtml += "Text&nbsp;Color";
-            }
-            else {
+            } else {
                 //Suggest Background Color
                 suggestedColor = suggestedBgColor;
                 suggestedColorHtml += "Background";
@@ -602,8 +591,7 @@ function init_module() {
 
             suggestedColorHtml += ":</th><td><div class='bANDI508-colorSelector' style='background-color:" + suggestedColor + " !important;'></div>";
             suggestedColorHtml += "<span id='bANDI508-suggested'>" + suggestedColor + "</span></td></tr>";
-        }
-        else {
+        } else {
             suggestedColorHtml += "Color:</th>" +
                 "<td><a href='" + help_url + "modules.html#bANDI-style' target='_ANDIhelp' class='bANDI508-suggestionNotPossible'>" +
                 "Semi-transparency present; cannot provide specific suggestion." +
@@ -621,8 +609,7 @@ function init_module() {
         if (fgbg == "fg") {
             contrastingColor = bANDI_data.bgColor;
             suggestedColor = bANDI_data.fgColor.clone();
-        }
-        else {
+        } else {
             contrastingColor = bANDI_data.fgColor;
             suggestedColor = bANDI_data.bgColor.clone();
         }
@@ -644,8 +631,7 @@ function init_module() {
                     break;
                 }
             }
-        }
-        else {
+        } else {
             //Original Color is closer to white
             //Suggest darker foreground color
             for (var y = 0; y < 256; y++) {
@@ -723,24 +709,19 @@ function init_module() {
             //Display Resylt
             if (bANDI_data.result === "PASS") {
                 $("#bANDI508-result").html("PASS").addClass("bANDI508-pass");
-            }
-            else { //FAIL
+            } else { //FAIL
                 $("#bANDI508-result").html("FAIL").addClass("bANDI508-fail");
 
                 if (!bANDI_data.semiTransparency) {
                     //There is no transparency involved, therefore, a suggestion can be made.
                     //Suggest a color that meets the contrast ratio minimum:
                     $("#bANDI508-table-style tbody").append(bANDI.getSuggestedColorHTML(bANDI_data));
-                }
-                else {
+                } else {
                     //Cannot suggest color due to semi-transparency
                     $("#bANDI508-table-style tbody").append(bANDI.getSuggestedColorHTML());
                 }
             }
-        }
-        else {
-            //MANUAL TEST NEEDED - Cannot determine pass or fail status
-
+        } else { //MANUAL TEST NEEDED - Cannot determine pass or fail status
             //Remove Background Color Selector Box
             $("#bANDI508-colorSelector-background").remove();
 
@@ -825,8 +806,7 @@ function init_module() {
 
                 if (rgba) {
                     rgba.shift();
-                }
-                else {
+                } else {
                     throw new Error('Invalid string: ' + rgbaString);
                 }
             }

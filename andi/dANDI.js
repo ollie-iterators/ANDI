@@ -31,8 +31,7 @@ function init_module() {
                     dANDI.accesskeys.push(this, andiData.accesskey, andiData.andiElementIndex);
                 testPageData.firstLaunchedModulePrep(this, andiData);
                 AndiData.attachDataToElement(this);
-            }
-            else {
+            } else {
                 testPageData.firstLaunchedModulePrep(this);
                 andiCheck.isThisElementDisabled(this);
             }
@@ -59,8 +58,7 @@ function init_module() {
                 if (accesskey.length > 1) { //TODO: could be a non-issue if browsers are supporting space delimited accesskey lists
                     andiAlerter.throwAlert(alert_0052, [accesskey]);
                     addToList(accesskey, alert_0052);
-                }
-                else {
+                } else {
                     //Check for duplicate accesskey
                     if (duplicateComparator.includes(accesskey)) {
                         if ($(element).is("button,input:submit,input:button,input:reset,input:image")) {
@@ -72,14 +70,12 @@ function init_module() {
                             //duplicate accesskey found on link
                             andiAlerter.throwAlert(alert_0056, [accesskey]);
                             addToList(accesskey, alert_0056);
-                        }
-                        else {
+                        } else {
                             //duplicate accesskey found
                             andiAlerter.throwAlert(alert_0055, [accesskey]);
                             addToList(accesskey, alert_0055);
                         }
-                    }
-                    else {
+                    } else {
                         addToList(accesskey);
                         duplicateComparator += accesskey;
                     }
@@ -141,8 +137,7 @@ function init_module() {
                     andiOverlay.overlayButton_on("overlay", $(this));
                     andiOverlay.overlayTabOrder();
                     AndiModule.activeActionButtons.tabOrder = true;
-                }
-                else {
+                } else {
                     andiOverlay.overlayButton_off("overlay", $(this));
                     andiOverlay.removeOverlay("ANDI508-overlay-tabSequence");
                     AndiModule.activeActionButtons.tabOrder = false;
@@ -157,8 +152,7 @@ function init_module() {
                     andiOverlay.overlayButton_on("overlay", $(this));
                     andiOverlay.overlayTitleAttributes();
                     AndiModule.activeActionButtons.titleAttributes = true;
-                }
-                else {
+                } else {
                     andiOverlay.overlayButton_off("overlay", $(this));
                     andiOverlay.removeOverlay("ANDI508-overlay-titleAttributes");
                     AndiModule.activeActionButtons.titleAttributes = false;
@@ -173,8 +167,7 @@ function init_module() {
                     andiOverlay.overlayButton_on("overlay", $(this));
                     andiOverlay.overlayLabelTags();
                     AndiModule.activeActionButtons.labelTags = true;
-                }
-                else {
+                } else {
                     andiOverlay.overlayButton_off("overlay", $(this));
                     andiOverlay.removeOverlay("ANDI508-overlay-labelTags");
                     AndiModule.activeActionButtons.labelTags = false;
@@ -186,9 +179,7 @@ function init_module() {
             andiBar.focusIsOnInspectableElement();
             andiBar.showElementControls();
             andiBar.showStartUpSummary("Discover accessibility markup for focusable elements by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every focusable element.", true);
-        }
-        else {
-            //No Focusable Elements were found
+        } else { //No Focusable Elements were found
             andiBar.hideElementControls();
             andiBar.showStartUpSummary("No focusable elements were found on this page.");
         }

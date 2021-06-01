@@ -19,15 +19,17 @@ function init_module() {
             $(testPage).find(".eANDI508-decorative").removeClass("eANDI508-decorative");
     };
 
-    //Stores the total number of image types found
-    var totals = {
-        inline: 0, 		//inline images
-        background: 0,	//elements with background images
-        decorative: 0,	//images explicetly declared as decorative
-        fontIcon: 0,	//font icons
-        imageLink: 0,	//images contained in links
-        imageButton: 0	//images contained in buttons
-    };
+    //This object class is used to keep track of the Images on the page
+    function Images() {
+        this.list = [];
+        this.count = 0;
+        this.inline = 0;      //inline images
+        this.background = 0;  //elements with background images
+        this.decorative = 0;  //images explicetly declared as decorative
+        this.fontIcon = 0;    //font icons
+        this.imageLink = 0;   //images contained in links
+        this.imageButton = 0; //images contained in buttons
+    }
 
     AndiModule.initActiveActionButtons({
         fadeInlineImages: false,
@@ -39,7 +41,7 @@ function init_module() {
 
     //This function will analyze the test page for graphics/image related markup relating to accessibility
     eANDI.analyze = function () {
-
+        eANDI.images = new Images();
         var isImageContainedByInteractiveWidget; //boolean if image is contained by link or button
 
         //Loop through every visible element
@@ -53,16 +55,15 @@ function init_module() {
                 closestWidgetParent = $(this).closest("a,button,[role=button],[role=link]");
                 if ($(closestWidgetParent).length) {
                     if ($(closestWidgetParent).isSemantically("[role=link]", "a"))
-                        totals.imageLink++;
+                        eANDI.images.imageLink++;
                     else if ($(closestWidgetParent).isSemantically("[role=button]", "button"))
-                        totals.imageButton++;
-                    totals.inline++;
+                        eANDI.images.imageButton++;
+                    eANDI.images.inline++;
                     isImageContainedByInteractiveWidget = true;
                 }
             }
 
             if (isImageContainedByInteractiveWidget || $(this).is("[role=img],[role=image],img,input[type=image],svg,canvas,area,marquee,blink")) {
-
                 if (isImageContainedByInteractiveWidget) {
                     //Check if parent already has been evaluated (when more than one image is in a link)
                     if (!$(closestWidgetParent).hasClass("ANDI508-element")) {
@@ -71,50 +72,48 @@ function init_module() {
                         andiCheck.commonFocusableElementChecks(andiData, $(closestWidgetParent));
                         AndiData.attachDataToElement(closestWidgetParent);
                     }
-                }
-                else {//not contained by interactive widget
+                } else {//not contained by interactive widget
                     andiData = new AndiData(this);
                 }
 
                 //Check for conditions based on semantics
                 if ($(this).is("marquee")) {
-                    totals.inline++;
+                    eANDI.images.inline++;
                     andiAlerter.throwAlert(alert_0171);
                     AndiData.attachDataToElement(this);
                 }
                 else if ($(this).is("blink")) {
-                    totals.inline++;
+                    eANDI.images.inline++;
                     andiAlerter.throwAlert(alert_0172);
                     AndiData.attachDataToElement(this);
                 }
                 else if ($(this).is("canvas")) {
-                    totals.inline++;
+                    eANDI.images.inline++;
                     andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
                     AndiData.attachDataToElement(this);
                 }
                 else if ($(this).is("input:image")) {
-                    totals.inline++;
+                    eANDI.images.inline++;
                     andiCheck.commonFocusableElementChecks(andiData, $(this));
                     altTextAnalysis($.trim($(this).attr("alt")));
                     AndiData.attachDataToElement(this);
                 }
                 //Check for server side image map
                 else if ($(this).is("img") && $(this).attr("ismap")) {//Code is written this way to prevent bug in IE8
-                    totals.inline++;
+                    eANDI.images.inline++;
                     andiAlerter.throwAlert(alert_0173);
                     AndiData.attachDataToElement(this);
                 }
                 else if (!isImageContainedByInteractiveWidget && $(this).is("img,svg,[role=img]")) { //an image used by an image map is handled by the <area>
-                    totals.inline++;
+                    eANDI.images.inline++;
                     if (isElementDecorative(this, andiData)) {
-                        totals.decorative++;
+                        eANDI.images.decorative++;
                         $(this).addClass("eANDI508-decorative");
 
                         if ($(this).prop("tabIndex") >= 0)
                             //Decorative image is in the tab order
                             andiAlerter.throwAlert(alert_0126);
-                    }
-                    else {//This image has not been declared decorative
+                    } else {//This image has not been declared decorative
                         if (andiData.tabbable)
                             andiCheck.commonFocusableElementChecks(andiData, $(this));
                         else
@@ -125,7 +124,7 @@ function init_module() {
                     AndiData.attachDataToElement(this);
                 }
                 else if ($(this).is("area")) {
-                    totals.inline++;
+                    eANDI.images.inline++;
                     var map = $(this).closest("map");
                     if ($(map).length) {
                         //<area> is contained in <map>
@@ -135,8 +134,7 @@ function init_module() {
                             andiCheck.commonFocusableElementChecks(andiData, $(this));
                             altTextAnalysis($.trim($(this).attr("alt")));
                             AndiData.attachDataToElement(this);
-                        }
-                        else {//Image referenced by image map not found
+                        } else {//Image referenced by image map not found
                             //TODO: throw this message only once for all area tags that it relates to
                             andiAlerter.throwAlert(alert_006A, ["&ltmap name=" + mapName + "&gt;"], 0);
                         }
@@ -145,13 +143,13 @@ function init_module() {
                         andiAlerter.throwAlert(alert_0178, alert_0178.message, 0);
                 }
                 else if ($(this).is("[role=image]")) {
-                    //totals.inline++;
+                    //eANDI.images.inline++;
                     andiAlerter.throwAlert(alert_0183);
                     AndiData.attachDataToElement(this);
                 }
             }
             else if ($(this).css("background-image").includes("url(")) {
-                totals.background++;
+                eANDI.images.background++;
                 $(this).addClass("eANDI508-background");
             }
 
@@ -169,31 +167,29 @@ function init_module() {
                     andiData = new AndiData(this);
                     AndiData.attachDataToElement(this);
                 }
-                totals.fontIcon++;
+                eANDI.images.fontIcon++;
                 $(this).addClass("eANDI508-fontIcon");
                 //Throw alert
                 if (andiData.accName && !andiData.isTabbable) {
                     //has accessible name. Needs role=img if meaningful image.
                     andiAlerter.throwAlert(alert_0179);
-                }
-                else {
+                } else {
                     //no accessible name. Is it meaningful?
                     //andiAlerter.throwAlert(alert_017A);
                 }
             }
         });
 
-        if (totals.background > 0) //Page has background images
+        if (eANDI.images.background > 0) //Page has background images
             andiAlerter.throwAlert(alert_0177, alert_0177.message, 0);
 
         //This returns true if the image is decorative.
         function isElementDecorative(element, elementData) {
             if ($(element).attr("aria-hidden") === "true") {
                 return true;
-            }
-            //TODO: this logic may need to change if screen readers support spec that says aria-label
-            //		should override role=presentation, thus making it not decorative
-            else {
+                //TODO: this logic may need to change if screen readers support spec that says aria-label
+                //		should override role=presentation, thus making it not decorative
+            } else {
                 if (elementData.role === "presentation" || elementData.role === "none") { //role is presentation or none
                     return true;
                 }
@@ -228,159 +224,122 @@ function init_module() {
 
     //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
     eANDI.results = function () {
-
-        var imagesCount = totals.inline + totals.background + totals.fontIcon;
+        var imagesCount = eANDI.images.inline + eANDI.images.background + eANDI.images.fontIcon;
 
         andiBar.updateResultsSummary("Images Found: " + imagesCount);
 
-        //Are There Images?
-        if (imagesCount > 0) {
-            //Yes, images were found
+        //Create Image contained by html (number of image links and image buttons)
+        var resultsDetails = "";
+        resultsDetails += eANDI.images.inline + " inline images, ";
+        resultsDetails += eANDI.images.imageLink + " image links, ";
+        resultsDetails += eANDI.images.imageButton + " image buttons, ";
+        resultsDetails += eANDI.images.fontIcon + " font icons, ";
+        resultsDetails += eANDI.images.background + " background-images.";
 
-            //Create Image contained by html (number of image links and image buttons)
-            var resultsDetails = "";
-            if (totals.inline > 0)
-                resultsDetails += totals.inline + " inline images, ";
-            if (totals.imageLink > 0)
-                resultsDetails += totals.imageLink + " image links, ";
-            if (totals.imageButton > 0)
-                resultsDetails += totals.imageButton + " image buttons, ";
-            if (totals.fontIcon > 0)
-                resultsDetails += totals.fontIcon + " font icons, ";
-            if (totals.background > 0)
-                resultsDetails += totals.background + " background-images, ";
-            if (resultsDetails)
-                resultsDetails = resultsDetails.slice(0, -2);//Slice off last two characters: the comma and space: ", "
+        $("#ANDI508-additionalPageResults").append("<p tabindex='0'>" + resultsDetails + "</p>");
 
-            $("#ANDI508-additionalPageResults").append("<p tabindex='0'>" + resultsDetails + "</p>");
+        //Add Module Mode Buttons
+        var moduleActionButtons = "";
+        moduleActionButtons += "<button id='ANDI508-fadeInlineImages-button' aria-label='Hide " + eANDI.images.inline + " Inline Images' aria-pressed='false'>hide " + eANDI.images.inline + " inline</button>";
+        moduleActionButtons += "<button id='ANDI508-highlightDecorativeImages-button' aria-label='Highlight " + eANDI.images.decorative + " Decorative Inline Images' aria-pressed='false'>" + eANDI.images.decorative + " decorative inline" + findIcon + "</button>";
+        moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span> ";
+        moduleActionButtons += "<button id='ANDI508-removeBackgroundImages-button' aria-label='Hide " + eANDI.images.background + " Background Images' aria-pressed='false'>hide " + eANDI.images.background + " background</button>";
+        moduleActionButtons += "<button id='ANDI508-highlightBackgroundImages-button' aria-label='Highlight " + eANDI.images.background + " Background Images' aria-pressed='false'>find " + eANDI.images.background + " background" + findIcon + "</button>";
+        moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span> ";
+        moduleActionButtons += "<button id='ANDI508-highlightFontIcons-button' aria-label='Find " + eANDI.images.fontIcon + " Font Icons' aria-pressed='false'>" + eANDI.images.fontIcon + " font icons</button>";
 
-            //Add Module Mode Buttons
-            var moduleActionButtons = "";
-            if (totals.inline > 0) {
-                moduleActionButtons += "<button id='ANDI508-fadeInlineImages-button' aria-label='Hide " + totals.inline + " Inline Images' aria-pressed='false'>hide " + totals.inline + " inline</button>";
-                if (totals.decorative > 0)
-                    moduleActionButtons += "<button id='ANDI508-highlightDecorativeImages-button' aria-label='Highlight " + totals.decorative + " Decorative Inline Images' aria-pressed='false'>" + totals.decorative + " decorative inline" + findIcon + "</button>";
+        $("#ANDI508-module-actions").html(moduleActionButtons);
+
+        //Define fadeInlineImages button
+        $("#ANDI508-fadeInlineImages-button").click(function () {
+            //This button will change the image's opacity to almost zero
+            if ($(this).attr("aria-pressed") == "false") {
+                $(this).attr("aria-pressed", "true").addClass("ANDI508-module-action-active");
+                $("#ANDI508-testPage").addClass("eANDI508-fadeInline");
+                AndiModule.activeActionButtons.fadeInlineImages = true;
+            } else {
+                $(this).attr("aria-pressed", "false").removeClass("ANDI508-module-action-active");
+                $("#ANDI508-testPage").removeClass("eANDI508-fadeInline");
+                AndiModule.activeActionButtons.fadeInlineImages = false;
             }
-            if (totals.background > 0) {
-                if (totals.inline > 0)
-                    moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span> ";
-                moduleActionButtons += "<button id='ANDI508-removeBackgroundImages-button' aria-label='Hide " + totals.background + " Background Images' aria-pressed='false'>hide " + totals.background + " background</button>";
-                moduleActionButtons += "<button id='ANDI508-highlightBackgroundImages-button' aria-label='Highlight " + totals.background + " Background Images' aria-pressed='false'>find " + totals.background + " background" + findIcon + "</button>";
+            andiResetter.resizeHeights();
+            return false;
+        });
+
+        //Define Remove removeBackgroundImages button
+        $("#ANDI508-removeBackgroundImages-button").click(function () {
+            if ($(this).attr("aria-pressed") == "false") {
+                $(this).attr("aria-pressed", "true").addClass("ANDI508-module-action-active");
+                $("#ANDI508-testPage").addClass("eANDI508-hideBackground");
+                AndiModule.activeActionButtons.removeBackgroundImages = true;
+            } else {
+                $(this).attr("aria-pressed", "false").removeClass("ANDI508-module-action-active");
+                $("#ANDI508-testPage").removeClass("eANDI508-hideBackground");
+                AndiModule.activeActionButtons.removeBackgroundImages = false;
             }
-            if (totals.fontIcon > 0) {
-                if (totals.inline > 0 || totals.background > 0)
-                    moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span> ";
-                moduleActionButtons += "<button id='ANDI508-highlightFontIcons-button' aria-label='Find " + totals.fontIcon + " Font Icons' aria-pressed='false'>" + totals.fontIcon + " font icons</button>";
+            andiResetter.resizeHeights();
+            return false;
+        });
+
+        //Define highlightBackgroundImages button
+        $("#ANDI508-highlightBackgroundImages-button").click(function () {
+            if ($(this).attr("aria-pressed") == "false") {
+                andiOverlay.overlayButton_on("find", $(this));
+                $("#ANDI508-testPage").addClass("eANDI508-highlightBackground");
+                AndiModule.activeActionButtons.highlightBackgroundImages = true;
+            } else {
+                andiOverlay.overlayButton_off("find", $(this));
+                $("#ANDI508-testPage").removeClass("eANDI508-highlightBackground");
+                AndiModule.activeActionButtons.highlightBackgroundImages = false;
             }
+            andiResetter.resizeHeights();
+            return false;
+        });
 
-            $("#ANDI508-module-actions").html(moduleActionButtons);
-
-            //Define fadeInlineImages button
-            $("#ANDI508-fadeInlineImages-button").click(function () {
-                //This button will change the image's opacity to almost zero
-                if ($(this).attr("aria-pressed") == "false") {
-                    $(this).attr("aria-pressed", "true").addClass("ANDI508-module-action-active");
-                    $("#ANDI508-testPage").addClass("eANDI508-fadeInline");
-                    AndiModule.activeActionButtons.fadeInlineImages = true;
-                }
-                else {
-                    $(this).attr("aria-pressed", "false").removeClass("ANDI508-module-action-active");
-                    $("#ANDI508-testPage").removeClass("eANDI508-fadeInline");
-                    AndiModule.activeActionButtons.fadeInlineImages = false;
-                }
-                andiResetter.resizeHeights();
-                return false;
-            });
-
-            //Define Remove removeBackgroundImages button
-            $("#ANDI508-removeBackgroundImages-button").click(function () {
-                if ($(this).attr("aria-pressed") == "false") {
-                    $(this).attr("aria-pressed", "true").addClass("ANDI508-module-action-active");
-                    $("#ANDI508-testPage").addClass("eANDI508-hideBackground");
-                    AndiModule.activeActionButtons.removeBackgroundImages = true;
-                }
-                else {
-                    $(this).attr("aria-pressed", "false").removeClass("ANDI508-module-action-active");
-                    $("#ANDI508-testPage").removeClass("eANDI508-hideBackground");
-                    AndiModule.activeActionButtons.removeBackgroundImages = false;
-                }
-                andiResetter.resizeHeights();
-                return false;
-            });
-
-            //Define highlightBackgroundImages button
-            $("#ANDI508-highlightBackgroundImages-button").click(function () {
-                if ($(this).attr("aria-pressed") == "false") {
-                    andiOverlay.overlayButton_on("find", $(this));
-                    $("#ANDI508-testPage").addClass("eANDI508-highlightBackground");
-                    AndiModule.activeActionButtons.highlightBackgroundImages = true;
-                }
-                else {
-                    andiOverlay.overlayButton_off("find", $(this));
-                    $("#ANDI508-testPage").removeClass("eANDI508-highlightBackground");
-                    AndiModule.activeActionButtons.highlightBackgroundImages = false;
-                }
-                andiResetter.resizeHeights();
-                return false;
-            });
-
-            //Define highlightDecorativeImages button
-            $("#ANDI508-highlightDecorativeImages-button").click(function () {
-                if ($(this).attr("aria-pressed") == "false") {
-                    andiOverlay.overlayButton_on("find", $(this));
-                    $("#ANDI508-testPage").addClass("eANDI508-highlightDecorative");
-                    AndiModule.activeActionButtons.highlightDecorativeImages = true;
-                }
-                else {
-                    andiOverlay.overlayButton_off("find", $(this));
-                    $("#ANDI508-testPage").removeClass("eANDI508-highlightDecorative");
-                    AndiModule.activeActionButtons.highlightDecorativeImages = false;
-                }
-                andiResetter.resizeHeights();
-                return false;
-            });
-
-            //Define highlightFontIcons button
-            $("#ANDI508-highlightFontIcons-button").click(function () {
-                if ($(this).attr("aria-pressed") == "false") {
-                    andiOverlay.overlayButton_on("find", $(this));
-                    $("#ANDI508-testPage").addClass("eANDI508-highlightFontIcon");
-                    AndiModule.activeActionButtons.highlightFontIcons = true;
-                }
-                else {
-                    andiOverlay.overlayButton_off("find", $(this));
-                    $("#ANDI508-testPage").removeClass("eANDI508-highlightFontIcon");
-                    AndiModule.activeActionButtons.highlightFontIcons = false;
-                }
-                andiResetter.resizeHeights();
-                return false;
-            });
-
-            var startupSummaryText = "";
-            if ((totals.inline + totals.fontIcon) > 0) {
-                andiBar.showElementControls();
-                if (!andiBar.focusIsOnInspectableElement())
-                    startupSummaryText += "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. ";
+        //Define highlightDecorativeImages button
+        $("#ANDI508-highlightDecorativeImages-button").click(function () {
+            if ($(this).attr("aria-pressed") == "false") {
+                andiOverlay.overlayButton_on("find", $(this));
+                $("#ANDI508-testPage").addClass("eANDI508-highlightDecorative");
+                AndiModule.activeActionButtons.highlightDecorativeImages = true;
+            } else {
+                andiOverlay.overlayButton_off("find", $(this));
+                $("#ANDI508-testPage").removeClass("eANDI508-highlightDecorative");
+                AndiModule.activeActionButtons.highlightDecorativeImages = false;
             }
-            else {
-                andiBar.hideElementControls();
-            }
-            startupSummaryText += "Ensure that every meaningful/non-decorative image has a text equivalent.";
-            andiBar.showStartUpSummary(startupSummaryText, true);
+            andiResetter.resizeHeights();
+            return false;
+        });
 
-            AndiModule.engageActiveActionButtons([
-                "fadeInlineImages",
-                "removeBackgroundImages",
-                "highlightBackgroundImages",
-                "highlightDecorativeImages",
-                "highlightFontIcons"
-            ]);
-        }
-        else {
-            //No Graphics were found
-            andiBar.hideElementControls();
-            andiBar.showStartUpSummary("No <span class='ANDI508-module-name-g'>graphics/images</span> were found on this page.");
-        }
+        //Define highlightFontIcons button
+        $("#ANDI508-highlightFontIcons-button").click(function () {
+            if ($(this).attr("aria-pressed") == "false") {
+                andiOverlay.overlayButton_on("find", $(this));
+                $("#ANDI508-testPage").addClass("eANDI508-highlightFontIcon");
+                AndiModule.activeActionButtons.highlightFontIcons = true;
+            } else {
+                andiOverlay.overlayButton_off("find", $(this));
+                $("#ANDI508-testPage").removeClass("eANDI508-highlightFontIcon");
+                AndiModule.activeActionButtons.highlightFontIcons = false;
+            }
+            andiResetter.resizeHeights();
+            return false;
+        });
+
+        var startupSummaryText = "";
+        andiBar.showElementControls();
+        if (!andiBar.focusIsOnInspectableElement())
+            startupSummaryText += "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. ";
+        startupSummaryText += "Ensure that every meaningful/non-decorative image has a text equivalent.";
+        andiBar.showStartUpSummary(startupSummaryText, true);
+
+        AndiModule.engageActiveActionButtons([
+            "fadeInlineImages",
+            "removeBackgroundImages",
+            "highlightBackgroundImages",
+            "highlightDecorativeImages",
+            "highlightFontIcons"
+        ]);
 
         andiAlerter.updateAlertList();
 
