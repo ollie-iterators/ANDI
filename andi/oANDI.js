@@ -41,9 +41,7 @@ function init_module() {
                         if (parseInt(ariaLevel) < 0 || parseInt(ariaLevel) != ariaLevel)
                             //Not a positive integar
                             andiAlerter.throwAlert(alert_0180);
-                    }
-                    else {
-                        //role=heading without aria-level
+                    } else { //role=heading without aria-level
                         andiAlerter.throwAlert(alert_0192);
                     }
                 }
@@ -136,8 +134,7 @@ function init_module() {
                 indentLevel = parseInt(ariaLevel);
             else //aria-level is not a positive integar, default to 2 (defined in ARIA spec, and screen readers are doing this)
                 indentLevel = 2;
-        }
-        else {
+        } else {
             if (role === "heading")
                 indentLevel = 2; //no aria-level and role=heading, so default to 2 (defined in ARIA spec)
             else
@@ -187,8 +184,7 @@ function init_module() {
                 andiOverlay.overlayButton_on("overlay", $(this));
                 andiOverlay.overlayReadingOrder();
                 AndiModule.activeActionButtons.readingOrder = true;
-            }
-            else {
+            } else {
                 andiOverlay.overlayButton_off("overlay", $(this));
                 andiOverlay.removeOverlay("ANDI508-overlay-readingOrder");
                 AndiModule.activeActionButtons.readingOrder = false;
@@ -215,8 +211,7 @@ function init_module() {
                 });
 
                 AndiModule.activeActionButtons.langAttributes = true;
-            }
-            else {
+            } else {
                 andiOverlay.overlayButton_off("overlay", $(this));
                 andiOverlay.removeOverlay("ANDI508-overlay-langAttributes");
                 AndiModule.activeActionButtons.langAttributes = false;
@@ -243,8 +238,7 @@ function init_module() {
                 });
 
                 AndiModule.activeActionButtons.roleAttributes = true;
-            }
-            else {
+            } else {
                 andiOverlay.overlayButton_off("overlay", $(this));
                 andiOverlay.removeOverlay("ANDI508-overlay-roleAttributes");
                 AndiModule.activeActionButtons.roleAttributes = false;
@@ -298,8 +292,7 @@ function init_module() {
                     .html(listIcon + "view headings list")
                     .attr("aria-expanded", "false")
                     .removeClass("ANDI508-viewOtherResults-button-expanded ANDI508-module-action-active");
-            }
-            else {
+            } else {
                 //show Outline, hide alert list
                 $("#ANDI508-alerts-list").hide();
 
@@ -445,13 +438,12 @@ function init_module() {
                         if ($(element.childNodes[z]).is(inclusions)) {//no need to look at this element's childNodes
                             insertReadingOrder(ariaHidden, element.childNodes[z]);
                             z++;//because a new node was inserted, the indexes changed
-                        }
-                        else {//recursion here:
+                        } else { //recursion here:
                             traverseReadingOrder(element.childNodes[z], ariaHidden);
                         }
                     }
                 }
-                //else if child is a text node
+                //Child is a text node
                 else if (element.childNodes[z].nodeType === 3) {
                     if ($.trim(element.childNodes[z].nodeValue) !== "") {
                         //Found some text
@@ -466,8 +458,7 @@ function init_module() {
             function insertReadingOrder(ariaHidden, node) {
                 if (ariaHidden) {
                     overlayObject = andiOverlay.createOverlay("ANDI508-overlay-alert ANDI508-overlay-readingOrder", "X", "hidden from screen reader using aria-hidden=true");
-                }
-                else {
+                } else {
                     readingSequence++;
                     overlayObject = andiOverlay.createOverlay("ANDI508-overlay-readingOrder", readingSequence);
                 }

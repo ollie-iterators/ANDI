@@ -53,9 +53,9 @@ function init_module() {
                             bANDI.processResult($(this));
 
                             AndiData.attachDataToElement(this);
-                        }
-                        else
+                        } else {
                             testPageData.disabledElementsCount++;
+                        }
                     }
                 }
             }
@@ -87,8 +87,7 @@ function init_module() {
                         return true; //one of the immediate children has text
                     }
                 }
-            }
-            else if ($(element).is("input:not([type=radio],[type=checkbox])")) {//element has no child nodes but still can contain text
+            } else if ($(element).is("input:not([type=radio],[type=checkbox])")) {//element has no child nodes but still can contain text
                 return true;
             }
             return false;
@@ -336,7 +335,7 @@ function init_module() {
         bANDI.playground_calc();
 
         //This function will get the colors from the active element
-        //If the color grab is successful, it returns true. Else (doesn't contain a color) returns false.
+        //If the color grab is successful, it returns true. Otherwise (doesn't contain a color) returns false.
         function getColorFromActive(fgBg) {
             var element = $("#bANDI508-" + fgBg);
             if ($("#ANDI508-additionalElementDetails").html() && $(element).children().length === 0) {
@@ -344,8 +343,10 @@ function init_module() {
                 $("#bANDI508-playground-" + fgBg).val(hexColor);
                 $("#bANDI508-playground-colorSelector-" + fgBg).attr("style", "background-color:" + hexColor + " !important");
                 return true;
+            } else {
+                return false;
             }
-            else return false;
+            
         }
     };
 
@@ -360,15 +361,16 @@ function init_module() {
         $("#bANDI508-playground-ratio").removeClass("bANDI508-invalid").html(ratio);
 
         //Hide or Show Suggestion Buttons
-        if (ratio < wcagLevel.largeTextReqRatio)
+        if (ratio < wcagLevel.largeTextReqRatio) {
             $("#bANDI508-playground-suggest-large").css("visibility", "visible");
-        else
+        } else {
             $("#bANDI508-playground-suggest-large").css("visibility", "hidden");
-
-        if (ratio < wcagLevel.smallTextReqRatio)
+        }
+        if (ratio < wcagLevel.smallTextReqRatio) {
             $("#bANDI508-playground-suggest-small").css("visibility", "visible");
-        else
+        } else {
             $("#bANDI508-playground-suggest-small").css("visibility", "hidden");
+        }
     };
 
     //This function checks the colors entered into the playground and determines if they are valid
@@ -483,11 +485,11 @@ function init_module() {
             //Set minReq (minimum requirement)
             bANDI_data.minReq = ratio_small;
 
-            if (bANDI_data.size >= 24)
+            if (bANDI_data.size >= 24) {
                 bANDI_data.minReq = ratio_large;
-            else if (bANDI_data.size >= 18.66 && bANDI_data.weight >= 700) //700 is where bold begins, 18.66 is approx equal to 14pt
+            } else if (bANDI_data.size >= 18.66 && bANDI_data.weight >= 700) { //700 is where bold begins, 18.66 is approx equal to 14pt
                 bANDI_data.minReq = ratio_large;
-
+            }
             if (bANDI_data.bgImage === "none" && !bANDI_data.opacity) {
                 //No, Display PASS/FAIL Result and Requirement Ratio
                 if (bANDI_data.ratio >= bANDI_data.minReq) {
@@ -513,11 +515,11 @@ function init_module() {
                 var thisBgColor = new Color($(element).css("background-color"));
 
                 //Overlay the accumulated bgColor with the the previous background color that was semi-transparent
-                if (recursion)
+                if (recursion) {
                     bgColor = bgColor.overlayOn(thisBgColor);
-                else
+                } else {
                     bgColor = thisBgColor;
-
+                }
                 if ($(element).is("html")) {
                     //transparent or semi-transparent
                     if (thisBgColor.alpha < 1) {
@@ -525,8 +527,7 @@ function init_module() {
                         if (thisBgColor.alpha > 0)
                             semiTransparency = true;
                     }
-                }
-                else if (thisBgColor.alpha < 1) {
+                } else if (thisBgColor.alpha < 1) {
                     //Look at parent element
                     if (thisBgColor.alpha > 0)
                         semiTransparency = true;
@@ -549,13 +550,12 @@ function init_module() {
         if (bANDI_data.result === "FAIL") {
             //Text does not meet minimum contrast ratio
             var minReq = $(element).data("candi508").minReq;
-            if (minReq === wcagLevel.largeTextReqRatio)
+            if (minReq === wcagLevel.largeTextReqRatio) {
                 andiAlerter.throwAlert(alert_0240, ["large text ", wcagLevel.level, minReq]);
-            else
+            } else {
                 andiAlerter.throwAlert(alert_0240, [" ", wcagLevel.level, minReq]);
-        }
-        else if (!bANDI_data.result) {
-            //Opacity Less Than 1
+            }
+        } else if (!bANDI_data.result) { //Opacity Less Than 1
             if ($(element).data("candi508").opacity)
                 andiAlerter.throwAlert(alert_0232);
 
@@ -653,10 +653,11 @@ function init_module() {
     //This function returns true if the suggested foreground color is closer to the actual foreground color.
     //Returns false if the suggested background color is closer to the actual background color 
     bANDI.suggestForegroundChange = function (bANDI_data, suggestedFgColor, suggestedBgColor) {
-        if (getColorDifferenceValue(bANDI_data.fgColor, suggestedFgColor) <= getColorDifferenceValue(bANDI_data.bgColor, suggestedBgColor))
+        if (getColorDifferenceValue(bANDI_data.fgColor, suggestedFgColor) <= getColorDifferenceValue(bANDI_data.bgColor, suggestedBgColor)) {
             return true;
-        else
+        } else {
             return false;
+        }
 
         //This function compares two colors and returns a "color difference value" that can be used in comparisons.
         //Formula: The Color Difference Value = abs(r1 - r2) + abs(g1 - g2) + abs(b1 - b2)
@@ -726,9 +727,9 @@ function init_module() {
             $("#bANDI508-colorSelector-background").remove();
 
             //Insert the reason:
-            if (bANDI_data.bgImage != "none")
+            if (bANDI_data.bgImage != "none") {
                 $("#bANDI508-bg").html("<span class='bANDI508-attention'>has background image</span>");
-            else if (bANDI_data.opacity) {
+            } else if (bANDI_data.opacity) {
                 $("#bANDI508-bg").closest("tr").remove();
                 $("#bANDI508-fg").closest("tr").remove();
             }
@@ -755,10 +756,11 @@ function init_module() {
     function displayColorValue(id, rgbaColor) {
         var hexColor = rgbToHex(rgbaColor);
         //Change color display value of this element
-        if ($(id).is("input"))
+        if ($(id).is("input")) {
             $(id).val(hexColor);
-        else
+        } else {
             $(id).html(hexColor);
+        }
         //Change color on the colorSelector
         $(id).prev().attr("style", "background-color:" + hexColor + " !important");
     }
@@ -799,8 +801,7 @@ function init_module() {
         var _ = self.Color = function (rgba) {
             if (rgba === 'transparent') {
                 rgba = [0, 0, 0, 0];
-            }
-            else if (typeof rgba === 'string') {
+            } else if (typeof rgba === 'string') {
                 var rgbaString = rgba;
                 rgba = rgbaString.match(/rgba?\(([\d.]+), ([\d.]+), ([\d.]+)(?:, ([\d.]+))?\)/);
 
@@ -882,11 +883,11 @@ function init_module() {
 
                 for (var i = 0; i < 3; i++) {
                     //Modified code (Mod 2): (divide by the overlaid alpha if not zero) (Formula: https://en.wikipedia.org/wiki/Alpha_compositing#Alpha_blending)
-                    if (overlaid.rgba[3] !== 0)
+                    if (overlaid.rgba[3] !== 0) {
                         overlaid.rgba[i] = (overlaid.rgba[i] * alpha + color.rgba[i] * color.rgba[3] * (1 - alpha)) / overlaid.rgba[3];
-                    else
-                        //Modified code (Mod 2) End
+                    } else { //Modified code (Mod 2) End
                         overlaid.rgba[i] = overlaid.rgba[i] * alpha + color.rgba[i] * color.rgba[3] * (1 - alpha);
+                    }
                 }
 
                 //Original code (Mod 1):
@@ -942,8 +943,7 @@ function init_module() {
                 var min = 1;
                 if (onBlack.luminance > color.luminance) {
                     min = contrastOnBlack;
-                }
-                else if (onWhite.luminance < color.luminance) {
+                } else if (onWhite.luminance < color.luminance) {
                     min = contrastOnWhite;
                 }
 

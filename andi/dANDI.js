@@ -65,8 +65,7 @@ function init_module() {
                             //duplicate accesskey found on button
                             andiAlerter.throwAlert(alert_0054, [accesskey]);
                             addToList(accesskey, alert_0054);
-                        }
-                        else if ($(element).is("a[href]")) {
+                        } else if ($(element).is("a[href]")) {
                             //duplicate accesskey found on link
                             andiAlerter.throwAlert(alert_0056, [accesskey]);
                             addToList(accesskey, alert_0056);
@@ -88,14 +87,14 @@ function init_module() {
                 if (alertObject) {
                     addClass = "class='ANDI508-display-" + alertObject.level + "'";
                     titleText = alertObject.level + ": " + alertObject.message + accesskey;
-                }
-                else
+                } else {
                     titleText = "AccessKey " + accesskey + " found, focus on element";
-
-                if (index === 0)
+                }
+                if (index === 0) {
                     list += "<span tabindex='0' " + addClass + " title='" + titleText + "'>" + accesskey + "</span> ";
-                else
+                } else {
                     list += "<a href='#' data-andi508-relatedindex='" + index + "' title='" + titleText + "'><span " + addClass + ">" + accesskey + "</span></a> ";
+                }
             }
         };
     }
@@ -228,19 +227,18 @@ function init_module() {
         var lastRadioGroupName;
         $("#ANDI508-testPage .ANDI508-element").each(function () {
             tabindex = $(this).attr("tabindex");
-            if (tabindex < 0) {
-                //tab index is negative
+            if (tabindex < 0) { //tab index is negative
                 overlayObject = andiOverlay.createOverlay("ANDI508-overlay-alert ANDI508-overlay-tabSequence", "X", "not in tab order", 0);
                 andiOverlay.insertAssociatedOverlay(this, overlayObject, true);
-            }
-            else if (tabindex == 0 || ($(this).is(":tabbable") && !(tabindex > 0))) {
+            } else if (tabindex == 0 || ($(this).is(":tabbable") && !(tabindex > 0))) {
                 //tabindex is 0 or natively tabbable and tabindex is not greater than zero
 
                 if ($(this).is("input[type=radio][name]")) {
-                    if (lastRadioGroupName !== undefined && lastRadioGroupName === $(this).attr("name"))
+                    if (lastRadioGroupName !== undefined && lastRadioGroupName === $(this).attr("name")) {
                         return; //this is a subsequent radio button, don't add overlay
-                    else
+                    } else {
                         lastRadioGroupName = $(this).attr("name");
+                    }
                 }
                 tabSequence++;
                 titleText = (tabindex == 0) ? "tabIndex=0" : "natively tabbable";
@@ -265,9 +263,9 @@ function init_module() {
                     overlayClasses += " ANDI508-overlay-alert";
                     titleText += "no matching [id]";
                 }
-            }
-            else
+            } else {
                 titleText += "no [for] attribute";
+            }
             labelText += "&gt;";
 
             overlayObject = andiOverlay.createOverlay(overlayClasses, labelText, titleText, 0);

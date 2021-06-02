@@ -113,8 +113,7 @@ function init_module() {
 
                                 if (!alerts) //Add this for sorting purposes
                                     alerts = "<i>4</i>";
-                            }
-                            else {//No accessible name or description
+                            } else {//No accessible name or description
                                 alerts = alertIcons.danger_noAccessibleName;
                                 nameDescription = "<span class='ANDI508-display-danger'>No Accessible Name</span>";
                             }
@@ -184,8 +183,7 @@ function init_module() {
                 //No click event could be detected
                 else if (!id && !name) {//Link doesn't have id or name
                     andiAlerter.throwAlert(alert_0128);
-                }
-                else {//Link has id or name
+                } else {//Link has id or name
                     //Determine if the link is an anchor for another link
                     var isDefinitelyAnAnchor = false;
                     var referencingHref = "";
@@ -205,11 +203,9 @@ function init_module() {
                             andiAlerter.throwAlert(alert_0129);
                         else //Link is clickable but not keyboard accessible
                             andiAlerter.throwAlert(alert_0164);
-                    }
-                    else if (name) { //name is deprecated
+                    } else if (name) { //name is deprecated
                         andiAlerter.throwAlert(alert_007B, [name]);
-                    }
-                    else {
+                    } else {
                         andiAlerter.throwAlert(alert_012A); //definitely an anchor, but not focusable
                     }
                 }
@@ -232,8 +228,7 @@ function init_module() {
                             //One link is internal
                             alertIcon = alertIcons.caution_ambiguous;
                             alertObject = alert_0162;
-                        }
-                        else {
+                        } else {
                             alertIcon = alertIcons.warning_ambiguous;
                             alertObject = alert_0161;
                         }
@@ -249,13 +244,10 @@ function init_module() {
                         var i; //will store the ambiguousIndex for this match
                         //Does the first instance already have an ambiguousIndex?
                         relatedElement = $(mANDI.links.list[x].element);
-                        if (mANDI.links.list[x].ambiguousIndex) {
-                            //Yes. Copy the ambiguousIndex from the first instance
+                        if (mANDI.links.list[x].ambiguousIndex) { //Yes. Copy the ambiguousIndex from the first instance
                             i = mANDI.links.list[x].ambiguousIndex;
                             mANDI.links.ambiguousCount++;
-                        }
-                        else {
-                            //No. increment ambiguousIndex and add it to the first instance.
+                        } else { //No. increment ambiguousIndex and add it to the first instance.
                             mANDI.links.ambiguousCount = mANDI.links.ambiguousCount + 2;
                             mANDI.links.ambiguousIndex++;
                             i = mANDI.links.ambiguousIndex;
@@ -284,8 +276,7 @@ function init_module() {
                             alerts += alertIcons.danger_anchorTargetNotFound;
                             andiAlerter.throwAlert(alert_0069, [idRef]);
                         }
-                    }
-                    else {//link is internal and anchor target found
+                    } else {//link is internal and anchor target found
                         mANDI.links.internalCount++;
                         linkPurpose = "i";
                         $(element).addClass("mANDI508-internalLink");
@@ -367,8 +358,7 @@ function init_module() {
                     .addClass("mANDI508-highlightAmbiguous");
                 andiOverlay.overlayButton_on("find", $(this));
                 AndiModule.activeActionButtons.highlightAmbiguousLinks = true;
-            }
-            else {
+            } else {
                 //Off
                 $("#ANDI508-testPage").removeClass("mANDI508-highlightAmbiguous");
                 andiOverlay.overlayButton_off("find", $(this));
@@ -456,8 +446,7 @@ function init_module() {
                     if (mANDI.links.list[x].href.charAt(0) !== "#") //href doesn't start with # (points externally)
                         targetText = "target='_mANDI'";
                     displayHref = "<a href='" + mANDI.links.list[x].href + "' " + targetText + ">" + mANDI.links.list[x].href + "</a>";
-                }
-                else { //href contains javascript
+                } else { //href contains javascript
                     displayHref = mANDI.links.list[x].href;
                 }
             }
@@ -514,8 +503,7 @@ function init_module() {
                 .find("img").attr("src", icons_url + "list-on.png");
             $("#mANDI508-viewList").slideDown(AndiSettings.andiAnimationSpeed).focus();
             AndiModule.activeActionButtons.viewLinksList = true;
-        }
-        else {
+        } else {
             //hide List, show alert list
             $("#mANDI508-viewList").slideUp(AndiSettings.andiAnimationSpeed);
             //$("#ANDI508-resultsSummary").show();
@@ -570,8 +558,7 @@ function init_module() {
                 rows = rows.reverse();
                 $(this).attr("title", "descending")
                     .parent().find("i").html("&#9650;"); //up arrow
-            }
-            else {
+            } else {
                 $(this).attr("title", "ascending")
                     .parent().find("i").html("&#9660;"); //down arrow
             }
@@ -603,8 +590,7 @@ function init_module() {
                 //No link being inspected yet, get first element according to selected tab
                 focusGoesOnThisIndex = $("#ANDI508-testPage ." + selectedTabClass).first().attr("data-andi508-index");
                 andiFocuser.focusByIndex(focusGoesOnThisIndex); //loop back to first
-            }
-            else {
+            } else {
                 //Find the next element with class from selected tab and data-andi508-index
                 //This will skip over elements that may have been removed from the DOM
                 for (var x = index; x < testPageData.andiElementIndex; x++) {
@@ -643,8 +629,7 @@ function init_module() {
                 //Loop to last element in list
                 focusGoesOnThisIndex = $("#ANDI508-testPage ." + selectedTabClass).last().attr("data-andi508-index");
                 andiFocuser.focusByIndex(focusGoesOnThisIndex); //loop back to last
-            }
-            else {
+            } else {
                 //Find the previous element with class from selected tab and data-andi508-index
                 //This will skip over elements that may have been removed from the DOM
                 for (var x = index; x > 0; x--) {
@@ -753,7 +738,7 @@ function init_module() {
         if (typeof href == "string") {
             //broken up into three substrings so its not flagged in jslint
             return (href.toLowerCase().substring(0, 3) === "jav" && href.toLowerCase().substring(3, 5) === "ascri" && href.toLowerCase().substring(8, 3) === "pt:");
-        }//else
+        }
         return false;
     };
 

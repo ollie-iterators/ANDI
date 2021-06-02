@@ -11,20 +11,8 @@ function init_module() {
     //This function removes markup in the test page that was added by this module
     AndiModule.cleanup = function (testPage, element) {
         if (element)
-            $(element).removeClass("nANDI508-internalLink nANDI508-externalLink nANDI508-ambiguous nANDI508-anchorTarget");
+            $(element).removeClass("nANDI508-ambiguous");
     };
-
-    //This object class is used to store data about each link. Object instances will be placed into an array.
-    function Link(href, nameDescription, index, alerts, target, linkPurpose, ambiguousIndex, element) {
-        this.href = href;
-        this.nameDescription = nameDescription;
-        this.index = index;
-        this.alerts = alerts;
-        this.target = target;
-        this.linkPurpose = linkPurpose;
-        this.ambiguousIndex = undefined;
-        this.element = element;
-    }
 
     //This object class is used to store data about each button. Object instances will be placed into an array.
     function Button(nameDescription, index, alerts, accesskey, nonUniqueIndex, element) {
@@ -34,16 +22,6 @@ function init_module() {
         this.accesskey = accesskey;
         this.nonUniqueIndex = undefined;
         this.element = element;
-    }
-
-    //This object class is used to keep track of the links on the page
-    function Links() {
-        this.list = [];
-        this.count = 0;
-        this.ambiguousIndex = 0;
-        this.ambiguousCount = 0;
-        this.internalCount = 0;
-        this.externalCount = 0;
     }
 
     //This object class is used to keep track of the buttons on the page
@@ -85,7 +63,6 @@ function init_module() {
 
     //This function will analyze the test page for link related markup relating to accessibility
     nANDI.analyze = function () {
-        nANDI.links = new Links();
         nANDI.buttons = new Buttons();
 
         //Variables used to build the links/buttons list array.
@@ -95,7 +72,6 @@ function init_module() {
         $(TestPageData.allElements).each(function () {
             //ANALYZE BUTTONS
             if ($(this).isSemantically("[role=button]", "button,:button,:submit,:reset,:image")) {
-
                 if (!andiCheck.isThisElementDisabled(this)) {
                     nANDI.buttons.count++;
 
@@ -124,8 +100,7 @@ function init_module() {
                         if (!alerts)
                             //Add this for sorting purposes
                             alerts = "<i>4</i>";
-                    }
-                    else {
+                    } else {
                         //No accessible name or description
                         alerts = alertIcons.danger_noAccessibleName;
                         nameDescription = "<span class='ANDI508-display-danger'>No Accessible Name</span>";
@@ -162,13 +137,10 @@ function init_module() {
                     var m; //will store the nonUniqueIndex for this match
                     //Does the first instance already have a nonUniqueIndex?
                     relatedElement = $(nANDI.buttons.list[y].element);
-                    if (nANDI.buttons.list[y].nonUniqueIndex) {
-                        //Yes. Copy the nonUniqueIndex from the first instance
+                    if (nANDI.buttons.list[y].nonUniqueIndex) { //Yes. Copy the nonUniqueIndex from the first instance
                         m = nANDI.buttons.list[y].nonUniqueIndex;
                         nANDI.buttons.nonUniqueCount++;
-                    }
-                    else {
-                        //No. increment nonUniqueIndex and add it to the first instance.
+                    } else { //No. increment nonUniqueIndex and add it to the first instance.
                         nANDI.buttons.nonUniqueCount = nANDI.buttons.nonUniqueCount + 2;
                         nANDI.buttons.nonUniqueIndex++;
                         m = nANDI.buttons.nonUniqueIndex;
@@ -183,46 +155,6 @@ function init_module() {
                 }
             }
             return false;
-        }
-
-        //This function searches for anchor target if href is internal and greater than 1 character e.g. href="#x"
-        function determineLinkPurpose(href, element) {
-            if (typeof href !== "undefined") {
-                if (href.charAt(0) === "#" && href.length > 1) {
-                    var idRef = href.slice(1); //do not convert to lowercase
-                    if (!isAnchorTargetFound(idRef)) {
-                        if (element.onclick === null && $._data(element, 'events').click === undefined) {//no click events
-                            //Throw Alert, Anchor Target not found
-                            alerts += alertIcons.danger_anchorTargetNotFound;
-                            andiAlerter.throwAlert(alert_0069, [idRef]);
-                        }
-                    }
-                    else {//link is internal and anchor target found
-                        nANDI.links.internalCount++;
-                        linkPurpose = "i";
-                        $(element).addClass("nANDI508-internalLink");
-                    }
-                }
-                else if (href.charAt(0) !== "#" && !nANDI.isScriptedLink(href)) {//this is an external link
-                    nANDI.links.externalCount++;
-                    linkPurpose = "e";
-                    $(element).addClass("nANDI508-externalLink");
-                }
-            }
-
-            //This function searches allIds list to check if anchor target exists. return true if found.
-            function isAnchorTargetFound(idRef) {
-                //for(var z=0; z<testPageData.allIds.length; z++){
-                //	if(testPageData.allIds[z].id.toString().toLowerCase() == idRef)
-                //		return true;
-                //}
-                var anchorTarget = document.getElementById(idRef) || document.getElementsByName(idRef)[0];
-                if ($(anchorTarget).is(":visible")) {
-                    $(anchorTarget).addClass("nANDI508-anchorTarget");
-                    return true;
-                }
-                return false;
-            }
         }
 
         //This function determines if an element[role] is in tab order
@@ -262,15 +194,12 @@ function init_module() {
         //highlightNonUniqueButtons Button
         $("#ANDI508-highlightNonUniqueButtons-button").click(function () {
             var testPage = $("#ANDI508-testPage");
-            if (!$(testPage).hasClass("nANDI508-highlightAmbiguous")) {
-                //On
+            if (!$(testPage).hasClass("nANDI508-highlightAmbiguous")) { //On
                 $("#nANDI508-listButtons-tab-all").click();
                 $("#ANDI508-testPage").addClass("nANDI508-highlightAmbiguous");
                 andiOverlay.overlayButton_on("find", $(this));
                 AndiModule.activeActionButtons.highlightNonUniqueButtons = true;
-            }
-            else {
-                //Off
+            } else { //Off
                 $("#ANDI508-testPage").removeClass("nANDI508-highlightAmbiguous");
                 andiOverlay.overlayButton_off("find", $(this));
                 AndiModule.activeActionButtons.highlightNonUniqueButtons = false;
@@ -322,15 +251,7 @@ function init_module() {
 
             var elementData = $(element).data("andi508");
             var addOnProps = AndiData.getAddOnProps(element, elementData,
-                [
-                    ["href", nANDI.normalizeHref(element)],
-                    "rel",
-                    "download",
-                    "media",
-                    "target",
-                    "type"
-                ]
-            );
+                ["rel", "download", "media", "target", "type"]);
 
             andiBar.displayOutput(elementData, element, addOnProps);
             andiBar.displayTable(elementData, element, addOnProps);
@@ -375,8 +296,7 @@ function init_module() {
 
     //This function hide/shows the view list
     nANDI.viewList_toggle = function (mode, btn) {
-        if ($(btn).attr("aria-expanded") === "false") {
-            //show List, hide alert list
+        if ($(btn).attr("aria-expanded") === "false") { //show List, hide alert list
             $("#ANDI508-alerts-list").hide();
             andiSettings.minimode(false);
             $(btn)
@@ -386,9 +306,7 @@ function init_module() {
                 .find("img").attr("src", icons_url + "list-on.png");
             $("#nANDI508-viewList").slideDown(AndiSettings.andiAnimationSpeed).focus();
             AndiModule.activeActionButtons.viewButtonsList = true;
-        }
-        else {
-            //hide List, show alert list
+        } else { //hide List, show alert list
             $("#nANDI508-viewList").slideUp(AndiSettings.andiAnimationSpeed);
             //$("#ANDI508-resultsSummary").show();
             if (testPageData.numberOfAccessibilityAlertsFound > 0) {
@@ -442,8 +360,7 @@ function init_module() {
                 rows = rows.reverse();
                 $(this).attr("title", "descending")
                     .parent().find("i").html("&#9650;"); //up arrow
-            }
-            else {
+            } else {
                 $(this).attr("title", "ascending")
                     .parent().find("i").html("&#9660;"); //down arrow
             }
@@ -475,8 +392,7 @@ function init_module() {
                 //No link being inspected yet, get first element according to selected tab
                 focusGoesOnThisIndex = $("#ANDI508-testPage ." + selectedTabClass).first().attr("data-andi508-index");
                 andiFocuser.focusByIndex(focusGoesOnThisIndex); //loop back to first
-            }
-            else {
+            } else {
                 //Find the next element with class from selected tab and data-andi508-index
                 //This will skip over elements that may have been removed from the DOM
                 for (var x = index; x < testPageData.andiElementIndex; x++) {
@@ -510,13 +426,11 @@ function init_module() {
                 //get first element according to selected tab
                 andiFocuser.focusByIndex(firstElementInListIndex); //loop back to first
                 focusGoesOnThisIndex = firstElementInListIndex;
-            }
-            else if (index == firstElementInListIndex) {
+            } else if (index == firstElementInListIndex) {
                 //Loop to last element in list
                 focusGoesOnThisIndex = $("#ANDI508-testPage ." + selectedTabClass).last().attr("data-andi508-index");
                 andiFocuser.focusByIndex(focusGoesOnThisIndex); //loop back to last
-            }
-            else {
+            } else {
                 //Find the previous element with class from selected tab and data-andi508-index
                 //This will skip over elements that may have been removed from the DOM
                 for (var x = index; x > 0; x--) {
@@ -557,30 +471,6 @@ function init_module() {
     nANDI.viewList_selectTab = function (tab) {
         $("#nANDI508-viewList-tabs button").removeClass().attr("aria-selected", "false");
         $(tab).addClass("ANDI508-tab-active").attr("aria-selected", "true");
-    };
-
-    //This function gets the href
-    //if href length is greater than 1 and last char is a slash
-    //This elimates false positives during comparisons since with or without slash is essentially the same
-    nANDI.normalizeHref = function (element) {
-        var href = $(element).attr("href");
-        if (typeof href != "undefined") {
-            href = $.trim($(element).attr("href"));
-            if (href === "")
-                href = AndiCheck.emptyString;
-            else if (href.length > 1 && href.charAt(href.length - 1) == "/")
-                href = href.slice(0, -1);
-        }
-        return href;
-    };
-
-    //This function returns true if the href is a link that fires a script
-    nANDI.isScriptedLink = function (href) {
-        if (typeof href == "string") {
-            //broken up into three substrings so its not flagged in jslint
-            return (href.toLowerCase().substring(0, 3) === "jav" && href.toLowerCase().substring(3, 5) === "ascri" && href.toLowerCase().substring(8, 3) === "pt:");
-        }//else
-        return false;
     };
 
     nANDI.analyze();

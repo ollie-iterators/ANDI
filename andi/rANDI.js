@@ -37,8 +37,7 @@ function init_module() {
                         //For live regions, screen readers only use the innerText
                         //override the accName to just the innerText
                         andiData.accName = "<span class='ANDI508-display-innerText'>" + innerText + "</span>";
-                    }
-                    else {//no visible innerText
+                    } else {//no visible innerText
                         andiAlerter.throwAlert(alert_0133);
                         andiData.accName = "";
                     }
@@ -69,32 +68,12 @@ function init_module() {
         var displayCharLength = 60; //for truncating innerText
         var tagName = $(element).prop("tagName").toLowerCase();
         var role = $(element).attr("role");
-        var ariaLevel = $(element).attr("aria-level");
 
-        //Indent the heading according to the level
-        //Results in h1 = 1% left margin, h2 = 2% left margin, etc.
-        var indentLevel;
-        if (ariaLevel) {
-            //Check if positive integar
-            if (parseInt(ariaLevel) > 0 && parseInt(ariaLevel) == ariaLevel)
-                indentLevel = parseInt(ariaLevel);
-            else //aria-level is not a positive integar, default to 2 (defined in ARIA spec, and screen readers are doing this)
-                indentLevel = 2;
-        }
-        else {
-            if (role === "heading")
-                indentLevel = 2; //no aria-level and role=heading, so default to 2 (defined in ARIA spec)
-            else
-                indentLevel = parseInt(tagName.slice(1)); //get second character from h tag
-        }
-
-        var outlineItem = "<a style='margin-left:" + indentLevel + "%' href='#' data-andi508-relatedindex='" + $(element).attr('data-andi508-index') + "'>&lt;" + tagName;
+        var outlineItem = "<a href='#' data-andi508-relatedindex='" + $(element).attr('data-andi508-index') + "'>&lt;" + tagName;
 
         //display relevant attributes
         if (role)
             outlineItem += " role='" + role + "' ";
-        if (ariaLevel)
-            outlineItem += " aria-level='" + ariaLevel + "' ";
 
         outlineItem += "&gt;";
         outlineItem += "<span class='ANDI508-display-innerText'>";
@@ -283,10 +262,8 @@ function init_module() {
             var elementData = $(element).data("andi508");
 
             var addOnProps = AndiData.getAddOnProps(element, elementData,
-                [
-                    "aria-level",
-                    getDefault_ariaLive(element, elementData),
-                    getDefault_ariaAtomic(element, elementData),
+                [getDefault_ariaLive(element, elementData),
+                getDefault_ariaAtomic(element, elementData),
                     "aria-busy",
                     "aria-relevant"
                 ]);
@@ -367,7 +344,7 @@ function init_module() {
                         }
                     }
                 }
-                //else if child is a text node
+                //Child is a text node
                 else if (element.childNodes[z].nodeType === 3) {
                     if ($.trim(element.childNodes[z].nodeValue) !== "") {
                         //Found some text

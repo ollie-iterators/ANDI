@@ -13,10 +13,11 @@ function init_module() {
 
     //This function removes markup in the test page that was added by this module
     AndiModule.cleanup = function (testPage, element) {
-        if (element)
+        if (element) {
             $(element).removeClass("eANDI508-background eANDI508-fontIcon");
-        else
+        } else {
             $(testPage).find(".eANDI508-decorative").removeClass("eANDI508-decorative");
+        }
     };
 
     //This object class is used to keep track of the Images on the page
@@ -54,10 +55,11 @@ function init_module() {
                 //Is Image contained by a link or button?
                 closestWidgetParent = $(this).closest("a,button,[role=button],[role=link]");
                 if ($(closestWidgetParent).length) {
-                    if ($(closestWidgetParent).isSemantically("[role=link]", "a"))
+                    if ($(closestWidgetParent).isSemantically("[role=link]", "a")) {
                         eANDI.images.imageLink++;
-                    else if ($(closestWidgetParent).isSemantically("[role=button]", "button"))
+                    } else if ($(closestWidgetParent).isSemantically("[role=button]", "button")) {
                         eANDI.images.imageButton++;
+                    }
                     eANDI.images.inline++;
                     isImageContainedByInteractiveWidget = true;
                 }

@@ -57,8 +57,7 @@ function init_module() {
                     var listContainer = $(this).closest("ol,ul");
                     if (!$(listContainer).length) {
                         andiAlerter.throwAlert(alert_0079, ["&lt;li&gt;", "&lt;ol&gt; or &lt;ul&gt;"]);
-                    }
-                    else { //check if listContainer is still semantically a list
+                    } else { //check if listContainer is still semantically a list
                         var listContainer_role = $(listContainer).attr("role");
                         if (listContainer_role && listContainer_role !== "list")
                             andiAlerter.throwAlert(alert_0185, [listContainer_role]);
@@ -134,8 +133,7 @@ function init_module() {
                 andiOverlay.overlayButton_on("overlay", $(this));
                 andiOverlay.overlayReadingOrder();
                 AndiModule.activeActionButtons.readingOrder = true;
-            }
-            else {
+            } else {
                 andiOverlay.overlayButton_off("overlay", $(this));
                 andiOverlay.removeOverlay("ANDI508-overlay-readingOrder");
                 AndiModule.activeActionButtons.readingOrder = false;
@@ -162,8 +160,7 @@ function init_module() {
                 });
 
                 AndiModule.activeActionButtons.langAttributes = true;
-            }
-            else {
+            } else {
                 andiOverlay.overlayButton_off("overlay", $(this));
                 andiOverlay.removeOverlay("ANDI508-overlay-langAttributes");
                 AndiModule.activeActionButtons.langAttributes = false;
@@ -190,8 +187,7 @@ function init_module() {
                 });
 
                 AndiModule.activeActionButtons.roleAttributes = true;
-            }
-            else {
+            } else {
                 andiOverlay.overlayButton_off("overlay", $(this));
                 andiOverlay.removeOverlay("ANDI508-overlay-roleAttributes");
                 AndiModule.activeActionButtons.roleAttributes = false;
@@ -380,13 +376,12 @@ function init_module() {
                         if ($(element.childNodes[z]).is(inclusions)) {//no need to look at this element's childNodes
                             insertReadingOrder(ariaHidden, element.childNodes[z]);
                             z++;//because a new node was inserted, the indexes changed
-                        }
-                        else {//recursion here:
+                        } else {//recursion here:
                             traverseReadingOrder(element.childNodes[z], ariaHidden);
                         }
                     }
                 }
-                //else if child is a text node
+                //Child is a text node
                 else if (element.childNodes[z].nodeType === 3) {
                     if ($.trim(element.childNodes[z].nodeValue) !== "") {
                         //Found some text
@@ -401,8 +396,7 @@ function init_module() {
             function insertReadingOrder(ariaHidden, node) {
                 if (ariaHidden) {
                     overlayObject = andiOverlay.createOverlay("ANDI508-overlay-alert ANDI508-overlay-readingOrder", "X", "hidden from screen reader using aria-hidden=true");
-                }
-                else {
+                } else {
                     readingSequence++;
                     overlayObject = andiOverlay.createOverlay("ANDI508-overlay-readingOrder", readingSequence);
                 }
