@@ -81,9 +81,8 @@ function init_module() {
                 ($.trim($(element).text()) === "" &&
                     $(element).find(elementsNeedingTesting).length === 0))) {
             needsTesting = false; //this element doesn't need testing
-        }
         //Is this element one that needs testing?
-        else if (!isContainerElement && $(element).is(elementsNeedingTesting)) {
+        } else if (!isContainerElement && $(element).is(elementsNeedingTesting)) {
             needsTesting = false; //this element doesn't need testing
         }
 
@@ -412,10 +411,11 @@ function init_module() {
 
         //Loop through each reveal button
         $("#ANDI508-module-actions .jANDI-revealButton").each(function () {
-            if ($(this).attr("aria-pressed") == "false")
+            if ($(this).attr("aria-pressed") == "false") {
                 revealAllOn = false;
-            else //a reveal button is pressed
+            } else { //a reveal button is pressed
                 prevNextBtnsVisible = true; //show the prev/next Buttons
+            }
         });
 
         //Toggle Reveal All Button
@@ -444,22 +444,23 @@ function init_module() {
         var okayToRemoveHighlight = true;
         $("#ANDI508-testPage .ANDI508-forceReveal").each(function () {
             okayToRemoveHighlight = true;
-            if (AndiModule.activeActionButtons.forceReveal_display && $(this).hasClass(c + "display"))
+            if (AndiModule.activeActionButtons.forceReveal_display && $(this).hasClass(c + "display")) {
                 okayToRemoveHighlight = false;
-            else if (AndiModule.activeActionButtons.forceReveal_visibility && $(this).hasClass(c + "visibility"))
+            } else if (AndiModule.activeActionButtons.forceReveal_visibility && $(this).hasClass(c + "visibility")) {
                 okayToRemoveHighlight = false;
-            else if (AndiModule.activeActionButtons.forceReveal_position && $(this).hasClass(c + "position"))
+            } else if (AndiModule.activeActionButtons.forceReveal_position && $(this).hasClass(c + "position")) {
                 okayToRemoveHighlight = false;
-            else if (AndiModule.activeActionButtons.forceReveal_opacity && $(this).hasClass(c + "opacity"))
+            } else if (AndiModule.activeActionButtons.forceReveal_opacity && $(this).hasClass(c + "opacity")) {
                 okayToRemoveHighlight = false;
-            else if (AndiModule.activeActionButtons.forceReveal_overflow && $(this).hasClass(c + "overflow"))
+            } else if (AndiModule.activeActionButtons.forceReveal_overflow && $(this).hasClass(c + "overflow")) {
                 okayToRemoveHighlight = false;
-            else if (AndiModule.activeActionButtons.forceReveal_fontSize && $(this).hasClass(c + "fontSize"))
+            } else if (AndiModule.activeActionButtons.forceReveal_fontSize && $(this).hasClass(c + "fontSize")) {
                 okayToRemoveHighlight = false;
-            else if (AndiModule.activeActionButtons.forceReveal_textIndent && $(this).hasClass(c + "textIndent"))
+            } else if (AndiModule.activeActionButtons.forceReveal_textIndent && $(this).hasClass(c + "textIndent")) {
                 okayToRemoveHighlight = false;
-            else if (AndiModule.activeActionButtons.forceReveal_html5Hidden && $(this).hasClass(c + "html5Hidden"))
+            } else if (AndiModule.activeActionButtons.forceReveal_html5Hidden && $(this).hasClass(c + "html5Hidden")) {
                 okayToRemoveHighlight = false;
+            }
 
             if (okayToRemoveHighlight) {
                 $(this).removeClass("ANDI508-forceReveal");

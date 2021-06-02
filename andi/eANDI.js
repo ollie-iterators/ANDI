@@ -83,30 +83,25 @@ function init_module() {
                     eANDI.images.inline++;
                     andiAlerter.throwAlert(alert_0171);
                     AndiData.attachDataToElement(this);
-                }
-                else if ($(this).is("blink")) {
+                } else if ($(this).is("blink")) {
                     eANDI.images.inline++;
                     andiAlerter.throwAlert(alert_0172);
                     AndiData.attachDataToElement(this);
-                }
-                else if ($(this).is("canvas")) {
+                } else if ($(this).is("canvas")) {
                     eANDI.images.inline++;
                     andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
                     AndiData.attachDataToElement(this);
-                }
-                else if ($(this).is("input:image")) {
+                } else if ($(this).is("input:image")) {
                     eANDI.images.inline++;
                     andiCheck.commonFocusableElementChecks(andiData, $(this));
                     altTextAnalysis($.trim($(this).attr("alt")));
                     AndiData.attachDataToElement(this);
-                }
                 //Check for server side image map
-                else if ($(this).is("img") && $(this).attr("ismap")) {//Code is written this way to prevent bug in IE8
+                } else if ($(this).is("img") && $(this).attr("ismap")) {//Code is written this way to prevent bug in IE8
                     eANDI.images.inline++;
                     andiAlerter.throwAlert(alert_0173);
                     AndiData.attachDataToElement(this);
-                }
-                else if (!isImageContainedByInteractiveWidget && $(this).is("img,svg,[role=img]")) { //an image used by an image map is handled by the <area>
+                } else if (!isImageContainedByInteractiveWidget && $(this).is("img,svg,[role=img]")) { //an image used by an image map is handled by the <area>
                     eANDI.images.inline++;
                     if (isElementDecorative(this, andiData)) {
                         eANDI.images.decorative++;
@@ -124,8 +119,7 @@ function init_module() {
                     }
 
                     AndiData.attachDataToElement(this);
-                }
-                else if ($(this).is("area")) {
+                } else if ($(this).is("area")) {
                     eANDI.images.inline++;
                     var map = $(this).closest("map");
                     if ($(map).length) {
@@ -140,17 +134,15 @@ function init_module() {
                             //TODO: throw this message only once for all area tags that it relates to
                             andiAlerter.throwAlert(alert_006A, ["&ltmap name=" + mapName + "&gt;"], 0);
                         }
-                    }
-                    else //Area tag not contained in map
+                    } else { //Area tag not contained in map
                         andiAlerter.throwAlert(alert_0178, alert_0178.message, 0);
-                }
-                else if ($(this).is("[role=image]")) {
+                    }
+                } else if ($(this).is("[role=image]")) {
                     //eANDI.images.inline++;
                     andiAlerter.throwAlert(alert_0183);
                     AndiData.attachDataToElement(this);
                 }
-            }
-            else if ($(this).css("background-image").includes("url(")) {
+            } else if ($(this).css("background-image").includes("url(")) {
                 eANDI.images.background++;
                 $(this).addClass("eANDI508-background");
             }
@@ -194,8 +186,7 @@ function init_module() {
             } else {
                 if (elementData.role === "presentation" || elementData.role === "none") { //role is presentation or none
                     return true;
-                }
-                else if ($(element).is("img") && elementData.empty && elementData.empty.alt) { //<img> and empty alt
+                } else if ($(element).is("img") && elementData.empty && elementData.empty.alt) { //<img> and empty alt
                     return true;
                 }
             }
@@ -383,18 +374,13 @@ function init_module() {
 
         if (altText !== "") {
             altText = altText.toLowerCase();
-            //check for redundant phrase in alt text
-            if (regEx_redundantPhrase.test(altText)) {
+            if (regEx_redundantPhrase.test(altText)) { //Check for redundant phrase in alt text
                 //redundant phrase in alt text
                 andiAlerter.throwAlert(alert_0174);
-            }
-            //Check for filename in alt text
-            else if (regEx_fileTypeExt.test(altText)) {
+            } else if (regEx_fileTypeExt.test(altText)) { //Check for filename in alt text
                 //file name in alt text
                 andiAlerter.throwAlert(alert_0175);
-            }
-            //Check for non-descriptive alt text
-            else if (regEx_nonDescAlt.test(altText)) {
+            } else if (regEx_nonDescAlt.test(altText)) { //Check for non-descriptive alt text
                 //non-descriptive alt text
                 andiAlerter.throwAlert(alert_0176);
             }

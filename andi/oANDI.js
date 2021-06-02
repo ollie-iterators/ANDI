@@ -48,8 +48,7 @@ function init_module() {
 
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this));
                 AndiData.attachDataToElement(this);
-            }
-            else if (headingsArray.length === 0 && $(this).is("p,div,span,strong,em")) {
+            } else if (headingsArray.length === 0 && $(this).is("p,div,span,strong,em")) {
                 //Since oANDI has not found a heading yet, check if this element is a fake headings
 
                 if (oANDI.isFakeHeading(this)) {
@@ -99,8 +98,7 @@ function init_module() {
                     if (nextElement_fontSize < fakeHeading_fontSize) {
                         //next element's font-size is smaller than fakeHeading font-size
                         isFakeHeading = true;
-                    }
-                    else if (isBold(fakeHeading_fontWeight) && !isBold(nextElement_fontWeight)) {
+                    } else if (isBold(fakeHeading_fontWeight) && !isBold(nextElement_fontWeight)) {
                         //next element's font-weight is lighter than fakeHeading font-weight
                         isFakeHeading = true;
                     }
@@ -130,15 +128,17 @@ function init_module() {
         var indentLevel;
         if (ariaLevel) {
             //Check if positive integar
-            if (parseInt(ariaLevel) > 0 && parseInt(ariaLevel) == ariaLevel)
+            if (parseInt(ariaLevel) > 0 && parseInt(ariaLevel) == ariaLevel) {
                 indentLevel = parseInt(ariaLevel);
-            else //aria-level is not a positive integar, default to 2 (defined in ARIA spec, and screen readers are doing this)
+            } else { //aria-level is not a positive integar, default to 2 (defined in ARIA spec, and screen readers are doing this)
                 indentLevel = 2;
+            }
         } else {
-            if (role === "heading")
+            if (role === "heading") {
                 indentLevel = 2; //no aria-level and role=heading, so default to 2 (defined in ARIA spec)
-            else
+            } else {
                 indentLevel = parseInt(tagName.slice(1)); //get second character from h tag
+            }
         }
 
         var outlineItem = "<a style='margin-left:" + indentLevel + "%' href='#' data-andi508-relatedindex='" + $(element).attr('data-andi508-index') + "'>&lt;" + tagName;
@@ -385,13 +385,15 @@ function init_module() {
         function getDefault_ariaLive(element, elementData) {
             var val = $.trim($(element).attr("aria-live"));
             if (!val) {
-                if (elementData.role === "alert")
+                if (elementData.role === "alert") {
                     val = "assertive";
-                else if (elementData.role === "log" || elementData.role === "status")
+                } else if (elementData.role === "log" || elementData.role === "status") {
                     val = "polite";
-                else if (elementData.role === "marquee" || elementData.role === "timer")
+                } else if (elementData.role === "marquee" || elementData.role === "timer") {
                     val = "off";
-                else return; //no default
+                } else {
+                    return; //no default
+                }
             }
             return ["aria-live", val];
         }
@@ -400,11 +402,14 @@ function init_module() {
         function getDefault_ariaAtomic(element, elementData) {
             var val = $.trim($(element).attr("aria-atomic"));
             if (!val) {
-                if (elementData.role === "alert" || elementData.role === "status")
+                if (elementData.role === "alert" || elementData.role === "status") {
                     val = "true";
-                else if (elementData.role === "log" || elementData.role === "marquee" || elementData.role === "timer")
+                } else if (elementData.role === "log" || elementData.role === "marquee" || elementData.role === "timer") {
                     val = "false";
-                else return; //no default
+                } else {
+                    return; //no default
+                }
+                
             }
             return ["aria-atomic", val];
         }
@@ -442,9 +447,7 @@ function init_module() {
                             traverseReadingOrder(element.childNodes[z], ariaHidden);
                         }
                     }
-                }
-                //Child is a text node
-                else if (element.childNodes[z].nodeType === 3) {
+                } else if (element.childNodes[z].nodeType === 3) { //Child is a text node
                     if ($.trim(element.childNodes[z].nodeValue) !== "") {
                         //Found some text
                         insertReadingOrder(ariaHidden, element.childNodes[z]);

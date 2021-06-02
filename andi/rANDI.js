@@ -110,8 +110,7 @@ function init_module() {
                 andiOverlay.overlayButton_on("overlay", $(this));
                 andiOverlay.overlayReadingOrder();
                 AndiModule.activeActionButtons.readingOrder = true;
-            }
-            else {
+            } else {
                 andiOverlay.overlayButton_off("overlay", $(this));
                 andiOverlay.removeOverlay("ANDI508-overlay-readingOrder");
                 AndiModule.activeActionButtons.readingOrder = false;
@@ -138,8 +137,7 @@ function init_module() {
                 });
 
                 AndiModule.activeActionButtons.langAttributes = true;
-            }
-            else {
+            } else {
                 andiOverlay.overlayButton_off("overlay", $(this));
                 andiOverlay.removeOverlay("ANDI508-overlay-langAttributes");
                 AndiModule.activeActionButtons.langAttributes = false;
@@ -166,8 +164,7 @@ function init_module() {
                 });
 
                 AndiModule.activeActionButtons.roleAttributes = true;
-            }
-            else {
+            } else {
                 andiOverlay.overlayButton_off("overlay", $(this));
                 andiOverlay.removeOverlay("ANDI508-overlay-roleAttributes");
                 AndiModule.activeActionButtons.roleAttributes = false;
@@ -285,13 +282,15 @@ function init_module() {
         function getDefault_ariaLive(element, elementData) {
             var val = $.trim($(element).attr("aria-live"));
             if (!val) {
-                if (elementData.role === "alert")
+                if (elementData.role === "alert") {
                     val = "assertive";
-                else if (elementData.role === "log" || elementData.role === "status")
+                } else if (elementData.role === "log" || elementData.role === "status") {
                     val = "polite";
-                else if (elementData.role === "marquee" || elementData.role === "timer")
+                } else if (elementData.role === "marquee" || elementData.role === "timer") {
                     val = "off";
-                else return; //no default
+                } else {
+                    return; //no default
+                }
             }
             return ["aria-live", val];
         }
@@ -300,11 +299,13 @@ function init_module() {
         function getDefault_ariaAtomic(element, elementData) {
             var val = $.trim($(element).attr("aria-atomic"));
             if (!val) {
-                if (elementData.role === "alert" || elementData.role === "status")
+                if (elementData.role === "alert" || elementData.role === "status") {
                     val = "true";
-                else if (elementData.role === "log" || elementData.role === "marquee" || elementData.role === "timer")
+                } else if (elementData.role === "log" || elementData.role === "marquee" || elementData.role === "timer") {
                     val = "false";
-                else return; //no default
+                } else {
+                    return; //no default
+                }
             }
             return ["aria-atomic", val];
         }
@@ -338,14 +339,11 @@ function init_module() {
                         if ($(element.childNodes[z]).is(inclusions)) {//no need to look at this element's childNodes
                             insertReadingOrder(ariaHidden, element.childNodes[z]);
                             z++;//because a new node was inserted, the indexes changed
-                        }
-                        else {//recursion here:
+                        } else {//recursion here:
                             traverseReadingOrder(element.childNodes[z], ariaHidden);
                         }
                     }
-                }
-                //Child is a text node
-                else if (element.childNodes[z].nodeType === 3) {
+                } else if (element.childNodes[z].nodeType === 3) { //Child is a text node
                     if ($.trim(element.childNodes[z].nodeValue) !== "") {
                         //Found some text
                         insertReadingOrder(ariaHidden, element.childNodes[z]);

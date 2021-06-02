@@ -58,10 +58,11 @@ function init_module() {
         function makeIcon(alertLevel, titleText) {
             //The sortPriority number allows alert icon sorting
             var sortPriority = "3"; //default to caution
-            if (alertLevel == "warning")
+            if (alertLevel == "warning") {
                 sortPriority = "2";
-            else if (alertLevel == "danger")
+            } else if (alertLevel == "danger") {
                 sortPriority = "1";
+            }
             return "<img src='" + icons_url + alertLevel + ".png' alt='" + alertLevel + "' title='Accessibility Alert: " + titleText + "' /><i>" + sortPriority + " </i>";
         }
     };
@@ -129,8 +130,7 @@ function init_module() {
                                         linkPurpose,
                                         ambiguousIndex,
                                         this));
-                            }
-                            else if (andiData.role === "link") {
+                            } else if (andiData.role === "link") {
                                 //create Link object and add to array
                                 mANDI.links.list.push(
                                     new Link(href,
@@ -143,8 +143,7 @@ function init_module() {
                                         this));
 
                                 isElementInTabOrder(this, "link");
-                            }
-                            else if (!andiData.role) {
+                            } else if (!andiData.role) {
                                 //link as no role and no href, suggest using role=link or href
                                 andiAlerter.throwAlert(alert_0168);
                             }
@@ -155,9 +154,7 @@ function init_module() {
 
                     AndiData.attachDataToElement(this);
                 }
-            }
-            //Analyze elements that might be links
-            else if ($(this).is("a")) {
+            } else if ($(this).is("a")) { //Analyze elements that might be links
                 andiData = new AndiData(this);
                 isLinkKeyboardAccessible(undefined, this);
                 AndiData.attachDataToElement(this);
@@ -179,9 +176,8 @@ function init_module() {
                 if (element.onclick !== null || $._data(element, "events").click !== undefined) {
                     //Link is clickable but not keyboard accessible
                     andiAlerter.throwAlert(alert_0164);
-                }
                 //No click event could be detected
-                else if (!id && !name) {//Link doesn't have id or name
+                } else if (!id && !name) {//Link doesn't have id or name
                     andiAlerter.throwAlert(alert_0128);
                 } else {//Link has id or name
                     //Determine if the link is an anchor for another link
@@ -199,10 +195,11 @@ function init_module() {
                         }
                     });
                     if (!isDefinitelyAnAnchor) {
-                        if (element.onclick === null && $._data(element, "events").click === undefined)
+                        if (element.onclick === null && $._data(element, "events").click === undefined) {
                             andiAlerter.throwAlert(alert_0129);
-                        else //Link is clickable but not keyboard accessible
+                        } else { //Link is clickable but not keyboard accessible
                             andiAlerter.throwAlert(alert_0164);
+                        } 
                     } else if (name) { //name is deprecated
                         andiAlerter.throwAlert(alert_007B, [name]);
                     } else {
@@ -281,8 +278,7 @@ function init_module() {
                         linkPurpose = "i";
                         $(element).addClass("mANDI508-internalLink");
                     }
-                }
-                else if (href.charAt(0) !== "#" && !mANDI.isScriptedLink(href)) {//this is an external link
+                } else if (href.charAt(0) !== "#" && !mANDI.isScriptedLink(href)) {//this is an external link
                     mANDI.links.externalCount++;
                     linkPurpose = "e";
                     $(element).addClass("mANDI508-externalLink");
@@ -465,8 +461,7 @@ function init_module() {
                 nextTabButton = " <button class='mANDI508-nextTab' data-andi508-relatedid='" +
                     id + "' title='focus on the element after id=" +
                     id + "'>next tab</button>";
-            }
-            else if (mANDI.links.list[x].linkPurpose == "e")
+            } else if (mANDI.links.list[x].linkPurpose == "e")
                 rowClasses += "mANDI508-listLinks-external ";
 
             tableHTML += "<tr class='" + $.trim(rowClasses) + "'>" +
@@ -624,8 +619,7 @@ function init_module() {
                 //get first element according to selected tab
                 andiFocuser.focusByIndex(firstElementInListIndex); //loop back to first
                 focusGoesOnThisIndex = firstElementInListIndex;
-            }
-            else if (index == firstElementInListIndex) {
+            } else if (index == firstElementInListIndex) {
                 //Loop to last element in list
                 focusGoesOnThisIndex = $("#ANDI508-testPage ." + selectedTabClass).last().attr("data-andi508-index");
                 andiFocuser.focusByIndex(focusGoesOnThisIndex); //loop back to last
@@ -725,10 +719,11 @@ function init_module() {
         var href = $(element).attr("href");
         if (typeof href != "undefined") {
             href = $.trim($(element).attr("href"));
-            if (href === "")
+            if (href === "") {
                 href = AndiCheck.emptyString;
-            else if (href.length > 1 && href.charAt(href.length - 1) == "/")
+            } else if (href.length > 1 && href.charAt(href.length - 1) == "/") {
                 href = href.slice(0, -1);
+            }
         }
         return href;
     };

@@ -46,10 +46,11 @@ function init_module() {
         function makeIcon(alertLevel, titleText) {
             //The sortPriority number allows alert icon sorting
             var sortPriority = "3"; //default to caution
-            if (alertLevel == "warning")
+            if (alertLevel == "warning") {
                 sortPriority = "2";
-            else if (alertLevel == "danger")
+            } else if (alertLevel == "danger") {
                 sortPriority = "1";
+            }
             return "<img src='" + icons_url + alertLevel + ".png' alt='" + alertLevel + "' title='Accessibility Alert: " + titleText + "' /><i>" + sortPriority + " </i>";
         }
     };
