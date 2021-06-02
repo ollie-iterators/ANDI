@@ -327,14 +327,10 @@ function init_module() {
         //It distinguishes between element nodes and text nodes
         //It will check for aria-hidden=true (with inheritance)
         function traverseReadingOrder(element, ariaHidden) {
-
             //Check for aria-hidden=true
             ariaHidden = (ariaHidden || $(element).attr("aria-hidden") === "true") ? true : false;
-
             for (var z = 0; z < element.childNodes.length; z++) {
-
-                //if child is an element object that is visible
-                if (element.childNodes[z].nodeType === 1) {
+                if (element.childNodes[z].nodeType === 1) { //if child is an element object that is visible
                     if (!$(element.childNodes[z]).is(exclusions) && $(element.childNodes[z]).is(":shown")) {
                         if ($(element.childNodes[z]).is(inclusions)) {//no need to look at this element's childNodes
                             insertReadingOrder(ariaHidden, element.childNodes[z]);
