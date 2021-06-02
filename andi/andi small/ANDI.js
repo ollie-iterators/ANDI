@@ -60,7 +60,6 @@ var listIcon = "<img src='"+icons_url+"list-off.png' class='ANDI508-listIcon' al
 //==================//
 //This main function is called when jQuery is ready.
 function launchAndi(){(window.andi508 = function(){
-
 	//Ensure that $ is mapped to jQuery
 	window.jQuery = window.$ = jQuery;
 
@@ -499,12 +498,6 @@ function andiReady(){
 
 	//This function creates main html structure of the ANDI Bar.
 	function insertAndiBarHtml(){
-		var menuButtons =
-			"<button id='ANDI508-button-relaunch' aria-label='Refresh ANDI' title='Refresh ANDI' accesskey='"+andiHotkeyList.key_relaunch.key+"'><img src='"+icons_url+"reload.png' alt='' /></button>"+ //refresh
-			"<button id='ANDI508-button-settings' aria-label='Advanced Settings' title='Advanced Settings'><img src='"+icons_url+"settings-off.png' alt='' /></button>"+
-			"<button id='ANDI508-button-keys' aria-label='ANDI Hotkeys List' title='ANDI Hotkeys List'><img src='"+icons_url+"keys-off.png' alt='' /></button>"+
-			"<button id='ANDI508-button-help' aria-label='ANDI Help' title='ANDI Help'><img src='"+icons_url+"help.png' alt='' /></button>"+
-			"<button id='ANDI508-button-close' aria-label='Remove ANDI' title='Remove ANDI'><img src='"+icons_url+"close.png' alt='' /></button>";
 
 		var moduleButtons = "<div id='ANDI508-moduleMenu' role='menu' aria-label='Select a Module'><div id='ANDI508-moduleMenu-prompt'>Select Module:</div>"+
 			//Default (fANDI)
@@ -533,9 +526,6 @@ function andiReady(){
 			"</div>"+
 			"<div id='ANDI508-module-actions'></div>"+
 			"<div id='ANDI508-loading'>Loading <div id='ANDI508-loading-animation'></div></div>"+
-			"<div id='ANDI508-barControls' aria-label='ANDI Controls' class='ANDI508-sectionJump' tabindex='-1'>"+
-				menuButtons+
-			"</div>"+
 		"</div>"+
 		"<div id='ANDI508-body' style='display:none'>"+
 			"<div id='ANDI508-activeElementInspection' aria-label='Active Element Inspection' class='ANDI508-sectionJump' tabindex='-1'>"+
@@ -601,27 +591,6 @@ function andiReady(){
 	//Controls are: Relaunch, Highlights, Mini Mode, Hotkey List, Help, Close, TagName link,
 	// prev/next button, module laucnhers, active element jump hotkey, version popup
 	function defineControls(){
-		//ANDI Relaunch Button
-		$("#ANDI508-button-relaunch")
-			.click(function(){
-				$("#ANDI508-moduleMenu-button-"+AndiModule.module).click();
-				return false;
-			});
-		//ANDI Help Button
-		$("#ANDI508-button-help")
-			.click(function(){
-				var helpLocation = "howtouse.html";
-				if(AndiModule.module != "f") //jump directly to the module on the help page
-					helpLocation = "modules.html#" + AndiModule.module + "ANDI";
-
-				window.open(help_url+helpLocation, "_ANDIhelp",'width=810,height=620,scrollbars=yes,resizable=yes').focus();
-			})
-			.focus(andiHotkeyList.hideHotkeysList);
-		//ANDI Remove/Close Button
-		$("#ANDI508-button-close").click(function(){
-			$("#ANDI508-testPage .ANDI508-element-active").first().removeClass("ANDI508-element-active");
-			andiResetter.hardReset();
-		});
 		//Tag name link
 		$("#ANDI508-elementNameLink")
 			.click(function(){ //Place focus on active element when click tagname
