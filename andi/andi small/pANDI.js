@@ -3,14 +3,17 @@
 //Created By Social Security Administration //
 //==========================================//
 function init_module() {
-    //create pANDI instance
-    var pANDI = new AndiModule("4.1.4", "p");
+    var pANDI = new AndiModule("4.1.4", "p"); //create pANDI instance
     pANDI.index = 1;
 
     //This object class is used to store data about each landmark. Object instances will be placed into an array.
-    function List(element, index) {
+    function List(element, index, closestListItem, listContainer, listContainer_role, closestDesc) {
         this.element = element;
         this.index = index;
+        this.closestListItem = closestListItem;
+        this.listContainer = listContainer;
+        this.listContainer_role = listContainer_role;
+        this.closestDesc = closestDesc;
     }
 
     //This object class is used to keep track of the lists on the page
@@ -30,14 +33,12 @@ function init_module() {
     //This function will analyze the test page for graphics/image related markup relating to accessibility
     pANDI.analyze = function () {
         pANDI.lists = new Lists();
-        //Loop through every visible element
-        $(TestPageData.allElements).each(function () {
+        $(TestPageData.allElements).each(function () { //Loop through every visible element
             if ($(this).isSemantically("[role=listitem],[role=list]", "ol,ul,li,dl,dd,dt")) {
-                //Add to the lists array
-                pANDI.lists.list.push(new List(this, pANDI.index));
-                pANDI.lists.count += 1;
-                pANDI.index += 1;
-
+                var closestListItem = "";
+                var listContainer = "";
+                var listContainer_role = "";
+                var closestDesc = "";
                 if ($(this).isSemantically("[role=list]", "ol,ul,dl")) {
                     if ($(this).is("ul")) {
                         pANDI.lists.ulCount++;
@@ -54,6 +55,7 @@ function init_module() {
                 //Is the listitem contained by an appropriate list container?
                 if ($(this).is("[role=listitem]")) {
                     pANDI.lists.listItemRoleCount += 1;
+                    closestListItem = $(this).closest("[role=list]").length;
                     if (!$(this).closest("[role=list]").length)
                         andiAlerter.throwAlert(alert_0079, ["[role=listitem]", "[role=list]"]);
                 } else if ($(this).is("li")) {
@@ -67,6 +69,7 @@ function init_module() {
                             andiAlerter.throwAlert(alert_0185, [listContainer_role]);
                     }
                 } else if ($(this).is("dd,dt") && !$(this).closest("dl").length) {//Is the dl,dt contained by a dl?
+                    closestDesc = $(this).is("dd,dt") && !$(this).closest("dl").length;
                     andiAlerter.throwAlert(alert_007A);
                 }
 
@@ -78,6 +81,10 @@ function init_module() {
 
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this));
                 AndiData.attachDataToElement(this);
+                //Add to the lists array
+                pANDI.lists.list.push(new List(this, pANDI.index, closestListItem, listConatainer, listContainer_role, closestDesc));
+                pANDI.lists.count += 1;
+                pANDI.index += 1;
             }
         });
     };

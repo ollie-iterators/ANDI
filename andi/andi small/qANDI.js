@@ -3,8 +3,7 @@
 //Created By Social Security Administration //
 //==========================================//
 function init_module() {
-    //create qANDI instance
-    var qANDI = new AndiModule("4.1.4", "q");
+    var qANDI = new AndiModule("4.1.4", "q"); //create qANDI instance
     qANDI.index = 1;
 
     //This object class is used to store data about each landmark. Object instances will be placed into an array.
@@ -48,6 +47,5 @@ function init_module() {
             }
         });
     };
-
     qANDI.analyze();
 }//end init

@@ -3,8 +3,7 @@
 //Created By Social Security Administration //
 //==========================================//
 function init_module() {
-    //create rANDI instance
-    var rANDI = new AndiModule("4.1.4", "r");
+    var rANDI = new AndiModule("4.1.4", "r"); //create rANDI instance
     rANDI.index = 1;
 
     //This object class is used to store data about each live region. Object instances will be placed into an array.
@@ -59,5 +58,4 @@ function init_module() {
         });
     };
     rANDI.analyze();
-
 }//end init
