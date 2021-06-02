@@ -27,18 +27,6 @@ var icons_url = host_url+"icons/";
 	head.appendChild(andiCss);
 })();
 
-//Representation of Empty String that will appear on screen
-AndiCheck.emptyString = "\"\"";
-
-//This number is 2x breath interval of a screen reader (125 characters)
-AndiCheck.characterLimiter = 250;
-
-//Set the global animation speed
-AndiSettings.andiAnimationSpeed = 50; //milliseconds
-
-//The element highlights setting (true = on, false = off)
-AndiSettings.elementHighlightsOn = true;
-
 //Default Module
 AndiModule.module = "f";
 
@@ -46,7 +34,6 @@ AndiModule.module = "f";
 // ANDI OBJECTS: //
 //===============//
 var andiResetter = 		new AndiResetter();		//Resets things ANDI changed
-var andiSettings = 		new AndiSettings();		//Stores Settings
 var andiBar = 			new AndiBar();			//Main Display
 var andiCheck = 		new AndiCheck();		//Alert Testing
 var andiAlerter = 		new AndiAlerter();		//Alert Throwing
@@ -127,9 +114,6 @@ function launchAndi(){(window.andi508 = function(){
 
 	//Default Module Launch
 	AndiModule.launchModule(AndiModule.module);
-
-	//Load previously saved settings.
-	andiSettings.loadANDIsettings();
 
 	//Push down test page so ANDI display can be fixed at top of screen.
 	andiResetter.resizeHeightsOnWindowResize();
@@ -449,7 +433,7 @@ var alert_0133 = new Alert("caution","13","Live region has no innerText content.
 
 var alert_0142 = new Alert("caution","14","Image is presentational; its [alt] will not be used in output.","image_alt_not_used");
 
-var alert_0151 = new Alert("warning","15","[%%%] attribute length exceeds "+AndiCheck.characterLimiter+" characters; consider condensing.","character_length");
+var alert_0151 = new Alert("warning","15","[%%%] attribute length exceeds "+250+" characters; consider condensing.","character_length");
 
 var alert_0161 = new Alert("warning","16","Ambiguous Link: same name/description as another link but different href.","ambiguous_link");
 var alert_0162 = new Alert("caution","16","Ambiguous Link: same name/description as another link but different href.","ambiguous_link");//caution level thrown for internal links
@@ -622,17 +606,7 @@ function andiReady(){
 			.click(function(){
 				$("#ANDI508-moduleMenu-button-"+AndiModule.module).click();
 				return false;
-			})
-			.focus(andiSettings.hideSettingsList);
-		//ANDI Settings
-		$("#ANDI508-button-settings")
-			.click(function(){
-				if($("#ANDI508-settingsList").css("display") === "none")
-					andiSettings.showSettingsList();
-				else
-					andiSettings.hideSettingsList();
-			})
-			.focus(andiHotkeyList.hideHotkeysList);
+			});
 		//ANDI Help Button
 		$("#ANDI508-button-help")
 			.click(function(){
@@ -1191,7 +1165,7 @@ function AndiResetter(){
 
 	//This function resizes ANDI's display and the ANDI508-testPage container so that ANDI doesn't overlap with the test page.
 	//Should be called any time the height of the ANDI Bar might change.
-	this.resizeHeights = function(hideSettingsList){
+	this.resizeHeights = function(){
 		var testPage = document.getElementById("ANDI508-testPage");
 		//Calculate remaining height for testPage
 		setTimeout(function(){
@@ -1217,9 +1191,7 @@ function AndiResetter(){
 						$(this).css("top",andiHeight);
 				});
 			andiHotkeyList.hideHotkeysList();
-			if(!hideSettingsList)
-				andiSettings.hideSettingsList();
-		}, AndiSettings.andiAnimationSpeed+50);
+		}, 50+50);
 	};
 
 	//This function will adjust the top distance of all elements on the test page that have css fixed positions.
@@ -1242,169 +1214,6 @@ function AndiResetter(){
 	//This will automatically call resizeHeights when the browser window is resized by the user.
 	this.resizeHeightsOnWindowResize = function(){
 		$(window).resize(andiResetter.resizeHeights);
-	};
-}
-
-//This class is used to keep track of ANDI settings
-function AndiSettings(){
-
-	//This function will save ANDI settings
-	this.saveANDIsettings = function(){
-		//If this browser has HTML5 local storage capabilities
-		if(typeof(Storage) !== "undefined"){
-			try{
-				if(window.localStorage){
-					//Save the linearize selection
-					localStorage.setItem("ANDI508-linearize", $("#ANDI508-button-linearize").attr("aria-checked"));
-				}
-			}catch(err){console.error(err);}
-		}
-	};
-	//This function will load ANDI settings
-	//If no saved settings were found, it will load with the default settings.
-	this.loadANDIsettings = function(){
-		buildSettingsList();
-		addSettingListNavigation();
-		addSettingsButtonLogic();
-
-		//If this browser has HTML5 local storage capabilities
-		if(typeof(Storage) !== "undefined"){
-			try{
-				if(window.localStorage){
-					//Load the Linearize
-					if(!localStorage.getItem("ANDI508-linearize"))
-						//Default linearize to false
-						andiSettings.linearize(false);
-					else{//load from local storage
-						if(localStorage.getItem("ANDI508-linearize") == "true")
-							andiSettings.linearize(true);
-						else
-							andiSettings.linearize(false);
-					}
-				}
-				else//no local storage
-					andiSettings.linearize(false);
-			}catch(err){console.error(err);}
-		}
-	};
-
-	//This function will toggle the state of linearize
-	//	state: true or false
-	this.linearize = function(state){
-		if(state){//linearize on
-			andiSettings.setting_on(document.getElementById("ANDI508-button-linearize"));
-			var css_position, css_float;
-			$("#ANDI508-testPage *").filter(":visible:not(.ANDI508-overlay)").each(function(){
-				//check position property
-				css_position = $(this).css("position");
-				if(css_position === "absolute" ||
-					css_position === "fixed" ||
-					css_position === "relative" ||
-					css_position === "sticky")
-				{
-					if($(this).css("top") !== "auto" ||
-						$(this).css("left") !== "auto" ||
-						$(this).css("bottom") !== "auto" ||
-						$(this).css("right") !== "auto")
-					{
-						$(this).addClass("ANDI508-linearized ANDI508-linearized-position");
-					}
-				}
-
-				//check float property
-				css_float = $(this).css("float");
-				if(css_float === "left" || css_float === "right"){
-					$(this).addClass("ANDI508-linearized ANDI508-linearized-float");
-				}
-
-			});
-		}
-		else{//linearize off
-			andiSettings.setting_off(document.getElementById("ANDI508-button-linearize"));
-			$("#ANDI508-testPage .ANDI508-linearized").removeClass("ANDI508-linearized ANDI508-linearized-position ANDI508-linearized-float");
-		}
-		andiResetter.resizeHeights(true);
-	};
-
-	//These functions show/hide the settings list
-	this.showSettingsList = function(){
-		$("#ANDI508-settingsList").slideDown(AndiSettings.andiAnimationSpeed).find("a").first().focus();
-		$("#ANDI508-button-settings").attr("aria-expanded","true").children("img").first().attr("src",icons_url+"settings-on.png");
-	};
-	this.hideSettingsList = function(){
-		setTimeout(function(){
-			$("#ANDI508-settingsList").slideUp(AndiSettings.andiAnimationSpeed);
-			$("#ANDI508-button-settings").attr("aria-expanded","false").children("img").first().attr("src",icons_url+"settings-off.png");
-		},5);
-	};
-
-	//This function builds the settings list
-	function buildSettingsList(){
-		var settingsList = "<div id='ANDI508-settingsList' role='application'>"+
-			"<a rel='help' href='"+ help_url + "howtouse.html#AdvancedSettings' aria-label='Advanced Settings Help' target='_blank'>Advanced Settings:</a>"+
-			"<button id='ANDI508-button-highlights' aria-checked='true' role='checkbox'><img src='"+icons_url+"checked-on.png' alt='' /> Element Highlights</button>"+
-			"<button id='ANDI508-button-linearize' aria-checked='false' role='checkbox'><img src='"+icons_url+"checked-off.png' alt='' /> Linearize Page</button>"+
-			"</div>";
-		$("#ANDI508-button-settings").after(settingsList);
-	}
-
-	//This function adds the click logic to the settings buttons
-	function addSettingsButtonLogic(){
-		//Highlights Button
-		//The button removes .ANDI508-highlight from any element with .ANDI508-element
-		$("#ANDI508-button-highlights").click(function(){
-			if(!AndiSettings.elementHighlightsOn){
-				//Show Highlights
-				$("#ANDI508-testPage .ANDI508-element").addClass("ANDI508-highlight");
-				andiSettings.setting_on($(this));
-				AndiSettings.elementHighlightsOn = true;
-			}else{
-				//Hide Highlights
-				$("#ANDI508-testPage .ANDI508-highlight").removeClass("ANDI508-highlight");
-				andiSettings.setting_off($(this));
-				AndiSettings.elementHighlightsOn = false;
-			}
-			andiResetter.resizeHeights(true);
-			return false;
-		});
-
-		//Define the linearize
-		$("#ANDI508-button-linearize").click(function(){
-			if($(this).attr("aria-checked") === "false")
-				andiSettings.linearize(true);
-			else
-				andiSettings.linearize(false);
-			andiSettings.saveANDIsettings();
-			return false;
-		});
-	}
-
-	function addSettingListNavigation(){
-		$("#ANDI508-settingsList").keydown(function(e){
-			switch(e.keyCode){
-			case 40: //down
-				if($("#ANDI508-settingsList").is(":focus"))
-					$(this).children("button").first().focus();//focus on first button
-				else
-					$(":focus").next().focus();//focus on next button
-				break;
-			case 38: //up
-				$(":focus").prev().focus();//focus on prev button
-				break;
-			case 27: //esc
-				andiSettings.hideSettingsList();
-				$("#ANDI508-button-settings").focus();
-				break;
-			}
-		});
-	}
-
-	//These functions handle the on-off state of a settings toggle
-	this.setting_on = function(button){
-		$(button).attr("aria-checked","true").children("img").first().attr("src",icons_url+"checked-on.png");
-	};
-	this.setting_off = function(button){
-		$(button).attr("aria-checked","false").children("img").first().attr("src",icons_url+"checked-off.png");
 	};
 }
 
@@ -2138,7 +1947,7 @@ AndiData.textAlternativeComputation = function(root){
 										//Don't call stepB again to avoid infinite loops (spec explicitely defines this)
 										if(element != refElement && $(refElement).attr(attribute)){//reference contains another reference
 											andiAlerter.throwAlert(alert_006C, [attribute, attribute]);
-											AndiData.addComp(data, componentType, [(AndiCheck.emptyString+" "), refElement, idsArray[x]]);
+											AndiData.addComp(data, componentType, [("\"\" "), refElement, idsArray[x]]);
 										}
 
 										var refData = {}; //will be discarded
@@ -2581,7 +2390,7 @@ AndiData.textAlternativeComputation = function(root){
 	function isEmptyComponent(component, componentType, element){
 		if($.trim(component) == ""){
 			if(element == root)//only record empty components for the root
-				addEmptyComponent(componentType, AndiCheck.emptyString);
+				addEmptyComponent(componentType, "\"\"");
 			return true;
 		}
 		return false;
@@ -3025,9 +2834,6 @@ AndiData.attachDataToElement = function(element){
 	//Attach danger class
 	if(AndiData.data.dangers.length > 0)
 		$(element).addClass("ANDI508-element-danger");
-	//Highlight this element
-	if(AndiSettings.elementHighlightsOn)
-		$(element).addClass("ANDI508-highlight");
 };
 
 AndiData.addComp = function(data, componentType, component, hasNodebeenTraversed){
@@ -3435,7 +3241,7 @@ function AndiCheck(){
 	this.checkCharacterLimit = function(componentText, componentName){
 		if( componentText &&
 			(componentName === "ariaLabel" || componentName === "title" || componentName === "alt") &&
-			componentText.length > AndiCheck.characterLimiter
+			componentText.length > 250
 		){
 			if(componentName === "ariaLabel")
 				componentName = "aria-label";
@@ -3447,9 +3253,9 @@ function AndiCheck(){
 		//This function inserts a pipe character into the componentText at the characterLimiter position
 		//The color of the pipe is the color of a warning
 		function insertCharacterLimitMark(componentText){//inject scissors unicode
-			return andiUtility.formatForHtml(componentText.substring(0, AndiCheck.characterLimiter)) +
+			return andiUtility.formatForHtml(componentText.substring(0, 250)) +
 				"<span class='ANDI508-display-warning'>&hellip;&#9986;&hellip;</span>" +
-				andiUtility.formatForHtml(componentText.substring(AndiCheck.characterLimiter,componentText.length));
+				andiUtility.formatForHtml(componentText.substring(250,componentText.length));
 		}
 	};
 }
@@ -3717,14 +3523,14 @@ function AndiAlerter(){
 					var tabindex;
 					if($(groupListContainer).css("display")=="none"){
 						//show alertGroup-list
-						$(groupListContainer).slideDown(AndiSettings.andiAnimationSpeed);
+						$(groupListContainer).slideDown(50);
 						$(groupListContainer).children().first().find("a").focus();
 						$(trigger).attr("aria-expanded","true");
 						tabindex = "0";
 					}
 					else{
 						//hide alertGroup-list
-						$(groupListContainer).slideUp(AndiSettings.andiAnimationSpeed);
+						$(groupListContainer).slideUp(50);
 						$(trigger).attr("aria-expanded","false");
 						tabindex = "-1";
 					}
