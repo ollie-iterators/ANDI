@@ -45,6 +45,7 @@ function init_module() {
                 AndiData.attachDataToElement(this);
                 kANDI.iFrames.list.push(new iFrame(this, kANDI.index, src, ariaHiddenTest, andiData.isAriaHidden, andiData.accName, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, ""));
                 kANDI.index += 1;
+                kANDI.iFrames.count += 1;
             }
         });
     };
