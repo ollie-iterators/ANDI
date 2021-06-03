@@ -9,10 +9,11 @@ function init_module() {
     kANDI.index = 1;
 
     //This object class is used to store data about each iFrame. Object instances will be placed into an array.
-    function iFrame(element, index, src, isAriaHidden, accessibleName, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, alerts) {
+    function iFrame(element, index, src, ariaHiddenTest, isAriaHidden, accessibleName, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, alerts) {
         this.element = element;
         this.index = index;
         this.src = src;
+        this.ariaHiddenTest = ariaHiddenTest;
         this.isAriaHidden = isAriaHidden;
         this.accessibleName = accessibleName
         this.ariaLabel = ariaLabel
@@ -41,10 +42,11 @@ function init_module() {
                 var ariaLabelledby = $(this).attr("aria-labelledby");
                 var ariaRole = $(this).attr("aria-role");
                 var ariaLabeledby = $(this).attr("aria-labeledby");
+                var ariaHiddenTest = $(this).parents().attr("aria-hidden");
                 andiData = new AndiData(this);
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
                 AndiData.attachDataToElement(this);
-                kANDI.iFrames.list.push(new iFrame(this, kANDI.index, src, andiData.isAriaHidden, andiData.accName, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, ""));
+                kANDI.iFrames.list.push(new iFrame(this, kANDI.index, src, ariaHiddenTest, andiData.isAriaHidden, andiData.accName, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, ""));
                 kANDI.index += 1;
             }
         });

@@ -229,49 +229,6 @@ function init_module() {
             return true;
         }
     };
-
-    //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-    var showStartUpSummaryText = "";
-    jANDI.results = function () {
-
-        andiBar.updateResultsSummary("Hidden Elements: " + hiddenElements);
-
-        //Add Module Mode Buttons
-        var moduleActionButtons = "";
-        var revealButtons = "";
-
-        addForceRevealButton("display", hidden_display, "display:none");
-        addForceRevealButton("visibility", hidden_visibility, "visibility:hidden");
-        addForceRevealButton("position", hidden_position, "position:absolute");
-        addForceRevealButton("overflow", hidden_overflow, "overflow:hidden");
-        addForceRevealButton("fontSize", hidden_fontSize, "font-size:0");
-        addForceRevealButton("textIndent", hidden_textIndent, "text-indent");
-        addForceRevealButton("html5Hidden", hidden_html5Hidden, "html5 hidden");
-        addForceRevealButton("opacity", hidden_opacity, "opacity:0");
-
-        function addForceRevealButton(technique, count, buttonText) {
-            revealButtons += "<button id='ANDI508-forceReveal_" + technique + "-button' class='jANDI-revealButton' aria-label='" + count + " " + buttonText + "' aria-pressed='false'>" + count + " " + buttonText + findIcon + "</button>";
-        }
-
-        moduleActionButtons = "<button id='ANDI508-forceRevealAll-button' aria-label='Reveal All' aria-pressed='false'>reveal all" + findIcon + "</button><span class='ANDI508-module-actions-spacer'>|</span> ";
-
-        $("#ANDI508-module-actions").html(moduleActionButtons);
-
-        andiBar.initializeModuleActionGroups();
-
-        //=============================================
-        showStartUpSummaryText += "Discover <span class='ANDI508-module-name-h'>hidden content</span> that should be tested for accessibility using other ANDI modules. " +
-            "Use the style toggle buttons to force the hidden content to be revealed. " +
-            "The revealed content will not remain revealed after changing modules. ";
-        showStartUpSummaryText += "Content injected with CSS may be invisible to a screen reader.";
-
-        andiBar.showStartUpSummary(showStartUpSummaryText, true);
-
-        andiAlerter.updateAlertList();
-
-        $("#ANDI508").focus();
-    };
-
     jANDI.analyze();
     jANDI.results();
 
