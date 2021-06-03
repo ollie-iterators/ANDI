@@ -31,12 +31,11 @@ iANDI.results = function(){
 		
 		$("#ANDI508-testPage .ANDI508-element").each(function(){
 			//Build iFrame List
-			var ariaHiddenTest = $(this).parents().attr("aria-hidden");
 			iframesSelectionLinks += "<li><a href='javascript:void(0)' data-andi508-relatedindex='"+$(this).attr('data-andi508-index')+"'>";
 			if($(this).attr("src"))
-				iframesSelectionLinks += $(this).attr("src") + ' "' + ariaHiddenTest + '"';
+				iframesSelectionLinks += $(this).attr("src");
 			else
-				iframesSelectionLinks += "No src" + ' "' + ariaHiddenTest + '"';
+				iframesSelectionLinks += "No src";
 			iframesSelectionLinks += "</a></li>";
 		});
 		//iframes contain body content
