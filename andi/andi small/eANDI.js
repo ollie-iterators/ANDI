@@ -252,12 +252,7 @@ function init_module() {
             }
             var elementData = $(element).data("andi508");
             var addOnProps = AndiData.getAddOnProps(element, elementData,
-                [
-                    "longdesc",
-                    "ismap",
-                    "usemap",
-                    ["background-image", bgImgUrl]
-                ]);
+                ["longdesc", "ismap", "usemap", ["background-image", bgImgUrl]]);
 
             andiBar.displayOutput(elementData, element, addOnProps);
             andiBar.displayTable(elementData, element, addOnProps);
@@ -272,8 +267,7 @@ function init_module() {
 
         if (altText !== "") {
             altText = altText.toLowerCase();
-            //check for redundant phrase in alt text
-            if (regEx_redundantPhrase.test(altText)) {
+            if (regEx_redundantPhrase.test(altText)) { //check for redundant phrase in alt text
                 andiAlerter.throwAlert(alert_0174); //redundant phrase in alt text
             } else if (regEx_fileTypeExt.test(altText)) { //Check for filename in alt text
                 andiAlerter.throwAlert(alert_0175); //file name in alt text

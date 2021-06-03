@@ -1,7 +1,8 @@
 //==========================================//
-//pANDI: lists ANDI                         //
+//pANDI: lists ANDI (small code)            //
 //Created By Social Security Administration //
 //==========================================//
+//NOTE: This only contains the code for finding errors and none for displaying the error code
 function init_module() {
     var pANDI = new AndiModule("4.1.4", "p"); //create pANDI instance
     pANDI.index = 1;
@@ -39,25 +40,20 @@ function init_module() {
                 var listContainer = "";
                 var listContainer_role = "";
                 var closestDesc = "";
-                if ($(this).isSemantically("[role=list]", "ol,ul,dl")) {
-                    if ($(this).is("ul")) {
-                        pANDI.lists.ulCount++;
-                    } else if ($(this).is("ol")) {
-                        pANDI.lists.olCount++;
-                    } else if ($(this).is("dl")) {
-                        pANDI.lists.dlCount++;
-                    } else {
-                        pANDI.lists.listRoleCount++;
-                    }
-                }
-                andiData = new AndiData(this);
-
-                //Is the listitem contained by an appropriate list container?
-                if ($(this).is("[role=listitem]")) {
+                if ($(this).is("ul")) {
+                    pANDI.lists.ulCount++;
+                } else if ($(this).is("ol")) {
+                    pANDI.lists.olCount++;
+                } else if ($(this).is("dl")) {
+                    pANDI.lists.dlCount++;
+                } else if ($(this).is("[role=list]")) {
+                    pANDI.lists.listRoleCount++;
+                } else if ($(this).is("[role=listitem]")) {
                     pANDI.lists.listItemRoleCount += 1;
                     closestListItem = $(this).closest("[role=list]").length;
-                    if (!$(this).closest("[role=list]").length)
+                    if (!$(this).closest("[role=list]").length) { //Is the listitem contained by an appropriate list container?
                         andiAlerter.throwAlert(alert_0079, ["[role=listitem]", "[role=list]"]);
+                    }
                 } else if ($(this).is("li")) {
                     pANDI.lists.liCount += 1;
                     var listContainer = $(this).closest("ol,ul");
@@ -68,17 +64,20 @@ function init_module() {
                         if (listContainer_role && listContainer_role !== "list")
                             andiAlerter.throwAlert(alert_0185, [listContainer_role]);
                     }
-                } else if ($(this).is("dd,dt") && !$(this).closest("dl").length) {//Is the dl,dt contained by a dl?
-                    closestDesc = $(this).is("dd,dt") && !$(this).closest("dl").length;
-                    andiAlerter.throwAlert(alert_007A);
-                }
-
-                if ($(this).is("dd")) {
+                } else if ($(this).is("dd")) {
                     pANDI.lists.ddCount += 1;
+                    closestDesc = $(this).is("dd,dt") && !$(this).closest("dl").length;
+                    if (!$(this).closest("dl").length) {
+                        andiAlerter.throwAlert(alert_007A);
+                    }
                 } else if ($(this).is("dt")) {
                     pANDI.lists.dtCount += 1;
+                    closestDesc = $(this).is("dd,dt") && !$(this).closest("dl").length;
+                    if (!$(this).closest("dl").length) {
+                        andiAlerter.throwAlert(alert_007A);
+                    }
                 }
-
+                andiData = new AndiData(this);
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this));
                 AndiData.attachDataToElement(this);
                 //Add to the lists array
@@ -88,58 +87,5 @@ function init_module() {
             }
         });
     };
-
-    //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-    pANDI.results = function () {
-        andiBar.updateResultsSummary("List Elements: " + pANDI.lists.count);
-        var listCounts = "";
-        var delimiter = "";
-        var listTypesUsed = "";
-
-        listCounts += pANDI.lists.olCount + " ordered list (ol)";
-        listTypesUsed += "ol";
-        delimiter = ", ";
-
-        listCounts += delimiter + pANDI.lists.ulCount + " unordered list (ul)";
-        listTypesUsed += delimiter + "ul";
-        delimiter = ", ";
-
-        listCounts += delimiter + pANDI.lists.dlCount + " description list (dl)";
-        listTypesUsed += delimiter + "dl";
-
-        listCounts += delimiter + pANDI.lists.listRoleCount + " role=list";
-        listTypesUsed += delimiter + "[role=list]";
-
-        $("#ANDI508-additionalPageResults").html(listCounts);
-
-        if (!andiBar.focusIsOnInspectableElement()) {
-            andiBar.showElementControls();
-            andiBar.showStartUpSummary("List structure found.<br />Determine if the <span class='ANDI508-module-name-s'>list</span> container types used (" + listTypesUsed + ") are appropriately applied.", true);
-        }
-
-        andiAlerter.updateAlertList();
-
-        $("#ANDI508").focus();
-
-    };
-
-    //This function will update the info in the Active Element Inspection.
-    //Should be called after the mouse hover or focus in event.
-    AndiModule.inspect = function (element) {
-        if ($(element).hasClass("ANDI508-element")) {
-            andiBar.prepareActiveElementInspection(element);
-
-            var elementData = $(element).data("andi508");
-
-            var addOnProps = AndiData.getAddOnProps(element, elementData, ["aria-busy", "aria-relevant"]);
-
-            andiBar.displayTable(elementData, element, addOnProps);
-
-            andiBar.displayOutput(elementData, element, addOnProps);
-        }
-    };
-
     pANDI.analyze();
-    pANDI.results();
-
 }//end init

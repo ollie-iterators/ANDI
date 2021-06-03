@@ -11,7 +11,7 @@ function init_module() {
         this.element = element;
         this.index = index;
         this.isAriaHidden = isAriaHidden;
-        this.ariaLabel = ariaLabel
+        this.ariaLabel = ariaLabel;
         this.ariaLabelledby = ariaLabelledby;
         this.ariaRole = ariaRole;
         this.ariaLabeledby = ariaLabeledby;

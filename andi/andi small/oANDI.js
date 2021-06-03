@@ -36,14 +36,13 @@ function init_module() {
                     var ariaLevel = $(this).attr("aria-level");
                     if (ariaLevel) {
                         if ($(this).is("h1,h2,h3,h4,h5,h6")) {
-                            if (andiData.tagNameText.charAt(1) !== ariaLevel) {
-                                //heading tag name level doesn't match aria-level
+                            if (andiData.tagNameText.charAt(1) !== ariaLevel) { //heading tag name level doesn't match aria-level
                                 andiAlerter.throwAlert(alert_0191, [andiData.tagNameText, ariaLevel]);
                             }
                         }
-                        if (parseInt(ariaLevel) < 0 || parseInt(ariaLevel) != ariaLevel)
-                            //Not a positive integar
+                        if (parseInt(ariaLevel) < 0 || parseInt(ariaLevel) != ariaLevel) { //Not a positive integer
                             andiAlerter.throwAlert(alert_0180);
+                        }
                     } else { //role=heading without aria-level
                         andiAlerter.throwAlert(alert_0192);
                     }

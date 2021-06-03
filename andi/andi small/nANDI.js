@@ -106,8 +106,7 @@ function init_module() {
 
                         if (!alerts) { //Add this for sorting purposes
                             alerts = "<i>4</i>";
-                        }
-                            
+                        }     
                     } else { //No accessible name or description
                         alerts = alertIcons.danger_noAccessibleName;
                         nameDescription = "<span class='ANDI508-display-danger'>No Accessible Name</span>";

@@ -22,6 +22,9 @@
     change the name so that any changes in the code won't alter it, and make sure to be alert about documenting how
     the code changes so that you can add code to the other areas
 
+NOTES about attributes to get
+1. Get attributes from add-on props. Confirm that they are in the code
+
 List of ANDI that should not be altered (except for allVisibleElements)
 ANDI File Name - ANDI Test
 andi  - Main Module
