@@ -27,9 +27,6 @@ function init_module() {
     function IFrames() {
         this.list = [];
         this.count = 0;
-        this.ambiguousCount = 0;
-        this.internalCount = 0;
-        this.externalCount = 0;
     }
 
     //This function will analyze the test page for focusable element related markup relating to accessibility
