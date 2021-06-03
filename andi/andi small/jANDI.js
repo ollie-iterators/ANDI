@@ -259,27 +259,6 @@ function init_module() {
 
         andiBar.initializeModuleActionGroups();
 
-        function addHiddenContentButtonClickLogic(technique) {
-            $("#ANDI508-forceReveal_" + technique + "-button").click(function () {
-                if ($(this).attr("aria-pressed") === "false") {
-                    andiOverlay.overlayButton_on("find", $(this));
-                    $("#ANDI508-testPage .ANDI508-forceReveal-" + technique).each(function () {
-                        $(this).addClass("ANDI508-forceReveal");
-                        if (technique === "html5Hidden")//remove hidden attribute for html5Hidden technique
-                            $(this).removeAttr("hidden");
-                    });
-                    AndiModule.activeActionButtons["forceReveal_" + technique] = true;
-                } else {
-                    andiOverlay.overlayButton_off("find", $(this));
-                    if (technique === "html5Hidden")//add the hidden attribute back on
-                        $("#ANDI508-testPage .ANDI508-forceReveal-html5Hidden").attr("hidden", "hidden");
-                    AndiModule.activeActionButtons["forceReveal_" + technique] = false;
-                }
-                andiResetter.resizeHeights();
-                return false;
-            });
-        }
-
         //=============================================
         showStartUpSummaryText += "Discover <span class='ANDI508-module-name-h'>hidden content</span> that should be tested for accessibility using other ANDI modules. " +
             "Use the style toggle buttons to force the hidden content to be revealed. " +
