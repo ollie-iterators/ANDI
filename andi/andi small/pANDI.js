@@ -50,7 +50,7 @@ function init_module() {
                 if ($(this).is("[role=listitem]")) {
                     pANDI.lists.listItemRoleCount += 1;
                     closestListItem = $(this).closest("[role=list]").length;
-                    if (!$(this).closest("[role=list]").length) { //Is the listitem contained by an appropriate list container?
+                    if (!closestListItem) { //Is the listitem contained by an appropriate list container?
                         andiAlerter.throwAlert(alert_0079, ["[role=listitem]", "[role=list]"]);
                     }
                 } else if ($(this).is("li")) {
@@ -63,16 +63,10 @@ function init_module() {
                         if (listContainer_role && listContainer_role !== "list")
                             andiAlerter.throwAlert(alert_0185, [listContainer_role]);
                     }
-                } else if ($(this).is("dd")) {
+                } else if ($(this).is("dd,dt")) {
                     pANDI.lists.ddCount += 1;
-                    closestDesc = $(this).is("dd,dt") && !$(this).closest("dl").length;
-                    if (!$(this).closest("dl").length) {
-                        andiAlerter.throwAlert(alert_007A);
-                    }
-                } else if ($(this).is("dt")) {
-                    pANDI.lists.dtCount += 1;
-                    closestDesc = $(this).is("dd,dt") && !$(this).closest("dl").length;
-                    if (!$(this).closest("dl").length) {
+                    closestDesc = !$(this).closest("dl").length;
+                    if (closestDesc) {
                         andiAlerter.throwAlert(alert_007A);
                     }
                 }
