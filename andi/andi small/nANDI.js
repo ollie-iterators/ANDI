@@ -16,7 +16,7 @@ function init_module() {
     };
 
     //This object class is used to store data about each button. Object instances will be placed into an array.
-    function Button(element, index, role, elementInTabOrder, nameDescription, alerts, accesskey, nonUniqueIndex, isAriaHidden, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby) {
+    function Button(element, index, role, elementInTabOrder, nameDescription, alerts, accesskey, nonUniqueIndex, isAriaHidden, ariaLabel, ariaLabelledby, label, ariaRole, ariaLabeledby) {
         this.element = element;
         this.index = index;
         this.role = role;
@@ -32,6 +32,9 @@ function init_module() {
         this.ariaRole = ariaRole;
         this.ariaLabeledby = ariaLabeledby;
         // NOTE: Check out: areThereAnyDuplicateFors
+        // NOTE: label[for] means a label tag with a for attribute that shows which element it is added to
+        // The test is about if the element has a label attribute and
+        this.label = label;
         this.onBlue = onBlur;
         // NOTE: onCharge is combined with whether the element is an input, select, or textarea element
         this.onCharge = onCharge;
@@ -83,6 +86,7 @@ function init_module() {
                     var ariaLabelledby = $(this).attr("aria-labelledby");
                     var ariaRole = $(this).attr("aria-role");
                     var ariaLabeledby = $(this).attr("aria-labeledby");
+                    var label = $(this).attr("label");
 
                     andiData = new AndiData(this);
 

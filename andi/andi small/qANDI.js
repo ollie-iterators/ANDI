@@ -10,6 +10,7 @@ function init_module() {
     function Landmark(element, index, isAriaHidden, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, alerts) {
         this.element = element;
         this.index = index;
+        // Common Non Focusable Element Attributes
         this.isAriaHidden = isAriaHidden;
         this.ariaLabel = ariaLabel;
         this.ariaLabelledby = ariaLabelledby;

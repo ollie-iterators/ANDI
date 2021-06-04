@@ -8,13 +8,43 @@ function init_module() {
     oANDI.index = 1;
 
     //This object class is used to store data about each header. Object instances will be placed into an array.
-    function Header(element, index, role, lang) {
+    function Header(element, index, role, ariaLevel, ariaLevelComp, isAriaHidden, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, alerts) {
         this.element = element;
         this.index = index;
+        this.role = role;
+        this.ariaLevel = ariaLevel;
+        this.ariaLevelComp = ariaLevelComp;
+        // Common Non Focusable Element Attributes
+        this.isAriaHidden = isAriaHidden;
+        this.ariaLabel = ariaLabel;
+        this.ariaLabelledby = ariaLabelledby;
+        this.ariaRole = ariaRole;
+        this.ariaLabeledby = ariaLabeledby;
+        this.alerts = alerts;
+    }
+
+    //This object class is used to store data about each fake header. Object instances will be placed into an array.
+    function FakeHeader(element, index, text, fontSize, fontWeight, nextElement, nextText, nextFontSize, nextFontWeight, isFakeHeader) {
+        this.element = element;
+        this.index = index;
+        this.text = text;
+        this.fontSize = fontSize;
+        this.fontWeight = fontWeight;
+        this.nextElement = nextElement;
+        this.nextText = nextText;
+        this.nextFontSize = nextFontSize;
+        this.nextFontWeight = nextFontWeight;
+        this.isFakeHeader = isFakeHeader;
     }
 
     //This object class is used to keep track of the headers on the page
     function Headers() {
+        this.list = [];
+        this.count = 0;
+    }
+
+    //This object class is used to keep track of the fake headers on the page
+    function FakeHeaders() {
         this.list = [];
         this.count = 0;
     }
@@ -25,15 +55,16 @@ function init_module() {
         //Loop through every visible element
         $(TestPageData.allElements).each(function () {
             if ($(this).isSemantically("[role=heading]", "h1,h2,h3,h4,h5,h6")) {
-                //Add to the headings array
-                oANDI.headers.list.push(new Header(this, oANDI.index));
-                oANDI.headers.count += 1;
-                oANDI.index += 1;
-
                 andiData = new AndiData(this);
-
+                var ariaLevel = "";
+                var ariaLevelComp = andiData.tagNameText.charAt(1);
+                var role = $(this).attr("role");
+                var ariaLabel = $(this).attr("aria-label");
+                var ariaLabelledby = $(this).attr("aria-labelledby");
+                var ariaRole = $(this).attr("aria-role");
+                var ariaLabeledby = $(this).attr("aria-labeledby");
                 if (andiData.role === "heading") {
-                    var ariaLevel = $(this).attr("aria-level");
+                    ariaLevel = $(this).attr("aria-level");
                     if (ariaLevel) {
                         if ($(this).is("h1,h2,h3,h4,h5,h6")) {
                             if (andiData.tagNameText.charAt(1) !== ariaLevel) { //heading tag name level doesn't match aria-level
@@ -50,15 +81,27 @@ function init_module() {
 
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this));
                 AndiData.attachDataToElement(this);
+                oANDI.headers.list.push(new Header(this, oANDI.index, role, ariaLevel, ariaLevelComp, andiData.isAriaHidden, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, ""));
+                oANDI.headers.count += 1;
+                oANDI.index += 1;
             } else if (oANDI.headers.list.length === 0 && $(this).is("p,div,span,strong,em")) {
-                //Since oANDI has not found a heading yet, check if this element is a fake headings
-
-                if (oANDI.isFakeHeading(this)) {
+                oANDI.fakeHeaders = new FakeHeaders();
+                var text = $.trim($(this).text());
+                var fontSize = parseInt($(this).css("font-size"));
+                var fontWeight = $(this).css("font-weight");
+                var nextElement = $(this).next().filter(":visible");
+                var nextText = $.trim($(nextElement).text());
+                var nextFontSize = parseInt($(nextElement).css("font-size"));
+                var nextFontWeight = $(nextElement).css("font-weight");
+                if (oANDI.isFakeHeading(this)) { //Since oANDI has not found a heading yet, check if this element is a fake headings
                     andiData = new AndiData(this);
 
                     andiAlerter.throwAlert(alert_0190);
                     AndiData.attachDataToElement(this);
                 }
+                oANDI.fakeHeaders.list.push(new FakeHeader(this, oANDI.index, text, fontSize, fontWeight, nextElement, nextText, nextFontSize, nextFontWeight, oANDI.isFakeHeading(this)))
+                oANDI.index += 1;
+
             }
         });
     };
@@ -74,14 +117,12 @@ function init_module() {
             var fakeHeading_fontSize = parseInt($(element).css("font-size"));
             var fakeHeading_fontWeight = $(element).css("font-weight");
 
-            if (fakeHeading_fontSize > 22 ||
-                (isBold(fakeHeading_fontWeight) && fakeHeading_fontSize > 15)
-            ) { //fakeHeading_fontSize is greater than size limit
+            if (fakeHeading_fontSize > 22 || (isBold(fakeHeading_fontWeight) && fakeHeading_fontSize > 15)) { //fakeHeading_fontSize is greater than size limit
                 var nextElement = $(element).next().filter(":visible");
 
                 if ($.trim($(nextElement).text()) !== "") { //next element has text
-                    var nextElement_fontWeight = $(nextElement).css("font-weight");
                     var nextElement_fontSize = parseInt($(nextElement).css("font-size"));
+                    var nextElement_fontWeight = $(nextElement).css("font-weight");
 
                     if (nextElement_fontSize < fakeHeading_fontSize) {
                         //next element's font-size is smaller than fakeHeading font-size
@@ -99,154 +140,5 @@ function init_module() {
             return (weight === "bold" || weight === "bolder" || weight >= 700);
         }
     };
-
-    //Initialize outline
-    oANDI.outline = "<h3 tabindex='-1' id='oANDI508-outline-heading'>Headings List (ordered by occurance):</h3><div class='ANDI508-scrollable'>";
-
-    //This function will display the heading list (headings outline)
-    //It should only be called on heading elements
-    oANDI.getOutlineItem = function (element) {
-        var displayCharLength = 60; //for truncating innerText
-        var tagName = $(element).prop("tagName").toLowerCase();
-        var role = $(element).attr("role");
-        var ariaLevel = $(element).attr("aria-level");
-
-        //Indent the heading according to the level
-        //Results in h1 = 1% left margin, h2 = 2% left margin, etc.
-        var indentLevel;
-        if (ariaLevel) {
-            //Check if positive integar
-            if (parseInt(ariaLevel) > 0 && parseInt(ariaLevel) == ariaLevel) {
-                indentLevel = parseInt(ariaLevel);
-            } else { //aria-level is not a positive integar, default to 2 (defined in ARIA spec, and screen readers are doing this)
-                indentLevel = 2;
-            }
-        } else {
-            if (role === "heading") {
-                indentLevel = 2; //no aria-level and role=heading, so default to 2 (defined in ARIA spec)
-            } else {
-                indentLevel = parseInt(tagName.slice(1)); //get second character from h tag
-            }
-        }
-
-        var outlineItem = "<a style='margin-left:" + indentLevel + "%' href='#' data-andi508-relatedindex='" + $(element).attr('data-andi508-index') + "'>&lt;" + tagName;
-
-        //display relevant attributes
-        if (role)
-            outlineItem += " role='" + role + "' ";
-        if (ariaLevel)
-            outlineItem += " aria-level='" + ariaLevel + "' ";
-
-        outlineItem += "&gt;";
-        outlineItem += "<span class='ANDI508-display-innerText'>";
-        outlineItem += $.trim(andiUtility.formatForHtml($(element).text().substring(0, displayCharLength)));
-        if ($(element).html().length > displayCharLength) {
-            outlineItem += "...";
-        }
-        outlineItem += "</span>";
-        outlineItem += "&lt;/" + tagName + "&gt;</a>";
-        outlineItem += "<br />";
-        return outlineItem;
-    };
-
-    //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-    oANDI.results = function () {
-        andiBar.updateResultsSummary("Headings: " + oANDI.headers.list.length);
-
-        //Build Outline
-        for (var x = 0; x < oANDI.headers.list.length; x++) {
-            oANDI.outline += oANDI.getOutlineItem(oANDI.headers.list[x]);
-        }
-        oANDI.outline += "</div>";
-
-        $("#ANDI508-additionalPageResults").html("<button id='ANDI508-viewOutline-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>" + listIcon + "view headings list</button><div id='oANDI508-outline-container' class='ANDI508-viewOtherResults-expanded' tabindex='0'></div>");
-
-        //Define outline button
-        $("#ANDI508-viewOutline-button").click(function () {
-            if ($(this).attr("aria-expanded") === "true") { //hide Outline, show alert list
-                $("#oANDI508-outline-container").slideUp(50);
-                $("#ANDI508-alerts-list").show();
-                $(this)
-                    .addClass("ANDI508-viewOtherResults-button-expanded")
-                    .html(listIcon + "view headings list")
-                    .attr("aria-expanded", "false")
-                    .removeClass("ANDI508-viewOtherResults-button-expanded ANDI508-module-action-active");
-            } else { //show Outline, hide alert list
-                $("#ANDI508-alerts-list").hide();
-
-                andiSettings.minimode(false);
-                $(this)
-                    .html(listIcon + "hide headings list")
-                    .attr("aria-expanded", "true")
-                    .addClass("ANDI508-viewOtherResults-button-expanded ANDI508-module-action-active")
-                    .find("img").attr("src", icons_url + "list-on.png");
-                $("#oANDI508-outline-container").slideDown(50).focus();
-            }
-            andiResetter.resizeHeights();
-            return false;
-        });
-
-        if (!andiBar.focusIsOnInspectableElement()) {
-            andiBar.showElementControls();
-            andiBar.showStartUpSummary("Heading structure found.<br />Determine if <span class='ANDI508-module-name-s'>headings</span> are appropriately applied.", true);
-        }
-
-        $("#oANDI508-outline-container")
-            .html(oANDI.outline)
-            .find("a[data-andi508-relatedindex]").each(function () {
-                andiFocuser.addFocusClick($(this));
-                var relatedIndex = $(this).attr("data-andi508-relatedindex");
-                var relatedElement = $("#ANDI508-testPage [data-andi508-index=" + relatedIndex + "]").first();
-                andiLaser.createLaserTrigger($(this), $(relatedElement));
-                $(this)
-                    .hover(function () {
-                        if (!event.shiftKey)
-                            AndiModule.inspect(relatedElement[0]);
-                    })
-                    .focus(function () {
-                        AndiModule.inspect(relatedElement[0]);
-                    });
-            });
-
-        $("#oANDI508-outline-container")
-            .html(oANDI.outline)
-            .find("a[data-andi508-relatedindex]").each(function () {
-                andiFocuser.addFocusClick($(this));
-                var relatedIndex = $(this).attr("data-andi508-relatedindex");
-                var relatedElement = $("#ANDI508-testPage [data-andi508-index=" + relatedIndex + "]").first();
-                andiLaser.createLaserTrigger($(this), $(relatedElement));
-                $(this)
-                    .hover(function () {
-                        if (!event.shiftKey)
-                            AndiModule.inspect(relatedElement[0]);
-                    })
-                    .focus(function () {
-                        AndiModule.inspect(relatedElement[0]);
-                    });
-            });
-
-        andiAlerter.updateAlertList();
-
-        $("#ANDI508").focus();
-
-    };
-
-    //This function will update the info in the Active Element Inspection.
-    //Should be called after the mouse hover or focus in event.
-    AndiModule.inspect = function (element) {
-        if ($(element).hasClass("ANDI508-element")) {
-            andiBar.prepareActiveElementInspection(element);
-
-            var elementData = $(element).data("andi508");
-            var addOnProps = AndiData.getAddOnProps(element, elementData, ["aria-level", "aria-busy", "aria-relevant"]);
-
-            andiBar.displayTable(elementData, element, addOnProps);
-
-            andiBar.displayOutput(elementData, element, addOnProps);
-        }
-    };
-
     oANDI.analyze();
-    oANDI.results();
-
 }//end init

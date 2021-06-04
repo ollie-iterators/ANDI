@@ -3,19 +3,49 @@
 //Created By Social Security Administration	   //
 //=============================================//
 function init_module() {
-
     var kANDIVersionNumber = "3.0.1";
-
     //create kANDI instance
     var kANDI = new AndiModule(kANDIVersionNumber, "k");
+    kANDI.index = 1;
+
+    //This object class is used to store data about each iFrame. Object instances will be placed into an array.
+    function iFrame(element, index, src, ariaHiddenTest, isAriaHidden, accessibleName, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, alerts) {
+        this.element = element;
+        this.index = index;
+        this.src = src;
+        this.ariaHiddenTest = ariaHiddenTest;
+        this.isAriaHidden = isAriaHidden;
+        this.accessibleName = accessibleName
+        this.ariaLabel = ariaLabel
+        this.ariaLabelledby = ariaLabelledby;
+        this.ariaRole = ariaRole;
+        this.ariaLabeledby = ariaLabeledby;
+        this.alerts = alerts;
+    }
+
+    //This object class is used to keep track of the iFrames on the page
+    function IFrames() {
+        this.list = [];
+        this.count = 0;
+    }
 
     //This function will analyze the test page for focusable element related markup relating to accessibility
     kANDI.analyze = function () {
         $(TestPageData.allElements).each(function () {
+            kANDI.iFrames = new IFrames();
             if ($(this).is("iframe")) {
+                var src = $(this).attr("src");
+                var ariaLabel = $(this).attr("aria-label");
+                var ariaLabelledby = $(this).attr("aria-labelledby");
+                var ariaRole = $(this).attr("aria-role");
+                var ariaLabeledby = $(this).attr("aria-labeledby");
+                var ariaHiddenTest = $(this).parents().attr("aria-hidden");
                 andiData = new AndiData(this);
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
                 AndiData.attachDataToElement(this);
+                kANDI.iFrames.list.push(new iFrame(this, kANDI.index, src, ariaHiddenTest, andiData.isAriaHidden, andiData.accName, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, ""));
+                kANDI.index += 1;
+                kANDI.iFrames.count += 1;
             }
         });
     };

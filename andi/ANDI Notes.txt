@@ -62,3 +62,9 @@ xANDI  - Main Module (Minimum Code)
     - role and lang apply to all elemens on the page
 # NOTE: Work on making the filenames match how they look in the folder when testing the page
 # NOTE: Check on aria-live and aria-atomic
+
+List of ANDI Mimimum Code Files that have been finished
+oANDI  - Headers
+pANDI  - Lists
+qANDI  - Landmarks
+rANDI  - Live Regions
