@@ -39,13 +39,8 @@ function init_module() {
 
     //This object class is used to keep track of the headers on the page
     function Headers() {
-        this.list = [];
-        this.count = 0;
-    }
-
-    //This object class is used to keep track of the fake headers on the page
-    function FakeHeaders() {
-        this.list = [];
+        this.HeaderList = [];
+        this.FakeHeaderList = [];
         this.count = 0;
     }
 
@@ -81,11 +76,10 @@ function init_module() {
 
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this));
                 AndiData.attachDataToElement(this);
-                oANDI.headers.list.push(new Header(this, oANDI.index, role, ariaLevel, ariaLevelComp, andiData.isAriaHidden, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, ""));
+                oANDI.headers.HeaderList.push(new Header(this, oANDI.index, role, ariaLevel, ariaLevelComp, andiData.isAriaHidden, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, ""));
                 oANDI.headers.count += 1;
                 oANDI.index += 1;
-            } else if (oANDI.headers.list.length === 0 && $(this).is("p,div,span,strong,em")) {
-                oANDI.fakeHeaders = new FakeHeaders();
+            } else if (oANDI.headers.HeaderList.length === 0 && $(this).is("p,div,span,strong,em")) {
                 var text = $.trim($(this).text());
                 var fontSize = parseInt($(this).css("font-size"));
                 var fontWeight = $(this).css("font-weight");
@@ -99,7 +93,7 @@ function init_module() {
                     andiAlerter.throwAlert(alert_0190);
                     AndiData.attachDataToElement(this);
                 }
-                oANDI.fakeHeaders.list.push(new FakeHeader(this, oANDI.index, text, fontSize, fontWeight, nextElement, nextText, nextFontSize, nextFontWeight, oANDI.isFakeHeading(this)))
+                oANDI.headers.FakeHeaderList.push(new FakeHeader(this, oANDI.index, text, fontSize, fontWeight, nextElement, nextText, nextFontSize, nextFontWeight, oANDI.isFakeHeading(this)))
                 oANDI.index += 1;
 
             }
