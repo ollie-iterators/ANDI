@@ -22,9 +22,9 @@ function init_module() {
 
         //Loop through every visible element and run tests
         $(TestPageData.allVisibleElements).each(function () {
+            andiData = new AndiData(this);
+            // Work on finding out how to use isTabbable here
             if ($(this).is(":focusable,canvas")) {//If element is focusable, search for accessibility components.
-                andiData = new AndiData(this);
-
                 andiCheck.commonFocusableElementChecks(andiData, $(this));
                 andiCheck.lookForCanvasFallback(this);
                 if (andiData.accesskey)
@@ -105,83 +105,75 @@ function init_module() {
 
         andiBar.updateResultsSummary("Focusable Elements Found: " + testPageData.andiElementIndex);
 
-        //Are There Focusable Elements?
-        if (testPageData.andiElementIndex > 0) {
-            //Yes, Focusable Elements were found
-
-            //Accesskeys List:
-            if (dANDI.accesskeys.getListHtml()) {
-                $("#ANDI508-additionalPageResults").append("<p id='ANDI508-accesskeysFound'>AccessKeys: " + "{ " + dANDI.accesskeys.getListHtml() + "}</p>");
-                $("#ANDI508-accesskeysFound").find("a").each(function () {
-                    andiFocuser.addFocusClick($(this));
-                    $(this).on("mouseover", andiLaser.drawAlertLaser);
-                    $(this).on("click", andiLaser.eraseLaser);
-                    $(this).on("mouseleave", andiLaser.eraseLaser);
-                });
-                $("#ANDI508-accesskeysFound").show();
-            }
-
-            //Tab Order button
-            var moduleActionButtons = "<button id='ANDI508-tabOrder-button' aria-label='Tab Order Indicators' aria-pressed='false'>tab order" + overlayIcon + "</button>";
-            if (TestPageData.page_using_titleAttr)
-                moduleActionButtons += "<button id='ANDI508-titleAttributes-button' aria-label='Title Attributes' aria-pressed='false'>title attributes" + overlayIcon + "</button>";
-            if (testPageData.page_using_label)
-                moduleActionButtons += "<button id='ANDI508-labelTags-button' aria-label='Label Tags' aria-pressed='false'>label tags" + overlayIcon + "</button>";
-
-            $("#ANDI508-module-actions").append(moduleActionButtons);
-
-            //Define tabOrder button functionality
-            $("#ANDI508-tabOrder-button").click(function () {
-                if ($(this).attr("aria-pressed") == "false") {
-                    andiOverlay.overlayButton_on("overlay", $(this));
-                    andiOverlay.overlayTabOrder();
-                    AndiModule.activeActionButtons.tabOrder = true;
-                } else {
-                    andiOverlay.overlayButton_off("overlay", $(this));
-                    andiOverlay.removeOverlay("ANDI508-overlay-tabSequence");
-                    AndiModule.activeActionButtons.tabOrder = false;
-                }
-                andiResetter.resizeHeights();
-                return false;
+        //Accesskeys List:
+        if (dANDI.accesskeys.getListHtml()) {
+            $("#ANDI508-additionalPageResults").append("<p id='ANDI508-accesskeysFound'>AccessKeys: " + "{ " + dANDI.accesskeys.getListHtml() + "}</p>");
+            $("#ANDI508-accesskeysFound").find("a").each(function () {
+                andiFocuser.addFocusClick($(this));
+                $(this).on("mouseover", andiLaser.drawAlertLaser);
+                $(this).on("click", andiLaser.eraseLaser);
+                $(this).on("mouseleave", andiLaser.eraseLaser);
             });
-
-            //Define titleAttributes button functionality
-            $("#ANDI508-titleAttributes-button").click(function () {
-                if ($(this).attr("aria-pressed") == "false") {
-                    andiOverlay.overlayButton_on("overlay", $(this));
-                    andiOverlay.overlayTitleAttributes();
-                    AndiModule.activeActionButtons.titleAttributes = true;
-                } else {
-                    andiOverlay.overlayButton_off("overlay", $(this));
-                    andiOverlay.removeOverlay("ANDI508-overlay-titleAttributes");
-                    AndiModule.activeActionButtons.titleAttributes = false;
-                }
-                andiResetter.resizeHeights();
-                return false;
-            });
-
-            //Define titleAttributes button functionality
-            $("#ANDI508-labelTags-button").click(function () {
-                if ($(this).attr("aria-pressed") == "false") {
-                    andiOverlay.overlayButton_on("overlay", $(this));
-                    andiOverlay.overlayLabelTags();
-                    AndiModule.activeActionButtons.labelTags = true;
-                } else {
-                    andiOverlay.overlayButton_off("overlay", $(this));
-                    andiOverlay.removeOverlay("ANDI508-overlay-labelTags");
-                    AndiModule.activeActionButtons.labelTags = false;
-                }
-                andiResetter.resizeHeights();
-                return false;
-            });
-
-            andiBar.focusIsOnInspectableElement();
-            andiBar.showElementControls();
-            andiBar.showStartUpSummary("Discover accessibility markup for focusable elements by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every focusable element.", true);
-        } else { //No Focusable Elements were found
-            andiBar.hideElementControls();
-            andiBar.showStartUpSummary("No focusable elements were found on this page.");
+            $("#ANDI508-accesskeysFound").show();
         }
+
+        //Tab Order button
+        var moduleActionButtons = "<button id='ANDI508-tabOrder-button' aria-label='Tab Order Indicators' aria-pressed='false'>tab order" + overlayIcon + "</button>";
+        if (TestPageData.page_using_titleAttr)
+            moduleActionButtons += "<button id='ANDI508-titleAttributes-button' aria-label='Title Attributes' aria-pressed='false'>title attributes" + overlayIcon + "</button>";
+        if (testPageData.page_using_label)
+            moduleActionButtons += "<button id='ANDI508-labelTags-button' aria-label='Label Tags' aria-pressed='false'>label tags" + overlayIcon + "</button>";
+
+        $("#ANDI508-module-actions").append(moduleActionButtons);
+
+        //Define tabOrder button functionality
+        $("#ANDI508-tabOrder-button").click(function () {
+            if ($(this).attr("aria-pressed") == "false") {
+                andiOverlay.overlayButton_on("overlay", $(this));
+                andiOverlay.overlayTabOrder();
+                AndiModule.activeActionButtons.tabOrder = true;
+            } else {
+                andiOverlay.overlayButton_off("overlay", $(this));
+                andiOverlay.removeOverlay("ANDI508-overlay-tabSequence");
+                AndiModule.activeActionButtons.tabOrder = false;
+            }
+            andiResetter.resizeHeights();
+            return false;
+        });
+
+        //Define titleAttributes button functionality
+        $("#ANDI508-titleAttributes-button").click(function () {
+            if ($(this).attr("aria-pressed") == "false") {
+                andiOverlay.overlayButton_on("overlay", $(this));
+                andiOverlay.overlayTitleAttributes();
+                AndiModule.activeActionButtons.titleAttributes = true;
+            } else {
+                andiOverlay.overlayButton_off("overlay", $(this));
+                andiOverlay.removeOverlay("ANDI508-overlay-titleAttributes");
+                AndiModule.activeActionButtons.titleAttributes = false;
+            }
+            andiResetter.resizeHeights();
+            return false;
+        });
+
+        //Define titleAttributes button functionality
+        $("#ANDI508-labelTags-button").click(function () {
+            if ($(this).attr("aria-pressed") == "false") {
+                andiOverlay.overlayButton_on("overlay", $(this));
+                andiOverlay.overlayLabelTags();
+                AndiModule.activeActionButtons.labelTags = true;
+            } else {
+                andiOverlay.overlayButton_off("overlay", $(this));
+                andiOverlay.removeOverlay("ANDI508-overlay-labelTags");
+                AndiModule.activeActionButtons.labelTags = false;
+            }
+            andiResetter.resizeHeights();
+            return false;
+        });
+
+        andiBar.focusIsOnInspectableElement();
+        andiBar.showElementControls();
+        andiBar.showStartUpSummary("Discover accessibility markup for focusable elements by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every focusable element.", true);
 
         andiAlerter.updateAlertList();
 

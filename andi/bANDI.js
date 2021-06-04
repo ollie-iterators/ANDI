@@ -205,18 +205,12 @@ function init_module() {
             return false;
         });
 
-        if (elementsContainingTextCount > 0) {
-            if (!andiBar.focusIsOnInspectableElement()) {
-                andiBar.showElementControls();
-                andiBar.showStartUpSummary("Discover the <span class='ANDI508-module-name-c'>color contrast</span> for elements containing text.", true);
-            }
-            if (testPageData.disabledElementsCount > 0)
-                andiAlerter.throwAlert(alert_0251, [testPageData.disabledElementsCount], 0);
-        } else {
-            //No text containing elements were found
-            andiBar.hideElementControls();
-            andiBar.showStartUpSummary("No elements containing text were found on this page.");
+        if (!andiBar.focusIsOnInspectableElement()) {
+            andiBar.showElementControls();
+            andiBar.showStartUpSummary("Discover the <span class='ANDI508-module-name-c'>color contrast</span> for elements containing text.", true);
         }
+        if (testPageData.disabledElementsCount > 0)
+            andiAlerter.throwAlert(alert_0251, [testPageData.disabledElementsCount], 0);
 
         andiAlerter.updateAlertList();
 
@@ -346,7 +340,7 @@ function init_module() {
             } else {
                 return false;
             }
-            
+
         }
     };
 
