@@ -10,14 +10,14 @@ var andiVersionNumber = "27.4.0";
 //==============//
 //URLs
 var host_url = "https://ollie-iterators.github.io/ANDI/andi/";
-var help_url = host_url + "help/";
-var icons_url = host_url + "icons/";
+var help_url = "https://ollie-iterators.github.io/ANDI/andi/help/";
+var icons_url = "https://ollie-iterators.github.io/ANDI/andi/icons/";
 
 //Load andi.css file immediately to minimize page flash
 (function () {
 	var head = document.getElementsByTagName("head")[0];
 	var andiCss = document.createElement("link");
-	andiCss.href = host_url + "andi.css";
+	andiCss.href = "https://ollie-iterators.github.io/ANDI/andi/andi.css";
 	andiCss.type = "text/css";
 	andiCss.rel = "stylesheet";
 	andiCss.id = "ANDI508-css";
@@ -26,9 +26,6 @@ var icons_url = host_url + "icons/";
 		head.removeChild(prevCss);
 	head.appendChild(andiCss);
 })();
-
-//Default Module
-AndiModule.module = "f";
 
 //===============//
 // ANDI OBJECTS: //
@@ -111,30 +108,6 @@ function launchAndi() {
 		andiCheck.areThereMoreExclusiveChildrenThanParents();
 	})();
 }
-
-//==============//
-// ANDI MODULE: //
-//==============//
-//This class defines an Andi Module.
-//Should be instantiated in the module's js file.
-//All ANDI modules (besides the default) should have a *andi.css file which will be loaded when the module is launched.
-function AndiModule(moduleVersionNumber, moduleLetter) {
-
-	//Display the module letter in the logo when the module is instantiated
-	var moduleName = document.getElementById("ANDI508-module-name");
-	$(moduleName).attr("data-andi508-moduleversion", moduleLetter + "ANDI: " + moduleVersionNumber);
-	if (moduleLetter == "f") {
-		$(moduleName).html("&nbsp;"); //do not display default module letter
-		document.getElementById("ANDI508-toolName-link").setAttribute("aria-label", "andi " + andiVersionNumber); //using setAttribute because jquery .attr("aria-label") is not recognized by ie7
-	}
-	else {
-		$(moduleName).html(moduleLetter);
-		document.getElementById("ANDI508-toolName-link").setAttribute("aria-label", moduleLetter + "andi " + moduleVersionNumber); //using setAttribute because jquery .attr("aria-label") is not recognized by ie7
-		//Append module's css file. The version number is added to the href string (?v=) so that when the module is updated, the css file is reloaded and not pulled from browser cache
-		$("head").append("<link id='andiModuleCss' href='" + host_url + moduleLetter + "andi.css?v=" + moduleVersionNumber + "' type='text/css' rel='stylesheet' />");
-	}
-}
-
 
 //================//
 // ALERT MESSAGES //
@@ -783,7 +756,6 @@ AndiData.grab_semantics = function (element, data) {
 // Text Alternative Computation://
 //==============================//
 AndiData.textAlternativeComputation = function (root) {
-
 	var isAriaHidden = traverseAriaHidden(root);
 	var isNamed = false;
 	var isDescribed = false;
