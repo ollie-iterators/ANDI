@@ -89,8 +89,6 @@ function init_module() {
                 var nextFontWeight = $(nextElement).css("font-weight");
                 var isFakeHeading = false;
                 if (text.length > 0 && text.length < 30) {
-                    //text is not empty, but less than char limit
-        
                     var fakeHeading_fontSize = parseInt($(element).css("font-size"));
                     var fakeHeading_fontWeight = $(element).css("font-weight");
                     var fakeHeadingIsBold = (fakeHeading_fontWeight === "bold" || fakeHeading_fontWeight === "bolder" || fakeHeading_fontWeight > 700);
