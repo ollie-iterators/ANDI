@@ -7,12 +7,6 @@ function init_module() {
     //create mANDI instance
     var mANDI = new AndiModule("8.1.0", "m");
 
-    //This function removes markup in the test page that was added by this module
-    AndiModule.cleanup = function (testPage, element) {
-        if (element)
-            $(element).removeClass("mANDI508-internalLink mANDI508-externalLink mANDI508-ambiguous mANDI508-anchorTarget");
-    };
-
     //This object class is used to store data about each link. Object instances will be placed into an array.
     function Link(href, nameDescription, index, alerts, target, linkPurpose, ambiguousIndex, element) {
         this.href = href;
@@ -34,28 +28,6 @@ function init_module() {
         this.internalCount = 0;
         this.externalCount = 0;
     }
-
-    //Alert icons for the links list table
-    //Ignore the jslint warning about the "new" declaration. It is needed.
-    var alertIcons = new function () {//new is intentional
-        this.danger_noAccessibleName = makeIcon("danger", "No accessible name");
-        this.danger_anchorTargetNotFound = makeIcon("warning", "In-page anchor target not found");
-        this.warning_ambiguous = makeIcon("warning", "Ambiguous: same name, different href");
-        this.caution_ambiguous = makeIcon("caution", "Ambiguous: same name, different href");
-        this.caution_vagueText = makeIcon("caution", "Vague: does not identify link purpose.");
-        this.warning_tabOrder = makeIcon("warning", "Element not in tab order");
-
-        function makeIcon(alertLevel, titleText) {
-            //The sortPriority number allows alert icon sorting
-            var sortPriority = "3"; //default to caution
-            if (alertLevel == "warning") {
-                sortPriority = "2";
-            } else if (alertLevel == "danger") {
-                sortPriority = "1";
-            }
-            return "<img src='" + icons_url + alertLevel + ".png' alt='" + alertLevel + "' title='Accessibility Alert: " + titleText + "' /><i>" + sortPriority + " </i>";
-        }
-    };
 
     mANDI.viewList_tableReady = false;
 
@@ -98,10 +70,8 @@ function init_module() {
 
                                 testForVagueLinkText(nameDescription);
 
-                                if (!alerts) //Add this for sorting purposes
-                                    alerts = "<i>4</i>";
                             } else { //No accessible name or description
-                                alerts = alertIcons.danger_noAccessibleName;
+                                alerts = "danger: No accessible name";
                                 nameDescription = "<span class='ANDI508-display-danger'>No Accessible Name</span>";
                             }
 
@@ -133,11 +103,9 @@ function init_module() {
                                 //link as no role and no href, suggest using role=link or href
                                 andiAlerter.throwAlert(alert_0168);
                             }
-
                             andiCheck.commonFocusableElementChecks(andiData, $(this));
                         }
                     }
-
                     AndiData.attachDataToElement(this);
                 }
             } else if ($(this).is("a")) { //Analyze elements that might be links
@@ -209,10 +177,10 @@ function init_module() {
                         //Determine which alert level should be thrown
                         if (href.charAt(0) == "#" || mANDI.links.list[x].href.charAt(0) == "#") {
                             //One link is internal
-                            alertIcon = alertIcons.caution_ambiguous;
+                            alertIcon = "caution: Ambiguous: same name, different href";
                             alertObject = alert_0162;
                         } else {
-                            alertIcon = alertIcons.warning_ambiguous;
+                            alertIcon = "warning: Ambiguous: same name, different href";
                             alertObject = alert_0161;
                         }
 
@@ -257,7 +225,7 @@ function init_module() {
                     if (!isAnchorTargetFound(idRef)) {
                         if (element.onclick === null && $._data(element, 'events').click === undefined) {//no click events
                             //Throw Alert, Anchor Target not found
-                            alerts += alertIcons.danger_anchorTargetNotFound;
+                            alerts += "danger: In-page anchor target not found";
                             andiAlerter.throwAlert(alert_0069, [idRef]);
                         }
                     } else { //link is internal and anchor target found
@@ -291,7 +259,7 @@ function init_module() {
         function testForVagueLinkText(nameDescription) {
             var regEx = /^(click here|here|link|edit|select|more|more info|more information|go)$/g;
             if (regEx.test(nameDescription.toLowerCase())) {
-                alerts += alertIcons.caution_vagueText;
+                alerts += "caution: Vague: does not identify link purpose.";
                 andiAlerter.throwAlert(alert_0163);
             }
         }
@@ -300,7 +268,7 @@ function init_module() {
         function isElementInTabOrder(element, role) {
             if (!!$(element).prop("tabIndex") && !$(element).is(":tabbable")) {//Element is not tabbable and has no tabindex
                 //Throw Alert: Element with role=link|button not in tab order
-                alerts += alertIcons.warning_tabOrder;
+                alerts += "warning: Element not in tab order";
                 andiAlerter.throwAlert(alert_0125, [role]);
             }
         }
@@ -321,45 +289,6 @@ function init_module() {
 
             }
             return n + d;
-        }
-    };
-
-    //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-    mANDI.results = function () {
-        andiBar.updateResultsSummary("Links Found: " + mANDI.links.count);
-
-        //Show Startup Summary
-        if (!andiBar.focusIsOnInspectableElement()) {
-            andiBar.showElementControls();
-            andiBar.showStartUpSummary("Discover accessibility markup for <span class='ANDI508-module-name-l'>links</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every link.", true);
-        }
-
-        andiAlerter.updateAlertList();
-
-        $("#ANDI508").focus();
-    };
-
-    //This function will update the info in the Active Element Inspection.
-    //Should be called after the mouse hover or focus in event.
-    AndiModule.inspect = function (element) {
-        if ($(element).hasClass("ANDI508-element")) {
-
-            andiBar.prepareActiveElementInspection(element);
-
-            var elementData = $(element).data("andi508");
-            var addOnProps = AndiData.getAddOnProps(element, elementData,
-                [
-                    ["href", mANDI.normalizeHref(element)],
-                    "rel",
-                    "download",
-                    "media",
-                    "target",
-                    "type"
-                ]
-            );
-
-            andiBar.displayOutput(elementData, element, addOnProps);
-            andiBar.displayTable(elementData, element, addOnProps);
         }
     };
 
@@ -388,5 +317,4 @@ function init_module() {
     };
 
     mANDI.analyze();
-    mANDI.results();
 }//end init

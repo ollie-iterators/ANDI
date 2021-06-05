@@ -8,43 +8,20 @@ function init_module() {
     //create jANDI instance
     var jANDI = new AndiModule("4.0.2", "j");
 
-    //This function updates the Active Element Inspector when mouseover/hover is on a given to a highlighted element.
-    //Holding the shift key will prevent inspection from changing.
-    AndiModule.hoverability = function (event) {
-        if (!event.shiftKey && $(this).hasClass("ANDI508-forceReveal")) //check for holding shift key
-            AndiModule.inspect(this);
-    };
-
-    //This function removes markup in the test page that was added by this module
-    AndiModule.cleanup = function (testPage, element) {
-        if (element) {
-            $(element).removeAttr("data-jandi508-hidingtechniques").removeClass("ANDI508-forceReveal ANDI508-forceReveal-display ANDI508-forceReveal-visibility ANDI508-forceReveal-position ANDI508-forceReveal-opacity ANDI508-forceReveal-overflow ANDI508-forceReveal-fontSize ANDI508-forceReveal-textIndent");
-            if ($(element).hasClass("ANDI508-forceReveal-html5Hidden"))
-                $(element).attr("hidden", "hidden").removeClass("ANDI508-forceReveal-html5Hidden"); //add the hidden attribute back
-        } else {
-            $(testPage).find(".jANDI508-hasHiddenCssContent").removeClass("jANDI508-hasHiddenCssContent");
-        }
-    };
-
-    AndiModule.inspect = function (element) {
-        andiBar.prepareActiveElementInspection(element);
-        var hidingTechniques = $(element).attr("data-jandi508-hidingtechniques");
-        $("#ANDI508-additionalElementDetails").html("");
-        if (hidingTechniques)
-            $("#ANDI508-additionalElementDetails").append(hidingTechniques);
-    };
-
-    var hiddenElements = 0;
-    var hidden_display = 0;
-    var hidden_visibility = 0;
-    var hidden_position = 0;
-    var hidden_opacity = 0;
-    var hidden_overflow = 0;
-    var hidden_fontSize = 0;
-    var hidden_textIndent = 0;
-    var hidden_html5Hidden = 0;
-
-    var elementsWithCssInjectedContent = 0;
+    //This object class is used to keep track of the hidden elements on the page
+    function HiddenElements() {
+        this.list = [];
+        this.count = 0;
+        this.hideDisplay = 0;
+        this.hideVisibility = 0;
+        this.hidePosition = 0;
+        this.hideOpacity = 0;
+        this.hideOverflow = 0;
+        this.hideFontSize = 0;
+        this.hideTextIndent = 0;
+        this.hideHTML5 = 0;
+        this.hasCSSInjectedContent = 0;
+    }
 
     //This function returns true if the element contains elements that might need accessibility testing, false if not.
     jANDI.containsTestableContent = function (element) {
@@ -67,33 +44,34 @@ function init_module() {
 
     //This function will analyze the test page for elements hidden using CSS
     jANDI.analyze = function () {
+        jANDI.hiddenElements = new HiddenElements();
         var elementCss;
         $(TestPageData.allElements).not("area,base,basefont,datalist,link,meta,noembed,noframes,param,rp,script,noscript,source,style,template,track,title").each(function () {
             elementCss = "";
 
             if (jANDI.containsTestableContent(this)) {
                 if ($(this).css("display") == "none") { //element display is none
-                    hiddenElements++;
-                    hidden_display++; //increment count if not contained by another of same hiding technique
+                    jANDI.hiddenElements.count += 1;
+                    jANDI.hiddenElements.hideDisplay += 1;
                     $(this).addClass("ANDI508-forceReveal-display");
                     elementCss += "display:none; ";
                 }
                 if ($(this).css("visibility") == "hidden") { //element visibility is hidden
-                    hiddenElements++;
-                    hidden_visibility++; //increment count if not contained by another of same hiding technique
+                    jANDI.hiddenElements.count += 1;
+                    jANDI.hiddenElements.hideVisibility += 1;
                     $(this).addClass("ANDI508-forceReveal-visibility");
                     elementCss += "visibility:hidden; ";
                 }
                 if ($(this).css("position") == "absolute" && ($(this).offset().left < 0 || $(this).offset().top < 0)) {
                     //element is positioned offscreen
-                    hiddenElements++;
-                    hidden_position++; //increment count if not contained by another of same hiding technique
+                    jANDI.hiddenElements.count += 1;
+                    jANDI.hiddenElements.hidePosition += 1;
                     $(this).addClass("ANDI508-forceReveal-position");
                     elementCss += "position:absolute; ";
                 }
                 if ($(this).css("opacity") == "0") { //element opacity is zero
-                    hiddenElements++;
-                    hidden_opacity++; //increment count if not contained by another of same hiding technique
+                    jANDI.hiddenElements.count += 1;
+                    jANDI.hiddenElements.hideOpacity += 1;
                     $(this).addClass("ANDI508-forceReveal-opacity");
                     elementCss += "opacity:0; ";
                 }
@@ -101,29 +79,29 @@ function init_module() {
                     if ($(this).css("overflow") == "hidden" &&
                         (parseInt($(this).css("height")) <= 1 || parseInt($(this).css("width")) <= 1)) {
                         //element has overflow hidden and a small height or width
-                        hiddenElements++;
-                        hidden_overflow++; //increment count if not contained by another of same hiding technique
+                        jANDI.hiddenElements.count += 1;
+                        jANDI.hiddenElements.hideOverflow += 1;
                         $(this).addClass("ANDI508-forceReveal-overflow");
                         elementCss += "overflow:hidden; ";
                     }
                     if (parseInt($(this).css("font-size")) === 0) { //element font-size is 0
-                        hiddenElements++;
-                        hidden_fontSize++; //increment count if not contained by another of same hiding technique
+                        jANDI.hiddenElements.count += 1;
+                        jANDI.hiddenElements.hideFontSize += 1;
                         $(this).addClass("ANDI508-forceReveal-fontSize");
                         elementCss += "font-size:0; ";
                     }
                 }
                 if ($(this).css("text-indent") != "0" || $(this).css("text-indent") != "0px") {
                     if (parseInt($(this).css("text-indent")) < -998) { //element has a text-indent that makes it off screen
-                        hiddenElements++;
-                        hidden_textIndent++; //increment count if not contained by another of same hiding technique
+                        jANDI.hiddenElements.count += 1;
+                        jANDI.hiddenElements.hideTextIndent += 1;
                         $(this).addClass("ANDI508-forceReveal-textIndent");
                         elementCss += "text-indent:" + $(this).css("text-indent") + "; ";
                     }
                 }
                 if ($(this).attr("hidden")) { //element has html5 hidden attribute
-                    hiddenElements++;
-                    hidden_html5Hidden++; //increment count if not contained by another of same hiding technique
+                    jANDI.hiddenElements.count += 1;
+                    jANDI.hiddenElements.hideHTML5 += 1;
                     $(this).addClass("ANDI508-forceReveal-html5Hidden");
                     elementCss += "\/*html5 hidden*\/ ";
                 }
@@ -141,8 +119,9 @@ function init_module() {
         if (!oldIE) {
             jANDI.detectCssInjectedContent();
 
-            if ($("#ANDI508-testPage .jANDI508-hasHiddenCssContent").first().length)
+            if ($("#ANDI508-testPage .jANDI508-hasHiddenCssContent").first().length) {
                 andiAlerter.throwAlert(alert_0220, alert_0220.message, 0);
+            }
         }
     };
 
@@ -179,7 +158,7 @@ function init_module() {
             }
 
             if (hasHiddenCSSContent) {
-                elementsWithCssInjectedContent++;
+                jANDI.hiddenElements.hasCSSInjectedContent++;
                 $(TestPageData.allVisibleElements[x]).addClass("jANDI508-hasHiddenCssContent");
             }
         }

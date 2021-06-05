@@ -29,7 +29,7 @@ function init_module() {
         this.count = 0;
     }
 
-    //This function will analyze the test page for focusable element related markup relating to accessibility
+    //This analyzes the test page for focusable element related markup relating to accessibility
     kANDI.analyze = function () {
         kANDI.iFrames = new IFrames();
         $(TestPageData.allElements).each(function () {

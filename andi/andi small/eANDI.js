@@ -8,15 +8,6 @@ function init_module() {
     //create eANDI instance
     var eANDI = new AndiModule("6.0.2", "e");
 
-    //This function removes markup in the test page that was added by this module
-    AndiModule.cleanup = function (testPage, element) {
-        if (element) {
-            $(element).removeClass("eANDI508-background eANDI508-fontIcon");
-        } else {
-            $(testPage).find(".eANDI508-decorative").removeClass("eANDI508-decorative");
-        }
-    };
-
     //This object class is used to keep track of the images on the page
     function Images() {
         this.list = [];
@@ -111,8 +102,7 @@ function init_module() {
                 } else if ($(this).is("area")) {
                     eANDI.images.inline++;
                     var map = $(this).closest("map");
-                    if ($(map).length) {
-                        //<area> is contained in <map>
+                    if ($(map).length) { //<area> is contained in <map>
                         var mapName = "#" + $(map).attr("name");
                         if ($("#ANDI508-testPage img[usemap='" + mapName + "']").length) {
                             //<map> references existing <img>
@@ -138,8 +128,7 @@ function init_module() {
 
             //Check for common font icon classes
             if (!$(this).is("[role=img],img") &&
-                (
-                    $(this).hasClass("fa fab fas fal fad") || //font awesome
+                ($(this).hasClass("fa fab fas fal fad") || //font awesome
                     $(this).hasClass("glyphicon") || //glyphicon
                     $(this).hasClass("material-icons") || //google material icons
                     $(this).is("[data-icon]") ||//common usage of the data-* attribute for icons
@@ -205,60 +194,6 @@ function init_module() {
         }
     };
 
-    //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-    eANDI.results = function () {
-        var imagesCount = eANDI.images.inline + eANDI.images.background + eANDI.images.fontIcon;
-
-        andiBar.updateResultsSummary("Images Found: " + imagesCount);
-
-        //Create Image contained by html (number of image links and image buttons)
-        var resultsDetails = "";
-        resultsDetails += eANDI.images.inline + " inline images, ";
-        resultsDetails += eANDI.images.imageLink + " image links, ";
-        resultsDetails += eANDI.images.imageButton + " image buttons, ";
-        resultsDetails += eANDI.images.fontIcon + " font icons, ";
-        resultsDetails += eANDI.images.background + " background-images, ";
-        resultsDetails = resultsDetails.slice(0, -2);//Slice off last two characters: the comma and space: ", "
-
-        $("#ANDI508-additionalPageResults").append("<p tabindex='0'>" + resultsDetails + "</p>");
-
-        var startupSummaryText = "";
-
-        andiBar.showElementControls();
-        if (!andiBar.focusIsOnInspectableElement()) {
-            startupSummaryText += "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. ";
-        }
-
-        startupSummaryText += "Ensure that every meaningful/non-decorative image has a text equivalent.";
-        andiBar.showStartUpSummary(startupSummaryText, true);
-
-        andiAlerter.updateAlertList();
-
-        $("#ANDI508").focus();
-    };
-
-    //This function will update the info in the Active Element Inspection.
-    //Should be called after the mouse hover or focus in event.
-    AndiModule.inspect = function (element) {
-        if ($(element).hasClass("ANDI508-element")) {
-            andiBar.prepareActiveElementInspection(element);
-
-            //format background-image
-            var bgImgUrl = $(element).css("background-image");
-            if (bgImgUrl.slice(0, 4) === "url(") {
-                bgImgUrl = bgImgUrl.slice(5, -2); //remove 'url("' and '")'
-            } else {
-                bgImgUrl = "";
-            }
-            var elementData = $(element).data("andi508");
-            var addOnProps = AndiData.getAddOnProps(element, elementData,
-                ["longdesc", "ismap", "usemap", ["background-image", bgImgUrl]]);
-
-            andiBar.displayOutput(elementData, element, addOnProps);
-            andiBar.displayTable(elementData, element, addOnProps);
-        }
-    };
-
     //This function will analyze the alt text
     function altTextAnalysis(altText) {
         var regEx_redundantPhrase = /(image of|photo of|picture of|graphic of|photograph of)/g;
@@ -276,7 +211,5 @@ function init_module() {
             }
         }
     }
-
     eANDI.analyze();
-    eANDI.results();
 }//end init

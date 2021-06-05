@@ -19,17 +19,6 @@ function init_module() {
     // NOTE: Extracted preCalculateTableName so that it was not deleted when removing a table creation function
     // NOTE: # of Alert_ text: 30
 
-    //This function removes markup in the test page that was added by this module
-    AndiModule.cleanup = function (testPage, element) {
-        if (element) {
-            $(element).removeClass("uANDI508-highlight").removeAttr("data-uandi508-rowindex data-uandi508-colindex data-uandi508-rowgroupindex data-uandi508-colgroupindex");
-        } else {
-            $(testPage).find("tr[data-uandi508-colgroupsegment]").removeAttr("data-uandi508-colgroupsegment");
-            $("#ANDI508-prevTable-button").remove();
-            $("#ANDI508-nextTable-button").remove();
-        }
-    };
-
     //Override Previous Element Button to jump to and analyze the previous table:
     $("#ANDI508-button-prevElement").off("click").click(function () {
         var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));

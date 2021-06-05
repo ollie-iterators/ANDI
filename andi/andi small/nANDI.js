@@ -9,7 +9,7 @@ function init_module() {
     nANDI.index = 1;
 
     //This object class is used to store data about each button. Object instances will be placed into an array.
-    function Button(element, index, role, elementInTabOrder, nameDescription, alerts, accesskey, nonUniqueIndex, isAriaHidden, ariaLabel, ariaLabelledby, label, ariaRole, ariaLabeledby) {
+    function Button(element, index, role, elementInTabOrder, nameDescription, alerts, accesskey, nonUniqueIndex, isAriaHidden, ariaLabel, ariaLabelledby, label, ariaRole, ariaLabeledby, alerts) {
         this.element = element;
         this.index = index;
         this.role = role;
@@ -28,11 +28,12 @@ function init_module() {
         // NOTE: label[for] means a label tag with a for attribute that shows which element it is added to
         // The test is about if the element has a label attribute and
         this.label = label;
-        this.onBlue = onBlur;
+        this.onBlur = onBlur;
         // NOTE: onCharge is combined with whether the element is an input, select, or textarea element
         this.onCharge = onCharge;
         this.onDBLClick = onDBLClick;
         //NOTE: Clickable area check works if an element does not have a label and is a radio button or a checkbox
+        this.alerts = alerts;
     }
 
     //This object class is used to keep track of the buttons on the page
@@ -127,16 +128,12 @@ function init_module() {
                         nonUniqueIndex = false;
 
                         if ($(this).is("[role=button]")) { //role=button
-                            if (!!$(this).prop("tabIndex") && !$(this).is(":tabbable")) {//Element is not tabbable and has no tabindex
+                            if (elementInTabOrder) {//Element is not tabbable and has no tabindex
                                 //Throw Alert: Element with role=button not in tab order
                                 alerts += "warning: Element not in tab order (alert_0125, role attribute)";
                                 andiAlerter.throwAlert(alert_0125, ["button"]);
                             }
-                        }
-
-                        if (!alerts) { //Add this for sorting purposes
-                            alerts = "<i>4</i>";
-                        }     
+                        } 
                     } else { //No accessible name or description
                         alerts = "danger: No accessible name";
                         nameDescription = "<span class='ANDI508-display-danger'>No Accessible Name</span>";
@@ -147,7 +144,7 @@ function init_module() {
                     AndiData.attachDataToElement(this);
 
                     //create Button object and add to array
-                    nANDI.buttons.list.push(new Button(this, nANDI.index, role, elementInTabOrder, nameDescription, alerts, accesskey, nonUniqueIndex));
+                    nANDI.buttons.list.push(new Button(this, nANDI.index, role, elementInTabOrder, nameDescription, alerts, accesskey, nonUniqueIndex, isAriaHidden, ariaLabel, ariaLabelledby, label, ariaRole, ariaLabeledby, ""));
                     nANDI.index += 1;
                     nANDI.buttons.count++;
                 }
