@@ -33,7 +33,6 @@ AndiModule.module = "f";
 //===============//
 // ANDI OBJECTS: //
 //===============//
-var andiResetter = new AndiResetter();		//Resets things ANDI changed
 var andiCheck = new AndiCheck();		//Alert Testing
 var andiAlerter = new AndiAlerter();		//Alert Throwing
 var andiFocuser = new AndiFocuser();		//Focusing Funtionality
@@ -111,10 +110,6 @@ function launchAndi() {
 
 		//Default Module Launch
 		AndiModule.launchModule(AndiModule.module);
-
-		//Push down test page so ANDI display can be fixed at top of screen.
-		andiResetter.resizeHeightsOnWindowResize();
-
 	})();
 }
 
@@ -150,11 +145,6 @@ function AndiModule(moduleVersionNumber, moduleLetter) {
 		if (!event.shiftKey && !$(this).hasClass("ANDI508-exclude-from-inspection"))
 			AndiModule.inspect(this);
 	};
-	AndiModule.focusability = function () {
-		AndiModule.inspect(this);
-		andiResetter.resizeHeights();
-	};
-	AndiModule.cleanup = function () { }; //Cleanup does nothing by default
 
 	//Previous Element Button - modules may overwrite this
 	//Instantiating a module will reset any overrides
@@ -261,7 +251,6 @@ AndiModule.launchModule = function (module) {
 
 		$("#ANDI508").removeClass().addClass("ANDI508-module-" + module).show();
 
-		andiResetter.resizeHeights();
 	}, 1);//end setTimeout
 };
 
@@ -431,8 +420,6 @@ var alert_0261 = new Alert("warning", "26", "Element is hidden from screen reade
 //This private function will get ANDI ready
 //Will add dependencies, insert the ANDI bar, add legacy css, define the controls
 function andiReady() {
-
-	andiResetter.hardReset();
 	dependencies();
 	appendLegacyCss();
 	insertAndiBarHtml();
@@ -552,13 +539,6 @@ function andiReady() {
 					$(nextSectionJump).focus();
 			}
 		});
-		//Module Launchers
-		$("#ANDI508-moduleMenu").children("button").each(function () {
-			$(this).click(function () {
-				andiResetter.softReset($("#ANDI508-testPage"));
-				AndiModule.launchModule(this.id.slice(-1)); //pass the letter of the module (last character of id)
-			});
-		});
 		//ANDI Version Popup
 		$("#ANDI508-toolName-link").click(function () {
 			alert("ANDI " + andiVersionNumber + "\n" + $("#ANDI508-module-name").attr("data-andi508-moduleversion"));
@@ -650,118 +630,6 @@ function andiReady() {
 		//Define Array.indexOf for old IE
 		if (!Array.prototype.indexOf) { Array.prototype.indexOf = function (obj, start) { for (var i = (start || 0), j = this.length; i < j; i++) { if (this[i] === obj) { return i; } } return -1; }; }
 	}
-}
-
-//This class is used to reset things that ANDI changed.
-function AndiResetter() {
-	//This function will clean up almost everything that ANDI inserted.
-	//Exceptions: 	.ANDI508-element-active (handled on close button press)
-	//				css <link> tags (all classes will be removed so it won't affect anything)
-	this.hardReset = function () {
-		if (document.getElementById("ANDI508")) {//check if ANDI was inserted
-			var testPage = document.getElementById("ANDI508-testPage");
-			$("#ANDI508").remove(); //removes ANDI
-			andiResetter.softReset(testPage);
-			andiResetter.restoreTestPageFixedPositionDistances(testPage);
-			$(testPage).find(".ANDI508-laserTarget").removeClass("ANDI508-laserTarget");
-			$(testPage).contents().unwrap();
-			$("#ANDI508-laser-container").remove();
-			$("#andiModuleScript").remove();//remove module script
-			$("#andiModuleCss").remove();//remove module css
-			$("script[src$='andi.js']").eq(1).remove(); //remove the second instance of the script
-			$("html.ANDI508-testPage, body.ANDI508-testPage").removeClass("ANDI508-testPage");
-		}
-	};
-
-	//This function is called between module launches.
-	this.softReset = function (testPage) {
-		if (testPage) {
-			$("#ANDI508-additionalElementDetails").html("");
-			$("#ANDI508-additionalPageResults").html("");
-			$("#ANDI508-alerts-list").html("");
-			$("#ANDI508-module-actions").html("");
-
-			//Loop through every ANDI508-element to clean up stuff
-			$(testPage).find(".ANDI508-element").each(function () {
-
-				//Module specific cleanup for this element
-				if (AndiModule.cleanup !== undefined)
-					AndiModule.cleanup(testPage, this);
-
-				//Global cleanup
-				$(this)
-					.removeClass("ANDI508-element ANDI508-element-danger ANDI508-highlight ANDI508-exclude-from-inspection")
-					.removeData("ANDI508")
-					.removeAttr("data-andi508-index")
-					.off("focus", AndiModule.focusability)
-					.off("mouseenter", AndiModule.hoverability);
-			});
-
-			//Module specific cleanup for all elements
-			if (AndiModule.cleanup !== undefined)
-				AndiModule.cleanup(testPage);
-
-			//Remove any custom click logic from prev next buttons (will be reapplied later)
-			$("#ANDI508-button-prevElement").off("click");
-			$("#ANDI508-button-nextElement").off("click");
-
-			//remove module class from test page
-			$(testPage).removeClass();
-		}
-	};
-
-	//This function resizes ANDI's display and the ANDI508-testPage container so that ANDI doesn't overlap with the test page.
-	//Should be called any time the height of the ANDI Bar might change.
-	this.resizeHeights = function () {
-		var testPage = document.getElementById("ANDI508-testPage");
-		//Calculate remaining height for testPage
-		setTimeout(function () {
-			var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-			var andiHeight = $("#ANDI508").outerHeight(true);
-			var testPageHeight = (windowHeight - andiHeight) + "px";
-			var testPagePaddingLeftRight = parseInt($(testPage).css("padding-left")) + parseInt($(testPage).css("padding-right"));
-			var testPageWidth = (window.innerWidth - testPagePaddingLeftRight) + "px";
-			andiHeight = andiHeight + "px";
-			//alert(windowHeight); alert(andiHeight); alert(testPageHeight);
-			$(testPage)
-				.css("height", testPageHeight)
-				.css("margin-top", andiHeight)
-				.css("width", testPageWidth)
-				.find("[data-andi508-origfixedtopbot]").each(function () {
-					//Adjust the top/bottom distance of any fixed elements in the test page
-					var origFixedTopBot = $(this).attr("data-andi508-origfixedtopbot").split(" ");
-					var top = origFixedTopBot[0];
-					var bottom = origFixedTopBot[1];
-					if (top != "auto") //if attached to top
-						$(this).css("top", parseInt(andiHeight) + parseInt(top) + "px"); //add the heights together so there is no overlap
-					else if (bottom === "auto") //if attached to bottom
-						$(this).css("top", andiHeight);
-				});
-			andiHotkeyList.hideHotkeysList();
-		}, 50 + 50);
-	};
-
-	//This function will adjust the top distance of all elements on the test page that have css fixed positions.
-	//This allows ANDI to not overlap with test page if using fixed positions.
-	this.storeTestPageFixedPositionDistances = function (element) {
-		if (($(element).css("position") === "fixed") && !$(element).attr("data-andi508-origfixedtopbot"))
-			$(element).attr("data-andi508-origfixedtopbot", $(element).css("top") + " " + $(element).css("bottom")); //store the value of the original top distance and bottom distance
-	};
-	//This function will restore the test page fixed position distances to their original values.
-	//It is meant to be called when the close ANDI button is pressed.
-	this.restoreTestPageFixedPositionDistances = function (testPage) {
-		$(testPage).find("[data-andi508-origfixedtopbot]").each(function () {
-			var origFixedTopBot = $(this).attr("data-andi508-origfixedtopbot").split(" ");
-			var top = origFixedTopBot[0];
-			var bottom = origFixedTopBot[1];
-			$(this).removeAttr("data-andi508-origfixedtopbot").css("top", top).css("bottom", bottom);
-		});
-	};
-
-	//This will automatically call resizeHeights when the browser window is resized by the user.
-	this.resizeHeightsOnWindowResize = function () {
-		$(window).resize(andiResetter.resizeHeights);
-	};
 }
 
 //This function is used for shifting focus to an element
@@ -2817,7 +2685,6 @@ function AndiAlerter() {
 						$(this).attr("tabindex", tabindex);
 					});
 					updateAlertLinksTabbableArray();
-					andiResetter.resizeHeights();
 				}
 			}
 		}
@@ -2940,15 +2807,6 @@ function TestPageData() {
 		//get all 'for's on the page and store for later comparison
 		this.allFors = $(TestPageData.allVisibleElements).filter("label[for]");
 	}
-
-	//This function should be called by the first module that is launched
-	//It should be placed in a loop that looks at every visible element on the page.
-	this.firstLaunchedModulePrep = function (element, elementData) {
-
-		//Force Test Page to convert any css fixed positions to absolute.
-		//Allows ANDI to be only fixed element at top of page.
-		andiResetter.storeTestPageFixedPositionDistances(element);
-	};
 }
 
 //==============//
