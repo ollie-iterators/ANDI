@@ -34,7 +34,6 @@ AndiModule.module = "f";
 // ANDI OBJECTS: //
 //===============//
 var andiResetter = new AndiResetter();		//Resets things ANDI changed
-var andiBar = new AndiBar();			//Main Display
 var andiCheck = new AndiCheck();		//Alert Testing
 var andiAlerter = new AndiAlerter();		//Alert Throwing
 var andiFocuser = new AndiFocuser();		//Focusing Funtionality
@@ -231,8 +230,6 @@ AndiModule.launchModule = function (module) {
 		.attr("aria-selected", "true")
 		.append("<img src='" + icons_url + "dropdown.png' role='presentation' />");
 
-	andiBar.showModuleLoading();
-
 	setTimeout(function () {//Slight delay so that the ANDI bar appears earlier
 		$("#ANDI508-testPage")
 			.addClass(module + "ANDI508-testPage");
@@ -265,8 +262,6 @@ AndiModule.launchModule = function (module) {
 
 		$("#ANDI508").removeClass().addClass("ANDI508-module-" + module).show();
 
-		andiBar.hideModuleLoading();
-
 		andiResetter.resizeHeights();
 	}, 1);//end setTimeout
 };
@@ -281,7 +276,6 @@ AndiModule.disableModuleButton = function (letter) {
 //================//
 // ALERT MESSAGES //
 //================//
-
 //This defines the class Alert
 function Alert(level, group, message, info, alertButton) {
 	this.level = level; 		//danger, warning, or caution
@@ -662,359 +656,6 @@ function andiReady() {
 	}
 }
 
-//This object handles the updating of the ANDI Bar
-function AndiBar() {
-	//This function prepares the active element inspection for the next element to display its data
-	this.prepareActiveElementInspection = function (element) {
-		if (!$(element).hasClass("ANDI508-element-active")) {
-			$("#ANDI508-testPage .ANDI508-element-active").first().removeClass("ANDI508-element-active"); //remove previous active element
-			$(element).addClass("ANDI508-element-active"); //mark this as the active element that ANDI is inspecting
-		}
-		//Display Element Name (tag/role)
-		var tagNameDisplay = $(element).prop("tagName").toLowerCase();
-		if ($(element).is("input") && $(element).attr("type"))
-			tagNameDisplay += ' type="' + $(element).attr("type") + '"';
-		var role = $.trim($(element).attr("role"));
-		if (role)
-			tagNameDisplay += ' role="' + role + '"';
-		$("#ANDI508-elementNameDisplay").html(tagNameDisplay);
-		//Hide the startUpSummary and show the elementDetails/pageAnalysis
-		if ($("#ANDI508-startUpSummary").html()) {
-			$("#ANDI508-startUpSummary").html("").hide();
-			$("#ANDI508-elementDetails").css("display", "inline-block");
-			$("#ANDI508-pageAnalysis").show();
-		}
-	};
-
-	//This function will display the output depending on the logic of the module Output Logic
-	//which should be defined in each module.
-	//It will also add the alerts to the output.
-	//No output will be displayed if there are danger level alerts.
-	this.displayOutput = function (elementData, element, addOnProps) {
-		var outputText = ""; //reset - this will hold the output text to be displayed
-
-		if (!checkAlerts("dangers")) { //No dangers found during load
-
-			if (!elementData.isAriaHidden && !(((elementData.role === "presentation" || elementData.role === "none")) && !$(element).is(":focusable"))) {
-
-				if (elementData.accGroup)
-					outputText += elementData.accGroup + " ";
-				if (elementData.accName) {
-					outputText += elementData.accName;
-
-					//Matching: if accessible name matches accessible description, don't output the description
-					if (elementData.accDesc && matchingTest(elementData.accName, elementData.accDesc))
-						outputText += " " + elementData.accDesc;
-				}
-				else if (elementData.accDesc) { //no accessible name, provide accessible description
-					outputText += " " + elementData.accDesc;
-				}
-
-				if (addOnProps && addOnProps[0])
-					outputText += " " + wrapText("addOnProperties", addOnProps[0]);
-			}
-		}
-		checkAlerts("warnings");
-		checkAlerts("cautions");
-
-		//Place the output display into the container.
-		$("#ANDI508-outputText").html(outputText);
-
-		function checkAlerts(alertType) {
-			if (elementData[alertType].length) {
-				for (var a = 0; a < elementData[alertType].length; a++)
-					outputText += wrapText(alertType.slice(0, -1), elementData[alertType][a]);
-				return true;
-			}
-			return false;
-		}
-
-		function wrapText(displayType, text) {
-			return " <span class='ANDI508-display-" + displayType + "'>" + text + "</span>";
-		}
-
-		function matchingTest(a, b) {
-			a = andiUtility.normalizeOutput(a);
-			b = andiUtility.normalizeOutput(b);
-			return (a !== b);
-		}
-	};
-
-	//This function displays the Accessible Components table.
-	//Only shows components containing data.
-	//Will display message if no accessible components were found.
-	this.displayTable = function (elementData, element, addOnProps) {
-		var accessibleComponentsTableBody = $("#ANDI508-accessibleComponentsTable").children("tbody").first();
-
-		//Reset the table to empty
-		$(accessibleComponentsTableBody).html("");
-
-		var rows = "";
-		buildTableBody();
-		if (rows)
-			$(accessibleComponentsTableBody).append(rows);
-
-		andiCheck.wereComponentsFound(elementData.isTabbable, accessibleComponentsTableBody);
-
-		function buildTableBody() {
-			if (!elementData.isAriaHidden) {
-				displayGrouping(elementData.grouping);
-				displayEmptyComponents(elementData.empty);
-				displayConcatenatedInnerText();
-				displayComponents(elementData.components);
-				displayAddOnProps();
-				displaySubtreeComponents();
-			}
-			else {
-				//Don't display any other components because the aria-hidden=true makes them not matter
-				displayAriaHiddenOnly();
-			}
-
-			function buildRow(displayClass, headerText, cellText) {
-				return "<tr><th class='ANDI508-display-" + displayClass + "' scope='row'>" +
-					headerText + ": </th><td class='ANDI508-display-" + displayClass + "'>" +
-					cellText + "</td></tr>";
-			}
-
-			function displayGrouping(grouping) {
-				if (grouping)
-					rows += buildRow("grouping", grouping.role, grouping.text);
-			}
-
-			function displayEmptyComponents(emptyComponents) {
-				for (var componentName in emptyComponents) {
-					if (emptyComponents.hasOwnProperty(componentName)) {
-						rows += buildRow(componentName, formatComponentName(componentName), emptyComponents[componentName]);
-					}
-				}
-			}
-
-			function displayConcatenatedInnerText() {
-				if (!$(element).is("table") || $(element).is("[role=presentation],[role=none]")) { //other exclusions are handled by the getVisibleInnerText
-					var innerText = andiUtility.formatForHtml($.trim(andiUtility.getVisibleInnerText(element, element)));
-					if (innerText)
-						rows += buildRow("innerText", "innerText", innerText);
-				}
-			}
-
-			function displayComponents(components) {
-				for (var component in components) {
-					if (component === "ariaLabelledby" || component === "ariaDescribedby") {
-						//build rows with a rowspan
-						rows += "<tr><th class='ANDI508-display-" + component + "' scope='row'" +
-							" rowspan='" + components[component].length + "'>" +
-							formatComponentName(component) + ": </th><td>" +
-							components[component][0] + "</td></tr>";
-						//add additional rows for each stored reference
-						for (var i = 1; i < components[component].length; i++) {
-							rows += "<tr><td>" + components[component][i] + "</td></tr>";
-						}
-					}
-					else if (component !== "innerText" && component !== "subtree") {
-						rows += buildRow(component, formatComponentName(component), components[component]);
-					}
-				}
-			}
-
-			function displayAddOnProps() {
-				for (var x = 1; x < addOnProps.length; x++) {
-					if (addOnProps[x].val)//if this addOnProperty exists, add to row
-						rows += buildRow("addOnProperties", addOnProps[x].name, addOnProps[x].val);
-				}
-
-				if (elementData.src)
-					rows += buildRow("addOnProperties", "src", elementData.src);
-			}
-
-			function displayAriaHiddenOnly() {
-				rows += buildRow("addOnProperties", "aria-hidden", "true");
-			}
-
-			function displaySubtreeComponents() {
-				if (elementData.components.subtree)
-					loopThroughSubtrees(elementData.components);
-
-				function loopThroughSubtrees(components) {
-					for (var x = 0; x < components.subtree.length; x++) {
-						var rowspan = 0;
-						var subtree = components.subtree[x];
-						var subtreeComponents = "";
-						for (var component in subtree) {
-							if (component === "subtree") {
-								loopThroughSubtrees(subtree);
-							}
-							else if (component !== "innerText" && component !== "role" && component !== "tagNameText") {
-								rowspan++;
-
-								if (rowspan > 1) //start new row
-									subtreeComponents += "<tr>";
-
-								subtreeComponents += "<td><span class='ANDI508-display-" + component + "'>" +
-									formatComponentName(component) + ":</span> " +
-									subtree[component] + "</td></tr>";
-							}
-						}
-
-						//Add the <th>
-						if (subtreeComponents) {
-							rows += "<tr><th rowspan=" + rowspan + "><span class='ANDI508-display-id'>child</span>";
-							if (subtree.role)
-								rows += subtree.role;
-							else
-								rows += "&lt;" + subtree.tagNameText + "&gt;";
-							rows += "</th>" + subtreeComponents;
-						}
-					}
-
-				}
-			}
-
-			function formatComponentName(componentName) {
-				if (componentName.substring(0, 4) === "aria")
-					return "aria-" + componentName.charAt(4).toLowerCase() + componentName.substring(5, componentName.length);
-				return componentName;
-			}
-		}
-	};
-
-	//This function will focus on an element if it is inspectable according to this module
-	this.focusIsOnInspectableElement = function () {
-		//Is there is an active element on the page? (was ANDI was relaunched?)
-		var activeElement = $("#ANDI508-testPage .ANDI508-element-active").first();
-		if (activeElement.length && $(activeElement).hasClass("ANDI508-element")) {
-			//Yes. "re-inspect" the active element
-			andiFocuser.focusOn($(activeElement));
-			return true;
-		}
-		else {
-			$("#ANDI508").focus();
-			return false; //module logic should show startUpSummary
-		}
-	};
-
-	//This function will show the startUpSummary with the text provided and conditionally show the pageAnalysis.
-	//It will also hide the activeElementResults
-	this.showStartUpSummary = function (summary, showPageAnalysis) {
-		if (showPageAnalysis || testPageData.numberOfAccessibilityAlertsFound > 0)
-			$("#ANDI508-pageAnalysis").show();
-		else
-			$("#ANDI508-pageAnalysis").hide();
-		$("#ANDI508-elementDetails").hide();
-		$("#ANDI508-startUpSummary").html("<p>" + summary + "</p>").css("display", "inline-block");
-	};
-
-	//This function updates the resultsSummary
-	this.updateResultsSummary = function (summary) {
-		$("#ANDI508-resultsSummary-heading").html(summary);
-	};
-
-	//These functions show/hide the elementControls
-	this.showElementControls = function () {
-		$("#ANDI508-elementControls button").css("display", "inline-block");
-	};
-	this.hideElementControls = function () {
-		$("#ANDI508-elementControls button").hide();
-	};
-
-	//These functions show/hide the anmiated loading image
-	this.showModuleLoading = function () {
-		document.getElementById("ANDI508-body").style.display = "none";
-		document.getElementById("ANDI508-loading").style.display = "inline-block";
-	};
-	this.hideModuleLoading = function () {
-		setTimeout(function () {
-			document.getElementById("ANDI508-loading").style.display = "none";
-			document.getElementById("ANDI508-body").style.display = "block";
-		}, 1);
-	};
-
-	//This function adds the functionality to any moduleActionGroup
-	this.initializeModuleActionGroups = function () {
-		$("#ANDI508-module-actions button.ANDI508-moduleActionGroup-toggler").each(function () {
-			//Toggler button
-			$(this)
-				.attr("aria-expanded", "false")
-				.attr("role", "menuitem")
-				//Arrow down opens menu. Tab or Shift Tab closes menu
-				.on("keydown", function (event) {
-					var keyCode = event.keyCode || event.which;
-					switch (keyCode) {
-						case 40: //down
-							$(this).parent().addClass("ANDI508-moduleActionGroup-visible");
-							$(this)
-								.attr("aria-expanded", "true")
-								.next().find("button").first().focus();
-							break;
-						case 9: //tab (covers shift tab)
-							$(this).parent().removeClass("ANDI508-moduleActionGroup-visible");
-							$(this).attr("aria-expanded", "false");
-							break;
-					}
-				})
-				//Clicking toggles menu
-				.click(function () {
-					if ($(this).attr("aria-expanded") === "false") {
-						//On
-						$(this).attr("aria-expanded", "true");
-						$(this).parent().addClass("ANDI508-moduleActionGroup-visible");
-					}
-					else {
-						//off
-						$(this).attr("aria-expanded", "false");
-						$(this).parent().removeClass("ANDI508-moduleActionGroup-visible");
-					}
-				})
-				//Add icon
-				.append(" <img src='" + icons_url + "dropdown.png' role='presentation' />");
-
-			$(this).next()
-				//Menu container
-				.attr("role", "application")
-				//Each button within menu container
-				.find("button").each(function () {
-					$(this)
-						.attr("tabindex", "-1")
-						.on("focusout", function () {
-							//setTimeout and :focus check are needed to fix a timing issue in firefox and chrome
-							var moduleActionGroup = $(this).parent(); //options container
-							setTimeout(function () {
-								if (!$(":focus").parent().is(moduleActionGroup)) {
-									$(moduleActionGroup).parent() //entire container
-										.removeClass("ANDI508-moduleActionGroup-visible")
-										.find("button.ANDI508-moduleActionGroup-toggler").first().attr("aria-expanded", "false");
-								}
-							}, 5);
-						}).on("focus", function () {
-							$(this).parent().parent()
-								.addClass("ANDI508-moduleActionGroup-visible")
-								.find("button.ANDI508-moduleActionGroup-toggler").first().attr("aria-expanded", "true");
-						}).on("keydown", function (event) {
-							var keyCode = event.keyCode || event.which;
-							switch (keyCode) {
-								case 40: //down
-									$(this).nextAll().first().focus();
-									break;
-								case 38: //up
-									$(this).prevAll().first().focus();
-									break;
-								case 27: //esc
-									$(this).parent().parent().find("button.ANDI508-moduleActionGroup-toggler").first().focus();
-									break;
-							}
-						});
-				});
-			//Widget container
-			$(this).parent()
-				.attr("role", "menu")
-				.on("mouseleave", function () {
-					$(this)
-						.removeClass("ANDI508-moduleActionGroup-visible")
-						.find("button.ANDI508-moduleActionGroup-toggler").first().attr("aria-expanded", "false");
-				});
-		});
-	};
-}
-
 //This class is used to reset things that ANDI changed.
 function AndiResetter() {
 	//This function will clean up almost everything that ANDI inserted.
@@ -1043,7 +684,6 @@ function AndiResetter() {
 			$("#ANDI508-additionalPageResults").html("");
 			$("#ANDI508-alerts-list").html("");
 			$("#ANDI508-module-actions").html("");
-			andiBar.showElementControls();
 
 			//Loop through every ANDI508-element to clean up stuff
 			$(testPage).find(".ANDI508-element").each(function () {
