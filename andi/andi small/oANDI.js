@@ -89,18 +89,11 @@ function init_module() {
                 var nextFontWeight = $(nextElement).css("font-weight");
                 var isFakeHeading = false;
                 if (text.length > 0 && text.length < 30) {
-                    var fakeHeading_fontSize = parseInt($(element).css("font-size"));
-                    var fakeHeading_fontWeight = $(element).css("font-weight");
-                    var fakeHeadingIsBold = (fakeHeading_fontWeight === "bold" || fakeHeading_fontWeight === "bolder" || fakeHeading_fontWeight > 700);
-        
-                    if (fakeHeading_fontSize > 22 || (fakeHeadingIsBold && fakeHeading_fontSize > 15)) { //fakeHeading_fontSize is greater than size limit
-                        var nextElement = $(element).next().filter(":visible");
-        
-                        if ($.trim($(nextElement).text()) !== "") { //next element has text
-                            var nextElement_fontSize = parseInt($(nextElement).css("font-size"));
-                            var nextElement_fontWeight = $(nextElement).css("font-weight");
-                            var nextIsBold = (nextElement_fontWeight === "bold" || nextElement_fontWeight === "bolder" || nextElement_fontWeight > 700);
-                            if (nextElement_fontSize < fakeHeading_fontSize) {
+                    var fakeHeadingIsBold = (fontWeight === "bold" || fontWeight === "bolder" || fontWeight > 700);
+                    if (fontSize > 22 || (fakeHeadingIsBold && fontSize > 15)) { //fontSize is greater than size limit
+                        if (nextText !== "") { //next element has text
+                            var nextIsBold = (nextFontWeight === "bold" || nextFontWeight === "bolder" || nextFontWeight > 700);
+                            if (nextFontSize < fontSize) {
                                 //next element's font-size is smaller than fakeHeading font-size
                                 isFakeHeading = true;
                             } else if (fakeHeadingIsBold && !nextIsBold) {
