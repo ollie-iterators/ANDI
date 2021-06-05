@@ -37,7 +37,6 @@ var andiResetter = 		new AndiResetter();		//Resets things ANDI changed
 var andiBar = 			new AndiBar();			//Main Display
 var andiCheck = 		new AndiCheck();		//Alert Testing
 var andiAlerter = 		new AndiAlerter();		//Alert Throwing
-var andiLaser = 		new AndiLaser();		//Laser Functionality
 var andiFocuser = 		new AndiFocuser();		//Focusing Funtionality
 var andiUtility = 		new AndiUtility();		//String Manipulation
 var andiOverlay = 		new AndiOverlay();		//Used to create overlays
@@ -141,28 +140,6 @@ function AndiModule(moduleVersionNumber, moduleLetter){
 		$("head").append("<link id='andiModuleCss' href='"+host_url+moduleLetter+"andi.css?v="+moduleVersionNumber+"' type='text/css' rel='stylesheet' />");
 	}
 
-	//Module Selection Menu Operation
-	$("#ANDI508-moduleMenu")
-		.on("mouseover",AndiModule.showMenu)
-		.on("mouseleave",AndiModule.hideMenu);
-	$("#ANDI508-moduleMenu button")
-		.on("focusout",AndiModule.hideMenu)
-		.on("focus",AndiModule.showMenu)
-		.on("keydown",function(event){
-			var keyCode = event.keyCode || event.which;
-			switch(keyCode){
-			case 40: //down
-				$(this).nextAll().filter(":visible").first().focus();
-				break;
-			case 38: //up
-				$(this).prevAll().filter(":visible").first().focus();
-				break;
-			case 27: //esc
-				$("#ANDI508-moduleMenu").children("button").first().focus();
-				break;
-			}
-		});
-
 	//The module should implement these priveleged methods
 	this.analyze = undefined;
 	this.results = undefined;
@@ -174,7 +151,6 @@ function AndiModule(moduleVersionNumber, moduleLetter){
 			AndiModule.inspect(this);
 	};
 	AndiModule.focusability = function(){
-		andiLaser.eraseLaser();
 		AndiModule.inspect(this);
 		andiResetter.resizeHeights();
 	};
@@ -235,36 +211,10 @@ AndiModule.initActiveActionButtons = function(buttonsObject){
 		AndiModule.activeActionButtons = buttonsObject;
 	}
 };
-//This function will click any of the activeActionButtons in the buttonsArray that are set to true
-AndiModule.engageActiveActionButtons = function(buttonsArray){
-	for(var b=0; b<buttonsArray.length; b++){
-		if(AndiModule.activeActionButtons[buttonsArray[b]])
-			$("#ANDI508-"+buttonsArray[b]+"-button").click();
-	}
-};
-
-//These functions show/hide the module selection menu
-AndiModule.showMenu = function(){
-	$("#ANDI508-moduleMenu").addClass("ANDI508-moduleMenu-expanded");
-	//Hide tANDI
-	if(!TestPageData.page_using_table)
-		AndiModule.disableModuleButton("t");
-	//Hide iANDI
-	if($(TestPageData.allVisibleElements).filter("iframe").length == 0)
-		AndiModule.disableModuleButton("i");
-};
-AndiModule.hideMenu = function(){
-	//setTimeout and :focus check are needed to fix a timing issue in firefox and chrome
-	setTimeout(function(){
-		if(!$(":focus").hasClass("ANDI508-moduleMenu-option"))
-			$("#ANDI508-moduleMenu").removeClass("ANDI508-moduleMenu-expanded");
-	}, 5);
-};
 
 //This function will launch a module.
 //	module:	the letter of the module
 AndiModule.launchModule = function(module){
-
 	//Remove previously selected modules
 	$("#ANDI508-moduleMenu button")
 		.attr("tabindex","-1")
@@ -595,14 +545,8 @@ function andiReady(){
 		$("#ANDI508-elementNameLink")
 			.click(function(){ //Place focus on active element when click tagname
 				andiFocuser.focusByIndex($("#ANDI508-testPage .ANDI508-element-active").first().attr("data-andi508-index"));
-				andiLaser.eraseLaser();
 				return false;
-			})
-			.hover(function(){ //Draw line to active element
-				var activeElement = $("#ANDI508-testPage .ANDI508-element-active").first();
-				andiLaser.drawLaser($(this).offset(),$(activeElement).offset(),$(activeElement));
-			})
-			.on("mouseleave", andiLaser.eraseLaser);
+			});
 		//Active Element Jump and Section Jump Hotkeys
 		$(document).keydown(function(e){
 			if(e.which === andiHotkeyList.key_active.code && e.altKey )
@@ -806,10 +750,8 @@ function AndiBar(){
 			$(accessibleComponentsTableBody).append(rows);
 
 		andiCheck.wereComponentsFound(elementData.isTabbable, accessibleComponentsTableBody);
-		andiLaser.createReferencedComponentLaserTriggers();
 
 		function buildTableBody(){
-
 			if(!elementData.isAriaHidden){
 				displayGrouping(elementData.grouping);
 				displayEmptyComponents(elementData.empty);
@@ -1118,8 +1060,6 @@ function AndiResetter(){
 			if(AndiModule.cleanup !== undefined)
 				AndiModule.cleanup(testPage);
 
-			andiLaser.cleanupLaserTargets(testPage);
-
 			//Remove any custom click logic from prev next buttons (will be reapplied later)
 			$("#ANDI508-button-prevElement").off("click");
 			$("#ANDI508-button-nextElement").off("click");
@@ -1232,94 +1172,8 @@ function AndiFocuser(){
 	};
 }
 
-//This function adds the capability to draw a line to visually connect the elements on the screen.
-//It works by showing an svg #ANDI508-laser-container that contains a line tag.
-//The coordinates of the line tag are updated to draw the line.
-//NOTE: The svg has a high z-index to keep it on top of the test page, therefore,
-//it must be hidden at the right time so that the page can be interacted with.
-function AndiLaser(){
-	//Draws a laser. Pass in an object containing properties top and left, AKA the result of jQuery offset().
-	this.drawLaser = function(fromHereCoords, toHereCoords, targetObject){
-		if(browserSupports.svg && !!targetObject.length){
-			$("#ANDI508-laser").attr("x1",fromHereCoords.left).attr("y1",fromHereCoords.top)
-							   .attr("x2",  toHereCoords.left).attr("y2",  toHereCoords.top);
-			$("#ANDI508-laser-container").css("cssText","display:inline !important");
-			$(targetObject).addClass("ANDI508-laserTarget");
-		}
-	};
-	//Removes the lasers by hiding the laser container.
-	//Should be called during mouseleave, or click functions that shift focus.
-	this.eraseLaser = function(){
-		if(browserSupports.svg){
-			$("#ANDI508-testPage").find(".ANDI508-laserTarget").first().removeClass("ANDI508-laserTarget");
-			$("#ANDI508-laser-container").css("cssText","display:none !important");
-		}
-		return false;
-	};
-	//Draws a laser for an alert link. It will be displayed when the shift key is held. Call it onmouseover
-	this.drawAlertLaser = function(event){
-		if(browserSupports.svg){
-			if(event.shiftKey){ //check for holding shift key
-				var relatedIndex = $(this).attr("data-andi508-relatedindex");
-				if(relatedIndex){
-					var alertCoords = $(this).offset();
-					var elementCoords = $("[data-andi508-index="+relatedIndex+"]").offset();
-					andiLaser.drawLaser(alertCoords,elementCoords,$("[data-andi508-index="+relatedIndex+"]"));
-				}
-			}
-			else
-				andiLaser.eraseLaser();
-		}
-	};
-	//This function attaches hover/mouseover and mouseleave events to the triggerObject
-	//It will call drawLaser on hover and eraseLaser on mouseleave
-	//NOTE: Do not use this function if the targetObject will change.
-	this.createLaserTrigger = function(triggerObject, targetObject){
-		if(browserSupports.svg){
-			$(triggerObject).hover(function(){
-				if($(targetObject) !== undefined)
-					andiLaser.drawLaser($(triggerObject).offset(),$(targetObject).offset(),$(targetObject));
-			});
-			$(triggerObject).on("mouseleave",andiLaser.eraseLaser);
-		}
-	};
-	//This function creates a laserAimer HTML object
-	//which will store the relatedLaserIndex of the object to point the laser at
-	this.createLaserTarget = function(targetElement, referencedText){
-		if(browserSupports.svg && referencedText !== ""){
-			var relatedLaserIndex;
-			if(!$(targetElement).hasClass("ANDI508-relatedLaserTarget")){
-				//increment relatedLaserIndex and store onto targetElement
-				relatedLaserIndex = testPageData.relatedLaserIndex++;
-				$(targetElement).addClass("ANDI508-relatedLaserTarget").attr("data-andi508-relatedlaserindex", relatedLaserIndex);
-			}
-			else //get relatedLaserIndex from targetElement
-				relatedLaserIndex = $(targetElement).attr("data-andi508-relatedlaserindex");
-			return "<span class='ANDI508-laserAimer' data-andi508-relatedlaserindex='"+relatedLaserIndex+"'>"+referencedText+"</span>";
-		}
-		else
-			return referencedText;
-	};
-
-	//This function will remove all laser targets
-	this.cleanupLaserTargets = function(testPage){
-		$(testPage).find(".ANDI508-relatedLaserTarget").removeClass("ANDI508-relatedLaserTarget").removeAttr("data-andi508-relatedlaserindex");
-	};
-
-	//This function will createLaserTrigger for each data-andi508-relatedlaserindex in the td cell of the accessibility components table
-	//It is used for (aria-labelledby, label, aria-describedby)
-	this.createReferencedComponentLaserTriggers = function(){
-		if(browserSupports.svg){
-			$("#ANDI508-accessibleComponentsTable td span.ANDI508-laserAimer").each(function(){
-				andiLaser.createLaserTrigger($(this), $("#ANDI508-testPage .ANDI508-relatedLaserTarget[data-andi508-relatedlaserindex="+$(this).attr("data-andi508-relatedlaserindex")+"]").first());
-			});
-		}
-	};
-}
-
 //This class is used to perform common utilities such as regular expressions and string alertations.
 function AndiUtility(){
-
 	//cache the regex for performance gains
 	this.greaterthan_regex = />/g;
 	this.lessthanthan_regex = /</g;
@@ -2238,7 +2092,6 @@ AndiData.textAlternativeComputation = function(root){
 			component = $(element).attr("title");
 			if(component !== undefined){
 				if(!isEmptyComponent(component, "title", element)){
-					TestPageData.page_using_titleAttr = true;
 					accumulateText(AndiData.addComp(data, "title", component));
 				}
 			}
@@ -2280,25 +2133,25 @@ AndiData.textAlternativeComputation = function(root){
 		var groupingText = "";
 
 		//role=radiogroup
-		if(TestPageData.page_using_role_radiogroup && $(element).isSemantically("[role=radio]","input[type=radio]")){
+		if($(element).isSemantically("[role=radio]","input[type=radio]")){
 			getGroupingText($(element).closest("[role=radiogroup],[role=group]"));
 		}
 		//role=group
-		if(!groupingText && TestPageData.page_using_role_group){
+		if(!groupingText){
 			if($(element).isSemantically("[role=button],[role=checkbox],[role=link],[role=menuitem],[role=menuitemcheckbox],[role=menuitemradio],[role=option],[role=radio],[role=slider],[role=textbox],[role=treeitem]","input,select,textarea,button")){ //is an interactive element
 				getGroupingText($(element).closest("[role=group]"));
 			}
 		}
 		//role=combobox
-		if(!groupingText && TestPageData.page_using_role_combobox && (data.role === "textbox" || data.role === "listbox" || data.role === "tree" || data.role === "grid" || data.role === "dialog") ){
+		if(!groupingText && (data.role === "textbox" || data.role === "listbox" || data.role === "tree" || data.role === "grid" || data.role === "dialog") ){
 			getGroupingText($(element).closest("[role=combobox]"));
 		}
 		//role=listbox
-		if(!groupingText && TestPageData.page_using_role_listbox && data.role === "option"){
+		if(!groupingText && data.role === "option"){
 			getGroupingText($(element).closest("[role=listbox]"));
 		}
 		//role=menu || role=menubar
-		if(!groupingText && TestPageData.page_using_role_menu && (data.role === "menuitem" || data.role === "menuitemcheckbox")){
+		if(!groupingText && (data.role === "menuitem" || data.role === "menuitemcheckbox")){
 			getGroupingText($(element).closest("[role=menu],[role=menubar]"));
 		}
 		//legend
@@ -2820,9 +2673,6 @@ AndiData.addComp = function(data, componentType, component, hasNodebeenTraversed
 
 			if(component[2]) //add the referenced id
 				displayText += "<span class='ANDI508-display-id'>#" + component[2] + "</span>";
-
-			if(component[1]) //ref element laser
-				displayText += andiLaser.createLaserTarget(component[1], andiUtility.formatForHtml(andiUtility.stripHTML(component[0])));
 
 			displayText += "</span>";
 		}
@@ -3468,13 +3318,6 @@ function AndiAlerter(){
 							return false;
 						});
 					}
-					else{
-						andiFocuser.addFocusClick($(this));
-						//Add andiLaser drawing to the alert links
-						$(this).on("mouseover" 	,andiLaser.drawAlertLaser);
-						$(this).on("click"		,andiLaser.eraseLaser);
-						$(this).on("mouseleave"	,andiLaser.eraseLaser);
-					}
 				});
 
 				//This function stores the tabbable alerts into an array.
@@ -3629,12 +3472,6 @@ function TestPageData(){
 	//Booleans which will be set if the associated tags are found. Helps with performance.
 	this.page_using_figure = false;
 	this.page_using_fieldset = false;
-	this.page_using_titleAttr = false;
-	this.page_using_role_group = false;
-	this.page_using_role_radiogroup = false;
-	this.page_using_role_combobox = false;
-	this.page_using_role_listbox = false;
-	this.page_using_role_menu  = false;
 
 	//Get all fors on the page and store for later comparison
 	//Determine if labels are being used on the page
@@ -3658,18 +3495,6 @@ function TestPageData(){
 
 		//get role from elementData if possible
 		var role = (elementData) ? elementData.role : $(element).attr("role");
-
-		//Determine if role=group is being used
-		if(!TestPageData.page_using_role_group && role === "group")
-			TestPageData.page_using_role_group = true;
-		if(!TestPageData.page_using_role_radiogroup && role === "radiogroup")
-			TestPageData.page_using_role_radiogroup = true;
-		if(!TestPageData.page_using_role_combobox && role === "combobox")
-			TestPageData.page_using_role_combobox = true;
-		if(!TestPageData.page_using_role_listbox && role === "listbox")
-			TestPageData.page_using_role_listbox = true;
-		if(!TestPageData.page_using_role_menu && role === "menu" || role === "menubar")
-			TestPageData.page_using_role_menu = true;
 
 		//Determine if role=table/grid is being used
 		if(!TestPageData.page_using_table && (role === "table" || role === "grid"))
