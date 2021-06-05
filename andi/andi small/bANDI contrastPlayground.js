@@ -11,6 +11,10 @@ function init_module() {
     var imgCount = 0;
     var elementsContainingTextCount = 0;
 
+    AndiModule.initActiveActionButtons({
+        contrastPlayground: false,
+    });
+
     //This function will run tests on text containing elements
     bANDI.analyze = function () {
         //Elements that are disabled or have aria-disabled="true" do not need to be tested
@@ -75,6 +79,315 @@ function init_module() {
                 return true;
             }
             return false;
+        }
+    };
+
+    //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
+    bANDI.results = function () {
+        andiBar.updateResultsSummary("Elements Containing Text: " + elementsContainingTextCount);
+
+        if (imgCount > 0) {
+            andiAlerter.throwAlert(alert_0231, alert_0231.message, 0);
+        }
+
+        //Contrast Playground HTML
+        $("#ANDI508-additionalPageResults").append(
+            "<button id='ANDI508-contrastPlayground-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>" + listIcon + "show contrast playground</button>" +
+            "<div id='bANDI508-contrastPlayground' tabindex='0' class='ANDI508-viewOtherResults-expanded'><h3 class='ANDI508-heading'>Contrast Playground:</h3><div id='bANDI508-contrastPlayground-area'>" +
+            "<div id='bANDI508-playground-instructions'>Enter two hex color values to get the contrast ratio.</div>" +
+            "<input type='color' id='bANDI508-colorSelectorWidget-fg' value='#000000' style='width:1px; opacity:0;' />" +
+            "<button class='bANDI508-colorSelector' id='bANDI508-playground-colorSelector-fg' style='background-color:#000000 !important' aria-label='visual color picker, select text color'></button>" +
+            "<input type='text' id='bANDI508-playground-fg' maxlength='7' title='Text Color Hex' value='#000000' aria-describedby='bANDI508-playground-instructions-controls' spellcheck='false' />/&nbsp;" +
+            "<input type='color' id='bANDI508-colorSelectorWidget-bg' value='#ffffff' style='width:1px; opacity:0;' />" +
+            "<button class='bANDI508-colorSelector' id='bANDI508-playground-colorSelector-bg' style='background-color:#ffffff !important' aria-label='visual color picker, select background color'></button>" +
+            "<input type='text' id='bANDI508-playground-bg' maxlength='7' title='Background Color Hex' value='#ffffff' aria-describedby='bANDI508-playground-instructions-controls' spellcheck='false' />= " +
+            "<div tabindex='0' id='bANDI508-playground-result' aria-describedby='bANDI508-playground-instructions'><span id='bANDI508-playground-ratio'>21</span>:1</div><br />" +
+            "<div id='bANDI508-playground-instructions-controls'>Arrow keys adjust brightness: &uarr; lightens, &darr; darkens.</div>" +
+            "<div id='bANDI508-playground-buttons'>" +
+            "<button id='bANDI508-playground-suggest-small' class='ANDI508-viewOtherResults-button'>get 4.5:1 suggestion</button>" +
+            "<button id='bANDI508-playground-suggest-large' class='ANDI508-viewOtherResults-button'>get 3:1 suggestion</button>" +
+            "</div></div></div>");
+
+        enableColorWidget("fg");
+        enableColorWidget("bg");
+
+        //Define contrastPlayground button
+        $("#ANDI508-contrastPlayground-button").click(function () {
+            if ($(this).attr("aria-expanded") == "false") {
+                //show Contrast Playground, hide alert list
+                $("#ANDI508-alerts-list").hide();
+                andiSettings.minimode(false);
+                $(this)
+                    .addClass("ANDI508-viewOtherResults-button-expanded")
+                    .html(listIcon + "hide contrast playground")
+                    .attr("aria-expanded", "true")
+                    .find("img").attr("src", icons_url + "list-on.png");
+                bANDI.playground_open();
+                $("#bANDI508-contrastPlayground").slideDown(50).focus();
+                AndiModule.activeActionButtons.contrastPlayground = true;
+            } else {
+                //hide Contrast Playground, show alert list
+                $("#bANDI508-contrastPlayground").slideUp(50);
+                $("#ANDI508-alerts-list").show();
+                $(this)
+                    .removeClass("ANDI508-viewOtherResults-button-expanded")
+                    .html(listIcon + "show contrast playground ")
+                    .attr("aria-expanded", "false");
+                AndiModule.activeActionButtons.contrastPlayground = false;
+            }
+            andiResetter.resizeHeights();
+            return false;
+        });
+
+        //This handles the javascript key event on the inputs.
+        //It handles validation of the fields.
+        //If passes validation, looks for up or down arrow key presses, calculates the contrast
+        $("#bANDI508-playground-bg,#bANDI508-playground-fg").keyup(function () {
+            if (bANDI.playground_validate("#bANDI508-playground-bg,#bANDI508-playground-fg")) {
+                //Check if user presses up or down
+                var keyCode = event.keyCode || event.which;
+                switch (keyCode) {
+                    case 40: //down - make darker
+                        bANDI.playground_adjustShade(this, "darker");
+                        break;
+                    case 38: //up - make lighter
+                        bANDI.playground_adjustShade(this, "lighter");
+                        break;
+                }
+                //Calculate the contrast ratio
+                bANDI.playground_calc();
+            }
+        });
+
+        $("#bANDI508-playground-suggest-small").click(function () {
+            bANDI.playground_suggest(4.5);
+            $("#bANDI508-playground-result").focus();
+        });
+        $("#bANDI508-playground-suggest-large").click(function () {
+            bANDI.playground_suggest(3);
+            $("#bANDI508-playground-result").focus();
+        });
+
+
+        if (!andiBar.focusIsOnInspectableElement()) {
+            andiBar.showElementControls();
+            andiBar.showStartUpSummary("Discover the <span class='ANDI508-module-name-c'>color contrast</span> for elements containing text.", true);
+        }
+        if (testPageData.disabledElementsCount > 0) {
+            andiAlerter.throwAlert(alert_0251, [testPageData.disabledElementsCount], 0);
+        }
+
+        andiAlerter.updateAlertList();
+
+        AndiModule.engageActiveActionButtons([
+            "contrastPlayground",
+        ]);
+
+        $("#ANDI508").focus();
+
+        //This function will allow the color selection widget to work
+        function enableColorWidget(fgbg) {
+            $("#bANDI508-playground-colorSelector-" + fgbg)
+                .attr("tabindex", "0")
+                .click(function () {
+                    var val = rgbToHex(new Color($(this).css("background-color")));
+                    $("#bANDI508-colorSelectorWidget-" + fgbg)
+                        .val(val) //set the value of the widget
+                        .click() //open the widget
+                        .off("change") //so that there is only one listener
+                        .on("change", function () {
+                            $("#bANDI508-playground-colorSelector-" + fgbg).attr("style", "background-color:" + this.value + " !important;");
+                            $("#bANDI508-playground-" + fgbg).val(this.value);
+                            bANDI.playground_calc();
+                        });
+                    return false;
+                });
+        }
+    };
+
+    //This function will update the info in the Active Element Inspection.
+    //Should be called after the mouse hover or focus in event.
+    AndiModule.inspect = function (element) {
+        andiBar.prepareActiveElementInspection(element);
+        var elementData = $(element).data("andi508");
+
+        if ($(element).hasClass("ANDI508-element")) {
+            $("#ANDI508-additionalElementDetails").html(
+                "<div tabindex='0' style='margin-bottom:1px' accesskey='" + andiHotkeyList.key_output.key + "'>" +
+                "<h3 class='ANDI508-heading'>Contrast Ratio<span aria-hidden='true'>:</span></h3> <span id='bANDI508-ratio'></span> <span id='bANDI508-result'></span> " +
+                "<span id='bANDI508-minReq'><span class='ANDI508-screenReaderOnly'>, </span>Min<span class='ANDI508-screenReaderOnly'>imum</span> Req<span class='ANDI508-screenReaderOnly'>uirement</span><span aria-hidden='true'>:</span></span> <span id='bANDI508-minReqRatio'></span>" +
+                "</div>" +
+                "<h3 class='ANDI508-heading' id='bANDI508-heading-style'>Style:</h3>" +
+                "<table id='bANDI508-table-style' aria-labelledby='bANDI508-heading-style'><tbody tabindex='0'>" +
+                "<tr><th scope='row' class='bANDI508-label'>Text&nbsp;Color:</th><td><div class='bANDI508-colorSelector' id='bANDI508-colorSelector-foreground'></div><span id='bANDI508-fg'></span></td></tr>" +
+                "<tr><th scope='row' class='bANDI508-label'>Background:</th><td><div class='bANDI508-colorSelector' id='bANDI508-colorSelector-background'></div><span id='bANDI508-bg'></span></td></tr>" +
+                "<tr><th scope='row' class='bANDI508-label'>Font:</th><td><span id='bANDI508-fontweight'></span> <span id='bANDI508-fontsize'></span> <span id='bANDI508-fontfamily'></span></td></tr>" +
+                "</tbody></table>"
+            ).show();
+
+            bANDI.contrastDisplay(element);
+
+            andiBar.displayOutput(elementData, element); //just to display any alerts
+
+            //Grab the alert text from the outputText
+            var alertHtml = $("#ANDI508-outputText").html();
+            if (alertHtml) {
+                $("#ANDI508-additionalElementDetails").append("<div id='bANDI508-alertContainer'><h3 class='ANDI508-heading'>Alerts:</h3> " + alertHtml + "</div>");
+            }
+
+            $("#bANDI508-colorSelector-foreground").click(function () {
+                if ($("#ANDI508-contrastPlayground-button").attr("aria-expanded") === "true") {
+                    displayColorValue("#bANDI508-playground-fg", new Color($(this).css("background-color")));
+                    bANDI.playground_calc();
+                }
+            });
+            $("#bANDI508-colorSelector-background").click(function () {
+                if ($("#ANDI508-contrastPlayground-button").attr("aria-expanded") === "true") {
+                    displayColorValue("#bANDI508-playground-bg", new Color($(this).css("background-color")));
+                    bANDI.playground_calc();
+                }
+            });
+        }
+    };
+
+    //This function will adjust the shade of the color in the playground
+    //It is meant to be called on arrow key presses
+    bANDI.playground_adjustShade = function (inputElement, shade) {
+        var colorSelectorBox = $(inputElement).prev();
+        var color = new Color($(colorSelectorBox).css("background-color"));
+
+        var adjustedShade;
+        if (shade == "lighter") {
+            for (var l = 0; l < 3; l++) {
+                if (color.rgba[l] < 255) {
+                    color.rgba[l]++;
+                }
+            }
+        } else { //darker
+            for (var d = 0; d < 3; d++) {
+                if (color.rgba[d] > 0) {
+                    color.rgba[d]--;
+                }
+            }
+        }
+
+        //Update Color
+        displayColorValue("#" + inputElement.id, color);
+    };
+
+    //This function will grab the colors from the active element, if it is available.
+    bANDI.playground_open = function () {
+
+        //Try to get fg color from active element
+        if (!getColorFromActive("fg")) {
+            //No color to get, default to black
+            displayColorValue("#bANDI508-playground-fg", Color.BLACK);
+        }
+
+        //Try to get fg color from active element
+        if (!getColorFromActive("bg")) {
+            //No color to get, default to white
+            displayColorValue("#bANDI508-playground-bg", Color.WHITE);
+        }
+
+        //Calculate the contrast ratio in the playground
+        bANDI.playground_calc();
+
+        //This function will get the colors from the active element
+        //If the color grab is successful, it returns true. Otherwise (doesn't contain a color) returns false.
+        function getColorFromActive(fgBg) {
+            var element = $("#bANDI508-" + fgBg);
+            if ($("#ANDI508-additionalElementDetails").html() && $(element).children().length === 0) {
+                var hexColor = $(element).html();
+                $("#bANDI508-playground-" + fgBg).val(hexColor);
+                $("#bANDI508-playground-colorSelector-" + fgBg).attr("style", "background-color:" + hexColor + " !important");
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    //This function will calculate the contrast ratio of the playground color values
+    bANDI.playground_calc = function () {
+        //get colors as rgb
+        var bgColor = new Color($("#bANDI508-playground-colorSelector-fg").css("background-color"));
+        var fgColor = new Color($("#bANDI508-playground-colorSelector-bg").css("background-color"));
+
+        var ratio = fgColor.contrast(bgColor).ratio;
+
+        $("#bANDI508-playground-ratio").removeClass("bANDI508-invalid").html(ratio);
+
+        //Hide or Show Suggestion Buttons
+        if (ratio < 3) {
+            $("#bANDI508-playground-suggest-large").css("visibility", "visible");
+        } else {
+            $("#bANDI508-playground-suggest-large").css("visibility", "hidden");
+        }
+        if (ratio < 4.5) {
+            $("#bANDI508-playground-suggest-small").css("visibility", "visible");
+        } else {
+            $("#bANDI508-playground-suggest-small").css("visibility", "hidden");
+        }
+    };
+
+    //This function checks the colors entered into the playground and determines if they are valid
+    bANDI.playground_validate = function (queryString) {
+
+        var valid = true;
+        var validHex = /^#([a-fA-F0-9]{6})$/;
+
+        $(queryString).each(function () {
+            var value = $(this).val();
+            var colorSelectorBox = $(this).prev();
+
+            //Is this a 6 digit hex value with #
+            if (value.length === 7 && validHex.test(value)) {
+                //Set this element's color selector box
+                $(colorSelectorBox).attr("style", "background-color:" + value + " !important; background-image:none;");
+                $(this).removeAttr("aria-invalid");
+            } else {
+                $(this).attr("aria-invalid", "true");
+                $(colorSelectorBox).attr("style", "background:black url(" + icons_url + "invalid.png) no-repeat top !important; background-size:1.3em !important");
+                valid = false;
+            }
+        });
+
+        if (valid) {
+            return true;
+        } else {
+            //Cannot calculate the contrast ratio
+            $("#bANDI508-playground-ratio").addClass("bANDI508-invalid").html("?");
+            $("#bANDI508-playground-suggest-large").css("visibility", "hidden");
+            $("#bANDI508-playground-suggest-small").css("visibility", "hidden");
+            return false;
+        }
+    };
+
+    //This function suggests color values that meet the required ratio
+    bANDI.playground_suggest = function (minReq) {
+        if (bANDI.playground_validate("#bANDI508-playground-bg,#bANDI508-playground-fg")) {
+
+            //Get Suggested Color
+            var bANDI_data = {
+                bgColor: new Color($("#bANDI508-playground-colorSelector-bg").css("background-color")),
+                fgColor: new Color($("#bANDI508-playground-colorSelector-fg").css("background-color")),
+                minReq: minReq
+            };
+
+            var suggestedFgColor = bANDI.getSuggestedColor(bANDI_data, "fg");
+            var suggestedBgColor = bANDI.getSuggestedColor(bANDI_data, "bg");
+
+            if (bANDI.suggestForegroundChange(bANDI_data, suggestedFgColor, suggestedBgColor)) {
+                //Suggest Foreground Color
+                displayColorValue("#bANDI508-playground-fg", suggestedFgColor);
+            } else {
+                //Suggest Background Color
+                displayColorValue("#bANDI508-playground-bg", suggestedBgColor);
+            }
+
+            //Calculate the contrast ratio
+            bANDI.playground_calc();
         }
     };
 
@@ -605,4 +918,5 @@ function init_module() {
     //color.js End
     //===============
     bANDI.analyze();
+    bANDI.results();
 }//end init
