@@ -89,44 +89,5 @@ function init_module() {
             }
         };
     }
-
-    //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-    //Inserts some counter totals, displays the accesskey list
-    dANDI.results = function () {
-        andiBar.updateResultsSummary("Focusable Elements Found: " + testPageData.andiElementIndex);
-        //Accesskeys List:
-        if (dANDI.accesskeys.getListHtml()) {
-            $("#ANDI508-additionalPageResults").append("<p id='ANDI508-accesskeysFound'>AccessKeys: " + "{ " + dANDI.accesskeys.getListHtml() + "}</p>");
-            $("#ANDI508-accesskeysFound").find("a").each(function () {
-                andiFocuser.addFocusClick($(this));
-                $(this).on("mouseover", andiLaser.drawAlertLaser);
-                $(this).on("click", andiLaser.eraseLaser);
-                $(this).on("mouseleave", andiLaser.eraseLaser);
-            });
-            $("#ANDI508-accesskeysFound").show();
-        }
-
-        andiBar.focusIsOnInspectableElement();
-        andiBar.showElementControls();
-        andiBar.showStartUpSummary("Discover accessibility markup for focusable elements by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every focusable element.", true);
-
-        andiAlerter.updateAlertList();
-
-        $("#ANDI508").focus();
-    };
-
-    //This function will update the info in the Active Element Inspection.
-    //Should be called after the mouse hover or focus in event.
-    AndiModule.inspect = function (element) {
-        andiBar.prepareActiveElementInspection(element);
-
-        var elementData = $(element).data("andi508");
-        var addOnProps = AndiData.getAddOnProps(element, elementData);
-
-        andiBar.displayOutput(elementData, element, addOnProps);
-        andiBar.displayTable(elementData, element, addOnProps);
-    };
-
     dANDI.analyze();
-    dANDI.results();
 }//end init

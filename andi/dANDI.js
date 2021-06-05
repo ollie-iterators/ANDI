@@ -102,7 +102,6 @@ function init_module() {
     //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
     //Inserts some counter totals, displays the accesskey list
     dANDI.results = function () {
-
         andiBar.updateResultsSummary("Focusable Elements Found: " + testPageData.andiElementIndex);
 
         //Accesskeys List:
@@ -119,10 +118,8 @@ function init_module() {
 
         //Tab Order button
         var moduleActionButtons = "<button id='ANDI508-tabOrder-button' aria-label='Tab Order Indicators' aria-pressed='false'>tab order" + overlayIcon + "</button>";
-        if (TestPageData.page_using_titleAttr)
-            moduleActionButtons += "<button id='ANDI508-titleAttributes-button' aria-label='Title Attributes' aria-pressed='false'>title attributes" + overlayIcon + "</button>";
-        if (testPageData.page_using_label)
-            moduleActionButtons += "<button id='ANDI508-labelTags-button' aria-label='Label Tags' aria-pressed='false'>label tags" + overlayIcon + "</button>";
+        moduleActionButtons += "<button id='ANDI508-titleAttributes-button' aria-label='Title Attributes' aria-pressed='false'>title attributes" + overlayIcon + "</button>";
+        moduleActionButtons += "<button id='ANDI508-labelTags-button' aria-label='Label Tags' aria-pressed='false'>label tags" + overlayIcon + "</button>";
 
         $("#ANDI508-module-actions").append(moduleActionButtons);
 
@@ -177,11 +174,7 @@ function init_module() {
 
         andiAlerter.updateAlertList();
 
-        AndiModule.engageActiveActionButtons([
-            "tabOrder",
-            "titleAttributes",
-            "labelTags"
-        ]);
+        AndiModule.engageActiveActionButtons(["tabOrder", "titleAttributes", "labelTags"]);
 
         $("#ANDI508").focus();
     };
