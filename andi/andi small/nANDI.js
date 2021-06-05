@@ -72,7 +72,6 @@ function init_module() {
     //This function will analyze the test page for link related markup relating to accessibility
     nANDI.analyze = function () {
         nANDI.buttons = new Buttons();
-
         //Variables used to build the buttons list array.
         var nameDescription, alerts, accesskey, alertIcon, alertObject, relatedElement, nonUniqueIndex, elementInTabOrder;
 
@@ -196,42 +195,5 @@ function init_module() {
             return n + d;
         }
     };
-
-    //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-    nANDI.results = function () {
-        andiBar.updateResultsSummary("Buttons Found: " + nANDI.buttons.count);
-
-        //Show Startup Summary
-        if (!andiBar.focusIsOnInspectableElement()) {
-            andiBar.showElementControls();
-            andiBar.showStartUpSummary("Discover accessibility markup for <span class='ANDI508-module-name-l'>buttons</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every button.", true);
-        }
-
-        andiAlerter.updateAlertList();
-
-        $("#ANDI508").focus();
-    };
-
-    //This function will update the info in the Active Element Inspection.
-    //Should be called after the mouse hover or focus in event.
-    AndiModule.inspect = function (element) {
-        if ($(element).hasClass("ANDI508-element")) {
-
-            //Highlight the row in the buttons list that associates with this element
-            nANDI.viewList_rowHighlight($(element).attr("data-andi508-index"));
-
-            andiBar.prepareActiveElementInspection(element);
-
-            var elementData = $(element).data("andi508");
-            var addOnProps = AndiData.getAddOnProps(element, elementData,
-                [["rel", "download", "media", "target", "type"]]);
-
-            andiBar.displayOutput(elementData, element, addOnProps);
-            andiBar.displayTable(elementData, element, addOnProps);
-        }
-    };
-
     nANDI.analyze();
-    nANDI.results();
-
 }//end init
