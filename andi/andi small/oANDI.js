@@ -44,7 +44,7 @@ function init_module() {
         this.count = 0;
     }
 
-    //This function will analyze the test page for graphics/image related markup relating to accessibility
+    //This analyzes the test page for graphics/image related markup relating to accessibility
     oANDI.analyze = function () {
         oANDI.headers = new Headers();
         //Loop through every visible element
@@ -87,7 +87,32 @@ function init_module() {
                 var nextText = $.trim($(nextElement).text());
                 var nextFontSize = parseInt($(nextElement).css("font-size"));
                 var nextFontWeight = $(nextElement).css("font-weight");
-                if (oANDI.isFakeHeading(this)) { //Since oANDI has not found a heading yet, check if this element is a fake headings
+                var isFakeHeading = false;
+                if (text.length > 0 && text.length < 30) {
+                    //text is not empty, but less than char limit
+        
+                    var fakeHeading_fontSize = parseInt($(element).css("font-size"));
+                    var fakeHeading_fontWeight = $(element).css("font-weight");
+                    var fakeHeadingIsBold = (fakeHeading_fontWeight === "bold" || fakeHeading_fontWeight === "bolder" || fakeHeading_fontWeight > 700);
+        
+                    if (fakeHeading_fontSize > 22 || (fakeHeadingIsBold && fakeHeading_fontSize > 15)) { //fakeHeading_fontSize is greater than size limit
+                        var nextElement = $(element).next().filter(":visible");
+        
+                        if ($.trim($(nextElement).text()) !== "") { //next element has text
+                            var nextElement_fontSize = parseInt($(nextElement).css("font-size"));
+                            var nextElement_fontWeight = $(nextElement).css("font-weight");
+                            var nextIsBold = (nextElement_fontWeight === "bold" || nextElement_fontWeight === "bolder" || nextElement_fontWeight > 700);
+                            if (nextElement_fontSize < fakeHeading_fontSize) {
+                                //next element's font-size is smaller than fakeHeading font-size
+                                isFakeHeading = true;
+                            } else if (fakeHeadingIsBold && !nextIsBold) {
+                                //next element's font-weight is lighter than fakeHeading font-weight
+                                isFakeHeading = true;
+                            }
+                        }
+                    }
+                }
+                if (isFakeHeading) { //Since oANDI has not found a heading yet, check if this element is a fake headings
                     andiData = new AndiData(this);
 
                     andiAlerter.throwAlert(alert_0190);
@@ -95,44 +120,8 @@ function init_module() {
                 }
                 oANDI.headers.FakeHeaderList.push(new FakeHeader(this, oANDI.index, text, fontSize, fontWeight, nextElement, nextText, nextFontSize, nextFontWeight, oANDI.isFakeHeading(this)))
                 oANDI.index += 1;
-
             }
         });
-    };
-
-    //This function determine's if the element looks like a heading but is not semantically a heading
-    oANDI.isFakeHeading = function (element) {
-        var isFakeHeading = false;
-
-        var text = $.trim($(element).text());
-        if (text.length > 0 && text.length < 30) {
-            //text is not empty, but less than char limit
-
-            var fakeHeading_fontSize = parseInt($(element).css("font-size"));
-            var fakeHeading_fontWeight = $(element).css("font-weight");
-
-            if (fakeHeading_fontSize > 22 || (isBold(fakeHeading_fontWeight) && fakeHeading_fontSize > 15)) { //fakeHeading_fontSize is greater than size limit
-                var nextElement = $(element).next().filter(":visible");
-
-                if ($.trim($(nextElement).text()) !== "") { //next element has text
-                    var nextElement_fontSize = parseInt($(nextElement).css("font-size"));
-                    var nextElement_fontWeight = $(nextElement).css("font-weight");
-
-                    if (nextElement_fontSize < fakeHeading_fontSize) {
-                        //next element's font-size is smaller than fakeHeading font-size
-                        isFakeHeading = true;
-                    } else if (isBold(fakeHeading_fontWeight) && !isBold(nextElement_fontWeight)) {
-                        //next element's font-weight is lighter than fakeHeading font-weight
-                        isFakeHeading = true;
-                    }
-                }
-            }
-        }
-        return isFakeHeading;
-
-        function isBold(weight) {
-            return (weight === "bold" || weight === "bolder" || weight >= 700);
-        }
     };
     oANDI.analyze();
 }//end init

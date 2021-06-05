@@ -34,7 +34,7 @@ function init_module() {
         this.listItemRoleCount = 0;
     }
 
-    //This function will analyze the test page for graphics/image related markup relating to accessibility
+    //This analyzes the test page for graphics/image related markup relating to accessibility
     pANDI.analyze = function () {
         pANDI.lists = new Lists();
         $(TestPageData.allElements).each(function () { //Loop through every visible element

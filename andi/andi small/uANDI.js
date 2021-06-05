@@ -69,11 +69,7 @@ function init_module() {
     var rowCount = 0;					//The total number of <tr>
     var colCount = 0;					//The total number of columns (maximum number of <th> or <td> in a <tr>)
 
-    AndiModule.initActiveActionButtons({
-        scopeMode: true, //default, false == headersIdMode
-        markup: false,
-        modeButtonsVisible: false
-    });
+    // NOTE: Get rid of scopeMode
 
     //This function will analyze the test page for table related markup relating to accessibility
     uANDI.analyze = function () {
@@ -103,151 +99,11 @@ function init_module() {
             uANDI.tables.tableCount++;
         });
 
-        //If the page has tables
-        var moduleActionButtons = "";
-
-        //Scope Mode / Headers/ID Mode buttons
-        moduleActionButtons += "<button id='ANDI508-scopeMode-button' aria-pressed='";
-        moduleActionButtons += (AndiModule.activeActionButtons.scopeMode) ? "true' class='ANDI508-module-action-active'" : "false'";
-        moduleActionButtons += ">scope mode</button><button id='ANDI508-headersIdMode-button' aria-pressed='";
-        moduleActionButtons += (!AndiModule.activeActionButtons.scopeMode) ? "true' class='ANDI508-module-action-active'" : "false'";
-        moduleActionButtons += ">headers/id mode</button>";
-
-        //Markup Overlay Button
-        moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-markup-button' aria-label='Markup Overlay' aria-pressed='false'>markup" + overlayIcon + "</button>";
-
-        $("#ANDI508-module-actions").html(moduleActionButtons);
 
         if (!activeElementFound) {
             uANDI.tables.tableIndex = 0;//Analyze first table
         }
         analyzeTable(uANDI.tables.list[uANDI.tables.tableIndex]);
-
-        //If there are more than one table and prevTable/nextTable buttons haven't yet been added
-        if (uANDI.tables.tableCount > 1 && $("#ANDI508-prevTable-button").length === 0) {
-            //Add "prev table" and "next table" buttons
-            $("#ANDI508-elementControls").append(
-                "<button id='ANDI508-prevTable-button' aria-label='Previous Table' title='Analyze Previous Table'><img src='" + icons_url + "prev-table.png' alt='' /></button> " +
-                "<button id='ANDI508-nextTable-button' aria-label='Next Table' title='Analyze Next Table'><img src='" + icons_url + "next-table.png' alt='' /></button>"
-            );
-        }
-
-        //Define scopeMode button functionality
-        $("#ANDI508-scopeMode-button").click(function () {
-            andiResetter.softReset($("#ANDI508-testPage"));
-            AndiModule.activeActionButtons.scopeMode = true;
-            AndiModule.activeActionButtons.modeButtonsVisible = true;
-            AndiModule.launchModule("u");
-            andiResetter.resizeHeights();
-            return false;
-        });
-
-        //Define headersIdMode button functionality
-        $("#ANDI508-headersIdMode-button").click(function () {
-            andiResetter.softReset($("#ANDI508-testPage"));
-            AndiModule.activeActionButtons.scopeMode = false;
-            AndiModule.activeActionButtons.modeButtonsVisible = true;
-            AndiModule.launchModule("u");
-            andiResetter.resizeHeights();
-            return false;
-        });
-
-        //Define markup button functionality
-        $("#ANDI508-markup-button").click(function () {
-            if ($(this).attr("aria-pressed") == "false") {
-                andiOverlay.overlayButton_on("overlay", $(this));
-                andiOverlay.overlayTableMarkup();
-                AndiModule.activeActionButtons.markup = true;
-            } else {
-                andiOverlay.overlayButton_off("overlay", $(this));
-                andiOverlay.removeOverlay("ANDI508-overlay-tableMarkup");
-                AndiModule.activeActionButtons.markup = false;
-            }
-            andiResetter.resizeHeights();
-            return false;
-        });
-    };
-
-    //This function updates the results in the ANDI Bar
-    uANDI.results = function () {
-
-        //Update Results Summary text depending on the active table type (data or presentation)
-        andiBar.updateResultsSummary("Tables: " + uANDI.tables.tableCount + " (data tables: " + uANDI.tables.dataCount + ", presentation tables: " + uANDI.tables.presentationCount + ")");
-
-        if (!uANDI.viewList_buttonAppended) {
-
-            uANDI.viewList_buttonAppended = true;
-        }
-
-        andiBar.showElementControls();
-        if (!andiBar.focusIsOnInspectableElement()) {
-            var startupMessage = "Discover accessibility markup for <span class='ANDI508-module-name-t'>tables</span> by tabbing to or hovering over the table cells. " +
-                "Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every data table cell. ";
-            startupMessage += "Tables should be tested one at a time - Press the next table button <img src='" + icons_url + "next-table.png' style='width:12px' alt='' /> to cycle through the tables.";
-            andiBar.showStartUpSummary(startupMessage, true);
-        } else {
-            $("#ANDI508-pageAnalysis").show();
-        }
-
-        andiBar.showElementControls();
-        if (!andiBar.focusIsOnInspectableElement()) {
-            andiBar.showStartUpSummary("Only <span class='ANDI508-module-name-t'>presentation tables</span> were found on this page, no data tables.", true);
-        } else {
-            $("#ANDI508-pageAnalysis").show();
-        }
-        andiAlerter.updateAlertList();
-        if (testPageData.numberOfAccessibilityAlertsFound > 0) {
-            $("#ANDI508-alerts-list").show();
-        } else {
-            $("#ANDI508-alerts-list").hide();
-        }
-    };
-
-    //This function will remove uANDI markup from every table and rebuild the alert list
-    uANDI.reset = function () {
-        var testPage = document.getElementById("ANDI508-testPage");
-
-        //Every ANDI508-element
-        $(testPage).find(".ANDI508-element").each(function () {
-            $(this)
-                .removeClass("uANDI508-highlight")
-                .removeAttr("data-andi508-index data-uandi508-rowindex data-uandi508-colindex data-uandi508-colgroupindex data-uandi508-rowgroupindex")
-                .removeClass("ANDI508-element ANDI508-element-danger ANDI508-highlight")
-                .removeData("ANDI508")
-                .off("focus", AndiModule.focusability)
-                .off("mouseenter", AndiModule.hoverability);
-        });
-
-        andiLaser.cleanupLaserTargets(testPage);
-
-        $("#ANDI508-alerts-list").html("");
-
-        testPageData = new TestPageData(); //get fresh test page data
-    };
-
-    //This function hides the scopeMode headersIdMode buttons
-    uANDI.hideModeButtons = function () {
-        AndiModule.activeActionButtons.modeButtonsVisible = false;
-        $("#ANDI508-scopeMode-button").add("#ANDI508-headersIdMode-button").add($("#ANDI508-markup-button").prev())
-            .addClass("ANDI508-module-action-hidden");
-    };
-    //This function shows the scopeMode headersIdMode buttons
-    uANDI.showModeButtons = function (mode) {
-        AndiModule.activeActionButtons.modeButtonsVisible = true;
-        var scopeModeButton = document.getElementById("ANDI508-scopeMode-button");
-        var headersIdButton = document.getElementById("ANDI508-headersIdMode-button");
-
-        //activeButton
-        $((mode === "scope") ? scopeModeButton : headersIdButton)
-            .addClass("ANDI508-module-action-active").attr("aria-pressed", "true");
-
-        //inactiveButton
-        $((mode === "scope") ? headersIdButton : scopeModeButton)
-            .removeClass("ANDI508-module-action-active").attr("aria-pressed", "false");
-
-        //show the buttons
-        $(scopeModeButton).add(headersIdButton).add($("#ANDI508-markup-button").prev())
-            .removeClass("ANDI508-module-action-hidden");
     };
 
     //This function will a table. Only one table at a time
@@ -518,8 +374,7 @@ function init_module() {
                         }
                         if (rowgroupIndex > 0) {
                             $(row).find("th,td").filter(":visible").each(function () {
-                                //Rowgroup
-                                if ($(this).attr("scope") == "rowgroup") {
+                                if ($(this).attr("scope") == "rowgroup") { //Rowgroup
                                     lastRowgroupIndex = $(this).attr("data-uandi508-rowgroupindex");
                                     //Get rowspan
                                     lastRowgroupRowSpan = $(this).attr("rowspan");
@@ -532,7 +387,6 @@ function init_module() {
                             //Decrement lastRowgroupRowSpan
                             lastRowgroupRowSpan--;
                         }
-
                     });
                 }
 
@@ -587,7 +441,6 @@ function init_module() {
                     }
 
                     //FOR EACH CELL...
-
                     //Determine if cell has a child element (link, form element, img)
                     child = $(cell).find("a,button,input,select,textarea,img").first();
 
@@ -628,22 +481,7 @@ function init_module() {
                     AndiData.attachDataToElement(cell);
                 });
 
-                if (tableHasHeaders) {
-                    //[headers] exist, show mode selection buttons
-                    if (AndiModule.activeActionButtons.modeButtonsVisible && $("#ANDI508-scopeMode-button").attr("aria-pressed") === "true") {
-                        uANDI.showModeButtons("scope");
-                        AndiModule.activeActionButtons.scopeMode = true;
-                    } else {
-                        uANDI.showModeButtons("headersId");
-                        AndiModule.activeActionButtons.scopeMode = false;
-                    }
-                } else { //No [headers], force scopeMode
-                    uANDI.hideModeButtons();
-                    AndiModule.activeActionButtons.scopeMode = true;
-                }
-
                 //FOR THE DATA TABLE...
-
                 //This is a little hack to force the table to go first in the index
                 var lastIndex = testPageData.andiElementIndex; //remember the last index
                 testPageData.andiElementIndex = 0; //setting this to 0 allows the element to be created at index 1, which places it before the cells
@@ -711,8 +549,7 @@ function init_module() {
                             });
                         }
                     } else if (!AndiModule.activeActionButtons.scopeMode) {
-                        if (!tableHasHeaders) {
-                            //Table Has No Headers
+                        if (!tableHasHeaders) { //Table Has No Headers
                             if (tableHasScopes) { //No Headers, Has Scope
                                 andiAlerter.throwAlert(alert_004C);
                             } else { //No Headers, No Scope
@@ -721,8 +558,7 @@ function init_module() {
                         }
                     }
 
-                    if (tableHasHeaders && tableHasScopes) {
-                        //Table is using both scopes and headers
+                    if (tableHasHeaders && tableHasScopes) { //Table is using both scopes and headers
                         andiAlerter.throwAlert(alert_0049);
                     }
                 }
@@ -930,7 +766,6 @@ function init_module() {
             AndiModule.activeActionButtons.scopeMode = true;
 
             //FOR THE DATA TABLE...
-
             //This is a little hack to force the table to go first in the index
             var lastIndex = testPageData.andiElementIndex; //remember the last index
             testPageData.andiElementIndex = 0; //setting this to 0 allows the element to be created at index 1, which places it before the cells
@@ -985,33 +820,6 @@ function init_module() {
             }
         }
     }
-
-    uANDI.viewList_tableReady = false;
-    uANDI.viewList_buttonAppended = false;
-
-    //This function will overlay the table markup.
-    AndiOverlay.prototype.overlayTableMarkup = function () {
-        var scope, headers, id, role, markupOverlay;
-        $("#ANDI508-testPage [data-uandi508-colindex]").each(function () {
-            scope = $(this).attr("scope");
-            headers = $(this).attr("headers");
-            id = this.id;
-            role = $(this).attr("role");
-
-            markupOverlay = $(this).prop("tagName").toLowerCase();
-
-            if (role)
-                markupOverlay += " role=" + role;
-            if (id)
-                markupOverlay += " id=" + id;
-            if (headers)
-                markupOverlay += " headers=" + headers;
-            if (scope)
-                markupOverlay += " scope=" + scope;
-
-            $(this).prepend(andiOverlay.createOverlay("ANDI508-overlay-tableMarkup", markupOverlay));
-        });
-    };
 
     uANDI.grab_headers = function (element, elementData, table) {
         var headers = $.trim($(element).attr("headers"));
@@ -1073,7 +881,6 @@ function init_module() {
                         } else { //No, this id was not found at all, add to list.
                             missingReferences.push(idsArray[x]);
                         }
-
                     }
 
                     if (referencedElementText !== "") //Add referenceId
@@ -1110,13 +917,10 @@ function init_module() {
             }
         }
     };
-
     //analyze tables
     uANDI.analyze();
-    uANDI.results();
 
     AndiModule.engageActiveActionButtons([
         "markup"
     ]);
-
 }//end init

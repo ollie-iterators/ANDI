@@ -25,7 +25,7 @@ function init_module() {
         this.count = 0;
     }
 
-    //This function will analyze the test page for graphics/image related markup relating to accessibility
+    //This analyzes the test page for graphics/image related markup relating to accessibility
     qANDI.analyze = function () {
         qANDI.landmarks = new Landmarks();
 

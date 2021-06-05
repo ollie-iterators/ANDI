@@ -22,7 +22,7 @@ function init_module() {
         this.count = 0;
     }
 
-    //This function will analyze the test page for graphics/image related markup relating to accessibility
+    //This analyzes the test page for graphics/image related markup relating to accessibility
     rANDI.analyze = function () {
         rANDI.liveRegions = new LiveRegions();
         //Loop through every visible element
