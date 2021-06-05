@@ -35,7 +35,6 @@ AndiModule.module = "f";
 //===============//
 var andiCheck = new AndiCheck();		//Alert Testing
 var andiAlerter = new AndiAlerter();		//Alert Throwing
-var andiFocuser = new AndiFocuser();		//Focusing Funtionality
 var andiUtility = new AndiUtility();		//String Manipulation
 var testPageData; 								//Test Page Data Storage/Analysis, instantiated within module launch
 var andiData;									//Element Data Storage/Analysis, instatiated within module's analysis logic
@@ -138,59 +137,7 @@ function AndiModule(moduleVersionNumber, moduleLetter) {
 	//The module should implement these priveleged methods
 	this.analyze = undefined;
 	this.results = undefined;
-
-	//Set Default Module function logic
-	AndiModule.hoverability = function (event) {
-		//check for holding shift key or if element is excluded from inspection for some reason
-		if (!event.shiftKey && !$(this).hasClass("ANDI508-exclude-from-inspection"))
-			AndiModule.inspect(this);
-	};
-
-	//Previous Element Button - modules may overwrite this
-	//Instantiating a module will reset any overrides
-	$("#ANDI508-button-prevElement").off("click").click(function () {
-		var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
-		if (isNaN(index)) //no active element yet
-			index = 2; //begin at first element (this number will be subtracted in the loop)
-		else if (index == 1)
-			index = testPageData.andiElementIndex + 1; //loop back to last element
-
-		//Find the previous element with data-andi508-index
-		//Skips over elements that have become hidden, removed from DOM, or excluded from inspection for some reason
-		for (var x = index, prev; x > 0; x--) {
-			prev = $("#ANDI508-testPage [data-andi508-index='" + (x - 1) + "']");
-			if ($(prev).length && $(prev).is(":visible") && !$(prev).hasClass("ANDI508-exclude-from-inspection")) {
-				andiFocuser.focusByIndex(x - 1);
-				break;
-			}
-		}
-	});
-
-	//Next Element Button - modules may overwrite this
-	//Instantiating a module will reset any overrides
-	$("#ANDI508-button-nextElement").off("click").click(function () {
-		var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
-
-		if (index == testPageData.andiElementIndex || isNaN(index)) //if active is last or not established yet
-			index = 0; //begin at first element
-
-		//Find the next element with data-andi508-index
-		//Skips over elements that have become hidden, removed from DOM, or excluded from inspection for some reason
-		for (var x = index, next; x < testPageData.andiElementIndex; x++) {
-			next = $("#ANDI508-testPage [data-andi508-index='" + (x + 1) + "']");
-			if ($(next).length && $(next).is(":visible") && !$(next).hasClass("ANDI508-exclude-from-inspection")) {
-				andiFocuser.focusByIndex(x + 1);
-				break;
-			}
-		}
-	});
 }
-//Each module may implement these public methods
-AndiModule.prototype.hoverability = undefined;
-AndiModule.prototype.focusability = undefined;
-AndiModule.prototype.inspect = undefined;
-AndiModule.prototype.cleanup = undefined;
-
 //The modules will keep track of the pressed action buttons using this variable.
 //When the module is refreshed, the buttons remain pressed.
 //If a different module is selected, the buttons will be unpressed.
@@ -520,12 +467,6 @@ function andiReady() {
 	//Controls are: Relaunch, Highlights, Mini Mode, Hotkey List, Help, Close, TagName link,
 	// prev/next button, module laucnhers, active element jump hotkey, version popup
 	function defineControls() {
-		//Tag name link
-		$("#ANDI508-elementNameLink")
-			.click(function () { //Place focus on active element when click tagname
-				andiFocuser.focusByIndex($("#ANDI508-testPage .ANDI508-element-active").first().attr("data-andi508-index"));
-				return false;
-			});
 		//Active Element Jump and Section Jump Hotkeys
 		$(document).keydown(function (e) {
 			if (e.which === andiHotkeyList.key_active.code && e.altKey)
@@ -630,52 +571,6 @@ function andiReady() {
 		//Define Array.indexOf for old IE
 		if (!Array.prototype.indexOf) { Array.prototype.indexOf = function (obj, start) { for (var i = (start || 0), j = this.length; i < j; i++) { if (this[i] === obj) { return i; } } return -1; }; }
 	}
-}
-
-//This function is used for shifting focus to an element
-function AndiFocuser() {
-	//Places focus on element at index.
-	this.focusByIndex = function (index) {
-		andiFocuser.focusOn($("#ANDI508-testPage [data-andi508-index=" + index + "]"));
-	};
-	//Creates click event handler on the element which will call focusByIndex
-	this.addFocusClick = function (element) {
-		$(element).click(function () {
-			var index = $(element).attr("data-andi508-relatedindex");
-			if (index) //Add focus on click
-				andiFocuser.focusByIndex(index);
-			else if (confirm("This alert does not refer to an inspectable element.\nPress OK to open ANDI Help for this alert in a new window.") === true)
-				window.open($(element).attr("href"), $(element).attr("target"), 'width=1010,height=768,scrollbars=yes,resizable=yes').focus();
-			return false;
-		});
-	};
-	//This function will shift the focus to an element even if the element is not tabbable
-	this.focusOn = function (element) {
-		if (!element.length) {
-			alert("Element removed from DOM. Refresh ANDI.");
-		}
-		else if (!$(element).attr("tabindex") && ((browserSupports.isIE && $(element).is("summary")) || !$(element).is(":focusable"))) {
-			//"Flash" the tabindex
-
-			//img with usemap cannot be given focus (browser moves focus to the <area>)
-			//so temporarily remove the usemap attr, reapply after focus
-			var useMapVal;
-			if ($(element).is("img[usemap]")) {
-				useMapVal = $(element).attr("usemap");
-				$(element).removeAttr("usemap");
-			}
-
-			$(element)
-				.attr("tabindex", "-1")
-				.focus()
-				.removeAttr("tabindex");
-
-			if (useMapVal) //Add usemap back on
-				$(element).attr("usemap", useMapVal);
-		}
-		else
-			$(element).focus();
-	};
 }
 
 //This class is used to perform common utilities such as regular expressions and string alertations.
@@ -2043,7 +1938,6 @@ AndiData.addComp = function (data, componentType, component, hasNodebeenTraverse
 //This object sets up the check logic to determine if an alert should be thrown.
 function AndiCheck() {
 	//==Mult-Point Checks==//
-
 	//This function is used to check for alerts related to focusable elements
 	this.commonFocusableElementChecks = function (andiData, element) {
 		this.hasThisElementBeenHiddenFromScreenReader(element, andiData, true);
