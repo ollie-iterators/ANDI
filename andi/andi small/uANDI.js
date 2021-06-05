@@ -2,7 +2,7 @@
 //uANDI: tables ANDI					   //
 //Created By Social Security Administration//
 //=========================================//
-
+//NOTE: This only contains the code for finding errors and none for displaying the error code
 function init_module() {
     //create uANDI instance
     var uANDI = new AndiModule("11.1.0", "u");

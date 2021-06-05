@@ -2,6 +2,7 @@
 //dANDI: focusable elements ANDI (default mode)//
 //Created By Social Security Administration	   //
 //=============================================//
+//NOTE: This only contains the code for finding errors and none for displaying the error code
 function init_module() {
     //create dANDI instance
     var dANDI = new AndiModule("7.0.0", "d");
@@ -40,16 +41,14 @@ function init_module() {
                 //Is accesskey value more than one character?
                 if (accesskey.length > 1) { //TODO: could be a non-issue if browsers are supporting space delimited accesskey lists
                     andiAlerter.throwAlert(alert_0052, [accesskey]);
-                } else {
-                    //Check for duplicate accesskey
+                } else { //Check for duplicate accesskey
                     if (duplicateComparator.includes(accesskey)) {
                         if ($(element).is("button,input:submit,input:button,input:reset,input:image")) {
-                            //duplicate accesskey found on button
-                            andiAlerter.throwAlert(alert_0054, [accesskey]);
-                        } else if ($(element).is("a[href]")) { //duplicate accesskey found on link
-                            andiAlerter.throwAlert(alert_0056, [accesskey]);
-                        } else { //duplicate accesskey found
-                            andiAlerter.throwAlert(alert_0055, [accesskey]);
+                            andiAlerter.throwAlert(alert_0054, [accesskey]); //duplicate accesskey found on button
+                        } else if ($(element).is("a[href]")) { 
+                            andiAlerter.throwAlert(alert_0056, [accesskey]); //duplicate accesskey found on link
+                        } else { 
+                            andiAlerter.throwAlert(alert_0055, [accesskey]); //duplicate accesskey found
                         }
                     } else {
                         duplicateComparator += accesskey;

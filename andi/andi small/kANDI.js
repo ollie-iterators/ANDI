@@ -49,7 +49,5 @@ function init_module() {
             }
         });
     };
-
     kANDI.analyze();
-
 }//end init

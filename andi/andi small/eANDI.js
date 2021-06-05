@@ -2,6 +2,7 @@
 //eANDI: graphics ANDI 						//
 //Created By Social Security Administration //
 //==========================================//
+//NOTE: This only contains the code for finding errors and none for displaying the error code
 function init_module() {
     //TODO: add <video>
 
@@ -27,7 +28,6 @@ function init_module() {
 
         //Loop through every visible element
         $(TestPageData.allElements).each(function () {
-
             var closestWidgetParent;
             //Determine if the image is contained by an interactive widget (link, button)
             isImageContainedByInteractiveWidget = false; //reset boolean

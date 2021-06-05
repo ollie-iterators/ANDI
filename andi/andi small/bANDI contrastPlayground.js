@@ -2,6 +2,7 @@
 //bANDI: colors ANDI (Able to be altered)  //
 //Created By Social Security Administration //
 //==========================================//
+//NOTE: This only contains the code for the color contrast playground
 function init_module() {
     //TODO: select box, check for selected
 

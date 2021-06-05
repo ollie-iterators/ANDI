@@ -2,6 +2,7 @@
 //qANDI: landmarks ANDI                     //
 //Created By Social Security Administration //
 //==========================================//
+//NOTE: This only contains the code for finding errors and none for displaying the error code
 function init_module() {
     var qANDI = new AndiModule("4.1.4", "q"); //create qANDI instance
     qANDI.index = 1;

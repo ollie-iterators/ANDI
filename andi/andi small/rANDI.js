@@ -2,6 +2,7 @@
 //rANDI: live regions ANDI                  //
 //Created By Social Security Administration //
 //==========================================//
+//NOTE: This only contains the code for finding errors and none for displaying the error code
 function init_module() {
     var rANDI = new AndiModule("4.1.4", "r"); //create rANDI instance
     rANDI.index = 1;
