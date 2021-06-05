@@ -118,7 +118,10 @@ function init_module() {
         });
 
         //Detect disabled links
-        andiCheck.areThereDisabledElements("links");
+        andiCheck.areLabelForValid();
+        if ($(this).attr("aria-hidden") !== "true") { // Code below was moved from areThereDisabledElements
+            andiAlerter.throwAlert(alert_0250, [testPageData.disabledElementsCount, "links"], 0);
+        }
 
         //This function returns true if the link is keyboard accessible
         function isLinkKeyboardAccessible(href, element) {

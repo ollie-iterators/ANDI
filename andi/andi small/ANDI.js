@@ -38,7 +38,6 @@ var andiCheck = new AndiCheck();		//Alert Testing
 var andiAlerter = new AndiAlerter();		//Alert Throwing
 var andiFocuser = new AndiFocuser();		//Focusing Funtionality
 var andiUtility = new AndiUtility();		//String Manipulation
-var andiOverlay = new AndiOverlay();		//Used to create overlays
 var testPageData; 								//Test Page Data Storage/Analysis, instantiated within module launch
 var andiData;									//Element Data Storage/Analysis, instatiated within module's analysis logic
 
@@ -294,8 +293,7 @@ var alert_0007 = new Alert("danger", "0", "Iframe has no accessible name or [tit
 var alert_0008 = new Alert("danger", "0", " has no accessible name.", "no_name_generic");
 var alert_0009 = new Alert("warning", "0", "Iframe has no accessible name or [title].", "no_name_iframe");
 
-var alert_0011 = new Alert("danger", "1", "%%%; element ids should be unique.", "dup_id",
-	new AlertButton("show ids", "ANDI508-alertButton-duplicateIdOverlay", function () { andiOverlay.overlay_duplicateIds(); }, overlayIcon));
+var alert_0011 = new Alert("danger", "1", "%%%; element ids should be unique.", "dup_id");
 var alert_0012 = new Alert("danger", "1", "More than one &lt;label[for=%%%]&gt; associates with this element [id=%%%].", "dup_for");
 
 var alert_0021 = new Alert("warning", "2", "[aria-describedby] should be used in combination with a component that provides an accessible name.", "dby_alone");
@@ -420,10 +418,8 @@ var alert_0233 = new Alert("caution", "23", "[role=grid] found; test navigation 
 
 var alert_0240 = new Alert("danger", "24", "Text does not meet %%%minimum %%% contrast ratio (%%%:1).", "min_contrast");
 
-var alert_0250 = new Alert("warning", "25", "Page has %%% disabled %%%; Disabled elements are not in the keyboard tab order.", "disabled_elements",
-	new AlertButton("show disabled", "ANDI508-alertButton-disabledElementsOverlay", function () { andiOverlay.overlay_disabledElements(); }, overlayIcon));
-var alert_0251 = new Alert("caution", "25", "Page has %%% disabled elements; Disabled elements do not require sufficient contrast.", "disabled_contrast",
-	new AlertButton("show disabled", "ANDI508-alertButton-disabledElementsOverlay", function () { andiOverlay.overlay_disabledElements(true); }, overlayIcon));
+var alert_0250 = new Alert("warning", "25", "Page has %%% disabled %%%; Disabled elements are not in the keyboard tab order.", "disabled_elements");
+var alert_0251 = new Alert("caution", "25", "Page has %%% disabled elements; Disabled elements do not require sufficient contrast.", "disabled_contrast");
 
 var alert_0260 = new Alert("danger", "26", "Element is hidden from screen reader using [aria-hidden=true] resulting in no output.", "ariahidden");
 var alert_0261 = new Alert("warning", "26", "Element is hidden from screen reader using [aria-hidden=true] resulting in no output.", "ariahidden");
@@ -708,9 +704,6 @@ function AndiResetter() {
 			//Remove any custom click logic from prev next buttons (will be reapplied later)
 			$("#ANDI508-button-prevElement").off("click");
 			$("#ANDI508-button-nextElement").off("click");
-
-			//Remove all overlays
-			andiOverlay.removeAllOverlays();
 
 			//remove module class from test page
 			$(testPage).removeClass();
@@ -1011,165 +1004,6 @@ function AndiUtility() {
 	this.normalizeOutput = function (text) {
 		var regex_idRef = /<span class='ANDI508-display-id'>#(.*?)<\/span>/;
 		return $.trim(andiUtility.stripHTML(text.replace(regex_idRef, "")));
-	};
-}
-
-//==================//
-// OVERLAYS (GLOBAL)//
-//==================//
-
-//This class handles overlay creation and removal
-function AndiOverlay() {
-
-	//This function will create an overlay html element
-	this.createOverlay = function (purposeClass, innerText, title, tabindex) {
-		if (!tabindex)
-			tabindex = 0;
-
-		var overlay = document.createElement("span");
-
-		if (title)
-			$(overlay).attr("title", title);
-
-		$(overlay)
-			.attr("tabindex", tabindex)
-			.addClass("ANDI508-overlay " + purposeClass)
-			.attr("role", "tooltip")
-			.append(innerText);
-		return overlay;
-	};
-	//This function will remove overlays with the class provided
-	this.removeOverlay = function (purposeClass) {
-		$("#ANDI508-testPage span." + purposeClass).remove();
-	};
-	//This function will remove all overlays from the test page
-	this.removeAllOverlays = function () {
-		$("#ANDI508-testPage span.ANDI508-overlay").remove();
-	};
-
-	//This function will overlay duplicate ids
-	this.overlay_duplicateIds = function () {
-		var btn = $("#ANDI508-alertButton-duplicateIdOverlay");
-		if ($(btn).attr("aria-pressed") === "false") {
-			//Show Overlay Duplicate Ids
-			$(btn).attr("aria-pressed", "true").html("hide ids" + overlayIcon);
-			andiOverlay.overlayButton_on("overlay", $(btn));
-			var overlayClass, idMatchesFound, overlayTitle;
-			$("#ANDI508-testPage [id]").each(function () {
-				overlayClass = "ANDI508-overlay-duplicateId";
-				overlayTitle = "";
-				idMatchesFound = 0;
-				//loop through allIds and compare
-				for (x = 0; x < testPageData.allIds.length; x++) {
-					if (this.id === testPageData.allIds[x].id) {
-						idMatchesFound++;
-						if (idMatchesFound == 2) break; //duplicate found so stop searching, for performance
-					}
-				}
-				if (idMatchesFound > 1) { //Duplicate Found
-					overlayClass += " ANDI508-overlay-alert";
-					overlayTitle = "duplicate id";
-				}
-				andiOverlay.insertAssociatedOverlay(this, andiOverlay.createOverlay(overlayClass, "id=" + this.id, overlayTitle, $(this).attr("tabindex")));
-			});
-		}
-		else {
-			//Hide Overlay Duplicate Ids
-			$(btn).attr("aria-pressed", "false").html("show ids" + overlayIcon);
-			andiOverlay.overlayButton_off("overlay", $(btn));
-			andiOverlay.removeOverlay("ANDI508-overlay-duplicateId");
-		}
-	};
-
-	//This function will overlay disabled elements
-	this.overlay_disabledElements = function (alsoAriaDisabled) {
-		var btn = $("#ANDI508-alertButton-disabledElementsOverlay");
-		if ($(btn).attr("aria-pressed") === "false") {
-			//Show Overlay Duplicate Ids
-			$(btn).attr("aria-pressed", "true").html("hide disabled" + overlayIcon);
-			andiOverlay.overlayButton_on("overlay", $(btn));
-			var overlayClass = "ANDI508-overlay-disabledElement";
-			//Find every disabled element
-			$("#ANDI508-testPage [disabled]").each(function () {
-				andiOverlay.insertAssociatedOverlay(this, andiOverlay.createOverlay(overlayClass, "disabled", "", $(this).attr("tabindex")));
-			});
-			if (alsoAriaDisabled) {
-				//Find every element with aria-disabled="true"
-				$("#ANDI508-testPage [aria-disabled=true]").each(function () {
-					andiOverlay.insertAssociatedOverlay(this, andiOverlay.createOverlay(overlayClass, "aria-disabled=\"true\"", "", $(this).attr("tabindex")));
-				});
-			}
-		}
-		else {
-			//Hide Overlay Duplicate Ids
-			$(btn).attr("aria-pressed", "false").html("show disabled" + overlayIcon);
-			andiOverlay.overlayButton_off("overlay", $(btn));
-			andiOverlay.removeOverlay("ANDI508-overlay-disabledElement");
-		}
-	};
-
-	//This function will insert an overlay onto the page
-	//Set alwaysBefore to true to ensure the overlay won't be prepended, but will be placed before the element
-	this.insertAssociatedOverlay = function (element, overlayObject, alwaysBefore) {
-
-		if (element.nodeType === 3) {//this is a text node, not an element
-			//using parentNode because parentElement doesn't work on text nodes in IE
-			element.parentNode.insertBefore(overlayObject, element);
-			element = element.parentNode;
-		}
-		else {
-			if ($(element).is("option")) {
-				element = $(element).closest("select");
-				$(element).before(overlayObject);
-			}
-			else if ($(element).is("summary")) {
-				element = $(element).closest("details");
-				$(element).before(overlayObject);
-			}
-			else if (!alwaysBefore && $(element).isContainerElement() && !$(element).is("select,textarea")) {
-				$(element).prepend(overlayObject);
-			}
-			else {
-				$(element).before(overlayObject);
-			}
-		}
-
-		//Attach association highlighting events.
-		$(overlayObject)
-			.on("mouseover", function () {
-				$(element).addClass("ANDI508-overlay-associated");
-			}).on("focus", function () {
-				$(element).addClass("ANDI508-overlay-associated");
-			}).on("mouseleave", function () {
-				$(element).removeClass("ANDI508-overlay-associated");
-			}).on("focusout", function () {
-				$(element).removeClass("ANDI508-overlay-associated");
-			});
-	};
-
-	//This function will overlay the title attributes.
-	this.overlayTitleAttributes = function () {
-		var title = "";
-		$("#ANDI508-testPage *").filter(":visible").not(".ANDI508-overlay").each(function () {
-			title = $.trim($(this).attr("title"));
-			if (title)
-				andiOverlay.insertAssociatedOverlay(this, andiOverlay.createOverlay("ANDI508-overlay-titleAttributes", "title=" + title));
-			title = ""; //reset
-		});
-	};
-
-	//These functions handle the on-off state of a find/highlight button
-	this.overlayButton_on = function (icon, button) {
-		$(button)
-			.attr("aria-pressed", "true")
-			.addClass("ANDI508-module-action-active")
-			.find("img").attr("src", icons_url + icon + ".png");
-	};
-	this.overlayButton_off = function (icon, button) {
-		$(button)
-			.attr("aria-pressed", "false")
-			.removeClass("ANDI508-module-action-active")
-			.find("img").attr("src", icons_url + icon + "-off.png");
 	};
 }
 

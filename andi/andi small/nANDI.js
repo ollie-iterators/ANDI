@@ -152,7 +152,10 @@ function init_module() {
         });
 
         //Detect disabled buttons
-        andiCheck.areThereDisabledElements("buttons");
+        andiCheck.areLabelForValid();
+        if ($(this).attr("aria-hidden") !== "true") { // Code below was moved from areThereDisabledElements
+            andiAlerter.throwAlert(alert_0250, [testPageData.disabledElementsCount, "buttons"], 0);
+        }
     };
     nANDI.analyze();
 }//end init

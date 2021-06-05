@@ -17,7 +17,13 @@ function init_module() {
                 andiData = new AndiData(this);
 
                 andiCheck.commonFocusableElementChecks(andiData, $(this));
-                andiCheck.lookForCanvasFallback(this);
+                if ($(this).is("canvas")) { //Code is from lookForCanvasFallback function
+                    if (!$(this).children().filter(":focusable").length) {
+                        andiAlerter.throwAlert(alert_0124);
+                    } else { //has focusable fallback content
+                        andiAlerter.throwAlert(alert_0127);
+                    }
+                }
                 if (andiData.accesskey) {
                     dANDI.accesskeys.push(this, andiData.accesskey);
                 }
@@ -29,7 +35,9 @@ function init_module() {
             }
         });
         andiCheck.areLabelForValid();
-        andiCheck.areThereDisabledElements("elements");
+        if ($(this).attr("aria-hidden") !== "true") { // Code below was moved from areThereDisabledElements
+            andiAlerter.throwAlert(alert_0250, [testPageData.disabledElementsCount, "elements"], 0);
+        }
     };
 
     function AndiAccesskeys() {
