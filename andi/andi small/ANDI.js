@@ -9,8 +9,6 @@ var andiVersionNumber = "27.4.0";
 // ANDI CONFIG: //
 //==============//
 //URLs
-var host_url = "https://ollie-iterators.github.io/ANDI/andi/";
-var help_url = "https://ollie-iterators.github.io/ANDI/andi/help/";
 var icons_url = "https://ollie-iterators.github.io/ANDI/andi/icons/";
 
 //Load andi.css file immediately to minimize page flash
@@ -30,22 +28,16 @@ var icons_url = "https://ollie-iterators.github.io/ANDI/andi/icons/";
 //===============//
 // ANDI OBJECTS: //
 //===============//
-var andiCheck = new AndiCheck();		//Alert Testing
-var andiAlerter = new AndiAlerter();		//Alert Throwing
-var andiUtility = new AndiUtility();		//String Manipulation
-var testPageData; 								//Test Page Data Storage/Analysis, instantiated within module launch
-var andiData;									//Element Data Storage/Analysis, instatiated within module's analysis logic
-
-var browserSupports = {
-	//Does the browser support SVG?
-	svg: typeof SVGRect !== "undefined",
-	isIE: /MSIE|Trident/.test(window.navigator.userAgent)
-};
+var andiCheck = new AndiCheck();     //Alert Testing
+var andiAlerter = new AndiAlerter(); //Alert Throwing
+var andiUtility = new AndiUtility(); //String Manipulation
+var testPageData;                    //Test Page Data Storage/Analysis, instantiated within module launch
+var andiData;                        //Element Data Storage/Analysis, instatiated within module's analysis logic
 
 //Define the overlay and find icons (not using background-image because of ie7 issues with sizing)
-var overlayIcon = "<img src='" + icons_url + "overlay-off.png' class='ANDI508-overlayIcon' aria-label='overLay' />";
-var findIcon = "<img src='" + icons_url + "find-off.png' class='ANDI508-findIcon' aria-label='find' />";
-var listIcon = "<img src='" + icons_url + "list-off.png' class='ANDI508-listIcon' alt='' />";
+var overlayIcon = "<img src='https://ollie-iterators.github.io/ANDI/andi/icons/overlay-off.png' class='ANDI508-overlayIcon' aria-label='overLay' />";
+var findIcon = "<img src='https://ollie-iterators.github.io/ANDI/andi/icons/find-off.png' class='ANDI508-findIcon' aria-label='find' />";
+var listIcon = "<img src='https://ollie-iterators.github.io/ANDI/andi/icons/list-off.png' class='ANDI508-listIcon' alt='' />";
 
 //==================//
 // ANDI INITIALIZE: //
@@ -79,7 +71,7 @@ function launchAndi() {
 					//Build Title Display
 					title = $(this).attr("title");
 					framesrc = $(this).attr("src");
-					titleDisplay = (!title) ? " <span style='color:#c4532c'><img style='width:18px' src='" + icons_url + "danger.png' alt='danger: ' /> No title attribute on this &lt;frame&gt;.</span>" : " <span style='color:#058488'>title=\"" + title + "\"</span>";
+					titleDisplay = (!title) ? " <span style='color:#c4532c'><img style='width:18px' src='https://ollie-iterators.github.io/ANDI/andi/icons/danger.png' alt='danger: ' /> No title attribute on this &lt;frame&gt;.</span>" : " <span style='color:#058488'>title=\"" + title + "\"</span>";
 					framesSelectionBody += "<li><a href='" + framesrc + "'>" + framesrc + "</a>" + titleDisplay + "</li>";
 				});
 				framesSelectionBody += "</ol><button id='ANDI508-frameSelectionUI-goBack'>Go Back</button>";
@@ -335,9 +327,6 @@ function andiReady() {
 			"</div>" +
 			"</div>" +
 			"</section>";
-
-		if (browserSupports.svg)
-			andiBar += "<svg id='ANDI508-laser-container'><title>ANDI Laser</title><line id='ANDI508-laser'></line></svg>";
 
 		var body = $("body").first();
 
@@ -1035,7 +1024,7 @@ AndiData.textAlternativeComputation = function (root) {
 					accumulatedText += AndiData.addComp(data, "figcaption", component, hasNodeBeenTraversed(element));
 				}
 			}
-			else if (browserSupports.svg && ($(element).is("svg") || element instanceof SVGElement)) {
+			else if (($(element).is("svg") || element instanceof SVGElement)) {
 				if (!hasNodeBeenTraversed(element)) {
 					component = $(element).find("title").first().text();
 					if (component !== undefined) {
@@ -1853,7 +1842,6 @@ function AndiAlerter() {
 			var message = alertMessage(alertObject, customMessage);
 			if (index === undefined) {
 				index = testPageData.andiElementIndex; //use current andiElementIndex
-				this[alertObject.level + "s"].push(messageWithHelpLink(alertObject, message));
 			}
 			this.addToAlertsList(alertObject, message, index);
 
@@ -1873,7 +1861,6 @@ function AndiAlerter() {
 	//	customMessage: 	(optional) message of the alert. If not passed will use default alertObject.message
 	this.throwAlertOnOtherElement = function (index, alertObject, customMessage) {
 		var message = alertMessage(alertObject, customMessage);
-		$("#ANDI508-testPage [data-andi508-index=" + index + "]").data("andi508")[alertObject.level + "s"].push(messageWithHelpLink(alertObject, message));
 		this.addToAlertsList(alertObject, message, index);
 	};
 
@@ -1902,14 +1889,6 @@ function AndiAlerter() {
 		}
 	}
 
-	//This private function will add a help link to the alert message
-	function messageWithHelpLink(alertObject, message) {
-		return "<a href='" + help_url + "alerts.html?" + alertObject.info + "' target='_blank' " +
-			"aria-label='" + alertObject.level + ": " + message + " Select to Open ANDI Help" + "'>" +
-			"<img alt='" + alertObject.level + "' title='Get more info about this' role='presentation' src='" + icons_url + alertObject.level + ".png' />" +
-			message + "</a> ";
-	}
-
 	//This function is not meant to be used directly.
 	//It will add a list item into the Alerts list.
 	//It can place a link which when followed, will move focus to the field relating to the alert.
@@ -1922,12 +1901,6 @@ function AndiAlerter() {
 		if (elementIndex !== 0) {
 			//Yes, this alert should point to a focusable element. Insert as link:
 			listItemHtml += "href='javascript:void(0)' data-andi508-relatedindex='" + elementIndex + "' aria-label='" + alertObject.level + ": " + message + " Element #" + elementIndex + "'>" +
-				"<img alt='" + alertObject.level + "' role='presentation' src='" + icons_url + alertObject.level + ".png' />" +
-				message + "</a></li>";
-		}
-		else {
-			//No, This alert is not specific to an indexed element. Insert message with link to help page.
-			listItemHtml += "href='" + help_url + "alerts.html?" + alertObject.info + "' target='_blank' aria-label='" + alertObject.level + ": " + message + "'>" +
 				"<img alt='" + alertObject.level + "' role='presentation' src='" + icons_url + alertObject.level + ".png' />" +
 				message + "</a></li>";
 		}
