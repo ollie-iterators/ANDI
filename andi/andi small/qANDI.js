@@ -29,10 +29,8 @@ function init_module() {
     qANDI.analyze = function () {
         qANDI.landmarks = new Landmarks();
 
-        //Loop through every visible element
-        $(TestPageData.allElements).each(function () {
+        $(TestPageData.allElements).each(function () { //Loop through every visible element
             if ($(this).isSemantically("[role=banner],[role=complementary],[role=contentinfo],[role=form],[role=main],[role=navigation],[role=search],[role=region]", "main,header,footer,nav,form,aside")) {
-                //Add to the landmarks array
                 var ariaLabel = $(this).attr("aria-label");
                 var ariaLabelledby = $(this).attr("aria-labelledby");
                 var ariaRole = $(this).attr("aria-role");

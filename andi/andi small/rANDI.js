@@ -28,15 +28,12 @@ function init_module() {
         //Loop through every visible element
         $(TestPageData.allElements).each(function () {
             if ($(this).is("[role=alert],[role=status],[role=log],[role=marquee],[role=timer],[aria-live=polite],[aria-live=assertive]")) {
-                //Add to the live regions array
                 andiData = new AndiData(this);
                 var containerElement = $(this).isContainerElement();
                 if ($(this).isContainerElement()) {
                     var innerText = andiUtility.getVisibleInnerText(this);
-                    if (innerText) {
-                        //For live regions, screen readers only use the innerText
-                        //override the accName to just the innerText
-                        andiData.accName = "<span class='ANDI508-display-innerText'>" + innerText + "</span>";
+                    if (innerText) { //For live regions, screen readers only use the innerText
+                        andiData.accName = innerText;
                     } else { //no visible innerText
                         andiAlerter.throwAlert(alert_0133);
                         andiData.accName = "";
@@ -47,7 +44,7 @@ function init_module() {
                     andiAlerter.throwAlert(alert_0184);
                 }
                 var containsForm = $(this).find("textarea,input:not(:hidden,[type=submit],[type=button],[type=image],[type=reset]),select").length;
-                if ($(this).find("textarea,input:not(:hidden,[type=submit],[type=button],[type=image],[type=reset]),select").length) {
+                if (containsForm) {
                     andiAlerter.throwAlert(alert_0182);
                 }
                 rANDI.liveRegions.list.push(new LiveRegion(this, rANDI.index, containerElement, innerText, containsForm, ""));
