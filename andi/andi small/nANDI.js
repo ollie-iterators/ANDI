@@ -8,13 +8,6 @@ function init_module() {
     var nANDI = new AndiModule("8.1.0", "n");
     nANDI.index = 1;
 
-    //This function removes markup in the test page that was added by this module
-    AndiModule.cleanup = function (testPage, element) {
-        if (element) {
-            $(element).removeClass("nANDI508-ambiguous");
-        }
-    };
-
     //This object class is used to store data about each button. Object instances will be placed into an array.
     function Button(element, index, role, elementInTabOrder, nameDescription, alerts, accesskey, nonUniqueIndex, isAriaHidden, ariaLabel, ariaLabelledby, label, ariaRole, ariaLabeledby) {
         this.element = element;
@@ -50,26 +43,7 @@ function init_module() {
         this.nonUniqueCount = 0;
     }
 
-    //Alert icons for the buttons list table
-    //Ignore the jslint warning about the "new" declaration. It is needed.
-    var alertIcons = new function () {//new is intentional
-        this.danger_noAccessibleName = makeIcon("danger", "No accessible name");
-        this.warning_nonUnique = makeIcon("warning", "Non-Unique: same name as another button");
-        this.warning_tabOrder = makeIcon("warning", "Element not in tab order");
-
-        function makeIcon(alertLevel, titleText) {
-            //The sortPriority number allows alert icon sorting
-            var sortPriority = "3"; //default to caution
-            if (alertLevel == "warning") {
-                sortPriority = "2";
-            } else if (alertLevel == "danger") {
-                sortPriority = "1";
-            }
-            return "<img src='" + icons_url + alertLevel + ".png' alt='" + alertLevel + "' title='Accessibility Alert: " + titleText + "' /><i>" + sortPriority + " </i>";
-        }
-    };
-
-    //This function will analyze the test page for link related markup relating to accessibility
+    //This analyzes the test page for link related markup relating to accessibility
     nANDI.analyze = function () {
         nANDI.buttons = new Buttons();
         //Variables used to build the buttons list array.
@@ -80,16 +54,30 @@ function init_module() {
             if ($(this).isSemantically("[role=button]", "button,:button,:submit,:reset,:image")) {
                 if (!andiCheck.isThisElementDisabled(this)) {
                     var role = $(this).attr("role");
-                    var elementInTabOrder = !!$(element).prop("tabIndex") && !$(element).is(":tabbable");
+                    var elementInTabOrder = !!$(this).prop("tabIndex") && !$(this).is(":tabbable");
                     var ariaLabel = $(this).attr("aria-label");
                     var ariaLabelledby = $(this).attr("aria-labelledby");
                     var ariaRole = $(this).attr("aria-role");
                     var ariaLabeledby = $(this).attr("aria-labeledby");
                     var label = $(this).attr("label");
+                    var nameDescription = "";
 
                     andiData = new AndiData(this);
 
-                    nameDescription = getNameDescription(andiData.accName, andiData.accDesc);
+                    var n = "";
+                    var d = "";
+                    if (andiData.accName) {
+                        n = andiUtility.normalizeOutput(andiData.accName);
+                    }
+                    if (andiData.accDesc) {
+                        d = andiUtility.normalizeOutput(andiData.accDesc);
+                        if (n === d) { //matchingTest
+                            d = "";
+                        } else {
+                            d = " " + d; //add space
+                        }
+                    }
+                    nameDescription = n + d;
 
                     alerts = "";
                     alertIcon = "";
@@ -100,18 +88,57 @@ function init_module() {
                     } else {
                         accesskey = "";
                     }
+                    var nonUniqueIndex = "";
                     if (nameDescription) { //Seach through Buttons Array for same name
-                        nonUniqueIndex = scanForNonUniqueness(this, nameDescription);
+                        for (var y = 0; y < nANDI.buttons.list.length; y++) {
+                            if (nameDescription.toLowerCase() == nANDI.buttons.list[y].nameDescription.toLowerCase()) { //nameDescription matches
+            
+                                alertIcon = "warning: Non-Unique: same name as another button (alert_0200)";
+                                alertObject = alert_0200;
+            
+                                //Throw the alert
+                                if (!nANDI.buttons.list[y].alerts.includes(alertIcon)) {
+                                    //Throw alert on first instance only one time
+                                    andiAlerter.throwAlertOnOtherElement(nANDI.buttons.list[y].index, alertObject);
+                                    nANDI.buttons.list[y].alerts = alertIcon;
+                                }
+            
+                                //Set the nonUniqueIndex
+                                var m; //will store the nonUniqueIndex for this match
+                                //Does the first instance already have a nonUniqueIndex?
+                                relatedElement = $(nANDI.buttons.list[y].element);
+                                if (nANDI.buttons.list[y].nonUniqueIndex) { //Yes. Copy the nonUniqueIndex from the first instance
+                                    m = nANDI.buttons.list[y].nonUniqueIndex;
+                                    nANDI.buttons.nonUniqueCount++;
+                                } else { //No. increment nonUniqueIndex and add it to the first instance.
+                                    nANDI.buttons.nonUniqueCount = nANDI.buttons.nonUniqueCount + 2;
+                                    nANDI.buttons.nonUniqueIndex++;
+                                    m = nANDI.buttons.nonUniqueIndex;
+                                    nANDI.buttons.list[y].nonUniqueIndex = m;
+                                    $(relatedElement).addClass("nANDI508-ambiguous");
+                                }
+            
+                                $(this).addClass("nANDI508-ambiguous");
+                                alerts += alertIcon;
+                                andiAlerter.throwAlert(alertObject);
+                                nonUniqueIndex = m;//prevents alert from being thrown more than once on an element
+                            }
+                        }
+                        nonUniqueIndex = false;
 
                         if ($(this).is("[role=button]")) { //role=button
-                            isElementInTabOrder(this, "button");
+                            if (!!$(this).prop("tabIndex") && !$(this).is(":tabbable")) {//Element is not tabbable and has no tabindex
+                                //Throw Alert: Element with role=button not in tab order
+                                alerts += "warning: Element not in tab order (alert_0125, role attribute)";
+                                andiAlerter.throwAlert(alert_0125, ["button"]);
+                            }
                         }
 
                         if (!alerts) { //Add this for sorting purposes
                             alerts = "<i>4</i>";
                         }     
                     } else { //No accessible name or description
-                        alerts = alertIcons.danger_noAccessibleName;
+                        alerts = "danger: No accessible name";
                         nameDescription = "<span class='ANDI508-display-danger'>No Accessible Name</span>";
                     }
 
@@ -129,71 +156,6 @@ function init_module() {
 
         //Detect disabled buttons
         andiCheck.areThereDisabledElements("buttons");
-
-        //This function searches the button list for non-uniqueness.
-        function scanForNonUniqueness(element, nameDescription) {
-            for (var y = 0; y < nANDI.buttons.list.length; y++) {
-                if (nameDescription.toLowerCase() == nANDI.buttons.list[y].nameDescription.toLowerCase()) { //nameDescription matches
-
-                    alertIcon = alertIcons.warning_nonUnique;
-                    alertObject = alert_0200;
-
-                    //Throw the alert
-                    if (!nANDI.buttons.list[y].alerts.includes(alertIcon)) {
-                        //Throw alert on first instance only one time
-                        andiAlerter.throwAlertOnOtherElement(nANDI.buttons.list[y].index, alertObject);
-                        nANDI.buttons.list[y].alerts = alertIcon;
-                    }
-
-                    //Set the nonUniqueIndex
-                    var m; //will store the nonUniqueIndex for this match
-                    //Does the first instance already have a nonUniqueIndex?
-                    relatedElement = $(nANDI.buttons.list[y].element);
-                    if (nANDI.buttons.list[y].nonUniqueIndex) { //Yes. Copy the nonUniqueIndex from the first instance
-                        m = nANDI.buttons.list[y].nonUniqueIndex;
-                        nANDI.buttons.nonUniqueCount++;
-                    } else { //No. increment nonUniqueIndex and add it to the first instance.
-                        nANDI.buttons.nonUniqueCount = nANDI.buttons.nonUniqueCount + 2;
-                        nANDI.buttons.nonUniqueIndex++;
-                        m = nANDI.buttons.nonUniqueIndex;
-                        nANDI.buttons.list[y].nonUniqueIndex = m;
-                        $(relatedElement).addClass("nANDI508-ambiguous");
-                    }
-
-                    $(element).addClass("nANDI508-ambiguous");
-                    alerts += alertIcon;
-                    andiAlerter.throwAlert(alertObject);
-                    return m;//prevents alert from being thrown more than once on an element
-                }
-            }
-            return false;
-        }
-
-        //This function determines if an element[role] is in tab order
-        function isElementInTabOrder(element, role) {
-            if (!!$(element).prop("tabIndex") && !$(element).is(":tabbable")) {//Element is not tabbable and has no tabindex
-                //Throw Alert: Element with role=button not in tab order
-                alerts += alertIcons.warning_tabOrder;
-                andiAlerter.throwAlert(alert_0125, [role]);
-            }
-        }
-
-        //this function will normalize the accessible name and description so that the raw string can be analyzed.
-        function getNameDescription(name, desc) {
-            var n = "";
-            var d = "";
-            if (name)
-                n = andiUtility.normalizeOutput(name);
-            if (desc) {
-                d = andiUtility.normalizeOutput(desc);
-                if (n === d) { //matchingTest
-                    d = "";
-                } else {
-                    d = " " + d; //add space
-                }
-            }
-            return n + d;
-        }
     };
     nANDI.analyze();
 }//end init
