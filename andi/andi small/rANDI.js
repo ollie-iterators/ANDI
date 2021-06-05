@@ -38,8 +38,7 @@ function init_module() {
                         andiAlerter.throwAlert(alert_0133);
                         andiData.accName = "";
                     }
-                    //accDesc should not appear in output
-                    delete andiData.accDesc;
+                    delete andiData.accDesc; //accDesc should not appear in output
                 } else {  //not a container element
                     andiAlerter.throwAlert(alert_0184);
                 }
