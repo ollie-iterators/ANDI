@@ -107,8 +107,8 @@ function launchAndi() {
 		//Get ANDI ready to launch the first module
 		andiReady();
 
-		//Default Module Launch
-		AndiModule.launchModule(AndiModule.module);
+		andiCheck.isThereExactlyOnePageTitle();
+		andiCheck.areThereMoreExclusiveChildrenThanParents();
 	})();
 }
 
@@ -133,80 +133,8 @@ function AndiModule(moduleVersionNumber, moduleLetter) {
 		//Append module's css file. The version number is added to the href string (?v=) so that when the module is updated, the css file is reloaded and not pulled from browser cache
 		$("head").append("<link id='andiModuleCss' href='" + host_url + moduleLetter + "andi.css?v=" + moduleVersionNumber + "' type='text/css' rel='stylesheet' />");
 	}
-
-	//The module should implement these priveleged methods
-	this.analyze = undefined;
-	this.results = undefined;
 }
-//The modules will keep track of the pressed action buttons using this variable.
-//When the module is refreshed, the buttons remain pressed.
-//If a different module is selected, the buttons will be unpressed.
-AndiModule.activeActionButtons = {};
-//This function will initialize the activeActionButtons
-AndiModule.initActiveActionButtons = function (buttonsObject) {
-	if ($.isEmptyObject(AndiModule.activeActionButtons)) {
-		AndiModule.activeActionButtons = buttonsObject;
-	}
-};
 
-//This function will launch a module.
-//	module:	the letter of the module
-AndiModule.launchModule = function (module) {
-	//Remove previously selected modules
-	$("#ANDI508-moduleMenu button")
-		.attr("tabindex", "-1")
-		.removeClass("ANDI508-moduleMenu-selected ANDI508-moduleMenu-unavailable")
-		.removeAttr("aria-selected")
-		.find("img").first().remove();
-
-	//Select this module
-	$("#ANDI508-moduleMenu-button-" + module)
-		.addClass("ANDI508-moduleMenu-selected")
-		.attr("tabindex", "0")
-		.attr("aria-selected", "true")
-		.append("<img src='" + icons_url + "dropdown.png' role='presentation' />");
-
-	setTimeout(function () {//Slight delay so that the ANDI bar appears earlier
-		$("#ANDI508-testPage")
-			.addClass(module + "ANDI508-testPage");
-
-		//if current module is not this module
-		if (AndiModule.module != module) {
-			AndiModule.module = module; //Set current module to launched module
-			AndiModule.activeActionButtons = {}; //Reset action buttons
-		}
-
-		testPageData = new TestPageData(); //get fresh test page data
-
-		//Global Checks
-		andiCheck.isThereExactlyOnePageTitle();
-		andiCheck.areThereMoreExclusiveChildrenThanParents();
-
-		//Load the module's script
-		var script = document.createElement("script");
-		var done = false;
-		script.src = host_url + module + "andi.js";
-		script.type = "text/javascript";
-		script.id = "andiModuleScript";
-		script.onload = script.onreadystatechange = function () { if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) { done = true; init_module(); } };
-
-		$("#andiModuleScript").remove(); //Remove previously added module script
-		$("#andiModuleCss").remove();//remove previously added module css
-
-		//Execute the module's script
-		document.getElementsByTagName("head")[0].appendChild(script);
-
-		$("#ANDI508").removeClass().addClass("ANDI508-module-" + module).show();
-
-	}, 1);//end setTimeout
-};
-
-//This function will hide the module corresponding to the letter passed in
-//unless the active module is the letter passed in
-AndiModule.disableModuleButton = function (letter) {
-	if (AndiModule.module != letter) //This prevents disabling the module that is currently selected when no corresponding
-		$("#ANDI508-moduleMenu-button-" + letter).addClass("ANDI508-moduleMenu-unavailable");
-};
 
 //================//
 // ALERT MESSAGES //
@@ -368,13 +296,10 @@ var alert_0261 = new Alert("warning", "26", "Element is hidden from screen reade
 //Will add dependencies, insert the ANDI bar, add legacy css, define the controls
 function andiReady() {
 	dependencies();
-	appendLegacyCss();
 	insertAndiBarHtml();
-	defineControls();
 
 	//This function creates main html structure of the ANDI Bar.
 	function insertAndiBarHtml() {
-
 		var moduleButtons = "<div id='ANDI508-moduleMenu' role='menu' aria-label='Select a Module'><div id='ANDI508-moduleMenu-prompt'>Select Module:</div>" +
 			//Default (fANDI)
 			"<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-f'>focusable elements</button>" +
@@ -387,7 +312,7 @@ function andiReady() {
 			//sANDI
 			"<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-s'>structures</button>" +
 			//cANDI
-			((!oldIE) ? "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-c'>color contrast</button>" : "") +
+			"<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-c'>color contrast</button>" +
 			//hANDI
 			"<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-h'>hidden content</button>" +
 			//iANDI
@@ -455,41 +380,8 @@ function andiReady() {
 
 	}
 
-	//This function appends css shims to the head of the page which are needed for old IE versions
-	function appendLegacyCss() {
-		if (oldIE) {
-			$("head").append("<!--[if lte IE 7]><link href='" + host_url + "ie7.css' rel='stylesheet' /><![endif]-->" +
-				"<!--[if lt IE 9]><link href='" + host_url + "ie8.css' rel='stylesheet' /><![endif]-->");
-		}
-	}
-
-	//This function defines what the ANDI controls/settings do.
-	//Controls are: Relaunch, Highlights, Mini Mode, Hotkey List, Help, Close, TagName link,
-	// prev/next button, module laucnhers, active element jump hotkey, version popup
-	function defineControls() {
-		//Active Element Jump and Section Jump Hotkeys
-		$(document).keydown(function (e) {
-			if (e.which === andiHotkeyList.key_active.code && e.altKey)
-				$("#ANDI508-testPage .ANDI508-element-active").first().focus();
-			else if (e.which === andiHotkeyList.key_jump.code && e.altKey) {
-				//get next element with ANDI508-sectionJump class
-				var nextSectionJump = $(".ANDI508-sectionJump").eq($(".ANDI508-sectionJump").index($(":focus")) + 1);
-				if (!nextSectionJump.length)
-					$(".ANDI508-sectionJump").first().focus();
-				else
-					$(nextSectionJump).focus();
-			}
-		});
-		//ANDI Version Popup
-		$("#ANDI508-toolName-link").click(function () {
-			alert("ANDI " + andiVersionNumber + "\n" + $("#ANDI508-module-name").attr("data-andi508-moduleversion"));
-			return false;
-		});
-	}
-
 	//This function sets up several dependencies for running ANDI on the test page.
 	function dependencies() {
-
 		//Define :focusable and :tabbable pseudo classes. Code from jQuery UI
 		$.extend($.expr[':'], {
 			data: $.expr.createPseudo ? $.expr.createPseudo(function (dataName) { return function (elem) { return !!$.data(elem, dataName); }; }) : function (elem, i, match) { return !!$.data(elem, match[3]); },
@@ -710,8 +602,7 @@ function AndiUtility() {
 				}
 			}
 
-			//strip double quotes
-			//TODO: do it more "carefully"
+			//strip double quotes. TODO: do it more "carefully"
 			var regex_everydoublequote = /"/g;
 			displayText = displayText.replace(regex_everydoublequote, '');
 
@@ -773,12 +664,10 @@ function AndiUtility() {
 //==================//
 // ELEMENT ANALYSIS //
 //==================//
-
 //This object grabs the accessible components and attaches the components and alerts to the element
 //Should be re-instantiated for each element to be inspected
 //If a child is passed in, it will grab the accessibility components from the child instead.
 function AndiData(element, skipTAC) {
-
 	andiAlerter.reset();
 
 	testPageData.andiElementIndex++;
@@ -798,15 +687,12 @@ function AndiData(element, skipTAC) {
 
 	$(element)
 		.addClass("ANDI508-element")
-		.attr("data-andi508-index", AndiData.data.andiElementIndex)
-		.on("focus", AndiModule.focusability)
-		.on("mouseenter", AndiModule.hoverability);
+		.attr("data-andi508-index", AndiData.data.andiElementIndex);
 
 	return AndiData.data;
 }
 
 AndiData.grab_coreProperties = function (element) {
-
 	grab_tabindex();
 	grab_accesskey();
 	grab_imageSrc();
