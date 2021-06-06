@@ -1,5 +1,5 @@
 //==========================================//
-//oANDI: headers ANDI                       //
+//oANDI: headers ANDI (not fake headings)   //
 //Created By Social Security Administration //
 //==========================================//
 function init_module() {
@@ -48,15 +48,6 @@ function init_module() {
 
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this));
                 AndiData.attachDataToElement(this);
-            } else if (headingsArray.length === 0 && $(this).is("p,div,span,strong,em")) {
-                //Since oANDI has not found a heading yet, check if this element is a fake headings
-
-                if (oANDI.isFakeHeading(this)) {
-                    andiData = new AndiData(this);
-
-                    andiAlerter.throwAlert(alert_0190);
-                    AndiData.attachDataToElement(this);
-                }
             }
 
             //For all elements on the page
@@ -65,51 +56,6 @@ function init_module() {
             if ($.trim($(this).prop("lang")))
                 langAttributesCount++;
         });
-    };
-
-    //This function determine's if the element looks like a heading but is not semantically a heading
-    oANDI.isFakeHeading = function (element) {
-
-        var isFakeHeading = false;
-
-        var limit_textLength = 30; //text longer than this will not be considered a fake heading
-
-        var limit_fontSize = 22; //px  (an h2 starts around 24px)
-        var limit_boldFontSize = 15; //px
-
-        var text = $.trim($(element).text());
-        if (text.length > 0 && text.length < limit_textLength) {
-            //text is not empty, but less than char limit
-
-            var fakeHeading_fontSize = parseInt($(element).css("font-size"));
-            var fakeHeading_fontWeight = $(element).css("font-weight");
-
-            if (fakeHeading_fontSize > limit_fontSize ||
-                (isBold(fakeHeading_fontWeight) && fakeHeading_fontSize > limit_boldFontSize)
-            ) { //fakeHeading_fontSize is greater than size limit
-
-                var nextElement = $(element).next().filter(":visible");
-
-                if ($.trim($(nextElement).text()) !== "") { //next element has text
-
-                    var nextElement_fontWeight = $(nextElement).css("font-weight");
-                    var nextElement_fontSize = parseInt($(nextElement).css("font-size"));
-
-                    if (nextElement_fontSize < fakeHeading_fontSize) {
-                        //next element's font-size is smaller than fakeHeading font-size
-                        isFakeHeading = true;
-                    } else if (isBold(fakeHeading_fontWeight) && !isBold(nextElement_fontWeight)) {
-                        //next element's font-weight is lighter than fakeHeading font-weight
-                        isFakeHeading = true;
-                    }
-                }
-            }
-        }
-        return isFakeHeading;
-
-        function isBold(weight) {
-            return (weight === "bold" || weight === "bolder" || weight >= 700);
-        }
     };
 
     //Initialize outline
