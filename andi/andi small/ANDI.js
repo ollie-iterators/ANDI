@@ -447,10 +447,6 @@ function AndiUtility() {
 			return string.replace(this.whitespace_regex, " ");
 	};
 
-	this.stripHTML = function (string) {
-		return $("<b>" + string + "</b>").text();
-	};
-
 	this.getVisibleInnerText = function (element, root) {
 		var innerText = "";
 		var exclusions = ".ANDI508-overlay,script,noscript,iframe";
@@ -614,12 +610,6 @@ function AndiUtility() {
 			return true;
 		}
 		return false;
-	};
-
-	//this function does a trim, strips html, and removes the refid
-	this.normalizeOutput = function (text) {
-		var regex_idRef = /<span class='ANDI508-display-id'>#(.*?)<\/span>/;
-		return $.trim(andiUtility.stripHTML(text.replace(regex_idRef, "")));
 	};
 }
 
@@ -1522,7 +1512,6 @@ function AndiCheck() {
 	};
 
 	//==Element Checks==//
-
 	//This function resets the accessibleComponentsTable
 	//returns true if components were found that should appear in the accessibleComponentsTable
 	this.wereComponentsFound = function (isTabbable, accessibleComponentsTableBody) {
@@ -1618,10 +1607,9 @@ function AndiCheck() {
 						}
 					}
 				}
-
-				if (elementData.components.legend)
-					//element has no name but has legend
+				if (elementData.components.legend) { //element has no name but has legend
 					andiAlerter.throwAlert(alert_0022);
+				}
 			}
 		}
 	};
@@ -1747,22 +1735,6 @@ function AndiCheck() {
 		return false;
 	};
 
-	//This function will throw alert_0250 if there are disabled elements
-	this.areThereDisabledElements = function (type) {
-		if (testPageData.disabledElementsCount > 0)
-			andiAlerter.throwAlert(alert_0250, [testPageData.disabledElementsCount, type], 0);
-	};
-
-	//This function will throw an alert if the canvas has no focusable children
-	this.lookForCanvasFallback = function (element) {
-		if ($(element).is("canvas")) {
-			if (!$(element).children().filter(":focusable").length)
-				andiAlerter.throwAlert(alert_0124);
-			else //has focusable fallback content
-				andiAlerter.throwAlert(alert_0127);
-		}
-	};
-
 	//This function will scan for deprecated HTML relating to accessibility associated with the element
 	this.detectDeprecatedHTML = function (element) {
 		if (document.doctype !== null && document.doctype.name == "html" && !document.doctype.publicId && !document.doctype.systemId) {
@@ -1811,8 +1783,7 @@ function AndiCheck() {
 	this.checkCharacterLimit = function (componentText, componentName) {
 		if (componentText &&
 			(componentName === "ariaLabel" || componentName === "title" || componentName === "alt") &&
-			componentText.length > 250
-		) {
+			componentText.length > 250) {
 			if (componentName === "ariaLabel")
 				componentName = "aria-label";
 			andiAlerter.throwAlert(alert_0151, [componentName]);

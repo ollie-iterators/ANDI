@@ -5,7 +5,7 @@
 # Reason for difference (Will be worked on)
   - 1. Moved areThereDisabledElements into the areas that it was used in, making it unnecessary
        - Code was altered, but the name of the function was kept in a comment near the code
-       - Removed 1 alert_ message
+       - Removed 2 alert_ messages (1 in comment, 1 in function)
   - 2. Moved lookForCanvasFallback into the areas that it was used in, making it unnecessary
        - Code was altered, but the name of the function was kept in a comment near the code
        - Removed 2 alert_ messages
