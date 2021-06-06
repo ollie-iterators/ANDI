@@ -1639,7 +1639,6 @@ function AndiCheck() {
 	};
 
 	//This function will search the html body for labels with duplicate 'for' attributes
-	//If found, it will throw alert_0012 with a link pointing to the ANDI highlighted element with the matching id.
 	this.areThereAnyDuplicateFors = function (element, data) {
 		if (data.components.label) {
 			var id = $.trim($(element).prop("id"));
@@ -1670,7 +1669,6 @@ function AndiCheck() {
 		}
 	};
 
-	//This function will throw alert_0112 if commonly troublesome Javascript events are found on the element.
 	this.areThereAnyTroublesomeJavascriptEvents = function (element) {
 		var events = "";
 		if ($(element).is("[onblur]"))
@@ -1709,7 +1707,6 @@ function AndiCheck() {
 			andiAlerter.throwAlert(alert_0031);
 	};
 
-	//This function will throw alert_0260 or alert_0261
 	//if the element has aria-hidden=true or is a child of an element with aria-hidden=true
 	//NOTE: role=presentation/none are not factored in here
 	//      because browsers automatically ignore them if the element is focusable
@@ -1771,7 +1768,6 @@ function AndiCheck() {
 		}
 	};
 
-	//This function will throw alert_0101
 	this.areThereComponentsThatShouldntBeCombined = function (data) {
 		if (data.components.ariaLabel && data.components.ariaLabelledby)
 			andiAlerter.throwAlert(alert_0101, ["[aria-label] with [aria-labelledby]"]);
@@ -1802,6 +1798,7 @@ function AndiCheck() {
 }
 
 //This function handles the throwing of alerts.
+// TODO: AndiAlerter has no alert messages in the function
 function AndiAlerter() {
 	//These functions will throw Danger/Warning/Caution Alerts
 	//They will add the alert to the alert list and attach it to the element
@@ -1895,184 +1892,6 @@ function AndiAlerter() {
 				alertGroup.level = "caution";
 		}
 		testPageData.numberOfAccessibilityAlertsFound++;
-	};
-
-	//This function will update the ANDI508-alerts-list.
-	this.updateAlertList = function () {
-		if (testPageData.numberOfAccessibilityAlertsFound > 0) {
-			//Yes, Accessibility alerts were found.
-			buildAlertGroupsHtml(sortAlertGroups());
-			showAlertButtons();
-		}
-		else//No accessibility alerts.
-			$("#ANDI508-alerts-list").html("").hide();
-
-		//This function sorts the alert groups into their levels
-		function sortAlertGroups() {
-			var dangers = [];
-			var warnings = [];
-			var cautions = [];
-			var alertGroup;
-			for (var x = 0; x < AndiAlerter.alertGroups.length; x++) {
-				alertGroup = AndiAlerter.alertGroups[x];
-				if (alertGroup.level === "danger")
-					dangers.push(alertGroup);
-				else if (alertGroup.level === "warning")
-					warnings.push(alertGroup);
-				else if (alertGroup.level === "caution")
-					cautions.push(alertGroup);
-			}
-			return { dangers: dangers, warnings: warnings, cautions: cautions };
-		}
-
-		//This function builds the html for all alert groups
-		function buildAlertGroupsHtml(alertGroups) {
-			$("#ANDI508-alerts-list").append(
-				"<h3 id='ANDI508-numberOfAccessibilityAlerts' class='ANDI508-heading' tabindex='0'>Accessibility Alerts: " +
-				"<span class='ANDI508-total'>" + testPageData.numberOfAccessibilityAlertsFound + "</span></h3>" +
-				"<div id='ANDI508-alerts-container' class='ANDI508-scrollable' role='application'>" +
-				buildAlertLevelList("dangers") +
-				buildAlertLevelList("warnings") +
-				buildAlertLevelList("cautions") +
-				"</div>"
-			).show();
-
-			addAlertListFunctionality();
-
-			function buildAlertLevelList(level) {
-				var html = "";
-				if (alertGroups[level].length > 0) {
-					html += "<ul id='ANDI508-alertLevel-" + level + "-container'>";
-					for (var x = 0; x < alertGroups[level].length; x++)
-						getAlertsForAlertGroup(alertGroups[level][x]);
-					html += "</ul>";
-				}
-				return html;
-
-				//This function build the html for a single alert group
-				function getAlertsForAlertGroup(group) {
-					var totalAlerts = parseInt(group.dangers.length + group.warnings.length + group.cautions.length);
-					html += "<li class='ANDI508-alertGroup-container ANDI508-display-" + group.level +
-						"' role='group' id='ANDI508-alertGroup_" + $.inArray(group, AndiAlerter.alertGroups) +
-						"'><a href='#' class='ANDI508-alertGroup-toggler' tabindex='0' role='treeitem' aria-expanded='false' " +
-						"aria-label='" + group.level + " " + totalAlerts + " " + group.heading + "'>" +
-						group.heading + ": (<span class='ANDI508-total' style='display:inline'>" + totalAlerts + "</span>)</a><ol class='ANDI508-alertGroup-list'>";
-					for (var d = 0; d < group.dangers.length; d++)
-						html += "<li class='ANDI508-display-danger'><a " + "aria-posinset='" + parseInt(d + 1) + "' aria-setsize='" + totalAlerts + "' " + group.dangers[d];
-					for (var w = 0; w < group.warnings.length; w++)
-						html += "<li class='ANDI508-display-warning'><a " + "aria-posinset='" + parseInt(w + 1) + "' aria-setsize='" + totalAlerts + "' " + group.warnings[w];
-					for (var c = 0; c < group.cautions.length; c++)
-						html += "<li class='ANDI508-display-caution'><a " + "aria-posinset='" + parseInt(c + 1) + "' aria-setsize='" + totalAlerts + "' " + group.cautions[c];
-					html += "</ol></li>";
-				}
-			}
-
-			//This function defines the functionality of the Alert List
-			//It adds key navigation: down, up, left, right, enter, asterisk, home, end,
-			//Also adds mouse clickability
-			function addAlertListFunctionality() {
-				//This private variable will keep track of the alert links for keyboard navigation purposes
-				var alertLinksTabbableArray;
-				updateAlertLinksTabbableArray();
-
-				$("#ANDI508-alerts-container a").each(function () {
-					//add keyboard functionality
-					$(this)
-						.keydown(function (e) {
-							switch (e.keyCode) {
-								case 13: //enter
-									if (!$(this).hasClass("ANDI508-alertGroup-toggler"))
-										$(this).click(function () { return false; }); //follow the link to the element
-									//else, the mouse click method takes care of the enter key for the alertGroup-toggler
-									break;
-								case 40: //down
-									$(alertLinksTabbableArray[alertLinksTabbableArray.indexOf(this) + 1]).focus();//next tabbable link
-									break;
-								case 38: //up
-									$(alertLinksTabbableArray[alertLinksTabbableArray.indexOf(this) - 1]).focus();//prev tabbable link
-									break;
-								case 39: //right
-									if ($(this).hasClass("ANDI508-alertGroup-toggler") && $(this).parent().find("ol").css("display") == "none")
-										toggleAlertGroupList(this); //show associating alertGroup-list
-									break;
-								case 37: //left
-									if (!$(this).hasClass("ANDI508-alertGroup-toggler"))
-										$(this).closest(".ANDI508-alertGroup-container").find("a.ANDI508-alertGroup-toggler").focus(); //focus on root
-									else if ($(this).parent().next().css("display") != "none")
-										toggleAlertGroupList(this); //hide associating alertGroup-list
-									break;
-								case 106: //asterisk
-									$("#ANDI508-alerts-container a.ANDI508-alertGroup-toggler").each(function () {
-										if ($(this).css("display") != "none")
-											toggleAlertGroupList(this); //show every alertGroup-list
-									});
-									$(this).focus();//retain focus
-									break;
-								case 36: //home
-									$(alertLinksTabbableArray[0]).focus();//focus on first link
-									break;
-								case 35: //end
-									$(alertLinksTabbableArray[alertLinksTabbableArray.length - 1]).focus();//focus on last link
-									break;
-							}
-						});
-
-					//Add mouse click method to alertGroupTogglers
-					if ($(this).hasClass("ANDI508-alertGroup-toggler")) {
-						$(this).click(function () {
-							toggleAlertGroupList(this);
-							return false;
-						});
-					}
-				});
-
-				//This function stores the tabbable alerts into an array.
-				//Should be called anytime the list display changes
-				function updateAlertLinksTabbableArray() {
-					alertLinksTabbableArray = [];
-					$("#ANDI508-alerts-container a[tabindex=0]").each(function () {
-						alertLinksTabbableArray.push(this);
-					});
-				}
-
-				//This function toggles the alertGroup display
-				function toggleAlertGroupList(trigger) {
-					var groupListContainer = $(trigger).parent().find("ol");
-					var tabindex;
-					if ($(groupListContainer).css("display") == "none") {
-						//show alertGroup-list
-						$(groupListContainer).slideDown(50);
-						$(groupListContainer).children().first().find("a").focus();
-						$(trigger).attr("aria-expanded", "true");
-						tabindex = "0";
-					}
-					else {
-						//hide alertGroup-list
-						$(groupListContainer).slideUp(50);
-						$(trigger).attr("aria-expanded", "false");
-						tabindex = "-1";
-					}
-					//Set the tabindex
-					$(groupListContainer).find("a").each(function () {
-						$(this).attr("tabindex", tabindex);
-					});
-					updateAlertLinksTabbableArray();
-				}
-			}
-		}
-
-		//This function will show the alert buttons that were added to the alertButtons array
-		function showAlertButtons() {
-			for (var x = 0; x < alertButtons.length; x++) {
-				$("#ANDI508-alertGroup_" + alertButtons[x].group).children("a").first().after(
-					"<button id='" + alertButtons[x].alertButton.id +
-					"' aria-pressed='false'>" + alertButtons[x].alertButton.label +
-					alertButtons[x].alertButton.overlayIcon + "</button>"
-				);
-				$("#" + alertButtons[x].alertButton.id).bind("click", alertButtons[x].alertButton.clickLogic);
-			}
-			alertButtons = [];//clear the alertButtons array
-		}
 	};
 
 	//This fucntion returns a new instance of an Alert Groups Array.
