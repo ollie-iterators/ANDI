@@ -657,12 +657,11 @@ AndiData.grab_coreProperties = function (element) {
 			if (tabindex < 0) {
 				AndiData.data.isTabbable = false;
 				if ($(element).is("iframe")) {
-					//check if iframe has focusable contents
-					if ($(element).contents().find(":focusable").length)
+					if ($(element).contents().find(":focusable").length) { //check if iframe has focusable contents
 						andiAlerter.throwAlert(alert_0123);
+					}
 				}
-				else if (!$(element).parent().is(":tabbable")) {
-					//element and parent are not tabbable
+				else if (!$(element).parent().is(":tabbable")) { //element and parent are not tabbable
 					if (AndiData.data.accName)
 						andiAlerter.throwAlert(alert_0121);
 					else
@@ -1777,11 +1776,10 @@ function AndiCheck() {
 	//If it exceeds the number defined in the variable characterLimiter, it will throw an alert.
 	//If the limit was exceeded, it will insert a scissors unicode
 	this.checkCharacterLimit = function (componentText, componentName) {
-		if (componentText &&
-			(componentName === "ariaLabel" || componentName === "title" || componentName === "alt") &&
-			componentText.length > 250) {
-			if (componentName === "ariaLabel")
+		if (componentText && (componentName === "ariaLabel" || componentName === "title" || componentName === "alt") && componentText.length > 250) {
+			if (componentName === "ariaLabel") {
 				componentName = "aria-label";
+			}
 			andiAlerter.throwAlert(alert_0151, [componentName]);
 			return insertCharacterLimitMark(componentText);
 		}
@@ -1814,7 +1812,6 @@ function AndiAlerter() {
 			this.addToAlertsList(alertObject, message, index);
 
 			//Add the Alert Button to the alertButtons array (to be displayed later)
-
 			if (alertObject.alertButton && alertButtons.indexOf(alertObject) < 0)
 				alertButtons.push(alertObject);
 		}
