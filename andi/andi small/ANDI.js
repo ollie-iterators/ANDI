@@ -1534,7 +1534,6 @@ function AndiCheck() {
 		if (!elementData.isAriaHidden) { //element is not aria-hidden=true and not contained by aria-hidden=true
 			var tagNameText = elementData.tagNameText;
 			if (!elementData.accName) {
-
 				if (elementData.components.ariaDescribedby)
 					//element has no name but has ariaDescribedby
 					andiAlerter.throwAlert(alert_0021);
