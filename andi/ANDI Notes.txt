@@ -54,9 +54,8 @@ pANDI  - Lists
 qANDI  - Landmarks
 rANDI  - Live Regions
 uANDI  - Tables
-vANDI  - Attributes
-wANDI  - Main Module (Fixed Code)
-xANDI  - Main Module (Minimum Code)
+vANDI  - Fake Headers
+wANDI  - Attributes
 
 # NOTE: Think about putting attributes like role and lang, ... into their own file
     - role and lang apply to all elemens on the page
@@ -72,3 +71,6 @@ rANDI  - Live Regions
 
 # Code Errors found:
 1. Links: danger_anchorTargetNotFound has an alert level of "warning" instead of "danger"
+2. sANDI: Many elements are mistitled (lang attributes button is written for the role attributes button) 
+3. fANDI: andiAccesskeys push function has if (accessKeys) when there is if (andiData.accesskey) before
+          it when andiData.accesskey is the value for the accesskey variable in the push function
