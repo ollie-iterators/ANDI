@@ -23,12 +23,11 @@ var listIcon = "<img src='https://ollie-iterators.github.io/ANDI/andi/icons/list
 // ALERT MESSAGES //
 //================//
 //This defines the class Alert
-function Alert(level, group, message, info, alertButton) {
+function Alert(level, group, message, info) {
 	this.level = level; 		//danger, warning, or caution
 	this.group = group; 	//belongs to this alert group id
 	this.message = message;	//message text
 	this.info = info; 		//the id corresponding to the help page documentation
-	this.alertButton = alertButton; //(optional) an alert button object
 }
 //Define Alerts used by all modules
 var alert_0001 = new Alert("danger", "0", " has no accessible name, associated &lt;label&gt;, or [title].", "no_name_form_element");
@@ -262,17 +261,8 @@ function andiReady() {
 //This class is used to perform common utilities such as regular expressions and string alertations.
 function AndiUtility() {
 	//cache the regex for performance gains
-	this.greaterthan_regex = />/g;
 	this.lessthanthan_regex = /</g;
-	this.ampersand_regex = /&/g;
 	this.whitespace_regex = /\s+/g;
-
-	//This ultility function takes a string and converts &, < and > into &amp;, &lt; and &gt; so that when the
-	//string is displayed on screen, the browser doesn't try to parse the string into html tags.
-	this.formatForHtml = function (string) {
-		if (string !== undefined)
-			return string.replace(this.ampersand_regex, "&amp;").replace(this.greaterthan_regex, "&gt;").replace(this.lessthanthan_regex, "&lt;");
-	};
 
 	this.condenseWhitespace = function (string) {
 		if (string !== undefined)
@@ -575,14 +565,13 @@ AndiData.textAlternativeComputation = function (root) {
 
 								if (refElement) {
 									if ($(refElement).is("legend")) //is directly referencing a legend
-										andiAlerter.throwAlert(alert_006B, [attribute]);
-
+										alert = [alert_006B, [attribute]];
 									if (!hasNodeBeenTraversed(refElement)) {
 										andiCheck.areThereAnyDuplicateIds(attribute, idsArray[x]);
 
 										//Don't call stepB again to avoid infinite loops (spec explicitely defines this)
 										if (element != refElement && $(refElement).attr(attribute)) {//reference contains another reference
-											andiAlerter.throwAlert(alert_006C, [attribute, attribute]);
+											alert = [alert_006C, [attribute, attribute]];
 											AndiData.addComp(data, componentType, [("\"\" "), refElement, idsArray[x]]);
 										}
 
@@ -595,7 +584,7 @@ AndiData.textAlternativeComputation = function (root) {
 										else if (calcRefName(stepJ(refElement, refData))); //placeholder
 									}
 									else {//Referenced Element has already been traversed.
-										andiAlerter.throwAlert(alert_006E, [attribute, idsArray[x]]);
+										alert = [alert_006E, [attribute, idsArray[x]]];
 										var refData = {}; //will be discarded
 										var alreadyTraversedText = (
 											stepC(refElement, refData) ||
@@ -616,7 +605,7 @@ AndiData.textAlternativeComputation = function (root) {
 							else { //id has already been directly referenced, this is a duplicate
 								if (duplicateRefInstances.indexOf(idsArray[x]) === -1) {
 									duplicateRefInstances.push(idsArray[x]);
-									andiAlerter.throwAlert(alert_006D, [attribute, idsArray[x]]);
+									alert = [alert_006D, [attribute, idsArray[x]]];
 								}
 							}
 						}
@@ -671,10 +660,11 @@ AndiData.textAlternativeComputation = function (root) {
 					}
 				}
 				else if ($.trim(component) !== "") {//because alt="" is allowed for images only
-					if ($(element).is("img[role=presentation],img[role=none]"))
-						andiAlerter.throwAlert(alert_0142);
-					else
-						andiAlerter.throwAlert(alert_0081);
+					if ($(element).is("img[role=presentation],img[role=none]")) {
+						alert = alert_0142;
+					} else {
+						alert = alert_0081;
+					}
 					AndiData.addComp(data, "alt", component);
 				}
 			}
@@ -1059,7 +1049,7 @@ AndiData.textAlternativeComputation = function (root) {
 				//Is this label explictly associated with something else?
 				var forAttr = $(closestLabel).attr("for");
 				if (forAttr && forAttr != element.id) {
-					andiAlerter.throwAlert(alert_006F, [forAttr, element.id]);
+					alert = [alert_006F, [forAttr, element.id]];
 				}
 				else {
 					labelElement = closestLabel;
@@ -1168,120 +1158,7 @@ AndiData.addComp = function (data, componentType, component, hasNodebeenTraverse
 
 //This object sets up the check logic to determine if an alert should be thrown.
 function AndiCheck() {
-	//==Mult-Point Checks==//
-	//This function is used to check for alerts related to focusable elements
-	this.commonFocusableElementChecks = function (andiData, element) {
-		this.wasAccessibleNameFound(andiData);
-	};
-
-	//This function is used to check for alerts related to non-focusable elements
-	this.commonNonFocusableElementChecks = function (andiData, element, isElementMustHaveName) {
-		if (isElementMustHaveName)
-			this.wasAccessibleNameFound(andiData);
-	};
-
 	//==Element Checks==//
-	//This function resets the accessibleComponentsTable
-	//returns true if components were found that should appear in the accessibleComponentsTable
-	this.wereComponentsFound = function (isTabbable, accessibleComponentsTableBody) {
-		//calculate total
-		var total = $(accessibleComponentsTableBody).find("tr").length;
-		//Display total
-		$("#ANDI508-accessibleComponentsTotal").html(total);
-
-		if (total === 0) {//No components. Display message in table
-			var alertLevel = "danger"; //tabbable elements with no components, default to red
-			if (!isTabbable)
-				alertLevel = "caution"; //non-tabbable elements with no components, default to yellow
-			$(accessibleComponentsTableBody).html(
-				"<tr><th id='ANDI508-accessibleComponentsTable-noData' class='ANDI508-display-" +
-				alertLevel + "'>No accessibility markup found for this Element.</th></tr>");
-		}
-	};
-
-	//This function will throw No Accessible Name alert depending on the tagName passed
-	this.wasAccessibleNameFound = function (elementData) {
-		if (!elementData.isAriaHidden) { //element is not aria-hidden=true and not contained by aria-hidden=true
-			var tagNameText = elementData.tagNameText;
-			if (!elementData.accName) {
-				if (elementData.components.ariaDescribedby)
-					//element has no name but has ariaDescribedby
-					andiAlerter.throwAlert(alert_0021);
-				else { //throw No Accessible Name Alert
-					if (tagNameText === "iframe") {
-						if (elementData.tabindex)
-							andiAlerter.throwAlert(alert_0007);
-						else//no tabindex
-							andiAlerter.throwAlert(alert_0009);
-					}
-					else if (elementData.isTabbable) {
-						//Does this element have a role?
-						if (elementData.role) {
-							var roleCapitalized = elementData.role.charAt(0).toUpperCase() + elementData.role.slice(1);
-							andiAlerter.throwAlert(alert_0008, roleCapitalized + " Element" + alert_0008.message);
-						}
-						//Is this an input element, excluding input[image]?
-						else if (tagNameText.includes("input") && tagNameText != "input[type=image]") {
-							switch (tagNameText) {
-								case "input[type=text]":
-									andiAlerter.throwAlert(alert_0001, "Textbox" + alert_0001.message); break;
-								case "input[type=radio]":
-									andiAlerter.throwAlert(alert_0001, "Radio Button" + alert_0001.message); break;
-								case "input[type=checkbox]":
-									andiAlerter.throwAlert(alert_0001, "Checkbox" + alert_0001.message); break;
-								default:
-									andiAlerter.throwAlert(alert_0001, "Input Element" + alert_0001.message);
-							}
-						}
-						//All other elements:
-						else switch (tagNameText) {
-							case "a":
-								andiAlerter.throwAlert(alert_0002, "Link" + alert_0002.message); break;
-							case "img":
-							case "input[type=image]":
-								andiAlerter.throwAlert(alert_0003, "Image" + alert_0003.message); break;
-							case "button":
-								andiAlerter.throwAlert(alert_0002, "Button" + alert_0002.message); break;
-							case "select":
-								andiAlerter.throwAlert(alert_0001, "Select" + alert_0001.message); break;
-							case "textarea":
-								andiAlerter.throwAlert(alert_0001, "Textarea" + alert_0001.message); break;
-							case "table":
-								andiAlerter.throwAlert(alert_0004, alert_0004.message); break;
-							case "figure":
-								andiAlerter.throwAlert(alert_0005, alert_0005.message); break;
-							case "th":
-							case "td":
-								andiAlerter.throwAlert(alert_0002, "Table Cell" + alert_0002.message); break;
-							case "canvas":
-								andiAlerter.throwAlert(alert_0008, "Canvas" + alert_0008.message); break;
-							default:
-								andiAlerter.throwAlert(alert_0002, "Element" + alert_0002.message);
-						}
-					}
-					else {//not tabbable
-						//Does this element have a role?
-						if (elementData.role === "img") {
-							andiAlerter.throwAlert(alert_0008, "[role=img] Element" + alert_0008.message);
-						}
-						else {
-							switch (tagNameText) {
-								case "img":
-								case "input[type=image]":
-									if (!elementData.role) andiAlerter.throwAlert(alert_0003, "Image" + alert_0003.message); break;
-								case "canvas":
-									andiAlerter.throwAlert(alert_0008, "Canvas" + alert_0008.message); break;
-							}
-						}
-					}
-				}
-				if (elementData.components.legend) { //element has no name but has legend
-					andiAlerter.throwAlert(alert_0022);
-				}
-			}
-		}
-	};
-
 	//This function will search the test page for elements with duplicate ids.
 	//If found, it will generate an alert
 	//TODO: add this check when these components are detected: aria-activedescendant,aria-colcount,aria-colindex,aria-colspan,aria-controls,aria-details,aria-errormessage,aria-flowto,aria-owns,aria-posinset,aria-rowcount,aria-rowindex,aria-rowspan,aria-setsize
@@ -1301,207 +1178,33 @@ function AndiCheck() {
 					message = "Element has duplicate id [id=" + id + "] and is referenced by a &lt;label[for]&gt;";
 				else //anything else
 					message = "[" + component + "] is referencing a duplicate id [id=" + id + "]";
-				andiAlerter.throwAlert(alert_0011, [message]);
+				alert = [alert_0011, [message]];
 			}
 		}
 	};
-
-	//This function will increment the testPageData.disabledElementsCount
-	//Returns true if the element is disabled
-	this.isThisElementDisabled = function (element) {
-		if (element.disabled) {
-			//if the element has aria-hidden=true, assume intentiality behind making this element disabled. Therefore don't complain about this element's disabled state.
-			if ($(element).attr("aria-hidden") !== "true") {
-				testPageData.disabledElementsCount++;
-				return true;
-			}
-		}
-		return false;
-	};
-
 	//==Component Quality Checks==//
 	//this function will throw an alert if there are missingReferences
 	this.areThereMissingReferences = function (attribute, missingReferences) {
 		//Check if any ids were not found
 		if (missingReferences.length === 1) {//one reference is missing
-			andiAlerter.throwAlert(alert_0063, [attribute, missingReferences]);
+			alert = [alert_0063, [attribute, missingReferences]];
 		}
 		else if (missingReferences.length > 1) {//more than one reference missing
-			andiAlerter.throwAlert(alert_0065, [attribute, missingReferences]);
+			alert = [alert_0065, [attribute, missingReferences]];
 		}
 	};
 }
 
-//This function handles the throwing of alerts.
-// TODO: AndiAlerter has no alert messages in the function
-function AndiAlerter() {
-	//These functions will throw Danger/Warning/Caution Alerts
-	//They will add the alert to the alert list and attach it to the element
-	//	alertObject:	the alert object
-	//	customMessage: 	(optional) message of the alert. If not passed will use default alertObject.message
-	//	index: 	(optional) pass in 0 if this cannot be linked to an element.  If not passed will use andiElementIndex
-	this.throwAlert = function (alertObject, customMessage, index) {
-		if (alertObject) {
-			var message = alertMessage(alertObject, customMessage);
-			if (index === undefined) {
-				index = testPageData.andiElementIndex; //use current andiElementIndex
-			}
-			this.addToAlertsList(alertObject, message, index);
-
-			//Add the Alert Button to the alertButtons array (to be displayed later)
-			if (alertObject.alertButton && alertButtons.indexOf(alertObject) < 0)
-				alertButtons.push(alertObject);
-		}
-	};
-
-	//This private function will add an icon to the message
-	//	alertObject:	the alert object
-	//	customMessage: 	(optional) message of the alert. if string, use the string. If array, get values from array
-	function alertMessage(alertObject, customMessage) {
-		var message = "";
-		if (typeof customMessage === "string")
-			message += customMessage;
-		else if (customMessage !== undefined)
-			message += getParams(alertObject, customMessage); //use custom message
-		else
-			message += alertObject.message; //use default alert message
-		return message;
-
-		//This function will fill in the parameters of the alert message with the string in the array
-		function getParams(alertObject, paramArray) {
-			var m = alertObject.message.split("%%%");
-			var message = "";
-			for (var x = 0; x < paramArray.length; x++)
-				message += m[x] + paramArray[x];
-			message += m[m.length - 1];
-			return message;
-		}
-	}
-
-	//This function is not meant to be used directly.
-	//It will add a list item into the Alerts list.
-	//It can place a link which when followed, will move focus to the field relating to the alert.
-	//	alertObject:	the alert object
-	//  message:		text of the alert message
-	//  elementIndex:	element to focus on when link is clicked. expects a number. pass zero 0 if alert is not relating to one particular element
-	this.addToAlertsList = function (alertObject, message, elementIndex) {
-		//Should this alert be associated with a focusable element?
-		var listItemHtml = " tabindex='-1' ";
-		if (elementIndex !== 0) {
-			//Yes, this alert should point to a focusable element. Insert as link:
-			listItemHtml += "href='javascript:void(0)' data-andi508-relatedindex='" + elementIndex + "' aria-label='" + alertObject.level + ": " + message + " Element #" + elementIndex + "'>" +
-				"<img alt='" + alertObject.level + "' role='presentation' />" +
-				message + "</a></li>";
-		}
-
-		var alertGroup = AndiAlerter.alertGroups[alertObject.group];
-
-		//Adds the alert into its group
-		//Assign the alert level to the group
-		if (alertObject.level === "danger") {
-			alertGroup.dangers.push(listItemHtml);
-			alertGroup.level = "danger";
-		}
-		else if (alertObject.level === "warning") {
-			alertGroup.warnings.push(listItemHtml);
-			if (alertGroup.level !== "danger")
-				alertGroup.level = "warning";
-		}
-		else {
-			alertGroup.cautions.push(listItemHtml);
-			if (alertGroup.level !== "danger" && alertGroup.level !== "warning")
-				alertGroup.level = "caution";
-		}
-		testPageData.numberOfAccessibilityAlertsFound++;
-	};
-
-	//This fucntion returns a new instance of an Alert Groups Array.
-	//Messages are categorized into these major groups.
-	this.createAlertGroups = function () {
-		return [
-			new AlertGroup("Elements with No Accessible Name"),			//0
-			new AlertGroup("Duplicate Attributes Found"),
-			new AlertGroup("Components That Should Not Be Used Alone"),
-			new AlertGroup("Misspelled ARIA Attributes"),
-			new AlertGroup("Table Alerts"),
-			new AlertGroup("AccessKey Alerts"),							//5
-			new AlertGroup("Reference Alerts"),
-			new AlertGroup("Invalid HTML Alerts"),
-			new AlertGroup("Misuses of Alt attribute"),
-			new AlertGroup("Misuses of Label Tag"),
-			new AlertGroup("Unreliable Component Combinations"),		//10
-			new AlertGroup("JavaScript Event Cautions"),
-			new AlertGroup("Keyboard Access Alerts"),
-			new AlertGroup("Empty Components Found"),
-			new AlertGroup("Unused Components"),
-			new AlertGroup("Excessive Text"),							//15
-			new AlertGroup("Link Alerts"),
-			new AlertGroup("Graphics Alerts"),
-			new AlertGroup("Improper ARIA Usage"),
-			new AlertGroup("Structure Alerts"),
-			new AlertGroup("Button Alerts"),							//20
-			new AlertGroup("Small Clickable Areas"),
-			new AlertGroup("CSS Content Alerts"),
-			new AlertGroup("Manual Tests Needed"),
-			new AlertGroup("Contrast Alerts"),
-			new AlertGroup("Disabled Element Alerts"),					//25
-			new AlertGroup("Aria-Hidden Alerts")
-		];
-	};
-
-	//Keeps track of alert buttons that need to be added.
-	var alertButtons = [];
-}
-
-//This defines the class AlertGroup
-function AlertGroup(heading) {
-	this.heading = heading;	//heading text for the group
-	this.level = undefined;
-	this.dangers = [];
-	this.warnings = [];
-	this.cautions = [];
-}
-
-//This defines the class AlertButton
-function AlertButton(label, id, clickLogic, overlayIcon) {
-	this.label = label; //button's innerText
-	this.id = id;		//button's id
-	this.clickLogic = clickLogic; //buttons clicklogic
-	this.overlayIcon = overlayIcon; //if button should contain overlayIcon, pass in overlayIcon. else pass in empty string ""
-}
-
-TestPageData.allVisibleElements = undefined;
 TestPageData.allElements = undefined;
 //This class is used to store temporary variables for the test page
 function TestPageData() {
-	//Creates the alert groups
-	AndiAlerter.alertGroups = andiAlerter.createAlertGroups();
-
 	TestPageData.allElements = $("#ANDI508-testPage *");
-
-	//all the visible elements or elements within a canvas on the test page
-	TestPageData.allVisibleElements = $(TestPageData.allElements).filter(":shown,canvas *");
 
 	//all the ids of elements on the page for duplicate comparisons
 	this.allIds = $(TestPageData.allElements).filter("[id]");
 
 	//all the fors of visible elements on the page for duplicate comparisons
 	this.allFors = "";
-
-	//Keeps track of the number of focusable elements ANDI has found, used to assign unique indexes.
-	//the first element's index will start at 1.
-	//When ANDI is done analyzing the page, this number will equal the total number of elements found.
-	this.andiElementIndex = 0;
-
-	this.relatedLaserIndex = 0;
-
-	//Keeps track of the number of accessibility alerts found.
-	this.numberOfAccessibilityAlertsFound = 0;
-
-	this.pageAlerts = [];
-
-	//Keeps track of the number of disabled elements
-	this.disabledElementsCount = 0;
 
 	//Get all fors on the page and store for later comparison
 	if ($(TestPageData.allElements).filter("label").length * 1 > 0) {
