@@ -117,11 +117,11 @@ function init_module() {
         var before_content, before_style, after_content, after_style, hasHiddenCSSContent, cssDisplay;
 
         //Loop through every element on the page
-        for (var x = 0; x < TestPageData.allVisibleElements.length; x++) {
+        for (var x = 0; x < TestPageData.allElements.length; x++) {
             hasHiddenCSSContent = false; //reset to false
             cssDisplay = "";
 
-            before_style = window.getComputedStyle(TestPageData.allVisibleElements[x], ":before");
+            before_style = window.getComputedStyle(TestPageData.allElements[x], ":before");
             if (before_style) {
                 before_content = before_style.getPropertyValue("content");
                 if (hasContent(before_content)) { //element has injected content using ::before
@@ -132,7 +132,7 @@ function init_module() {
                 }
             }
 
-            after_style = window.getComputedStyle(TestPageData.allVisibleElements[x], ":after");
+            after_style = window.getComputedStyle(TestPageData.allElements[x], ":after");
             if (after_style) {
                 after_content = after_style.getPropertyValue("content");
                 if (hasContent(after_content)) { //element has injected content using ::after
@@ -145,7 +145,7 @@ function init_module() {
 
             if (hasHiddenCSSContent) {
                 jANDI.hiddenElements.hasCSSInjectedContent++;
-                $(TestPageData.allVisibleElements[x]).addClass("jANDI508-hasHiddenCssContent");
+                $(TestPageData.allElements[x]).addClass("jANDI508-hasHiddenCssContent");
             }
         }
 

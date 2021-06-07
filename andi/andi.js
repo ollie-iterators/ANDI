@@ -268,7 +268,7 @@ AndiModule.showMenu = function(){
 	if(!TestPageData.page_using_table)
 		AndiModule.disableModuleButton("t");
 	//Hide iANDI
-	if($(TestPageData.allVisibleElements).filter("iframe").length == 0)
+	if($(TestPageData.allElements).filter("iframe").length == 0)
 		AndiModule.disableModuleButton("i");
 };
 AndiModule.hideMenu = function(){
@@ -3229,21 +3229,21 @@ function AndiCheck(){
 		var children, parents;
 
 		//legend/fieldset
-		parents = $(TestPageData.allVisibleElements).filter("fieldset").length*1; //*1 ensures that the var will be a number
-		children = $(TestPageData.allVisibleElements).filter("legend").length*1; //*1 ensures that the var will be a number
+		parents = $(TestPageData.allElements).filter("fieldset").length*1; //*1 ensures that the var will be a number
+		children = $(TestPageData.allElements).filter("legend").length*1; //*1 ensures that the var will be a number
 		if(children > parents) andiAlerter.throwAlert(alert_0074,[children, parents],0);
 		if(parents>0) testPageData.page_using_fieldset = true;
 
 		//figcaption/figure
-		parents = $(TestPageData.allVisibleElements).filter("figure").length*1; //*1 ensures that the var will be a number
-		children = $(TestPageData.allVisibleElements).filter("figcaption").length*1; //*1 ensures that the var will be a number
+		parents = $(TestPageData.allElements).filter("figure").length*1; //*1 ensures that the var will be a number
+		children = $(TestPageData.allElements).filter("figcaption").length*1; //*1 ensures that the var will be a number
 		if(children > parents) andiAlerter.throwAlert(alert_0075,[children, parents],0);
 		if(parents>0) testPageData.page_using_figure = true;
 
 		//caption/table
 		if(TestPageData.page_using_table){
-			parents = $(TestPageData.allVisibleElements).filter("table").length*1; //*1 ensures that the var will be a number
-			children = $(TestPageData.allVisibleElements).filter("caption").length*1; //*1 ensures that the var will be a number
+			parents = $(TestPageData.allElements).filter("table").length*1; //*1 ensures that the var will be a number
+			children = $(TestPageData.allElements).filter("caption").length*1; //*1 ensures that the var will be a number
 			if(children)
 				TestPageData.page_using_caption = true;
 			if(children > parents) andiAlerter.throwAlert(alert_0076,[children, parents],0);
@@ -3986,13 +3986,13 @@ function TestPageData(){
 	//Get all fors on the page and store for later comparison
 	//Determine if labels are being used on the page
 	this.page_using_label = false;
-	if($(TestPageData.allVisibleElements).filter("label").length*1 > 0){
+	if($(TestPageData.allElements).filter("label").length*1 > 0){
 		this.page_using_label = true;
 		//get all 'for's on the page and store for later comparison
-		this.allFors = $(TestPageData.allVisibleElements).filter("label[for]");
+		this.allFors = $(TestPageData.allElements).filter("label[for]");
 	}
 
-	if($(TestPageData.allVisibleElements).filter("table").first().length)
+	if($(TestPageData.allElements).filter("table").first().length)
 		TestPageData.page_using_table = true;
 
 	//This function should be called by the first module that is launched

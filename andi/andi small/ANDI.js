@@ -30,7 +30,6 @@ var icons_url = "https://ollie-iterators.github.io/ANDI/andi/icons/";
 //===============//
 
 var andiAlerter = new AndiAlerter(); //Alert Throwing
-var andiUtility = new AndiUtility(); //String Manipulation
 var testPageData;                    //Test Page Data Storage/Analysis, instantiated within module launch
 var andiData;                        //Element Data Storage/Analysis, instatiated within module's analysis logic
 
@@ -424,192 +423,6 @@ function andiReady() {
 	}
 }
 
-//This class is used to perform common utilities such as regular expressions and string alertations.
-function AndiUtility() {
-	//cache the regex for performance gains
-	this.greaterthan_regex = />/g;
-	this.lessthanthan_regex = /</g;
-	this.ampersand_regex = /&/g;
-	this.whitespace_regex = /\s+/g;
-
-	//This ultility function takes a string and converts &, < and > into &amp;, &lt; and &gt; so that when the
-	//string is displayed on screen, the browser doesn't try to parse the string into html tags.
-	this.formatForHtml = function (string) {
-		if (string !== undefined)
-			return string.replace(this.ampersand_regex, "&amp;").replace(this.greaterthan_regex, "&gt;").replace(this.lessthanthan_regex, "&lt;");
-	};
-
-	this.condenseWhitespace = function (string) {
-		if (string !== undefined)
-			return string.replace(this.whitespace_regex, " ");
-	};
-
-	this.getVisibleInnerText = function (element, root) {
-		var innerText = "";
-		var exclusions = ".ANDI508-overlay,script,noscript,iframe";
-		var node;
-		if (!$(element).is(exclusions) && element.childNodes) {
-			//Loop through this element's child nodes
-			lookForPseudoContent("before", element);
-
-			for (var z = 0; z < element.childNodes.length; z++) {
-				node = element.childNodes[z];
-				if (node.nodeType === 1) {//element node
-					if ($(node).is(":shown") && !$(node).is("[aria-hidden=true]")) {
-						if (root != node && !isEmbeddedControl(node))
-							innerText += this.getVisibleInnerText(node, root);
-
-						if (andiUtility.isBlockElement(node))
-							innerText += " ";
-					}
-				}
-				else if (node.nodeType === 3) {//text node
-					innerText += andiUtility.condenseWhitespace(node.nodeValue);
-				}
-			}
-
-			lookForPseudoContent("after", element);
-		}
-		return innerText;
-
-		//This function is essentially StepE of the TAC
-		function isEmbeddedControl(node) {
-			var component;
-			if ($(node).is("input[type=text]")) { //get value
-				innerText += $(node).val();
-				return true;
-			}
-			else if ($(node).is("[role=combobox],[role=listbox]")) { //get chosen option
-				component = $(node).find("[role=option][aria-selected=true]").first().text();
-				if (component && $.trim(component) !== "") {
-					innerText += component;
-				}
-				return true;
-			}
-			else if ($(node).is("select")) { //get chosen option
-				component = $(node).find("option:selected").first().text();
-				if (component && $.trim(component) !== "") {
-					innerText += component;
-				}
-				return true;
-			}
-			else if ($(node).is("[role=progressbar],[role=scrollbar],[role=slider],[role=spinbutton]")) {
-				component = $(node).attr("aria-valuetext");
-				if (component && $.trim(component) !== "") {
-					innerText += component;
-				}
-				else {
-					component = $(node).attr("aria-valuenow");
-					if (component && $.trim(component) !== "") {
-						innerText += component;
-					}
-				}
-				return true;
-			}
-			return false;
-		}
-
-		//This function checks for pseudo element content and adds to the innerText
-		function lookForPseudoContent(pseudo, element, data) {
-			var pseudoObject = andiUtility.getPseudoContent(pseudo, element);
-			if (pseudoObject) {
-				innerText += pseudoObject[0];
-			}
-		}
-	};
-
-	//This function checks for pseudo element content
-	//Return: Array [displayText, contentLiteral]
-	this.getPseudoContent = function (pseudo, element) {
-		if (!oldIE && window.getComputedStyle(element, ":" + pseudo).display !== "none") {
-			//pseudo element is not display:none
-			var contentLiteral = window.getComputedStyle(element, ":" + pseudo).content;
-
-			if (contentLiteral !== "none" && contentLiteral !== "normal" && contentLiteral !== "counter" && contentLiteral !== "\"\"") {//content is not none or empty string
-				var displayText = "";
-				if (!!hasReadableCharacters(contentLiteral));
-				return [displayText, contentLiteral];
-			}
-		}
-		return undefined;
-
-		function hasReadableCharacters(content) {
-			var unicode, c;
-
-			//replaces \a with a space
-			content = content.replace(/\\a /, " ");
-
-			content = stripContentKeywords(content);
-
-			for (var i = 0; i < content.length; i++) {
-				unicode = content.charCodeAt(i);
-
-				c = content.charAt(i);
-				if ( //if unicode is not in a private use range
-					(unicode < 57344) ||
-					!(
-						(unicode >= 57344 && unicode <= 63743) ||
-						(unicode >= 983040 && unicode <= 1048573) ||
-						(unicode >= 1048576 && unicode <= 1114109)
-					)
-				) {
-					displayText += c;
-				}
-			}
-
-			//strip double quotes. TODO: do it more "carefully"
-			var regex_everydoublequote = /"/g;
-			displayText = displayText.replace(regex_everydoublequote, '');
-
-			return displayText;
-		}
-
-		//This function removes CSS content keywords for display purposes
-		function stripContentKeywords(c) {
-			//gets common content keywords and their values between parens and the parens
-			var regex_keywords = /(url\()(.*)(\))|(counter\()(.*)(\))|(counters\()(.*)(\))/;
-
-			//removes common content keywords and their values between parens and the parens
-			c = c.replace(regex_keywords, '');
-
-			return c;
-		}
-	};
-
-	this.isBlockElement = function (node) {
-		var blockStyles = {
-			display: ["block", "grid", "table", "flex", "list-item"],
-			position: ["absolute", "fixed"],
-			float: ["left", "right", "inline"],
-			clear: ["left", "right", "both", "inline"]
-		};
-
-		var blockElements = ["address", "article", "aside", "blockquote", "br", "caption", "dd", "div", "dl", "dt", "fieldset",
-			"figcaption", "figure", "footer", "h1", "h2", "h3", "h4", "h5", "h6", "hr", "header", "legend",
-			"li", "main", "nav", "ol", "output", "p", "pre", "section", "table", "td", "tfoot", "th", "tr", "ul"];
-
-		for (var prop in blockStyles) {
-			if (blockStyles.hasOwnProperty(prop)) {
-				var values = blockStyles[prop];
-				var style = $(node).css(prop);
-				for (var i = 0; i < values.length; i++) {
-					if (style &&
-						((values[i].indexOf("!") === 0 &&
-							[values[i].slice(1), "inherit", "initial", "unset"].indexOf(style) === -1) ||
-							style.indexOf(values[i]) !== -1)
-					) {
-						return true;
-					}
-				}
-			}
-		}
-		if (node.nodeName && blockElements.indexOf(node.nodeName.toLowerCase()) !== -1) {
-			return true;
-		}
-		return false;
-	};
-}
-
 //==================//
 // ELEMENT ANALYSIS //
 //==================//
@@ -753,59 +566,6 @@ AndiData.textAlternativeComputation = function (root) {
 	//Support Functions
 
 };//end textAlternativeComputation
-
-AndiData.attachDataToElement = function (element) {
-	//Store elementData onto the html element's data-andi508 attribute
-
-	//TODO: add alerts directly to data object instead of copying here.
-	AndiData.data.dangers = andiAlerter.dangers;
-	AndiData.data.warnings = andiAlerter.warnings;
-	AndiData.data.cautions = andiAlerter.cautions;
-
-	$(element).data("andi508", AndiData.data);
-
-	//Attach danger class
-	if (AndiData.data.dangers.length > 0)
-		$(element).addClass("ANDI508-element-danger");
-};
-
-AndiData.addComp = function (data, componentType, component, hasNodebeenTraversed) {
-	var displayText = "";
-
-	if (typeof component === "string") {
-		if ($.trim(component) !== "") {
-			displayText = "<span class='ANDI508-display-" + componentType + "'>" + component + "</span>";
-		}
-	}
-	else {//component is an array [text, refElement, id]
-		if ($.trim(component[0]) !== "" || component[2]) { //add the text
-			displayText = "<span class='ANDI508-display-" + componentType + "'>";
-
-			if (component[2]) //add the referenced id
-				displayText += "<span class='ANDI508-display-id'>#" + component[2] + "</span>";
-
-			displayText += "</span>";
-		}
-	}
-
-	if (displayText) {
-		if (componentType === "ariaLabelledby" || componentType === "ariaDescribedby") {
-			if (data[componentType])
-				data[componentType].push(displayText);//push to array
-			else
-				data[componentType] = [displayText];//create array
-		}
-		else {//do not create an array
-			if (data[componentType])
-				data[componentType] += displayText;//append
-			else
-				data[componentType] = displayText;//create
-		}
-	}
-
-	//if node is traversed return empty string, otherwise return displayText
-	return (!hasNodebeenTraversed) ? displayText : "";
-};
 
 //This function handles the throwing of alerts.
 // TODO: AndiAlerter has no alert messages in the function
@@ -961,14 +721,6 @@ function AlertGroup(heading) {
 	this.cautions = [];
 }
 
-//This defines the class AlertButton
-function AlertButton(label, id, clickLogic, overlayIcon) {
-	this.label = label; //button's innerText
-	this.id = id;		//button's id
-	this.clickLogic = clickLogic; //buttons clicklogic
-	this.overlayIcon = overlayIcon; //if button should contain overlayIcon, pass in overlayIcon. else pass in empty string ""
-}
-
 TestPageData.allVisibleElements = undefined;
 TestPageData.allElements = undefined;
 //This class is used to store temporary variables for the test page
@@ -992,61 +744,13 @@ function TestPageData() {
 	//When ANDI is done analyzing the page, this number will equal the total number of elements found.
 	this.andiElementIndex = 0;
 
-	this.relatedLaserIndex = 0;
-
 	//Keeps track of the number of accessibility alerts found.
 	this.numberOfAccessibilityAlertsFound = 0;
 
-	this.pageAlerts = [];
-
-	//Keeps track of the number of disabled elements
-	this.disabledElementsCount = 0;
 
 	//Get all fors on the page and store for later comparison
-	if ($(TestPageData.allVisibleElements).filter("label").length * 1 > 0) {
+	if ($(TestPageData.allElements).filter("label").length * 1 > 0) {
 		//get all 'for's on the page and store for later comparison
-		this.allFors = $(TestPageData.allVisibleElements).filter("label[for]");
+		this.allFors = $(TestPageData.allElements).filter("label[for]");
 	}
 }
-
-//==============//
-// jQuery Load: //
-//==============//
-//This function will check to see if the page being tested already has jquery installed.
-//If not, it downloads the appropriate version from the jquery download source.
-//It will also determine if an old IE version is being used
-var jqueryPreferredVersion = "3.6.0"; //The preferred (latest) version of jQuery we want
-var jqueryMinimumVersion = "1.9.1"; //The minimum version of jQuery we allow ANDI to use
-var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //where we are downloading jquery from
-var oldIE = false; //used to determine if old version of IE is being used.
-(function () {
-	//Determine if old IE compatability mode
-	if (navigator.userAgent.toLowerCase().indexOf("msie") != -1) { if (parseInt(navigator.userAgent.toLowerCase().split("msie")[1]) < 9) { oldIE = true; } }
-	//Determine if Jquery exists
-	var j = (window.jQuery !== undefined) ? window.jQuery.fn.jquery.split(".") : undefined;
-	var m = jqueryMinimumVersion.split(".");
-	var needJquery = true;
-	if (j !== undefined) {
-		for (var i = 0; i < 3; i++) {
-			if (parseInt(j[i]) > parseInt(m[i])) {
-				needJquery = false;
-				break; //existing jquery version is greater than required minimum
-			}
-			else if (parseInt(j[i]) < parseInt(m[i])) {
-				break; //existing jquery version is less than required minimum
-			}
-		}
-	}
-	if (needJquery) {
-		var script = document.createElement("script"); var done = false;
-		//Which version is needed?
-		if (!oldIE) { script.src = jqueryDownloadSource + jqueryPreferredVersion + "/jquery.min.js"; }//IE 9 or later is being used, download preferred jquery version.
-		else { script.src = jqueryDownloadSource + jqueryMinimumVersion + "/jquery.min.js"; }//Download minimum jquery version.
-		//Waits until jQuery is ready before running ANDI
-		script.onload = script.onreadystatechange = function () { if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) { done = true; launchAndi(); } };
-		document.getElementsByTagName("head")[0].appendChild(script);
-	}
-	else { //sufficient version of jQuery already exists
-		launchAndi(); //initialize ANDI
-	}
-})();

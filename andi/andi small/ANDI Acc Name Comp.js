@@ -844,18 +844,18 @@ function AndiCheck() {
 		var children, parents;
 
 		//legend/fieldset
-		parents = $(TestPageData.allVisibleElements).filter("fieldset").length * 1; //*1 ensures that the var will be a number
-		children = $(TestPageData.allVisibleElements).filter("legend").length * 1; //*1 ensures that the var will be a number
+		parents = $(TestPageData.allElements).filter("fieldset").length * 1; //*1 ensures that the var will be a number
+		children = $(TestPageData.allElements).filter("legend").length * 1; //*1 ensures that the var will be a number
 		if (children > parents) andiAlerter.throwAlert(alert_0074, [children, parents], 0);
 
 		//figcaption/figure
-		parents = $(TestPageData.allVisibleElements).filter("figure").length * 1; //*1 ensures that the var will be a number
-		children = $(TestPageData.allVisibleElements).filter("figcaption").length * 1; //*1 ensures that the var will be a number
+		parents = $(TestPageData.allElements).filter("figure").length * 1; //*1 ensures that the var will be a number
+		children = $(TestPageData.allElements).filter("figcaption").length * 1; //*1 ensures that the var will be a number
 		if (children > parents) andiAlerter.throwAlert(alert_0075, [children, parents], 0);
 
 		//caption/table
-		parents = $(TestPageData.allVisibleElements).filter("table").length * 1; //*1 ensures that the var will be a number
-		children = $(TestPageData.allVisibleElements).filter("caption").length * 1; //*1 ensures that the var will be a number
+		parents = $(TestPageData.allElements).filter("table").length * 1; //*1 ensures that the var will be a number
+		children = $(TestPageData.allElements).filter("caption").length * 1; //*1 ensures that the var will be a number
 		if (children > parents) andiAlerter.throwAlert(alert_0076, [children, parents], 0);
 	};
 
@@ -1343,9 +1343,9 @@ function TestPageData() {
 	this.disabledElementsCount = 0;
 
 	//Get all fors on the page and store for later comparison
-	if ($(TestPageData.allVisibleElements).filter("label").length * 1 > 0) {
+	if ($(TestPageData.allElements).filter("label").length * 1 > 0) {
 		//get all 'for's on the page and store for later comparison
-		this.allFors = $(TestPageData.allVisibleElements).filter("label[for]");
+		this.allFors = $(TestPageData.allElements).filter("label[for]");
 	}
 }
 

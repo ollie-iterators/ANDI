@@ -21,7 +21,7 @@ function init_module() {
         dANDI.accesskeys = new AndiAccesskeys();
 
         //Loop through every visible element and run tests
-        $(TestPageData.allVisibleElements).each(function () {
+        $(TestPageData.allElements).each(function () {
             andiData = new AndiData(this);
             // Work on finding out how to use isTabbable here
             if ($(this).is(":focusable,canvas")) {//If element is focusable, search for accessibility components.
