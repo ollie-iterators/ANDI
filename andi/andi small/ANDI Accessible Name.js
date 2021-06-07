@@ -3,28 +3,8 @@
 //Created By Social Security Administration    //
 //=============================================//
 // NOTE: This is the code that is for creating the accessible name
+// If you need to look up a function or variable, look in andi.js
 var andiVersionNumber = "27.4.0";
-
-//==============//
-// ANDI CONFIG: //
-//==============//
-//URLs
-var icons_url = "https://ollie-iterators.github.io/ANDI/andi/icons/";
-
-//Load andi.css file immediately to minimize page flash
-(function () {
-	var head = document.getElementsByTagName("head")[0];
-	var andiCss = document.createElement("link");
-	andiCss.href = "https://ollie-iterators.github.io/ANDI/andi/andi.css";
-	andiCss.type = "text/css";
-	andiCss.rel = "stylesheet";
-	andiCss.id = "ANDI508-css";
-	var prevCss = document.getElementById("ANDI508-css");
-	if (prevCss)//remove already inserted CSS to improve performance on consequtive favelet launches
-		head.removeChild(prevCss);
-	head.appendChild(andiCss);
-})();
-
 //===============//
 // ANDI OBJECTS: //
 //===============//
@@ -38,68 +18,6 @@ var andiData;                        //Element Data Storage/Analysis, instatiate
 var overlayIcon = "<img src='https://ollie-iterators.github.io/ANDI/andi/icons/overlay-off.png' class='ANDI508-overlayIcon' aria-label='overLay' />";
 var findIcon = "<img src='https://ollie-iterators.github.io/ANDI/andi/icons/find-off.png' class='ANDI508-findIcon' aria-label='find' />";
 var listIcon = "<img src='https://ollie-iterators.github.io/ANDI/andi/icons/list-off.png' class='ANDI508-listIcon' alt='' />";
-
-//==================//
-// ANDI INITIALIZE: //
-//==================//
-//This main function is called when jQuery is ready.
-function launchAndi() {
-	(window.andi508 = function () {
-		//Ensure that $ is mapped to jQuery
-		window.jQuery = window.$ = jQuery;
-
-		//Check <html> and <body> elements for aria-hidden=true
-		if ($("html").first().attr("aria-hidden") === "true" || $("body").first().attr("aria-hidden") === "true") {
-			if (confirm("ANDI has detected aria-hidden=true on the <html> or <body> elements which would render this page invisible to a screen reader.\n\nPress OK to remove the aria-hidden=true from the <html> and <body> elements to continue.")) {
-				$("html").removeAttr("aria-hidden");
-				$("body").removeAttr("aria-hidden");
-			}
-			else {
-				alert("ANDI will not continue while aria-hidden=true is on <html> or <body> elements.");
-				return; //Stops ANDI
-			}
-		}
-
-		//Frames handling
-		if (document.getElementsByTagName("frameset")[0]) {
-			if (confirm("ANDI has detected frames:\nPress OK to stay on the page.\nPress Cancel to test an individual frame.") !== true) {
-				var oldLocation = document.location;
-				var framesSelectionHead = "<head><title>ANDI Frame Selection</title><style>body{margin-left:1em;}*{font-family:Verdana,Sans-Serif;font-size:12pt}h1{font-weight:bold;font-size:20pt}h2{font-weight:bold;font-size:13pt}li{margin:7px}a{font-family:monospace;margin-right:8px}</style></head>";
-				var framesSelectionBody = "<h1 id='ANDI508-frameSelectionUI'>ANDI</h1><p>This page uses frames. The page title is: '" + document.title + "'.<br /><br />Each frame must be tested individually. Select a frame from the list below, then launch ANDI.</p><h2>Frames:</h2><ol>";
-				var title, titleDisplay, framesrc;
-				$("frame").each(function () {
-					//Build Title Display
-					title = $(this).attr("title");
-					framesrc = $(this).attr("src");
-					titleDisplay = (!title) ? " <span style='color:#c4532c'><img style='width:18px' src='https://ollie-iterators.github.io/ANDI/andi/icons/danger.png' alt='danger: ' /> No title attribute on this &lt;frame&gt;.</span>" : " <span style='color:#058488'>title=\"" + title + "\"</span>";
-					framesSelectionBody += "<li><a href='" + framesrc + "'>" + framesrc + "</a>" + titleDisplay + "</li>";
-				});
-				framesSelectionBody += "</ol><button id='ANDI508-frameSelectionUI-goBack'>Go Back</button>";
-				$("frameset").remove();
-				$("html head").html(framesSelectionHead);
-				$("html").append(document.createElement("body"));
-				$("html body").append(framesSelectionBody);
-				$("#ANDI508-frameSelectionUI-goBack").click(function () { document.location = oldLocation; });
-			}
-			else {//Reload the test page so that the ANDI files that were added are removed.
-				location.reload();
-			}
-			return; //Stops ANDI
-		}
-		//Prevent running ANDI on the frame selection UI
-		if (document.getElementById("ANDI508-frameSelectionUI")) {
-			//ANDI was launched while the frame selection UI was open.
-			alert("Select a frame, then launch ANDI.");
-			return;
-		}
-
-		//Get ANDI ready to launch the first module
-		andiReady();
-
-		andiCheck.isThereExactlyOnePageTitle();
-		andiCheck.areThereMoreExclusiveChildrenThanParents();
-	})();
-}
 
 //================//
 // ALERT MESSAGES //
@@ -527,106 +445,10 @@ function AndiUtility() {
 	};
 }
 
-//==================//
-// ELEMENT ANALYSIS //
-//==================//
-//This object grabs the accessible components and attaches the components and alerts to the element
-//Should be re-instantiated for each element to be inspected
-//If a child is passed in, it will grab the accessibility components from the child instead.
-function AndiData(element, skipTAC) {
-	andiAlerter.reset();
-
-	testPageData.andiElementIndex++;
-
-	AndiData.data = {
-		andiElementIndex: testPageData.andiElementIndex,
-		components: {} //will store the accessible components as they are gathered
-	};
-
-	AndiData.grab_semantics(element, AndiData.data);
-
-	if (!skipTAC) {
-		//do the text alternative computation
-		AndiData.textAlternativeComputation(element);
-		AndiData.grab_coreProperties(element);
-	}
-
-	$(element)
-		.addClass("ANDI508-element")
-		.attr("data-andi508-index", AndiData.data.andiElementIndex);
-
-	return AndiData.data;
-}
-
-AndiData.grab_coreProperties = function (element) {
-	grab_tabindex();
-	grab_accesskey();
-	grab_imageSrc();
-
-	function grab_tabindex() {
-		AndiData.data.isTabbable = true; //assume true (prove to be false)
-		var tabindex = $.trim($(element).attr("tabindex"));
-		var nativelyTabbableElements = "a[href],button,input,select,textarea,iframe,area,[contenteditable=true],[contenteditable='']";
-		if (tabindex) {
-			if (tabindex < 0) {
-				AndiData.data.isTabbable = false;
-				if ($(element).is("iframe")) {
-					if ($(element).contents().find(":focusable").length) { //check if iframe has focusable contents
-						andiAlerter.throwAlert(alert_0123);
-					}
-				}
-				else if (!$(element).parent().is(":tabbable")) { //element and parent are not tabbable
-					if (AndiData.data.accName)
-						andiAlerter.throwAlert(alert_0121);
-					else
-						andiAlerter.throwAlert(alert_0122);
-				}
-			}
-			else if (isNaN(tabindex)) {//tabindex is not a number
-				andiAlerter.throwAlert(alert_0077, [tabindex]);
-				if (!$(element).is(nativelyTabbableElements))
-					AndiData.data.isTabbable = false;
-			}
-			//else element is tabbable
-			AndiData.data.tabindex = tabindex;
-		}
-		else if (!$(element).is(nativelyTabbableElements)) {
-			AndiData.data.isTabbable = false;
-		}
-	}
-
-	function grab_accesskey() {
-		var accesskey = $(element).attr("accesskey");
-		if (accesskey && accesskey !== " ") { //accesskey is not the space character
-			accesskey = $.trim(accesskey.toUpperCase());
-			AndiData.data.accesskey = accesskey;
-		}
-	}
-
-	function grab_imageSrc() {
-		var imageSrc;
-		if ($(element).is("area")) {
-			var map = $(element).closest("map");
-			if (map)
-				imageSrc = $("#ANDI508-testPage img[usemap=\\#" + $(map).attr("name") + "]").first().attr("src");
-		}
-		else if ($(element).is("img,input[type=image]"))
-			imageSrc = $(element).attr("src");
-		else if ($(element).is("svg"))
-			imageSrc = ($(element).find("image").first().attr("src"));
-
-		if (imageSrc) {
-			imageSrc = imageSrc.split("/").pop(); //get the filename and extension only
-			AndiData.data.src = imageSrc;
-		}
-	}
-};
-
 //================//
 // Grab Semantics://
 //================//
 AndiData.grab_semantics = function (element, data) {
-
 	grab_tagName();
 	grab_role();
 
@@ -701,7 +523,6 @@ AndiData.textAlternativeComputation = function (root) {
 	}
 
 	if (!isAriaHidden) {
-
 		//Calculate Accessible Name
 		nodesTraversed = [];
 		calcAccName(stepB(root, AndiData.data.components));
@@ -1196,7 +1017,6 @@ AndiData.textAlternativeComputation = function (root) {
 	}
 
 	//Support Functions
-
 	function isEmptyComponent(component, componentType, element) {
 		if ($.trim(component) == "") {
 			if (element == root)//only record empty components for the root
@@ -1352,53 +1172,12 @@ function AndiCheck() {
 	//This function is used to check for alerts related to focusable elements
 	this.commonFocusableElementChecks = function (andiData, element) {
 		this.wasAccessibleNameFound(andiData);
-		this.areThereAnyDuplicateFors(element, andiData);
 	};
 
 	//This function is used to check for alerts related to non-focusable elements
 	this.commonNonFocusableElementChecks = function (andiData, element, isElementMustHaveName) {
 		if (isElementMustHaveName)
 			this.wasAccessibleNameFound(andiData);
-	};
-
-	//==Test Page Checks==//
-
-	//This function will count the number of visible fieldset/figure/table tags and compare to the number of legend/figcaption/caption tags
-	//If there are more parents than children, it will generate an alert with the message and the counts.
-	//Note: The function does not test whether the children are actually contained within the parents, it's strictly concerned with the counts.
-	//More children than parents might mean a parent is missing or the child tag isn't being used properly.
-	this.areThereMoreExclusiveChildrenThanParents = function () {
-		var children, parents;
-
-		//legend/fieldset
-		parents = $(TestPageData.allElements).filter("fieldset").length * 1; //*1 ensures that the var will be a number
-		children = $(TestPageData.allElements).filter("legend").length * 1; //*1 ensures that the var will be a number
-		if (children > parents) andiAlerter.throwAlert(alert_0074, [children, parents], 0);
-
-		//figcaption/figure
-		parents = $(TestPageData.allElements).filter("figure").length * 1; //*1 ensures that the var will be a number
-		children = $(TestPageData.allElements).filter("figcaption").length * 1; //*1 ensures that the var will be a number
-		if (children > parents) andiAlerter.throwAlert(alert_0075, [children, parents], 0);
-
-		//caption/table
-		parents = $(TestPageData.allElements).filter("table").length * 1; //*1 ensures that the var will be a number
-		children = $(TestPageData.allElements).filter("caption").length * 1; //*1 ensures that the var will be a number
-		if (children > parents) andiAlerter.throwAlert(alert_0076, [children, parents], 0);
-	};
-
-	//This function checks to see if there is only one page <title> tag within the head
-	//If none, empty, or more than one, it will generate an alert.
-	//It also looks at document.title
-	this.isThereExactlyOnePageTitle = function () {
-		var pageTitleCount = $("head title").length;
-		if (document.title === "") { //check document.title because could have been set by javascript
-			if (pageTitleCount === 0)
-				andiAlerter.throwAlert(alert_0072, alert_0072.message, 0);
-			else if (pageTitleCount === 1 && $.trim($("head title").text()) === "")
-				andiAlerter.throwAlert(alert_0071, alert_0071.message, 0);
-		}
-		else if (pageTitleCount > 1)
-			andiAlerter.throwAlert(alert_0073, alert_0073.message, 0);
 	};
 
 	//==Element Checks==//
@@ -1527,37 +1306,6 @@ function AndiCheck() {
 		}
 	};
 
-	//This function will search the html body for labels with duplicate 'for' attributes
-	this.areThereAnyDuplicateFors = function (element, data) {
-		if (data.components.label) {
-			var id = $.trim($(element).prop("id"));
-			if (id && testPageData.allFors.length > 1) {
-				var forMatchesFound = 0;
-				for (var x = 0; x < testPageData.allFors.length; x++) {
-					if (id === $.trim($(testPageData.allFors[x]).attr("for"))) {
-						forMatchesFound++;
-						if (forMatchesFound == 2) break; //duplicate found so stop searching, for performance
-					}
-				}
-				if (forMatchesFound > 1) //Duplicate Found
-					andiAlerter.throwAlert(alert_0012, [id, id]);
-			}
-		}
-	};
-
-	//This function goes through the LabelFor array and checks if is pointing to valid form element
-	this.areLabelForValid = function () {
-		var referencedElement;
-		for (var f = 0; f < testPageData.allFors.length; f++) {
-			referencedElement = document.getElementById(testPageData.allFors[f].htmlFor);
-			if (referencedElement && $(referencedElement).hasClass("ANDI508-element")) {
-				if (!$(referencedElement).isSemantically("[role=textbox],[role=combobox],[role=listbox],[role=checkbox],[role=radio]", "input,select,textarea,button,[contenteditable=true],[contenteditable='']"))
-					//is not a form element
-					andiAlerter.throwAlertOnOtherElement($(referencedElement).attr("data-andi508-index"), alert_0091);
-			}
-		}
-	};
-
 	//This function will increment the testPageData.disabledElementsCount
 	//Returns true if the element is disabled
 	this.isThisElementDisabled = function (element) {
@@ -1606,23 +1354,10 @@ function AndiAlerter() {
 		}
 	};
 
-	//This function will add an alert another element's alert object.
-	//It is used to add an alert to a related (different) element than the element being currently analyzed.
-	//For example: non-unique link text: since the second instance triggers the alert, use this method to add the alert to the first instance
-	//NOTE: this function will not check if the alert has already been placed on the element, therefore such logic should be added by the caller before this function is called.
-	//	index:			andiElementIndex of the element
-	//	alertObject:	the alert object
-	//	customMessage: 	(optional) message of the alert. If not passed will use default alertObject.message
-	this.throwAlertOnOtherElement = function (index, alertObject, customMessage) {
-		var message = alertMessage(alertObject, customMessage);
-		this.addToAlertsList(alertObject, message, index);
-	};
-
 	//This private function will add an icon to the message
 	//	alertObject:	the alert object
 	//	customMessage: 	(optional) message of the alert. if string, use the string. If array, get values from array
 	function alertMessage(alertObject, customMessage) {
-		//var message = "<img alt='"+alertObject.level+": ' src='"+icons_url+alertObject.level+".png' />";
 		var message = "";
 		if (typeof customMessage === "string")
 			message += customMessage;
@@ -1655,7 +1390,7 @@ function AndiAlerter() {
 		if (elementIndex !== 0) {
 			//Yes, this alert should point to a focusable element. Insert as link:
 			listItemHtml += "href='javascript:void(0)' data-andi508-relatedindex='" + elementIndex + "' aria-label='" + alertObject.level + ": " + message + " Element #" + elementIndex + "'>" +
-				"<img alt='" + alertObject.level + "' role='presentation' src='" + icons_url + alertObject.level + ".png' />" +
+				"<img alt='" + alertObject.level + "' role='presentation' />" +
 				message + "</a></li>";
 		}
 
@@ -1716,17 +1451,6 @@ function AndiAlerter() {
 
 	//Keeps track of alert buttons that need to be added.
 	var alertButtons = [];
-
-	this.dangers = [];
-	this.warnings = [];
-	this.cautions = [];
-
-	//This function resets the alert data associated with a single element
-	this.reset = function () {
-		this.dangers = [];
-		this.warnings = [];
-		this.cautions = [];
-	};
 }
 
 //This defines the class AlertGroup
