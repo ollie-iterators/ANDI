@@ -28,8 +28,6 @@ var icons_url = "https://ollie-iterators.github.io/ANDI/andi/icons/";
 //===============//
 // ANDI OBJECTS: //
 //===============//
-
-var andiAlerter = new AndiAlerter(); //Alert Throwing
 var testPageData;                    //Test Page Data Storage/Analysis, instantiated within module launch
 var andiData;                        //Element Data Storage/Analysis, instatiated within module's analysis logic
 
@@ -414,12 +412,6 @@ function andiReady() {
 			var visibleVoidElements = ['area', 'br', 'embed', 'hr', 'img', 'input', 'menuitem', 'track', 'wbr'];
 			$.fn.isContainerElement = function () { return ($.inArray($(this).prop("tagName").toLowerCase(), visibleVoidElements) == -1); };
 		}(jQuery));
-
-		//Define Object.keys for old IE
-		if (!Object.keys) { Object.keys = (function () { 'use strict'; var hasOwnProperty = Object.prototype.hasOwnProperty, hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'), dontEnums = ['toString', 'toLocaleString', 'valueOf', 'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable', 'constructor'], dontEnumsLength = dontEnums.length; return function (obj) { if (typeof obj !== 'function' && (typeof obj !== 'object' || obj === null)) { throw new TypeError('Object.keys called on non-object'); } var result = [], prop, i; for (prop in obj) { if (hasOwnProperty.call(obj, prop)) { result.push(prop); } } if (hasDontEnumBug) { for (i = 0; i < dontEnumsLength; i++) { if (hasOwnProperty.call(obj, dontEnums[i])) { result.push(dontEnums[i]); } } } return result; }; }()); }
-
-		//Define Array.indexOf for old IE
-		if (!Array.prototype.indexOf) { Array.prototype.indexOf = function (obj, start) { for (var i = (start || 0), j = this.length; i < j; i++) { if (this[i] === obj) { return i; } } return -1; }; }
 	}
 }
 
@@ -430,8 +422,6 @@ function andiReady() {
 //Should be re-instantiated for each element to be inspected
 //If a child is passed in, it will grab the accessibility components from the child instead.
 function AndiData(element, skipTAC) {
-	andiAlerter.reset();
-
 	testPageData.andiElementIndex++;
 
 	AndiData.data = {
@@ -468,18 +458,19 @@ AndiData.grab_coreProperties = function (element) {
 				AndiData.data.isTabbable = false;
 				if ($(element).is("iframe")) {
 					if ($(element).contents().find(":focusable").length) { //check if iframe has focusable contents
-						andiAlerter.throwAlert(alert_0123);
+						alert = alert_0123;
 					}
 				}
 				else if (!$(element).parent().is(":tabbable")) { //element and parent are not tabbable
-					if (AndiData.data.accName)
-						andiAlerter.throwAlert(alert_0121);
-					else
-						andiAlerter.throwAlert(alert_0122);
+					if (AndiData.data.accName) {
+						alert = alert_0121;
+					} else {
+						alert = alert_0122;
+					}
 				}
 			}
 			else if (isNaN(tabindex)) {//tabindex is not a number
-				andiAlerter.throwAlert(alert_0077, [tabindex]);
+				alert = [alert_0077, [tabindex]];
 				if (!$(element).is(nativelyTabbableElements))
 					AndiData.data.isTabbable = false;
 			}
@@ -563,178 +554,12 @@ AndiData.textAlternativeComputation = function (root) {
 		AndiData.data.isAriaHidden = true;
 	}
 
-	//Support Functions
-
 };//end textAlternativeComputation
 
-//This function handles the throwing of alerts.
-// TODO: AndiAlerter has no alert messages in the function
-function AndiAlerter() {
-	//These functions will throw Danger/Warning/Caution Alerts
-	//They will add the alert to the alert list and attach it to the element
-	//	alertObject:	the alert object
-	//	customMessage: 	(optional) message of the alert. If not passed will use default alertObject.message
-	//	index: 	(optional) pass in 0 if this cannot be linked to an element.  If not passed will use andiElementIndex
-	this.throwAlert = function (alertObject, customMessage, index) {
-		if (alertObject) {
-			var message = alertMessage(alertObject, customMessage);
-			if (index === undefined) {
-				index = testPageData.andiElementIndex; //use current andiElementIndex
-			}
-			this.addToAlertsList(alertObject, message, index);
-
-			//Add the Alert Button to the alertButtons array (to be displayed later)
-			if (alertObject.alertButton && alertButtons.indexOf(alertObject) < 0)
-				alertButtons.push(alertObject);
-		}
-	};
-
-	//This function will add an alert another element's alert object.
-	//It is used to add an alert to a related (different) element than the element being currently analyzed.
-	//For example: non-unique link text: since the second instance triggers the alert, use this method to add the alert to the first instance
-	//NOTE: this function will not check if the alert has already been placed on the element, therefore such logic should be added by the caller before this function is called.
-	//	index:			andiElementIndex of the element
-	//	alertObject:	the alert object
-	//	customMessage: 	(optional) message of the alert. If not passed will use default alertObject.message
-	this.throwAlertOnOtherElement = function (index, alertObject, customMessage) {
-		var message = alertMessage(alertObject, customMessage);
-		this.addToAlertsList(alertObject, message, index);
-	};
-
-	//This private function will add an icon to the message
-	//	alertObject:	the alert object
-	//	customMessage: 	(optional) message of the alert. if string, use the string. If array, get values from array
-	function alertMessage(alertObject, customMessage) {
-		//var message = "<img alt='"+alertObject.level+": ' src='"+icons_url+alertObject.level+".png' />";
-		var message = "";
-		if (typeof customMessage === "string")
-			message += customMessage;
-		else if (customMessage !== undefined)
-			message += getParams(alertObject, customMessage); //use custom message
-		else
-			message += alertObject.message; //use default alert message
-		return message;
-
-		//This function will fill in the parameters of the alert message with the string in the array
-		function getParams(alertObject, paramArray) {
-			var m = alertObject.message.split("%%%");
-			var message = "";
-			for (var x = 0; x < paramArray.length; x++)
-				message += m[x] + paramArray[x];
-			message += m[m.length - 1];
-			return message;
-		}
-	}
-
-	//This function is not meant to be used directly.
-	//It will add a list item into the Alerts list.
-	//It can place a link which when followed, will move focus to the field relating to the alert.
-	//	alertObject:	the alert object
-	//  message:		text of the alert message
-	//  elementIndex:	element to focus on when link is clicked. expects a number. pass zero 0 if alert is not relating to one particular element
-	this.addToAlertsList = function (alertObject, message, elementIndex) {
-		//Should this alert be associated with a focusable element?
-		var listItemHtml = " tabindex='-1' ";
-		if (elementIndex !== 0) {
-			//Yes, this alert should point to a focusable element. Insert as link:
-			listItemHtml += "href='javascript:void(0)' data-andi508-relatedindex='" + elementIndex + "' aria-label='" + alertObject.level + ": " + message + " Element #" + elementIndex + "'>" +
-				"<img alt='" + alertObject.level + "' role='presentation' src='" + icons_url + alertObject.level + ".png' />" +
-				message + "</a></li>";
-		}
-
-		var alertGroup = AndiAlerter.alertGroups[alertObject.group];
-
-		//Adds the alert into its group
-		//Assign the alert level to the group
-		if (alertObject.level === "danger") {
-			alertGroup.dangers.push(listItemHtml);
-			alertGroup.level = "danger";
-		}
-		else if (alertObject.level === "warning") {
-			alertGroup.warnings.push(listItemHtml);
-			if (alertGroup.level !== "danger")
-				alertGroup.level = "warning";
-		}
-		else {
-			alertGroup.cautions.push(listItemHtml);
-			if (alertGroup.level !== "danger" && alertGroup.level !== "warning")
-				alertGroup.level = "caution";
-		}
-		testPageData.numberOfAccessibilityAlertsFound++;
-	};
-
-	//This fucntion returns a new instance of an Alert Groups Array.
-	//Messages are categorized into these major groups.
-	this.createAlertGroups = function () {
-		return [
-			new AlertGroup("Elements with No Accessible Name"),			//0
-			new AlertGroup("Duplicate Attributes Found"),
-			new AlertGroup("Components That Should Not Be Used Alone"),
-			new AlertGroup("Misspelled ARIA Attributes"),
-			new AlertGroup("Table Alerts"),
-			new AlertGroup("AccessKey Alerts"),							//5
-			new AlertGroup("Reference Alerts"),
-			new AlertGroup("Invalid HTML Alerts"),
-			new AlertGroup("Misuses of Alt attribute"),
-			new AlertGroup("Misuses of Label Tag"),
-			new AlertGroup("Unreliable Component Combinations"),		//10
-			new AlertGroup("JavaScript Event Cautions"),
-			new AlertGroup("Keyboard Access Alerts"),
-			new AlertGroup("Empty Components Found"),
-			new AlertGroup("Unused Components"),
-			new AlertGroup("Excessive Text"),							//15
-			new AlertGroup("Link Alerts"),
-			new AlertGroup("Graphics Alerts"),
-			new AlertGroup("Improper ARIA Usage"),
-			new AlertGroup("Structure Alerts"),
-			new AlertGroup("Button Alerts"),							//20
-			new AlertGroup("Small Clickable Areas"),
-			new AlertGroup("CSS Content Alerts"),
-			new AlertGroup("Manual Tests Needed"),
-			new AlertGroup("Contrast Alerts"),
-			new AlertGroup("Disabled Element Alerts"),					//25
-			new AlertGroup("Aria-Hidden Alerts")
-		];
-	};
-
-	//Keeps track of alert buttons that need to be added.
-	var alertButtons = [];
-
-	this.dangers = [];
-	this.warnings = [];
-	this.cautions = [];
-
-	//This function resets the alert data associated with a single element
-	this.reset = function () {
-		this.dangers = [];
-		this.warnings = [];
-		this.cautions = [];
-	};
-}
-
-//This defines the class AlertGroup
-function AlertGroup(heading) {
-	this.heading = heading;	//heading text for the group
-	this.level = undefined;
-	this.dangers = [];
-	this.warnings = [];
-	this.cautions = [];
-}
-
-TestPageData.allVisibleElements = undefined;
 TestPageData.allElements = undefined;
 //This class is used to store temporary variables for the test page
 function TestPageData() {
-	//Creates the alert groups
-	AndiAlerter.alertGroups = andiAlerter.createAlertGroups();
-
 	TestPageData.allElements = $("#ANDI508-testPage *");
-
-	//all the visible elements or elements within a canvas on the test page
-	TestPageData.allVisibleElements = $(TestPageData.allElements).filter(":shown,canvas *");
-
-	//all the ids of elements on the page for duplicate comparisons
-	this.allIds = $(TestPageData.allElements).filter("[id]");
 
 	//all the fors of visible elements on the page for duplicate comparisons
 	this.allFors = "";
@@ -743,11 +568,6 @@ function TestPageData() {
 	//the first element's index will start at 1.
 	//When ANDI is done analyzing the page, this number will equal the total number of elements found.
 	this.andiElementIndex = 0;
-
-	//Keeps track of the number of accessibility alerts found.
-	this.numberOfAccessibilityAlertsFound = 0;
-
-
 	//Get all fors on the page and store for later comparison
 	if ($(TestPageData.allElements).filter("label").length * 1 > 0) {
 		//get all 'for's on the page and store for later comparison
