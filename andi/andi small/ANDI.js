@@ -20,8 +20,9 @@ var icons_url = "https://ollie-iterators.github.io/ANDI/andi/icons/";
 	andiCss.rel = "stylesheet";
 	andiCss.id = "ANDI508-css";
 	var prevCss = document.getElementById("ANDI508-css");
-	if (prevCss)//remove already inserted CSS to improve performance on consequtive favelet launches
+	if (prevCss) { //remove already inserted CSS to improve performance on consequtive favelet launches
 		head.removeChild(prevCss);
+	}
 	head.appendChild(andiCss);
 })();
 
@@ -255,86 +256,6 @@ var alert_0261 = new Alert("warning", "26", "Element is hidden from screen reade
 //Will add dependencies, insert the ANDI bar, add legacy css, define the controls
 function andiReady() {
 	dependencies();
-	insertAndiBarHtml();
-
-	//This function creates main html structure of the ANDI Bar.
-	function insertAndiBarHtml() {
-		var moduleButtons = "<div id='ANDI508-moduleMenu' role='menu' aria-label='Select a Module'><div id='ANDI508-moduleMenu-prompt'>Select Module:</div>" +
-			//Default (fANDI)
-			"<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-f'>focusable elements</button>" +
-			//gANDI
-			"<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-g' aria-label='graphics slash images'>graphics/images</button>" +
-			//lANDI
-			"<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-l' aria-label='links slash buttons'>links/buttons</button>" +
-			//tANDI
-			"<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-t'>tables</button>" +
-			//sANDI
-			"<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-s'>structures</button>" +
-			//cANDI
-			"<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-c'>color contrast</button>" +
-			//hANDI
-			"<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-h'>hidden content</button>" +
-			//iANDI
-			"<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-i'>iframes</button>" +
-			"</div>";
-
-		var andiBar = "<section id='ANDI508' tabindex='-1' aria-label='ANDI' style='display:none'>" +
-			"<div id='ANDI508-header'>" +
-			"<h1 id='ANDI508-toolName-heading'><a id='ANDI508-toolName-link' class='ANDI508-sectionJump' href='#' aria-haspopup='dialog' aria-label='ANDI " + andiVersionNumber + "'><span id='ANDI508-module-name' data-andi508-moduleversion=''>&nbsp;</span>ANDI</a></h1>" +
-			"<div id='ANDI508-moduleMenu-container'>" +
-			moduleButtons +
-			"</div>" +
-			"<div id='ANDI508-module-actions'></div>" +
-			"<div id='ANDI508-loading'>Loading <div id='ANDI508-loading-animation'></div></div>" +
-			"</div>" +
-			"<div id='ANDI508-body' style='display:none'>" +
-			"<div id='ANDI508-activeElementInspection' aria-label='Active Element Inspection' class='ANDI508-sectionJump' tabindex='-1'>" +
-			"<div id='ANDI508-activeElementResults'>" +
-			"<div id='ANDI508-elementControls'>" +
-			"<button title='Previous Element' accesskey='" + andiHotkeyList.key_prev.key + "' id='ANDI508-button-prevElement'><img src='" + icons_url + "prev.png' alt='' /></button>" +
-			"<button title='Next Element' accesskey='" + andiHotkeyList.key_next.key + "' id='ANDI508-button-nextElement'><img src='" + icons_url + "next.png' alt='' /></button>" +
-			"<br />" +
-			"</div>" +
-			"<div id='ANDI508-startUpSummary' tabindex='0'></div>" +
-			"<div id='ANDI508-elementDetails'>" +
-			"<div id='ANDI508-elementNameContainer'><h3 class='ANDI508-heading'>Element:</h3> " +
-			"<a href='#' id='ANDI508-elementNameLink' aria-labelledby='ANDI508-elementNameContainer ANDI508-elementNameDisplay'>&lt;<span id='ANDI508-elementNameDisplay'></span>&gt;</a>" +
-			"</div>" +
-			"<div id='ANDI508-additionalElementDetails'></div>" +
-			"<div id='ANDI508-accessibleComponentsTableContainer' class='ANDI508-scrollable' tabindex='0' aria-labelledby='ANDI508-accessibleComponentsTable-heading'>" +
-			"<h3 id='ANDI508-accessibleComponentsTable-heading' class='ANDI508-heading'>Accessibility Components: <span id='ANDI508-accessibleComponentsTotal'></span></h3>" +
-			"<table id='ANDI508-accessibleComponentsTable' aria-labelledby='ANDI508-accessibleComponentsTable-heading'><tbody></tbody></table>" +
-			"</div>" +
-			"<div id='ANDI508-outputContainer'>" +
-			"<h3 class='ANDI508-heading' id='ANDI508-output-heading'>ANDI Output:</h3>" +
-			"<div id='ANDI508-outputText' class='ANDI508-scrollable' tabindex='0' accesskey='" + andiHotkeyList.key_output.key + "' aria-labelledby='ANDI508-output-heading ANDI508-outputText'></div>" +
-			"</div>" +
-			"</div>" +
-			"</div>" +
-			"</div>" +
-			"<div id='ANDI508-pageAnalysis' aria-label='Page Analysis' class='ANDI508-sectionJump' tabindex='-1'>" +
-			"<div id='ANDI508-resultsSummary'>" +
-			"<h3 class='ANDI508-heading' tabindex='0' id='ANDI508-resultsSummary-heading'></h3>" +
-			"</div>" +
-			"<div id='ANDI508-additionalPageResults'></div>" +
-			"<div id='ANDI508-alerts-list'></div>" +
-			"</div>" +
-			"</div>" +
-			"</section>";
-
-		var body = $("body").first();
-
-		//Preserve original body padding and margin
-		var body_padding = "padding:" + $(body).css("padding-top") + " " + $(body).css("padding-right") + " " + $(body).css("padding-bottom") + " " + $(body).css("padding-left") + "; ";
-		var body_margin = "margin:" + $(body).css("margin-top") + " 0px " + $(body).css("margin-bottom") + " 0px; ";
-
-		$("html").addClass("ANDI508-testPage");
-		$(body)
-			.addClass("ANDI508-testPage")
-			.wrapInner("<div id='ANDI508-testPage' style='" + body_padding + body_margin + "' ></div>") //Add an outer container to the test page
-			.prepend(andiBar); //insert ANDI display into body
-
-	}
 
 	//This function sets up several dependencies for running ANDI on the test page.
 	function dependencies() {
@@ -361,10 +282,11 @@ function andiReady() {
 		$.fn.extend({
 			isSemantically: function (roles, tags) {
 				//If this has one of the roles or (is one of the tags and doesn't have another role that isn't empty)
-				if ($.trim($(this).attr("role")))
+				if ($.trim($(this).attr("role"))) {
 					return $(this).is(roles);
-				else
+				} else {
 					return $(this).is(tags);
+				}
 			}
 		});
 
@@ -376,8 +298,11 @@ function andiReady() {
 			var isTabIndexNotNaN = !isNaN(tabindex) && tabindex !== "";
 			if (nodeName === "area") {
 				var map = element.parentNode; var mapName = map.name;
-				if (!element.href || !mapName || map.nodeName.toLowerCase() !== "map") return false;
-				var img = $("img[usemap=\\#" + mapName + "]")[0]; return !!img && visibleParents(img);
+				if (!element.href || !mapName || map.nodeName.toLowerCase() !== "map") {
+					return false;
+				}
+				var img = $("img[usemap=\\#" + mapName + "]")[0];
+				return !!img && visibleParents(img);
 			}
 			return (
 				/^(input|select|textarea|button|iframe|summary)$/.test(nodeName) ?
@@ -401,9 +326,14 @@ function andiReady() {
 		if (!String.prototype.includes) {
 			String.prototype.includes = function (search, start) {
 				'use strict';
-				if (typeof start !== "number") start = 0;
-				if (start + search.length > this.length) return false;
-				else return this.indexOf(search, start) !== -1;
+				if (typeof start !== "number") {
+					start = 0;
+				}
+				if (start + search.length > this.length) {
+					return false;
+				} else {
+					return this.indexOf(search, start) !== -1;
+				}
 			};
 		}
 
@@ -460,24 +390,21 @@ AndiData.grab_coreProperties = function (element) {
 					if ($(element).contents().find(":focusable").length) { //check if iframe has focusable contents
 						alert = alert_0123;
 					}
-				}
-				else if (!$(element).parent().is(":tabbable")) { //element and parent are not tabbable
+				} else if (!$(element).parent().is(":tabbable")) { //element and parent are not tabbable
 					if (AndiData.data.accName) {
 						alert = alert_0121;
 					} else {
 						alert = alert_0122;
 					}
 				}
-			}
-			else if (isNaN(tabindex)) {//tabindex is not a number
+			} else if (isNaN(tabindex)) {//tabindex is not a number
 				alert = [alert_0077, [tabindex]];
 				if (!$(element).is(nativelyTabbableElements))
 					AndiData.data.isTabbable = false;
 			}
 			//else element is tabbable
 			AndiData.data.tabindex = tabindex;
-		}
-		else if (!$(element).is(nativelyTabbableElements)) {
+		} else if (!$(element).is(nativelyTabbableElements)) {
 			AndiData.data.isTabbable = false;
 		}
 	}
@@ -494,14 +421,14 @@ AndiData.grab_coreProperties = function (element) {
 		var imageSrc;
 		if ($(element).is("area")) {
 			var map = $(element).closest("map");
-			if (map)
+			if (map) {
 				imageSrc = $("#ANDI508-testPage img[usemap=\\#" + $(map).attr("name") + "]").first().attr("src");
-		}
-		else if ($(element).is("img,input[type=image]"))
+			}
+		} else if ($(element).is("img,input[type=image]")) {
 			imageSrc = $(element).attr("src");
-		else if ($(element).is("svg"))
+		} else if ($(element).is("svg")) {
 			imageSrc = ($(element).find("image").first().attr("src"));
-
+		}
 		if (imageSrc) {
 			imageSrc = imageSrc.split("/").pop(); //get the filename and extension only
 			AndiData.data.src = imageSrc;
@@ -519,15 +446,17 @@ AndiData.grab_semantics = function (element, data) {
 
 	function grab_tagName() {
 		var tagNameText = $(element).prop("tagName").toLowerCase();
-		if (tagNameText === "input")
+		if (tagNameText === "input") {
 			tagNameText += "[type=" + $(element).prop("type").toLowerCase() + "]"; //add the type within brackets
+		}
 		data.tagNameText = tagNameText;
 	}
 
 	function grab_role() {
 		var role = $.trim($(element).attr("role")).toLowerCase();
-		if (role)
+		if (role) {
 			data.role = role;
+		}
 	}
 };
 
@@ -541,16 +470,16 @@ AndiData.textAlternativeComputation = function (root) {
 	//Stops at #ANDI508-testPage because another check will stop ANDI if aria-hidden=true is on body or html
 	//TODO: This is expensive
 	function traverseAriaHidden(element) {
-		if ($(element).is("#ANDI508-testPage"))
+		if ($(element).is("#ANDI508-testPage")) {
 			return false;
-		else if ($(element).attr("aria-hidden") === "true")
+		} else if ($(element).attr("aria-hidden") === "true") {
 			return true;
-		else
+		} else {
 			return traverseAriaHidden($(element).parent());
+		}
 	}
 
-	if (!isAriaHidden) {
-	} else {
+	if (isAriaHidden) {
 		AndiData.data.isAriaHidden = true;
 	}
 
