@@ -26,6 +26,11 @@ var alert_007C = new Alert("warning", "7", "[scope=%%%] value is invalid; accept
 var alert_0132 = new Alert("caution", "13", "Empty header cell.", "empty_header_cell");
 var alert_0233 = new Alert("caution", "23", "[role=grid] found; test navigation of design pattern.", "grid_navigation_test");
 
+# Table Alerts from AndiCheck
+  - These are alerts from AndiCheck
+
+var alert_0078 = new Alert("warning", "7", "Using HTML5, found deprecated %%%.", "deprecated_html");
+
 # Shared Table Alerts from andi.js
   - These are alerts that are for tables and AndiCheck
 

@@ -101,7 +101,7 @@ function init_module() {
                                 isElementInTabOrder(this, "link");
                             } else if (!andiData.role) {
                                 //link as no role and no href, suggest using role=link or href
-                                andiAlerter.throwAlert(alert_0168);
+                                alert = [alert_0168];
                             }
                             andiCheck.commonFocusableElementChecks(andiData, $(this));
                         }
@@ -120,7 +120,7 @@ function init_module() {
         //Detect disabled links
         andiCheck.areLabelForValid();
         if ($(this).attr("aria-hidden") !== "true") { // Code below was moved from areThereDisabledElements
-            andiAlerter.throwAlert(alert_0250, [testPageData.disabledElementsCount, "links"], 0);
+            alert = [alert_0250, [testPageData.disabledElementsCount, "links"], 0];
         }
 
         //This function returns true if the link is keyboard accessible
@@ -132,10 +132,10 @@ function init_module() {
 
                 if (element.onclick !== null || $._data(element, "events").click !== undefined) {
                     //Link is clickable but not keyboard accessible
-                    andiAlerter.throwAlert(alert_0164);
+                    alert = [alert_0164];
                     //No click event could be detected
                 } else if (!id && !name) {//Link doesn't have id or name
-                    andiAlerter.throwAlert(alert_0128);
+                    alert = [alert_0128];
                 } else { //Link has id or name
                     //Determine if the link is an anchor for another link
                     var isDefinitelyAnAnchor = false;
@@ -153,14 +153,14 @@ function init_module() {
                     });
                     if (!isDefinitelyAnAnchor) {
                         if (element.onclick === null && $._data(element, "events").click === undefined) {
-                            andiAlerter.throwAlert(alert_0129);
+                            alert = [alert_0129];
                         } else { //Link is clickable but not keyboard accessible
-                            andiAlerter.throwAlert(alert_0164);
+                            alert = [alert_0164];
                         }
                     } else if (name) { //name is deprecated
-                        andiAlerter.throwAlert(alert_007B, [name]);
+                        alert = [alert_007B, [name]];
                     } else {
-                        andiAlerter.throwAlert(alert_012A); //definitely an anchor, but not focusable
+                        alert = [alert_012A]; //definitely an anchor, but not focusable
                     }
                 }
                 return false; //not keyboard accessible
@@ -212,7 +212,7 @@ function init_module() {
 
                         $(element).addClass("mANDI508-ambiguous");
                         alerts += alertIcon;
-                        andiAlerter.throwAlert(alertObject);
+                        alert = [alertObject];
                         return i;//prevents alert from being thrown more than once on an element
                     }
                 }
@@ -229,7 +229,7 @@ function init_module() {
                         if (element.onclick === null && $._data(element, 'events').click === undefined) {//no click events
                             //Throw Alert, Anchor Target not found
                             alerts += "danger: In-page anchor target not found";
-                            andiAlerter.throwAlert(alert_0069, [idRef]);
+                            alert = [alert_0069, [idRef]];
                         }
                     } else { //link is internal and anchor target found
                         mANDI.links.internalCount++;
@@ -263,7 +263,7 @@ function init_module() {
             var regEx = /^(click here|here|link|edit|select|more|more info|more information|go)$/g;
             if (regEx.test(nameDescription.toLowerCase())) {
                 alerts += "caution: Vague: does not identify link purpose.";
-                andiAlerter.throwAlert(alert_0163);
+                alert = [alert_0163];
             }
         }
 
@@ -272,7 +272,7 @@ function init_module() {
             if (!!$(element).prop("tabIndex") && !$(element).is(":tabbable")) {//Element is not tabbable and has no tabindex
                 //Throw Alert: Element with role=link|button not in tab order
                 alerts += "warning: Element not in tab order";
-                andiAlerter.throwAlert(alert_0125, [role]);
+                alert = [alert_0125, [role]];
             }
         }
 

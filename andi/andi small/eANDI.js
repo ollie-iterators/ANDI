@@ -61,11 +61,11 @@ function init_module() {
                 //Check for conditions based on semantics
                 if ($(this).is("marquee")) {
                     eANDI.images.inline++;
-                    andiAlerter.throwAlert(alert_0171);
+                    alert = [alert_0171];
                     AndiData.attachDataToElement(this);
                 } else if ($(this).is("blink")) {
                     eANDI.images.inline++;
-                    andiAlerter.throwAlert(alert_0172);
+                    alert = [alert_0172];
                     AndiData.attachDataToElement(this);
                 } else if ($(this).is("canvas")) {
                     eANDI.images.inline++;
@@ -79,7 +79,7 @@ function init_module() {
                     //Check for server side image map
                 } else if ($(this).is("img") && $(this).attr("ismap")) {//Code is written this way to prevent bug in IE8
                     eANDI.images.inline++;
-                    andiAlerter.throwAlert(alert_0173);
+                    alert = [alert_0173];
                     AndiData.attachDataToElement(this);
                 } else if (!isImageContainedByInteractiveWidget && $(this).is("img,svg,[role=img]")) { //an image used by an image map is handled by the <area>
                     eANDI.images.inline++;
@@ -88,7 +88,7 @@ function init_module() {
                         $(this).addClass("eANDI508-decorative");
 
                         if ($(this).prop("tabIndex") >= 0) { //Decorative image is in the tab order
-                            andiAlerter.throwAlert(alert_0126);
+                            alert = [alert_0126];
                         }
                     } else { //This image has not been declared decorative
                         if (andiData.tabbable) {
@@ -111,14 +111,14 @@ function init_module() {
                             AndiData.attachDataToElement(this);
                         } else { //Image referenced by image map not found
                             //TODO: throw this message only once for all area tags that it relates to
-                            andiAlerter.throwAlert(alert_006A, ["&ltmap name=" + mapName + "&gt;"], 0);
+                            alert = [alert_006A, ["&ltmap name=" + mapName + "&gt;"], 0];
                         }
                     } else { //Area tag not contained in map
-                        andiAlerter.throwAlert(alert_0178, alert_0178.message, 0);
+                        alert = [alert_0178, alert_0178.message, 0];
                     }
                 } else if ($(this).is("[role=image]")) {
                     //eANDI.images.inline++;
-                    andiAlerter.throwAlert(alert_0183);
+                    alert = [alert_0183];
                     AndiData.attachDataToElement(this);
                 }
             } else if ($(this).css("background-image").includes("url(")) {
@@ -144,16 +144,16 @@ function init_module() {
                 //Throw alert
                 if (andiData.accName && !andiData.isTabbable) {
                     //has accessible name. Needs role=img if meaningful image.
-                    andiAlerter.throwAlert(alert_0179);
+                    alert = [alert_0179];
                 } else {
                     //no accessible name. Is it meaningful?
-                    //andiAlerter.throwAlert(alert_017A);
+                    //alert = [alert_017A);
                 }
             }
         });
 
         if (eANDI.images.background > 0) { //Page has background images
-            andiAlerter.throwAlert(alert_0177, alert_0177.message, 0);
+            alert = [alert_0177, alert_0177.message, 0];
         }
 
         //This returns true if the image is decorative.
@@ -203,11 +203,11 @@ function init_module() {
         if (altText !== "") {
             altText = altText.toLowerCase();
             if (regEx_redundantPhrase.test(altText)) { //check for redundant phrase in alt text
-                andiAlerter.throwAlert(alert_0174); //redundant phrase in alt text
+                alert = [alert_0174]; //redundant phrase in alt text
             } else if (regEx_fileTypeExt.test(altText)) { //Check for filename in alt text
-                andiAlerter.throwAlert(alert_0175); //file name in alt text
+                alert = [alert_0175]; //file name in alt text
             } else if (regEx_nonDescAlt.test(altText)) { //Check for non-descriptive alt text
-                andiAlerter.throwAlert(alert_0176); //non-descriptive alt text
+                alert = [alert_0176]; //non-descriptive alt text
             }
         }
     }

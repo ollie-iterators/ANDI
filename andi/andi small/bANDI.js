@@ -196,16 +196,16 @@ function init_module() {
         if (bANDI_data.result === "FAIL") { //Text does not meet minimum contrast ratio
             var minReq = $(element).data("bandi508").minReq;
             if (minReq === 3) {
-                andiAlerter.throwAlert(alert_0240, ["large text ", "AA", minReq]);
+                alert = [alert_0240, ["large text ", "AA", minReq]];
             } else {
-                andiAlerter.throwAlert(alert_0240, [" ", "AA", minReq]);
+                alert = [alert_0240, [" ", "AA", minReq]];
             }
         } else if (!bANDI_data.result) {
             if ($(element).data("bandi508").opacity) { //Opacity Less Than 1
-                andiAlerter.throwAlert(alert_0232);
+                alert = [alert_0232];
             }
             if ($(element).data("bandi508").bgImage !== "none") { //Has Background Image
-                andiAlerter.throwAlert(alert_0230);
+                alert = [alert_0230];
             }
                 
         }

@@ -191,7 +191,7 @@ function init_module() {
                     presentationTablesShouldNotHave += "a [summary] attribute, ";
 
                 if (presentationTablesShouldNotHave)
-                    andiAlerter.throwAlert(alert_0041, [presentationTablesShouldNotHave.slice(0, -2)]);
+                    alert = [alert_0041, [presentationTablesShouldNotHave.slice(0, -2)]];
 
                 AndiData.attachDataToElement(table);
 
@@ -200,7 +200,7 @@ function init_module() {
             } else if ($.trim(role) && role !== "table" && role !== "grid" && role !== "treegrid") {
                 //==TABLE WITH NONTYPICAL ROLE==//
                 andiData = new AndiData(table[0]);
-                andiAlerter.throwAlert(alert_004I, [role]);
+                alert = [alert_004I, [role]];
                 AndiData.attachDataToElement(table);
             } else {
                 //==DATA TABLE==//
@@ -450,12 +450,12 @@ function init_module() {
                         if (AndiModule.activeActionButtons.scopeMode) {
                             //Only throw scope alerts if in "scope mode"
                             if (tooManyScopeRowLevels)
-                                andiAlerter.throwAlert(alert_0043, [4, "row"]);
+                                alert = [alert_0043, [4, "row"]];
                             if (tooManyScopeColLevels)
-                                andiAlerter.throwAlert(alert_0043, [4, "col"]);
+                                alert = [alert_0043, [4, "col"]];
                             andiCheck.detectDeprecatedHTML($(cell));
                             if (scope !== "col" && scope !== "row" && scope !== "colgroup" && scope !== "rowgroup")//scope value is invalid
-                                andiAlerter.throwAlert(alert_007C, [scope]);
+                                alert = [alert_007C, [scope]];
                         }
                     }
 
@@ -465,7 +465,7 @@ function init_module() {
                     //If this is not the upper left cell
                     if ($(cell).is("th") && !andiData.accName && !($(this).attr("data-uandi508-rowindex") === "1" && $(this).attr("data-uandi508-colindex") === "1"))
                         //Header cell is empty
-                        andiAlerter.throwAlert(alert_0132);
+                        alert = [alert_0132];
 
                     AndiData.attachDataToElement(cell);
                 });
@@ -481,9 +481,9 @@ function init_module() {
 
                 if (thCount === 0) {
                     if (tdCount === 0) { //No td or th cells
-                        andiAlerter.throwAlert(alert_004E);
+                        alert = [alert_004E];
                     } else { //No th cells
-                        andiAlerter.throwAlert(alert_0046);
+                        alert = [alert_0046];
                     }
                 } else { //Has th cells
                     if (AndiModule.activeActionButtons.scopeMode) {
@@ -493,7 +493,7 @@ function init_module() {
                         if (!tableHasScopes) {
                             //Table Has No Scopes
                             if (tableHasHeaders) { //No Scope, Has Headers
-                                andiAlerter.throwAlert(alert_004B);
+                                alert = [alert_004B];
                             } else { //No Scope, No Headers
                                 andiAlerter.throwAlert(alert_0048);
                             }

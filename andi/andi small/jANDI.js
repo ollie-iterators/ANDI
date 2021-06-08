@@ -106,7 +106,7 @@ function init_module() {
             jANDI.detectCssInjectedContent();
 
             if ($("#ANDI508-testPage .jANDI508-hasHiddenCssContent").first().length) {
-                andiAlerter.throwAlert(alert_0220, alert_0220.message, 0);
+                alert = [alert_0220, alert_0220.message, 0];
             }
         }
     };

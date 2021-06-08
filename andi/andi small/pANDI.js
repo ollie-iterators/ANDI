@@ -51,23 +51,23 @@ function init_module() {
                     pANDI.lists.listItemRoleCount += 1;
                     closestListItem = $(this).closest("[role=list]").length;
                     if (!closestListItem) { //Is the listitem contained by an appropriate list container?
-                        andiAlerter.throwAlert(alert_0079, ["[role=listitem]", "[role=list]"]);
+                        alert = [alert_0079, ["[role=listitem]", "[role=list]"]];
                     }
                 } else if ($(this).is("li")) {
                     pANDI.lists.liCount += 1;
                     var listContainer = $(this).closest("ol,ul");
                     if (!$(listContainer).length) {
-                        andiAlerter.throwAlert(alert_0079, ["&lt;li&gt;", "&lt;ol&gt; or &lt;ul&gt;"]);
+                        alert = [alert_0079, ["&lt;li&gt;", "&lt;ol&gt; or &lt;ul&gt;"]];
                     } else { //check if listContainer is still semantically a list
                         var listContainer_role = $(listContainer).attr("role");
                         if (listContainer_role && listContainer_role !== "list")
-                            andiAlerter.throwAlert(alert_0185, [listContainer_role]);
+                            alert = [alert_0185, [listContainer_role]];
                     }
                 } else if ($(this).is("dd,dt")) {
                     pANDI.lists.ddCount += 1;
                     closestDesc = !$(this).closest("dl").length;
                     if (closestDesc) {
-                        andiAlerter.throwAlert(alert_007A);
+                        alert = [alert_007A];
                     }
                 }
                 andiData = new AndiData(this);

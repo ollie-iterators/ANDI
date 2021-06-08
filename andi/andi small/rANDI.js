@@ -36,16 +36,16 @@ function init_module() {
                     if (innerText) { //For live regions, screen readers only use the innerText
                         andiData.accName = innerText;
                     } else { //no visible innerText
-                        andiAlerter.throwAlert(alert_0133);
+                        alert = [alert_0133];
                         andiData.accName = "";
                     }
                     delete andiData.accDesc; //accDesc should not appear in output
                 } else {  //not a container element
-                    andiAlerter.throwAlert(alert_0184);
+                    alert = [alert_0184];
                 }
                 var containsForm = $(this).find("textarea,input:not(:hidden,[type=submit],[type=button],[type=image],[type=reset]),select").length;
                 if (containsForm) {
-                    andiAlerter.throwAlert(alert_0182);
+                    alert = [alert_0182];
                 }
                 rANDI.liveRegions.list.push(new LiveRegion(this, rANDI.index, containerElement, innerText, containsForm, ""));
                 rANDI.index += 1;

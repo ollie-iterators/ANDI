@@ -121,7 +121,7 @@ function init_module() {
             
                                 $(this).addClass("nANDI508-ambiguous");
                                 alerts += alertIcon;
-                                andiAlerter.throwAlert(alertObject);
+                                alert = [alertObject];
                                 nonUniqueIndex = m;//prevents alert from being thrown more than once on an element
                             }
                         }
@@ -131,7 +131,7 @@ function init_module() {
                             if (elementInTabOrder) {//Element is not tabbable and has no tabindex
                                 //Throw Alert: Element with role=button not in tab order
                                 alerts += "warning: Element not in tab order (alert_0125, role attribute)";
-                                andiAlerter.throwAlert(alert_0125, ["button"]);
+                                alert = [alert_0125, ["button"]];
                             }
                         } 
                     } else { //No accessible name or description
@@ -154,7 +154,7 @@ function init_module() {
         //Detect disabled buttons
         andiCheck.areLabelForValid();
         if ($(this).attr("aria-hidden") !== "true") { // Code below was moved from areThereDisabledElements
-            andiAlerter.throwAlert(alert_0250, [testPageData.disabledElementsCount, "buttons"], 0);
+            alert = [alert_0250, [testPageData.disabledElementsCount, "buttons"], 0];
         }
     };
     nANDI.analyze();

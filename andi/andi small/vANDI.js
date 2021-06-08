@@ -60,7 +60,7 @@ function init_module() {
                 if (isFakeHeading) { //Since oANDI has not found a heading yet, check if this element is a fake headings
                     andiData = new AndiData(this);
 
-                    andiAlerter.throwAlert(alert_0190);
+                    alert = [alert_0190];
                     AndiData.attachDataToElement(this);
                 }
                 oANDI.fakeHeaders.FakeHeaderList.push(new FakeHeader(this, oANDI.index, text, fontSize, fontWeight, nextElement, nextText, nextFontSize, nextFontWeight, oANDI.isFakeHeading(this)))

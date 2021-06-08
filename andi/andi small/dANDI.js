@@ -19,9 +19,9 @@ function init_module() {
                 andiCheck.commonFocusableElementChecks(andiData, $(this));
                 if ($(this).is("canvas")) { //Code is from lookForCanvasFallback function
                     if (!$(this).children().filter(":focusable").length) {
-                        andiAlerter.throwAlert(alert_0124);
+                        alert = [alert_0124];
                     } else { //has focusable fallback content
-                        andiAlerter.throwAlert(alert_0127);
+                        alert = [alert_0127];
                     }
                 }
                 if (andiData.accesskey) {
@@ -36,7 +36,7 @@ function init_module() {
         });
         andiCheck.areLabelForValid();
         if ($(this).attr("aria-hidden") !== "true") { // Code below was moved from areThereDisabledElements
-            andiAlerter.throwAlert(alert_0250, [testPageData.disabledElementsCount, "elements"], 0);
+            alert = [alert_0250, [testPageData.disabledElementsCount, "elements"], 0];
         }
     };
 
@@ -48,15 +48,15 @@ function init_module() {
             if (accesskey) {
                 //Is accesskey value more than one character?
                 if (accesskey.length > 1) { //TODO: could be a non-issue if browsers are supporting space delimited accesskey lists
-                    andiAlerter.throwAlert(alert_0052, [accesskey]);
+                    alert = [alert_0052, [accesskey]];
                 } else { //Check for duplicate accesskey
                     if (duplicateComparator.includes(accesskey)) {
                         if ($(element).is("button,input:submit,input:button,input:reset,input:image")) {
-                            andiAlerter.throwAlert(alert_0054, [accesskey]); //duplicate accesskey found on button
+                            alert = [alert_0054, [accesskey]]; //duplicate accesskey found on button
                         } else if ($(element).is("a[href]")) { 
-                            andiAlerter.throwAlert(alert_0056, [accesskey]); //duplicate accesskey found on link
+                            alert = [alert_0056, [accesskey]]; //duplicate accesskey found on link
                         } else { 
-                            andiAlerter.throwAlert(alert_0055, [accesskey]); //duplicate accesskey found
+                            alert = [alert_0055, [accesskey]]; //duplicate accesskey found
                         }
                     } else {
                         duplicateComparator += accesskey;
