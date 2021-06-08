@@ -25,3 +25,8 @@ var alert_0068 = new Alert("warning", "6", "Element\'s [headers] references prov
 var alert_007C = new Alert("warning", "7", "[scope=%%%] value is invalid; acceptable values are col, row, colgroup, or rowgroup.", "scope_value_invalid");
 var alert_0132 = new Alert("caution", "13", "Empty header cell.", "empty_header_cell");
 var alert_0233 = new Alert("caution", "23", "[role=grid] found; test navigation of design pattern.", "grid_navigation_test");
+
+# Shared Table Alerts from andi.js
+  - These are alerts that are for tables and AndiCheck
+
+var alert_0011 = new Alert("danger", "1", "%%%; element ids should be unique.", "dup_id");

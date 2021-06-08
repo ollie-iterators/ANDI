@@ -5,3 +5,4 @@ var alert_0230 = new Alert("warning", "23", "Element has background-image; Perfo
 var alert_0231 = new Alert("caution", "23", "Page has images; If images contain meaningful text, perform manual contrast test.", "manual_contrast_test_img");
 var alert_0232 = new Alert("warning", "23", "Opacity less than 100%; Perform manual contrast test.", "manual_contrast_test_opacity");
 var alert_0240 = new Alert("danger", "24", "Text does not meet %%%minimum %%% contrast ratio (%%%:1).", "min_contrast");
+var alert_0251 = new Alert("caution", "25", "Page has %%% disabled elements; Disabled elements do not require sufficient contrast.", "disabled_contrast");

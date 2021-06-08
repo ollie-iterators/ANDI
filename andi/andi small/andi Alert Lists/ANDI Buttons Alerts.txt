@@ -1,4 +1,13 @@
-# Image Alerts from andi.js
-  - These are alerts that are just for images
+# Button Alerts from andi.js
+  - These are alerts that are just for buttons
 
 var alert_0200 = new Alert("warning", "20", "Non-unique button: same name/description as another button.", "non_unique_button");
+
+# Shared Button Alerts from andi.js
+  - These are alerts that are for buttons and links
+
+var alert_0125 = new Alert("warning", "12", "Element with [role=%%%] not in the keyboard tab order.", "role_tab_order");
+
+  - These are alerts that are for buttons, focusable elements, images and AndiCheck
+
+var alert_0250 = new Alert("warning", "25", "Page has %%% disabled %%%; Disabled elements are not in the keyboard tab order.", "disabled_elements");

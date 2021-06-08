@@ -11,3 +11,8 @@ var alert_0162 = new Alert("caution", "16", "Ambiguous Link: same name/descripti
 var alert_0163 = new Alert("caution", "16", "Link text is vague and does not identify its purpose.", "vague_link");
 var alert_0164 = new Alert("warning", "16", "Link has click event but is not keyboard accessible.", "link_click_no_keyboard_access");
 var alert_0168 = new Alert("warning", "16", "&lt;a&gt; without [href] may not be recognized as a link; add [role=link] or [href].", "not_recognized_as_link");
+
+# Shared Link Alerts from andi.js
+  - These are alerts that are for links and buttons
+
+var alert_0125 = new Alert("warning", "12", "Element with [role=%%%] not in the keyboard tab order.", "role_tab_order");

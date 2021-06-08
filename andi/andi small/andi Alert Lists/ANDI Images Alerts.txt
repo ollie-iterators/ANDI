@@ -12,4 +12,10 @@ var alert_0177 = new Alert("caution", "17", "Ensure that background images are d
 var alert_0178 = new Alert("danger", "17", "&lt;area&gt; not contained in &lt;map&gt;.", "area_not_in_map");
 var alert_0179 = new Alert("caution", "17", "Screen reader will not recognize this font icon as an image; Add an appropriate role such as [role=img].", "");
 var alert_017A = new Alert("caution", "17", "Font Icon. Is this a meaningful image?", "");
+var alert_0126 = new Alert("danger", "12", "Image defined as decorative is in the keyboard tab order.", "decorative_image_tab_order");
 var alert_0183 = new Alert("danger", "18", "[role=image] is invalid; Use [role=img].", "role_image_invalid");
+
+# Shared Image Alerts from andi.js
+  - These are alerts that are for images, focusable elements, buttons and AndiCheck
+
+var alert_0250 = new Alert("warning", "25", "Page has %%% disabled %%%; Disabled elements are not in the keyboard tab order.", "disabled_elements");

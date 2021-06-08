@@ -1,4 +1,4 @@
-# Live Regions Alerts from andi.js
+# Live Region Alerts from andi.js
   - These are alerts that are just for live regions
 
 var alert_0133 = new Alert("caution", "13", "Live region has no innerText content.", "live_region_empty");

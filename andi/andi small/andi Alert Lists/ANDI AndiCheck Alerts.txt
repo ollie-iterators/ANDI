@@ -1,9 +1,41 @@
 # AndiCheck Alerts from andi.js
   - These are alerts that are just for AndiCheck
 
+var alert_0001 = new Alert("danger", "0", " has no accessible name, associated &lt;label&gt;, or [title].", "no_name_form_element");
+var alert_0002 = new Alert("danger", "0", " has no accessible name, innerText, or [title].", "no_name_generic");
+var alert_0003 = new Alert("danger", "0", " has no accessible name, [alt], or [title].", "no_name_image");
+var alert_0004 = new Alert("danger", "0", "Table has no accessible name, &lt;caption&gt;, or [title].", "no_name_table");
+var alert_0005 = new Alert("danger", "0", "Figure has no accessible name, &lt;figcaption&gt;, or [title].", "no_name_figure");
+var alert_0007 = new Alert("danger", "0", "Iframe has no accessible name or [title].", "no_name_iframe");
+var alert_0008 = new Alert("danger", "0", " has no accessible name.", "no_name_generic");
+var alert_0009 = new Alert("warning", "0", "Iframe has no accessible name or [title].", "no_name_iframe");
+var alert_0012 = new Alert("danger", "1", "More than one &lt;label[for=%%%]&gt; associates with this element [id=%%%].", "dup_for");
+var alert_0021 = new Alert("warning", "2", "[aria-describedby] should be used in combination with a component that provides an accessible name.", "dby_alone");
+var alert_0022 = new Alert("danger", "2", "&lt;legend&gt; should be used in combination with a component that provides an accessible name.", "legend_alone");
+var alert_0031 = new Alert("danger", "3", "[aria-labeledby] is mispelled, use [aria-labelledby].", "misspell");
+var alert_0032 = new Alert("danger", "3", "[aria-role] not a valid attribute, use [role] instead.", "aria_role");
+var alert_0063 = new Alert("warning", "6", "Element referenced by [%%%] with [id=%%%] not found.", "ref_id_not_found");
+var alert_0065 = new Alert("danger", "6", "Improper use of [%%%] possible: Referenced ids \"%%%\" not found.", "improper_ref_id_usage");
 var alert_0071 = new Alert("danger", "7", "Page &lt;title&gt; cannot be empty.", "page_title_empty");
 var alert_0072 = new Alert("danger", "7", "Page has no &lt;title&gt;.", "page_title_none");
 var alert_0073 = new Alert("warning", "7", "Page has more than one &lt;title&gt; tag.", "page_title_multiple");
 var alert_0074 = new Alert("danger", "7", "There are more legends (%%%) than fieldsets (%%%).", "too_many_legends");
 var alert_0075 = new Alert("danger", "7", "There are more figcaptions (%%%) than figures (%%%).", "too_many_figcaptions");
 var alert_0076 = new Alert("danger", "7", "There are more captions (%%%) than tables (%%%).", "too_many_captions");
+var alert_0078 = new Alert("warning", "7", "Using HTML5, found deprecated %%%.", "deprecated_html");
+var alert_0091 = new Alert("warning", "9", "Explicit &lt;label[for]&gt; only works with form elements.", "explicit_label_for_forms");
+var alert_0101 = new Alert("warning", "10", "Combining %%% may produce inconsistent screen reader results.", "unreliable_component_combine");
+var alert_0112 = new Alert("caution", "11", "JavaScript event %%% may cause keyboard accessibility issues; investigate.", "javascript_event_caution");
+var alert_0151 = new Alert("warning", "15", "[%%%] attribute length exceeds " + 250 + " characters; consider condensing.", "character_length");
+var alert_0210 = new Alert("caution", "21", "An associated &lt;label&gt; containing text would increase the clickable area of this %%%.", "label_clickable_area");
+var alert_0260 = new Alert("danger", "26", "Element is hidden from screen reader using [aria-hidden=true] resulting in no output.", "ariahidden");
+var alert_0261 = new Alert("warning", "26", "Element is hidden from screen reader using [aria-hidden=true] resulting in no output.", "ariahidden");
+
+Shared AndiCheck Alerts from andi.js
+  - These are alerts that are for AndiCheck and tables
+
+var alert_0011 = new Alert("danger", "1", "%%%; element ids should be unique.", "dup_id");
+
+  - These are alerts that are for AndiCheck, focusable elements, images and buttons
+
+var alert_0250 = new Alert("warning", "25", "Page has %%% disabled %%%; Disabled elements are not in the keyboard tab order.", "disabled_elements");
