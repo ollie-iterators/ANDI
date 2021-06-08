@@ -1,0 +1,15 @@
+# Image Alerts from andi.js
+  - These are alerts that are just for images
+
+var alert_006A = new Alert("danger", "6", "&lt;img&gt; referenced by image map %%% not found.", "image_map_ref_not_found");
+var alert_0171 = new Alert("danger", "17", "&lt;marquee&gt; element found, do not use.", "marquee_found");
+var alert_0172 = new Alert("danger", "17", "&lt;blink&gt; element found, do not use.", "blink_found");
+var alert_0173 = new Alert("danger", "17", "Server side image maps are not accessible.", "server_side_image_map");
+var alert_0174 = new Alert("caution", "17", "Redundant phrase in image [alt] text.", "image_alt_redundant_phrase");
+var alert_0175 = new Alert("warning", "17", "Image [alt] text contains file name.", "image_alt_contains_file_name");
+var alert_0176 = new Alert("danger", "17", "Image [alt] text is not descriptive.", "image_alt_not_descriptive");
+var alert_0177 = new Alert("caution", "17", "Ensure that background images are decorative.", "ensure_bg_images_decorative");
+var alert_0178 = new Alert("danger", "17", "&lt;area&gt; not contained in &lt;map&gt;.", "area_not_in_map");
+var alert_0179 = new Alert("caution", "17", "Screen reader will not recognize this font icon as an image; Add an appropriate role such as [role=img].", "");
+var alert_017A = new Alert("caution", "17", "Font Icon. Is this a meaningful image?", "");
+var alert_0183 = new Alert("danger", "18", "[role=image] is invalid; Use [role=img].", "role_image_invalid");

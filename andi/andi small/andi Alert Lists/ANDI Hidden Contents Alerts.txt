@@ -1,0 +1,4 @@
+# Hidden Content Alerts from andi.js
+  - These are alerts that are just for hidden contents
+
+var alert_0220 = new Alert("warning", "22", "Content has been injected using CSS pseudo-elements ::before or ::after.", "pseudo_before_after");

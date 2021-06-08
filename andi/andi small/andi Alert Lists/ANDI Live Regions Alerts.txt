@@ -1,0 +1,6 @@
+# Live Regions Alerts from andi.js
+  - These are alerts that are just for live regions
+
+var alert_0133 = new Alert("caution", "13", "Live region has no innerText content.", "live_region_empty");
+var alert_0182 = new Alert("danger", "18", "Live Region contains a form element.", "live_region_form_element");
+var alert_0184 = new Alert("danger", "18", "A live region can only be a container element.", "live_region_not_container");

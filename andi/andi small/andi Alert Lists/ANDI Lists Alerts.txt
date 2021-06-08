@@ -1,0 +1,6 @@
+# List Alerts from andi.js
+  - These are alerts that are just for lists
+
+var alert_0079 = new Alert("danger", "7", "List item %%% is not contained by a list container %%%.", "li_no_container");
+var alert_007A = new Alert("danger", "7", "Description list item is not contained by a description list container &lt;dl&gt;.", "dd_dt_no_container");
+var alert_0185 = new Alert("danger", "18", "List item's container is not recognized as a list because it has [role=%%%].", "non_list_role");

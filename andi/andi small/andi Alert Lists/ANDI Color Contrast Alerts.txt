@@ -1,0 +1,7 @@
+# Color Contrast Alerts from andi.js
+  - These are alerts that are just for color contrasts
+
+var alert_0230 = new Alert("warning", "23", "Element has background-image; Perform manual contrast test.", "manual_contrast_test_bgimage");
+var alert_0231 = new Alert("caution", "23", "Page has images; If images contain meaningful text, perform manual contrast test.", "manual_contrast_test_img");
+var alert_0232 = new Alert("warning", "23", "Opacity less than 100%; Perform manual contrast test.", "manual_contrast_test_opacity");
+var alert_0240 = new Alert("danger", "24", "Text does not meet %%%minimum %%% contrast ratio (%%%:1).", "min_contrast");

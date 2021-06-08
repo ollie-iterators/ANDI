@@ -1,0 +1,4 @@
+# Image Alerts from andi.js
+  - These are alerts that are just for images
+
+var alert_0200 = new Alert("warning", "20", "Non-unique button: same name/description as another button.", "non_unique_button");

@@ -1,0 +1,5 @@
+# Focusable Elements Alerts from andi.js
+  - These are alerts that are just for focusable elements
+
+  var alert_0124 = new Alert("warning", "12", "If &lt;canvas&gt; element is interactive with mouse, it's not keyboard accessible because there is no focusable fallback content.", "canvas_not_keyboard_accessible");
+  var alert_0127 = new Alert("caution", "12", "&lt;canvas&gt; element has focusable fallback content; Test for keyboard equivalency to mouse functionality.", "canvas_has_focusable_fallback");

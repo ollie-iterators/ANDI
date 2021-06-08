@@ -1,0 +1,11 @@
+# Header Alerts from andi.js
+  - These are alerts that are just for headers
+
+var alert_0180 = new Alert("warning", "18", "[aria-level] is not a greater-than-zero integar; level 2 will be assumed.", "arialevel_not_gt_zero_integar");
+var alert_0191 = new Alert("warning", "19", "Heading element level &lt;%%%&gt; conflicts with [aria-level=%%%].", "conflicting_heading_level");
+var alert_0192 = new Alert("caution", "19", "[role=heading] used without [aria-level]; level 2 will be assumed.", "role_heading_no_arialevel");
+
+# Fake Header Alerts from andi.js
+ - These are alerts that are just for fake headers
+
+var alert_0190 = new Alert("warning", "19", "Element visually conveys heading meaning but not using semantic heading markup.", "not_semantic_heading");
