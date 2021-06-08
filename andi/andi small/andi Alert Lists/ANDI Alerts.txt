@@ -1,4 +1,6 @@
-//Define Alerts used by all modules
+# Alerts from andi.js
+  - These are alerts that are used on andi.js
+
 var alert_0001 = new Alert("danger", "0", " has no accessible name, associated &lt;label&gt;, or [title].", "no_name_form_element");
 var alert_0002 = new Alert("danger", "0", " has no accessible name, innerText, or [title].", "no_name_generic");
 var alert_0003 = new Alert("danger", "0", " has no accessible name, [alt], or [title].", "no_name_image");
@@ -29,12 +31,6 @@ var alert_006D = new Alert("warning", "6", "[%%%] is directly referencing [id=%%
 var alert_006E = new Alert("warning", "6", "[%%%] is directly and indirectly referencing [id=%%%] which may cause speech verbosity.", "ref_is_direct_and_indirect");
 var alert_006F = new Alert("warning", "6", "Element nested in &lt;label&gt; but label[for=%%%] does not match element [id=%%%].", "nested_label_for_no_match");
 
-var alert_0071 = new Alert("danger", "7", "Page &lt;title&gt; cannot be empty.", "page_title_empty");
-var alert_0072 = new Alert("danger", "7", "Page has no &lt;title&gt;.", "page_title_none");
-var alert_0073 = new Alert("warning", "7", "Page has more than one &lt;title&gt; tag.", "page_title_multiple");
-var alert_0074 = new Alert("danger", "7", "There are more legends (%%%) than fieldsets (%%%).", "too_many_legends");
-var alert_0075 = new Alert("danger", "7", "There are more figcaptions (%%%) than figures (%%%).", "too_many_figcaptions");
-var alert_0076 = new Alert("danger", "7", "There are more captions (%%%) than tables (%%%).", "too_many_captions");
 var alert_0077 = new Alert("danger", "7", "Tabindex value \"%%%\" is not a number.", "tabindex_not_number");
 var alert_0078 = new Alert("warning", "7", "Using HTML5, found deprecated %%%.", "deprecated_html");
 
