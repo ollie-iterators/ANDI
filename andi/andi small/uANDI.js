@@ -495,7 +495,7 @@ function init_module() {
                             if (tableHasHeaders) { //No Scope, Has Headers
                                 alert = [alert_004B];
                             } else { //No Scope, No Headers
-                                andiAlerter.throwAlert(alert_0048);
+                                alert = [alert_0048];
                             }
 
                         }
@@ -540,15 +540,15 @@ function init_module() {
                     } else if (!AndiModule.activeActionButtons.scopeMode) {
                         if (!tableHasHeaders) { //Table Has No Headers
                             if (tableHasScopes) { //No Headers, Has Scope
-                                andiAlerter.throwAlert(alert_004C);
+                                alert = [alert_004C];
                             } else { //No Headers, No Scope
-                                andiAlerter.throwAlert(alert_004A);
+                                alert = [alert_004A];
                             }
                         }
                     }
 
                     if (tableHasHeaders && tableHasScopes) { //Table is using both scopes and headers
-                        andiAlerter.throwAlert(alert_0049);
+                        alert = [alert_0049];
                     }
                 }
 
@@ -742,7 +742,7 @@ function init_module() {
                     //If this is not the upper left cell
                     if ($(cell).is("[role=columnheader],[role=rowheader]") && !andiData.accName && !($(this).attr("data-uandi508-rowindex") === "1" && $(this).attr("data-uandi508-colindex") === "1"))
                         //Header cell is empty
-                        andiAlerter.throwAlert(alert_0132);
+                        alert = [alert_0132];
 
                     AndiData.attachDataToElement(cell);
                 } else {
@@ -763,25 +763,25 @@ function init_module() {
             andiCheck.commonNonFocusableElementChecks(andiData, $(table));
 
             if (role === "grid")
-                andiAlerter.throwAlert(alert_0233);
+                alert = [alert_0233];
 
             if (all_rows.length === 0) { //no rows
-                andiAlerter.throwAlert(alert_004H, [role]);
+                alert = [alert_004H, [role]];
             } else if (headerCount === 0) {
                 if (nonHeaderCount === 0) { //No cell or gridcell
-                    andiAlerter.throwAlert(alert_004F, [role, cell_role]);
+                    alert = [alert_004F, [role, cell_role]];
                 } else { //No header cells
-                    andiAlerter.throwAlert(alert_004G, [role]);
+                    alert = [alert_004G, [role]];
                 }
             }
 
             //If any header is missing a role, throw alert
             if (headersMissingRoleCount)
-                andiAlerter.throwAlert(alert_004J, [role, headersMissingRoleCount]);
+                alert = [alert_004J, [role, headersMissingRoleCount]];
 
             //If a cell is not contained by a role=row, throw alert
             if (cellsNotContainedByRow)
-                andiAlerter.throwAlert(alert_004K, [role, cellsNotContainedByRow]);
+                alert = [alert_004K, [role, cellsNotContainedByRow]];
 
             cellCount = headerCount + nonHeaderCount;
 
@@ -815,7 +815,7 @@ function init_module() {
         var headersText = "";
         if (headers !== undefined) {
             if (!$(element).is("th") && !$(element).is("td")) {
-                andiAlerter.throwAlert(alert_0045);
+                alert = [alert_0045];
             } else {
                 headers = getHeadersReferences(element, headers, table);
             }
@@ -854,9 +854,9 @@ function init_module() {
                     if ($(referencedElement).html() !== undefined && $(referencedElement).closest("table").is(table)) {
                         //element with id was found within the same table
                         if ($(referencedElement).is("td")) { //referenced element is a td
-                            andiAlerter.throwAlert(alert_0067, [idsArray[x]]);
+                            alert = [alert_0067, [idsArray[x]]];
                         } else if (!$(referencedElement).is("th")) { //referenced element is not a th
-                            andiAlerter.throwAlert(alert_0066, [idsArray[x]]);
+                            alert = [alert_0066, [idsArray[x]]];
                         } else { //referenced element is a th
                             //Check if this is referencing a duplicate id within the same table
                             areThereAnyDuplicateIds_headers(idsArray[x], tableThIds);
@@ -866,7 +866,7 @@ function init_module() {
                         referencedElement = document.getElementById(idsArray[x]); //search within entire document for this id
 
                         if ($(referencedElement).html() !== undefined) {
-                            andiAlerter.throwAlert(alert_0062, [idsArray[x]]); //referenced element is in another table
+                            alert = [alert_0062, [idsArray[x]]]; //referenced element is in another table
                         } else { //No, this id was not found at all, add to list.
                             missingReferences.push(idsArray[x]);
                         }
@@ -883,7 +883,7 @@ function init_module() {
 
             if ($.trim(accumulatedText) === "")
                 //ALL of the headers references do not return any text
-                andiAlerter.throwAlert(alert_0068);
+                alert = [alert_0068];
 
             return displayHeaders;
 
@@ -900,7 +900,7 @@ function init_module() {
                     }
                     if (idMatchesFound > 1) {//Duplicate Found
                         var message = "[headers] attribute is referencing a duplicate id [id=" + id + "] within the same table";
-                        andiAlerter.throwAlert(alert_0011, [message]);
+                        alert = [alert_0011, [message]];
                     }
                 }
             }

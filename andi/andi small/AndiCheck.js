@@ -35,22 +35,33 @@ function AndiCheck(){
 		//legend/fieldset
 		parents = $(TestPageData.allElements).filter("fieldset").length*1; //*1 ensures that the var will be a number
 		children = $(TestPageData.allElements).filter("legend").length*1; //*1 ensures that the var will be a number
-		if(children > parents) andiAlerter.throwAlert(alert_0074,[children, parents],0);
-		if(parents>0) testPageData.page_using_fieldset = true;
-
+		if(children > parents) {
+			alert = [alert_0074,[children, parents],0];
+		}
+		if(parents>0) {
+			testPageData.page_using_fieldset = true;
+		}
+		
 		//figcaption/figure
 		parents = $(TestPageData.allElements).filter("figure").length*1; //*1 ensures that the var will be a number
 		children = $(TestPageData.allElements).filter("figcaption").length*1; //*1 ensures that the var will be a number
-		if(children > parents) andiAlerter.throwAlert(alert_0075,[children, parents],0);
-		if(parents>0) testPageData.page_using_figure = true;
+		if(children > parents) {
+			alert = [alert_0075,[children, parents],0];
+		}
+		if(parents>0) {
+			testPageData.page_using_figure = true;
+		}
 
 		//caption/table
 		if(TestPageData.page_using_table){
 			parents = $(TestPageData.allElements).filter("table").length*1; //*1 ensures that the var will be a number
 			children = $(TestPageData.allElements).filter("caption").length*1; //*1 ensures that the var will be a number
-			if(children)
+			if(children) {
 				TestPageData.page_using_caption = true;
-			if(children > parents) andiAlerter.throwAlert(alert_0076,[children, parents],0);
+			}
+			if(children > parents) {
+				alert = [alert_0076,[children, parents],0];
+			}
 		}
 	};
 
@@ -61,12 +72,12 @@ function AndiCheck(){
 		var pageTitleCount = $("head title").length;
 		if(document.title === ""){ //check document.title because could have been set by javascript
 			if(pageTitleCount === 0)
-				andiAlerter.throwAlert(alert_0072,alert_0072.message,0);
+				alert = [alert_0072,alert_0072.message,0];
 			else if(pageTitleCount === 1 && $.trim($("head title").text()) === "")
-				andiAlerter.throwAlert(alert_0071,alert_0071.message,0);
+				alert = [alert_0071,alert_0071.message,0];
 		}
 		else if(pageTitleCount > 1)
-			andiAlerter.throwAlert(alert_0073,alert_0073.message,0);
+			alert = [alert_0073,alert_0073.message,0];
 	};
 
 	//==Element Checks==//
@@ -97,71 +108,85 @@ function AndiCheck(){
 
 				if(elementData.components.ariaDescribedby)
 					//element has no name but has ariaDescribedby
-					andiAlerter.throwAlert(alert_0021);
+					alert = [alert_0021];
 				else { //throw No Accessible Name Alert
 					if(tagNameText === "iframe"){
 						if(elementData.tabindex)
-							andiAlerter.throwAlert(alert_0007);
+							alert = [alert_0007];
 						else//no tabindex
-							andiAlerter.throwAlert(alert_0009);
+							alert = [alert_0009];
 					}
 					else if(elementData.isTabbable){
 						//Does this element have a role?
 						if(elementData.role){
 							var roleCapitalized = elementData.role.charAt(0).toUpperCase()+elementData.role.slice(1);
-							andiAlerter.throwAlert(alert_0008, roleCapitalized+" Element"+alert_0008.message);
+							alert = [alert_0008, roleCapitalized+" Element"+alert_0008.message];
 						}
 						//Is this an input element, excluding input[image]?
 						else if(tagNameText.includes("input") && tagNameText != "input[type=image]"){
 							switch(tagNameText){
 							case "input[type=text]":
-								andiAlerter.throwAlert(alert_0001, "Textbox"+alert_0001.message); break;
+								alert = [alert_0001, "Textbox"+alert_0001.message];
+								break;
 							case "input[type=radio]":
-								andiAlerter.throwAlert(alert_0001, "Radio Button"+alert_0001.message); break;
+								alert = [alert_0001, "Radio Button"+alert_0001.message];
+								break;
 							case "input[type=checkbox]":
-								andiAlerter.throwAlert(alert_0001, "Checkbox"+alert_0001.message); break;
+								alert = [alert_0001, "Checkbox"+alert_0001.message];
+								break;
 							default:
-								andiAlerter.throwAlert(alert_0001, "Input Element"+alert_0001.message);
+								alert = [alert_0001, "Input Element"+alert_0001.message];
 							}
 						}
 						//All other elements:
 						else switch(tagNameText){
 							case "a":
-								andiAlerter.throwAlert(alert_0002, "Link"+alert_0002.message); break;
+								alert = [alert_0002, "Link"+alert_0002.message];
+								break;
 							case "img":
 							case "input[type=image]":
-								andiAlerter.throwAlert(alert_0003, "Image"+alert_0003.message); break;
+								alert = [alert_0003, "Image"+alert_0003.message];
+								break;
 							case "button":
-								andiAlerter.throwAlert(alert_0002, "Button"+alert_0002.message); break;
+								alert = [alert_0002, "Button"+alert_0002.message];
+								break;
 							case "select":
-								andiAlerter.throwAlert(alert_0001, "Select"+alert_0001.message); break;
+								alert = [alert_0001, "Select"+alert_0001.message];
+								break;
 							case "textarea":
-								andiAlerter.throwAlert(alert_0001, "Textarea"+alert_0001.message); break;
+								alert = [alert_0001, "Textarea"+alert_0001.message];
+								break;
 							case "table":
-								andiAlerter.throwAlert(alert_0004, alert_0004.message); break;
+								alert = [alert_0004, alert_0004.message];
+								break;
 							case "figure":
-								andiAlerter.throwAlert(alert_0005, alert_0005.message); break;
+								alert = [alert_0005, alert_0005.message];
+								break;
 							case "th":
 							case "td":
-								andiAlerter.throwAlert(alert_0002, "Table Cell"+alert_0002.message); break;
+								alert = [alert_0002, "Table Cell"+alert_0002.message];
+								break;
 							case "canvas":
-								andiAlerter.throwAlert(alert_0008, "Canvas"+alert_0008.message); break;
+								alert = [alert_0008, "Canvas"+alert_0008.message];
+								break;
 							default:
-								andiAlerter.throwAlert(alert_0002, "Element"+alert_0002.message);
+								alert = [alert_0002, "Element"+alert_0002.message];
 						}
 					}
 					else{//not tabbable
 						//Does this element have a role?
 						if(elementData.role === "img"){
-							andiAlerter.throwAlert(alert_0008, "[role=img] Element"+alert_0008.message);
+							alert = [alert_0008, "[role=img] Element"+alert_0008.message];
 						}
 						else{
 							switch(tagNameText){
 							case "img":
 							case "input[type=image]":
-								if(!elementData.role) andiAlerter.throwAlert(alert_0003, "Image"+alert_0003.message); break;
+								if(!elementData.role) alert = [alert_0003, "Image"+alert_0003.message];
+								break;
 							case "canvas":
-								andiAlerter.throwAlert(alert_0008, "Canvas"+alert_0008.message); break;
+								alert = [alert_0008, "Canvas"+alert_0008.message];
+								break;
 							}
 						}
 					}
@@ -169,7 +194,7 @@ function AndiCheck(){
 
 				if(elementData.components.legend)
 					//element has no name but has legend
-					andiAlerter.throwAlert(alert_0022);
+					alert = [alert_0022];
 			}
 		}
 	};
@@ -193,7 +218,7 @@ function AndiCheck(){
 					message = "Element has duplicate id [id="+id+"] and is referenced by a &lt;label[for]&gt;";
 				else //anything else
 					message = "["+component+"] is referencing a duplicate id [id="+id+"]";
-				andiAlerter.throwAlert(alert_0011, [message]);
+				alert = [alert_0011, [message]];
 			}
 		}
 	};
@@ -212,7 +237,7 @@ function AndiCheck(){
 					}
 				}
 				if(forMatchesFound > 1) //Duplicate Found
-					andiAlerter.throwAlert(alert_0012,[id,id]);
+					alert = [alert_0012,[id,id]];
 			}
 		}
 	};
@@ -242,7 +267,7 @@ function AndiCheck(){
 		if($(element).is("[ondblclick]"))
 			events += "[ondblclick] ";
 		if(events !== "")
-			andiAlerter.throwAlert(alert_0112,[$.trim(events)]);
+			alert = [alert_0112,[$.trim(events)]];
 	};
 
 	//This function will check the clickable area of the element.
@@ -255,9 +280,9 @@ function AndiCheck(){
 			if(height < clickableAreaLimit && width < clickableAreaLimit){
 				//The height and with of the element is smaller than the clickableAreaLimit
 				if(andiData.tagNameText == "input[type=radio]")
-					andiAlerter.throwAlert(alert_0210,["radio button"]);
+					alert = [alert_0210,["radio button"]];
 				else if(andiData.tagNameText == "input[type=checkbox]")
-					andiAlerter.throwAlert(alert_0210,["checkbox"]);
+					alert = [alert_0210,["checkbox"]];
 			}
 		}
 	};
@@ -265,10 +290,10 @@ function AndiCheck(){
 	//This function will search for misspelled aria attributes and throw an alert if found.
 	this.areThereAnyMisspelledAria = function(element){
 		if($(element).is("[aria-role]"))
-			andiAlerter.throwAlert(alert_0032);
+			alert = [alert_0032];
 
 		if($(element).is("[aria-labeledby]"))
-			andiAlerter.throwAlert(alert_0031);
+			alert = [alert_0031];
 	};
 
 	//This function will throw alert_0260 or alert_0261
@@ -278,9 +303,9 @@ function AndiCheck(){
 	this.hasThisElementBeenHiddenFromScreenReader = function(element, elementData, isDangerous){
 		if(elementData.isAriaHidden){
 			if(isDangerous) //this type of element should not be hidden from screen reader
-				andiAlerter.throwAlert(alert_0260); //danger level alert
+				alert = [alert_0260]; //danger level alert
 			else //this type of element could be hidden by a screen reader, but tester should investigate
-				andiAlerter.throwAlert(alert_0261); //warning level alert
+				alert = [alert_0261]; //warning level alert
 		}
 	};
 
@@ -300,16 +325,16 @@ function AndiCheck(){
 	//This function will throw alert_0250 if there are disabled elements
 	this.areThereDisabledElements = function(type){
 		if(testPageData.disabledElementsCount > 0)
-			andiAlerter.throwAlert(alert_0250,[testPageData.disabledElementsCount, type],0);
+			alert = [alert_0250,[testPageData.disabledElementsCount, type],0];
 	};
 
 	//This function will throw an alert if the canvas has no focusable children
 	this.lookForCanvasFallback = function(element){
 		if($(element).is("canvas")){
 			if(!$(element).children().filter(":focusable").length)
-				andiAlerter.throwAlert(alert_0124);
+				alert = [alert_0124];
 			else //has focusable fallback content
-				andiAlerter.throwAlert(alert_0127);
+				alert = [alert_0127];
 		}
 	};
 
@@ -329,9 +354,9 @@ function AndiCheck(){
 
 			if(message){
 				if($(element).hasClass("ANDI508-element"))
-					andiAlerter.throwAlert(alert_0078,message);
+					alert = [alert_0078,message];
 				else
-					andiAlerter.throwAlert(alert_0078,message,0);
+					alert = [alert_0078,message,0];
 			}
 		}
 	};
@@ -342,17 +367,17 @@ function AndiCheck(){
 	this.areThereMissingReferences = function(attribute, missingReferences){
 		//Check if any ids were not found
 		if(missingReferences.length === 1){//one reference is missing
-			andiAlerter.throwAlert(alert_0063, [attribute, missingReferences]);
+			alert = [alert_0063, [attribute, missingReferences]];
 		}
 		else if(missingReferences.length > 1){//more than one reference missing
-			andiAlerter.throwAlert(alert_0065, [attribute, missingReferences]);
+			alert = [alert_0065, [attribute, missingReferences]];
 		}
 	};
 
 	//This function will throw alert_0101
 	this.areThereComponentsThatShouldntBeCombined = function(data){
 		if(data.components.ariaLabel && data.components.ariaLabelledby)
-			andiAlerter.throwAlert(alert_0101,["[aria-label] with [aria-labelledby]"]);
+			alert = [alert_0101,["[aria-label] with [aria-labelledby]"]];
 	};
 
 	//This function checks the character length of the componentText.
@@ -365,7 +390,7 @@ function AndiCheck(){
 		){
 			if(componentName === "ariaLabel")
 				componentName = "aria-label";
-			andiAlerter.throwAlert(alert_0151,[componentName]);
+			alert = [alert_0151,[componentName]];
 			return insertCharacterLimitMark(componentText);
 		}
 		return componentText;
