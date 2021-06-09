@@ -9,9 +9,6 @@ var alert_0065 = new Alert("danger", "6", "Improper use of [%%%] possible: Refer
   - This alert is in the function areLabelForValid
 var alert_0091 = new Alert("warning", "9", "Explicit &lt;label[for]&gt; only works with form elements.", "explicit_label_for_forms");
 
-  - This alert was from the function checkCharacterLimit
-var alert_0151 = new Alert("warning", "15", "[%%%] attribute length exceeds " + 250 + " characters; consider condensing.", "character_length");
-
   - These are alerts that are in the function commonFocusableElementChecks and nonFocusableElementChecks
   - NOTE: Alerts about Accessibility Testing are in "ANDI Accessible Name Alerts.txt"
 var alert_0031 = new Alert("danger", "3", "[aria-labeledby] is mispelled, use [aria-labelledby].", "misspell");
