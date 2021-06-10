@@ -24,5 +24,5 @@ var alert_0022 = new Alert("danger", "2", "&lt;legend&gt; should be used in comb
 var alert_0063 = new Alert("warning", "6", "Element referenced by [%%%] with [id=%%%] not found.", "ref_id_not_found");
 var alert_0065 = new Alert("danger", "6", "Improper use of [%%%] possible: Referenced ids \"%%%\" not found.", "improper_ref_id_usage");
 
-  - These are alerts that are used in the function areThereAnyDuplicateIds from AndiCheck
+  - This alert is used in the function areThereAnyDuplicateIds from AndiCheck
 var alert_0011 = new Alert("danger", "1", "%%%; element ids should be unique.", "dup_id");

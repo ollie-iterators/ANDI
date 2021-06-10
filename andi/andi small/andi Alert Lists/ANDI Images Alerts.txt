@@ -14,6 +14,5 @@ var alert_017A = new Alert("caution", "17", "Font Icon. Is this a meaningful ima
 var alert_0126 = new Alert("danger", "12", "Image defined as decorative is in the keyboard tab order.", "decorative_image_tab_order");
 var alert_0183 = new Alert("danger", "18", "[role=image] is invalid; Use [role=img].", "role_image_invalid");
 
-# Shared Image Alerts from andi.js
-  - These are alerts that are for images, focusable elements, buttons and AndiCheck
+  - These are alerts that are used in the function areThereDisabledElements from AndiCheck
 var alert_0250 = new Alert("warning", "25", "Page has %%% disabled %%%; Disabled elements are not in the keyboard tab order.", "disabled_elements");

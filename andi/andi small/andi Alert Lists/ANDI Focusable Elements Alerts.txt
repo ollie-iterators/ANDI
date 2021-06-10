@@ -10,7 +10,5 @@ var alert_0127 = new Alert("caution", "12", "&lt;canvas&gt; element has focusabl
   - This alert is in the function areLabelForValid from AndiCheck
 var alert_0091 = new Alert("warning", "9", "Explicit &lt;label[for]&gt; only works with form elements.", "explicit_label_for_forms");
 
-# Shared Focusable Element Alerts from andi.js
-  - These are alerts that are for focusable elements, images, buttons and AndiCheck
-
+  - These are alerts that are used in the function areThereDisabledElements from AndiCheck
 var alert_0250 = new Alert("warning", "25", "Page has %%% disabled %%%; Disabled elements are not in the keyboard tab order.", "disabled_elements");
