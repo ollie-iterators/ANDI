@@ -1,13 +1,11 @@
 # Alerts from andi.js
   - These are alerts that are just used on andi.js
-
 var alert_0077 = new Alert("danger", "7", "Tabindex value \"%%%\" is not a number.", "tabindex_not_number");
 var alert_0121 = new Alert("caution", "12", "Focusable element is not in keyboard tab order; should it be tabbable?", "not_in_tab_order");
 var alert_0122 = new Alert("caution", "12", "Focusable element is not in keyboard tab order and has no accessible name; should it be tabbable?", "not_in_tab_order_no_name");
 var alert_0123 = new Alert("warning", "12", "Iframe contents are not in keyboard tab order because iframe has negative tabindex.", "iframe_contents_not_in_tab_order");
 
   - These are global alerts that are from AndiChecks (isThereExactlyOnePageTitle, areThereMoreExclusiveChildrenThanParents)
-
 var alert_0071 = new Alert("danger", "7", "Page &lt;title&gt; cannot be empty.", "page_title_empty");
 var alert_0072 = new Alert("danger", "7", "Page has no &lt;title&gt;.", "page_title_none");
 var alert_0073 = new Alert("warning", "7", "Page has more than one &lt;title&gt; tag.", "page_title_multiple");

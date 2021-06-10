@@ -1,6 +1,5 @@
 # Accessible Name Alerts from andi.js
   - These are alerts that are used when Accessible Names are created
-
 var alert_006B = new Alert("warning", "6", "[%%%] is referencing a legend which may cause speech verbosity.", "ref_legend");
 var alert_006C = new Alert("warning", "6", "[%%%] reference contains another [%%%] reference which won't be used for this Output.", "ref_has_ref");
 var alert_006D = new Alert("warning", "6", "[%%%] is directly referencing [id=%%%] multiple times which may cause speech verbosity.", "ref_is_duplicate");
@@ -10,7 +9,6 @@ var alert_0081 = new Alert("warning", "8", "[alt] attribute is meant for &lt;img
 var alert_0142 = new Alert("caution", "14", "Image is presentational; its [alt] will not be used in output.", "image_alt_not_used");
 
   - These are alerts that are used in the function wasAccessibleNameFound in AndiCheck
-
 var alert_0001 = new Alert("danger", "0", " has no accessible name, associated &lt;label&gt;, or [title].", "no_name_form_element");
 var alert_0002 = new Alert("danger", "0", " has no accessible name, innerText, or [title].", "no_name_generic");
 var alert_0003 = new Alert("danger", "0", " has no accessible name, [alt], or [title].", "no_name_image");
@@ -21,3 +19,10 @@ var alert_0008 = new Alert("danger", "0", " has no accessible name.", "no_name_g
 var alert_0009 = new Alert("warning", "0", "Iframe has no accessible name or [title].", "no_name_iframe");
 var alert_0021 = new Alert("warning", "2", "[aria-describedby] should be used in combination with a component that provides an accessible name.", "dby_alone");
 var alert_0022 = new Alert("danger", "2", "&lt;legend&gt; should be used in combination with a component that provides an accessible name.", "legend_alone");
+
+  - These are alerts that are used in the function areThereMissingReferences in AndiCheck
+var alert_0063 = new Alert("warning", "6", "Element referenced by [%%%] with [id=%%%] not found.", "ref_id_not_found");
+var alert_0065 = new Alert("danger", "6", "Improper use of [%%%] possible: Referenced ids \"%%%\" not found.", "improper_ref_id_usage");
+
+  - These are alerts that are used in the function areThereAnyDuplicateIds from AndiCheck
+var alert_0011 = new Alert("danger", "1", "%%%; element ids should be unique.", "dup_id");

@@ -2,13 +2,6 @@
   - These are alerts that are just for AndiCheck
   - NOTE: Work on connecting these alerts to other modules
 
-  - These alerts are in the function areThereMissingReferences
-var alert_0063 = new Alert("warning", "6", "Element referenced by [%%%] with [id=%%%] not found.", "ref_id_not_found");
-var alert_0065 = new Alert("danger", "6", "Improper use of [%%%] possible: Referenced ids \"%%%\" not found.", "improper_ref_id_usage");
-
-  - This alert is in the function areLabelForValid
-var alert_0091 = new Alert("warning", "9", "Explicit &lt;label[for]&gt; only works with form elements.", "explicit_label_for_forms");
-
   - These are alerts that are in the function commonFocusableElementChecks and nonFocusableElementChecks
   - NOTE: Alerts about Accessibility Testing are in "ANDI Accessible Name Alerts.txt"
 var alert_0031 = new Alert("danger", "3", "[aria-labeledby] is mispelled, use [aria-labelledby].", "misspell");
@@ -19,12 +12,10 @@ var alert_0261 = new Alert("warning", "26", "Element is hidden from screen reade
 
   - These are alerts that are just in the function commonFocusableElementChecks
 var alert_0012 = new Alert("danger", "1", "More than one &lt;label[for=%%%]&gt; associates with this element [id=%%%].", "dup_for");
-
-Shared AndiCheck Alerts from andi.js
-  - These are alerts that are for AndiCheck and tables
-var alert_0011 = new Alert("danger", "1", "%%%; element ids should be unique.", "dup_id");
 var alert_0112 = new Alert("caution", "11", "JavaScript event %%% may cause keyboard accessibility issues; investigate.", "javascript_event_caution");
 var alert_0210 = new Alert("caution", "21", "An associated &lt;label&gt; containing text would increase the clickable area of this %%%.", "label_clickable_area");
+
+Shared AndiCheck Alerts from andi.js
 
   - These are alerts that are for AndiCheck, focusable elements, images and buttons
 var alert_0250 = new Alert("warning", "25", "Page has %%% disabled %%%; Disabled elements are not in the keyboard tab order.", "disabled_elements");

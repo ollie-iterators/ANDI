@@ -1,12 +1,14 @@
 # Focusable Element Alerts from andi.js
   - These are alerts that are just for focusable elements
-
 var alert_0052 = new Alert("danger", "5", "[accessKey] value \"%%%\" has more than one character.", "accesskey_more_one");
 var alert_0054 = new Alert("danger", "5", "Duplicate [accessKey=%%%] found on button.", "accesskey_duplicate");
 var alert_0055 = new Alert("caution", "5", "Duplicate [accessKey=%%%] found.", "accesskey_duplicate");
 var alert_0056 = new Alert("danger", "5", "Duplicate [accessKey=%%%] found on link.", "accesskey_duplicate");
 var alert_0124 = new Alert("warning", "12", "If &lt;canvas&gt; element is interactive with mouse, it's not keyboard accessible because there is no focusable fallback content.", "canvas_not_keyboard_accessible");
 var alert_0127 = new Alert("caution", "12", "&lt;canvas&gt; element has focusable fallback content; Test for keyboard equivalency to mouse functionality.", "canvas_has_focusable_fallback");
+
+  - This alert is in the function areLabelForValid from AndiCheck
+var alert_0091 = new Alert("warning", "9", "Explicit &lt;label[for]&gt; only works with form elements.", "explicit_label_for_forms");
 
 # Shared Focusable Element Alerts from andi.js
   - These are alerts that are for focusable elements, images, buttons and AndiCheck
