@@ -118,7 +118,6 @@ function init_module() {
         });
 
         //Detect disabled links
-        andiCheck.areLabelForValid();
         if ($(this).attr("aria-hidden") !== "true") { // Code below was moved from areThereDisabledElements
             alert = [alert_0250, [testPageData.disabledElementsCount, "links"], 0];
         }

@@ -1,6 +1,5 @@
 # Link Alerts from andi.js
   - These are alerts that are just for links
-
 var alert_0069 = new Alert("warning", "6", "In-page anchor target with [id=%%%] not found.", "anchor_target_not_found");
 var alert_007B = new Alert("caution", "7", "This &lt;a&gt; element has [name=%%%] which is a deprecated way of making an anchor target; use [id].", "deprecated_html_a_name");
 var alert_0128 = new Alert("warning", "12", "&lt;a&gt; element has no [href], [id], or [tabindex]; This might be a link that only works with a mouse.", "anchor_purpose_unclear");
@@ -12,7 +11,5 @@ var alert_0163 = new Alert("caution", "16", "Link text is vague and does not ide
 var alert_0164 = new Alert("warning", "16", "Link has click event but is not keyboard accessible.", "link_click_no_keyboard_access");
 var alert_0168 = new Alert("warning", "16", "&lt;a&gt; without [href] may not be recognized as a link; add [role=link] or [href].", "not_recognized_as_link");
 
-# Shared Link Alerts from andi.js
-  - These are alerts that are for links and buttons
-
+  - This alert is used in the function isElementInTabOrder
 var alert_0125 = new Alert("warning", "12", "Element with [role=%%%] not in the keyboard tab order.", "role_tab_order");

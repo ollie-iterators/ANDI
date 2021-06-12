@@ -1,8 +1,7 @@
 # Table Alerts from andi.js
-  - Alerts that are just for tables: alert_0041 - alert_0233
-  - Alerts from AndiCheck: alert_0078
-  - Alerts that are for tables and AndiCheck: alert_0011
+  - Alerts that are just for tables:
 
+var alert_0011 = new Alert("danger", "1", "%%%; element ids should be unique.", "dup_id");
 var alert_0041 = new Alert("warning", "4", "Presentation table has data table markup (%%%); Is this a data table?", "pres_table_not_have");
 var alert_0043 = new Alert("caution", "4", "Table has more than %%% levels of [scope=%%%].", "too_many_scope_levels");
 var alert_0045 = new Alert("danger", "4", "[headers] attribute only valid on &lt;th&gt; or &lt;td&gt;.", "headers_only_for_th_td");
@@ -28,6 +27,6 @@ var alert_007C = new Alert("warning", "7", "[scope=%%%] value is invalid; accept
 var alert_0132 = new Alert("caution", "13", "Empty header cell.", "empty_header_cell");
 var alert_0233 = new Alert("caution", "23", "[role=grid] found; test navigation of design pattern.", "grid_navigation_test");
 
+  - These are alerts that are used in the function detectDeprecatedHTML from AndiCheck:
 var alert_0078 = new Alert("warning", "7", "Using HTML5, found deprecated %%%.", "deprecated_html");
 
-var alert_0011 = new Alert("danger", "1", "%%%; element ids should be unique.", "dup_id");
