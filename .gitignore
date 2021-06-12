@@ -1,1 +1,13 @@
-# Nothing
+.DS_Store
+*.pyc
+*.pyx
+__pycache__/*
+__pycache__
+.vscode/*
+.pytest_cache/*
+*.class
+*.lst
+*.prefs
+.classpath
+.project
+.vscode/settings.json
