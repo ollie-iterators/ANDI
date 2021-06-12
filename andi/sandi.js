@@ -124,8 +124,8 @@ sANDI.analyze = function(){
 				AndiData.attachDataToElement(this);
 			}
 		}
-		else if(AndiModule.activeActionButtons.headings && headingsArray.length === 0 && $(this).is("p,div,span,strong,em")){
-			//Since sANDI has not found a heading yet, check if this element is a fake headings
+		else if(AndiModule.activeActionButtons.headings && $(this).is("p,div,span,strong,em")){
+			//Check if this element is a fake headings
 
 			if(sANDI.isFakeHeading(this)){
 				structureExists = true;
