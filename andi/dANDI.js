@@ -23,6 +23,7 @@ function init_module() {
         //Loop through every visible element and run tests
         $(TestPageData.allElements).each(function () {
             andiData = new AndiData(this);
+            AndiData.grab_coreProperties(this);
             // Work on finding out how to use isTabbable here
             if ($(this).is(":focusable,canvas")) {//If element is focusable, search for accessibility components.
                 andiCheck.commonFocusableElementChecks(andiData, $(this));
