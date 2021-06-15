@@ -1,5 +1,5 @@
 //==========================================//
-//qANDI: landmarks ANDI (small code)        //
+//qANDI: lists ANDI (small code)            //
 //Created By Social Security Administration //
 //==========================================//
 //NOTE: This only contains the code for finding errors and none for displaying the error code
@@ -8,9 +8,13 @@ function init_module() {
     qANDI.index = 1;
 
     //This object class is used to store data about each landmark. Object instances will be placed into an array.
-    function Landmark(element, index, isAriaHidden, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, alerts) {
+    function List(element, index, closestListItem, listContainer, listContainer_role, closestDesc, isAriaHidden, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, alerts) {
         this.element = element;
         this.index = index;
+        this.closestListItem = closestListItem;
+        this.listContainer = listContainer;
+        this.listContainer_role = listContainer_role;
+        this.closestDesc = closestDesc;
         // Common Non Focusable Element Attributes
         this.isAriaHidden = isAriaHidden;
         this.ariaLabel = ariaLabel;
@@ -20,29 +24,59 @@ function init_module() {
         this.alerts = alerts;
     }
 
-    //This object class is used to keep track of the landmarks on the page
-    function Landmarks() {
+    //This object class is used to keep track of the lists on the page
+    function Lists() {
         this.list = [];
         this.count = 0;
+        this.liCount = 0;
+        this.ddCount = 0;
+        this.dtCount = 0;
+        this.listItemRoleCount = 0;
     }
 
     //This analyzes the test page for graphics/image related markup relating to accessibility
     qANDI.analyze = function () {
-        qANDI.landmarks = new Landmarks();
-
+        qANDI.lists = new Lists();
         $(TestPageData.allElements).each(function () { //Loop through every visible element
-            if ($(this).isSemantically("[role=banner],[role=complementary],[role=contentinfo],[role=form],[role=main],[role=navigation],[role=search],[role=region]", "main,header,footer,nav,form,aside")) {
+            if ($(this).isSemantically("[role=listitem],[role=list]", "ol,ul,li,dl,dd,dt")) {
+                var closestListItem = "";
+                var listContainer = "";
+                var listContainer_role = "";
+                var closestDesc = "";
                 var ariaLabel = $(this).attr("aria-label");
                 var ariaLabelledby = $(this).attr("aria-labelledby");
                 var ariaRole = $(this).attr("aria-role");
                 var ariaLabeledby = $(this).attr("aria-labeledby");
-
+                if ($(this).is("[role=listitem]")) {
+                    qANDI.lists.listItemRoleCount += 1;
+                    closestListItem = $(this).closest("[role=list]").length;
+                    if (!closestListItem) { //Is the listitem contained by an appropriate list container?
+                        alert = [alert_0079, ["[role=listitem]", "[role=list]"]];
+                    }
+                } else if ($(this).is("li")) {
+                    qANDI.lists.liCount += 1;
+                    var listContainer = $(this).closest("ol,ul");
+                    if (!$(listContainer).length) {
+                        alert = [alert_0079, ["&lt;li&gt;", "&lt;ol&gt; or &lt;ul&gt;"]];
+                    } else { //check if listContainer is still semantically a list
+                        var listContainer_role = $(listContainer).attr("role");
+                        if (listContainer_role && listContainer_role !== "list")
+                            alert = [alert_0185, [listContainer_role]];
+                    }
+                } else if ($(this).is("dd,dt")) {
+                    qANDI.lists.ddCount += 1;
+                    closestDesc = !$(this).closest("dl").length;
+                    if (closestDesc) {
+                        alert = [alert_007A];
+                    }
+                }
                 andiData = new AndiData(this);
-
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this));
                 AndiData.attachDataToElement(this);
-                qANDI.landmarks.lists.push(new Landmark(this, qANDI.index, andiData.isAriaHidden, andiData.accName, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, ""));
-                qANDI.landmarks.count += 1;
+
+                //Add to the lists array
+                qANDI.lists.list.push(new List(this, qANDI.index, closestListItem, listConatainer, listContainer_role, closestDesc, andiData.isAriaHidden, ariaLabel, ariaLabelledby, ariaRole, ariaLabeledby, ""));
+                qANDI.lists.count += 1;
                 qANDI.index += 1;
             }
         });
