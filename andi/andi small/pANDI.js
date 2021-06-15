@@ -47,11 +47,9 @@ function init_module() {
                     if (fontSize > 22 || (fakeHeadingIsBold && fontSize > 15)) { //fontSize is greater than size limit
                         if (nextText !== "") { //next element has text
                             var nextIsBold = (nextFontWeight === "bold" || nextFontWeight === "bolder" || nextFontWeight > 700);
-                            if (nextFontSize < fontSize) {
-                                //next element's font-size is smaller than fakeHeading font-size
+                            if (nextFontSize < fontSize) { //next element's font-size is smaller than fakeHeading font-size
                                 isFakeHeading = true;
-                            } else if (fakeHeadingIsBold && !nextIsBold) {
-                                //next element's font-weight is lighter than fakeHeading font-weight
+                            } else if (fakeHeadingIsBold && !nextIsBold) { //next element's font-weight is lighter than fakeHeading font-weight
                                 isFakeHeading = true;
                             }
                         }
