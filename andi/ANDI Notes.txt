@@ -42,8 +42,8 @@ handi - Hidden Content
 iandi - iFrames
 landi - Links / Buttons
   - Separated into two areas
-sandi - Structures (Headers, Lists, Landmarks, Live Regions)
-  - Separated into four areas
+sandi - Structures (Headers, Fake Headers, Lists, Landmarks, Live Regions)
+  - Separated into five areas
 tandi - Tables
 
 
