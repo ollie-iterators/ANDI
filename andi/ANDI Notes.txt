@@ -10,7 +10,7 @@
          - This refers to the files with capitalized ANDI in the filename in the main andi file
            - This means you can remove code that does not show things if there are no lists, or links, ..., but not things
              that change how the page looks, or highlights various elements
-         - This has exceptions. If the functionality applies to all elements on the page, then it can go to the vANDI file
+         - This has exceptions. If the functionality applies to all elements on the page, then it can go to the wANDI file
            that works with all the attributes on the site
     - 3. Can remove code if it does not add alerts
          - This refers to the code in the folder named "small andi". This code is where it it is shown how the alerts are made
@@ -45,7 +45,6 @@ landi - Links / Buttons
 sandi - Structures (Headers, Fake Headers, Lists, Landmarks, Live Regions)
   - Separated into five areas
 tandi - Tables
-
 
 List of ANDI that can be altered
 ANDI File Name - ANDI Test

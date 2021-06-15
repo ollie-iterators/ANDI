@@ -9,7 +9,7 @@ function init_module() {
     //create pANDI instance
     var pANDI = new AndiModule(pANDIVersionNumber, "s");
 
-    var headingsArray = [];
+    var fakeHeadingsArray = [];
 
     //This function will analyze the test page for graphics/image related markup relating to accessibility
     pANDI.analyze = function () {
@@ -18,6 +18,7 @@ function init_module() {
             // Test whether any element that could be a heading should possibly be a heading
             if ($(this).is("p,div,span,strong,em")) {
                 if (pANDI.isFakeHeading(this)) {
+                    fakeHeadingsArray.push($(this));
 
                     andiData = new AndiData(this);
 
@@ -117,13 +118,11 @@ function init_module() {
 
     //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
     pANDI.results = function () {
-
-
-        andiBar.updateResultsSummary("Headings: " + headingsArray.length);
+        andiBar.updateResultsSummary("Headings: " + fakeHeadingsArray.length);
 
         //Build Outline
-        for (var x = 0; x < headingsArray.length; x++) {
-            pANDI.outline += pANDI.getOutlineItem(headingsArray[x]);
+        for (var x = 0; x < fakeHeadingsArray.length; x++) {
+            pANDI.outline += pANDI.getOutlineItem(fakeHeadingsArray[x]);
         }
         pANDI.outline += "</div>";
 
