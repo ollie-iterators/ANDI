@@ -42,24 +42,7 @@ function init_module() {
         var role = $(element).attr("role");
         var ariaLevel = $(element).attr("aria-level");
 
-        //Indent the heading according to the level
-        //Results in h1 = 1% left margin, h2 = 2% left margin, etc.
-        var indentLevel;
-        if (ariaLevel) {
-            //Check if positive integar
-            if (parseInt(ariaLevel) > 0 && parseInt(ariaLevel) == ariaLevel)
-                indentLevel = parseInt(ariaLevel);
-            else //aria-level is not a positive integar, default to 2 (defined in ARIA spec, and screen readers are doing this)
-                indentLevel = 2;
-        }
-        else {
-            if (role === "heading")
-                indentLevel = 2; //no aria-level and role=heading, so default to 2 (defined in ARIA spec)
-            else
-                indentLevel = parseInt(tagName.slice(1)); //get second character from h tag
-        }
-
-        var outlineItem = "<a style='margin-left:" + indentLevel + "%' href='#' data-andi508-relatedindex='" + $(element).attr('data-andi508-index') + "'>&lt;" + tagName;
+        var outlineItem = tagName;
 
         //display relevant attributes
         if (role)
@@ -81,7 +64,6 @@ function init_module() {
 
     //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
     sANDI.results = function () {
-
         var moduleActionButtons = "";
         moduleActionButtons += "<button id='ANDI508-readingOrder-button' aria-pressed='false'>reading order" + overlayIcon + "</button>";
 
