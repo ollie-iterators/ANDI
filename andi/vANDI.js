@@ -8,7 +8,7 @@ function init_module() {
     var vandiVersionNumber = "11.1.0";
 
     //create vANDI instance
-    var vANDI = new AndiModule(vandiVersionNumber, "u");
+    var vANDI = new AndiModule(vandiVersionNumber, "v");
 
     //a scope at this depth level triggers an alert
     vANDI.scopeLevelLimit = 4;

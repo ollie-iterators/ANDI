@@ -7,7 +7,7 @@ function init_module() {
     var pANDIVersionNumber = "4.1.4";
 
     //create pANDI instance
-    var pANDI = new AndiModule(pANDIVersionNumber, "s");
+    var pANDI = new AndiModule(pANDIVersionNumber, "p");
 
     var fakeHeadingsArray = [];
 

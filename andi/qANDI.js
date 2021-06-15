@@ -7,7 +7,7 @@ function init_module() {
     var qANDIVersionNumber = "4.1.4";
 
     //create qANDI instance
-    var qANDI = new AndiModule(qANDIVersionNumber, "p");
+    var qANDI = new AndiModule(qANDIVersionNumber, "q");
 
     var listsArray = [];
     var listsCount = 0;

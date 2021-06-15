@@ -7,7 +7,7 @@ function init_module() {
     var uANDIVersionNumber = "4.1.4";
 
     //create uANDI instance
-    var uANDI = new AndiModule(uANDIVersionNumber, "r");
+    var uANDI = new AndiModule(uANDIVersionNumber, "u");
 
     var liveRegionsArray = [];
 

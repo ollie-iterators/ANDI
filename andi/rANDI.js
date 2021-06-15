@@ -7,7 +7,7 @@ function init_module() {
     var rANDIVersionNumber = "4.1.4";
 
     //create rANDI instance
-    var rANDI = new AndiModule(rANDIVersionNumber, "q");
+    var rANDI = new AndiModule(rANDIVersionNumber, "r");
 
     var landmarksArray = [];
 
