@@ -1,57 +1,43 @@
 /*==uANDI==*/
 	/*==ANDI Bar==*/
-	#ANDI508 #ANDI508-elementControls #ANDI508-nextTable-button,
-	#ANDI508 #ANDI508-elementControls #ANDI508-prevTable-button
-		{padding:2px 3px 0px 2px !important;}
-	#ANDI508 .ANDI508-display-headerText
-		{color:#e75dff !important;}
-	#ANDI508 .ANDI508-display-headers
-		{color:#ffbdeb !important;}
+	#ANDI508 #uANDI508-outline-container #uANDI508-outline-heading
+		{display:inline-block; margin-bottom:2px;}
+	#ANDI508 #uANDI508-outline-container
+		{display:none;}
+	#ANDI508 #uANDI508-outline-container .ANDI508-scrollable
+		{font-family:monospace; padding:5px 0px 1px 1em;}
+	#ANDI508 #uANDI508-outline-container .ANDI508-scrollable br
+		{font-size:11pt;}
+	#ANDI508 #uANDI508-outline-container .ANDI508-scrollable a:hover,
+	#ANDI508 #uANDI508-outline-container .ANDI508-scrollable a:focus
+		{text-decoration:underline !important; color:#f160b1 !important;}
 		
 	/*=Test Page=*/
-	#ANDI508-testPage.uANDI508-testPage th.ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.uANDI508-testPage [role=columnheader].ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.uANDI508-testPage [role=rowheader].ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.uANDI508-testPage table[role="presentation"].ANDI508-element.ANDI508-highlight
-		{border:1.5px dashed #a02178 !important; outline:0 !important; animation:pulse_uANDI_header 3s infinite;}
-		@keyframes pulse_uANDI_header{
-			50% {border-color:#b03188 !important;}
-		}
-	#ANDI508-testPage.uANDI508-testPage td.ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.uANDI508-testPage [role=cell].ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.uANDI508-testPage [role=gridcell].ANDI508-element.ANDI508-highlight
-		{border:1.5px dotted #cd7aa8 !important; outline:0 !important; animation:pulse_uANDI 3s infinite;}
-		@keyframes pulse_uANDI{
-			50% {border-color:#c26f9d !important;}
-		}
-	#ANDI508-testPage.uANDI508-testPage table.ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.uANDI508-testPage [role=table].ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.uANDI508-testPage [role=grid].ANDI508-element.ANDI508-highlight
-		{outline:0 !important;}
-	
 	#ANDI508-testPage.uANDI508-testPage .ANDI508-element.ANDI508-highlight.ANDI508-element-danger
-		{border:2px dashed #df3131 !important; outline:0 !important;}
-	#ANDI508-testPage.uANDI508-testPage table.ANDI508-element.ANDI508-highlight.ANDI508-element-danger,
-	#ANDI508-testPage.uANDI508-testPage [role=table].ANDI508-element.ANDI508-highlight.ANDI508-element-danger,
-	#ANDI508-testPage.uANDI508-testPage [role=grid].ANDI508-element.ANDI508-highlight.ANDI508-element-danger
-		{border:4px dashed #df3131 !important; outline:0 !important;}	
-	
-	#ANDI508-testPage.uANDI508-testPage td.ANDI508-highlight.uANDI508-highlight,
-	#ANDI508-testPage.uANDI508-testPage [role=cell].ANDI508-highlight.uANDI508-highlight,
-	#ANDI508-testPage.uANDI508-testPage [role=gridcell].ANDI508-highlight.uANDI508-highlight
-		{background:none !important; background-color:#ffe6f3 !important;}
-	#ANDI508-testPage.uANDI508-testPage th.ANDI508-highlight.uANDI508-highlight,
-	#ANDI508-testPage.uANDI508-testPage [role=columnheader].ANDI508-highlight.uANDI508-highlight,
-	#ANDI508-testPage.uANDI508-testPage [role=rowheader].ANDI508-highlight.uANDI508-highlight
-		{background:none !important; background-color:#fdabd6 !important;}
-	#ANDI508-testPage.uANDI508-testPage .ANDI508-highlight.uANDI508-highlight, 
-	#ANDI508-testPage.uANDI508-testPage .ANDI508-highlight.uANDI508-highlight *
-		{color:black !important;}
-
+		{border:3px dashed #dd2f2f !important; outline:0 !important; animation:pulse_uANDI_danger 3s linear infinite !important;}
+		@keyframes pulse_uANDI_danger{
+			50% {border-color:#ef7200 !important;}
+		}
+	#ANDI508-testPage.uANDI508-testPage .ANDI508-element.ANDI508-highlight
+		{border:1.5px dashed #9b8acf !important; outline:0 !important; animation:pulse_uANDI 3s linear infinite !important;}
+		@keyframes pulse_uANDI{
+			50% {border-color:#604f94 !important;}
+		}
+	#ANDI508-testPage.uANDI508-testPage ul.ANDI508-element.ANDI508-highlight,
+	#ANDI508-testPage.uANDI508-testPage ol.ANDI508-element.ANDI508-highlight,
+	#ANDI508-testPage.uANDI508-testPage dl.ANDI508-element.ANDI508-highlight,
+	#ANDI508-testPage.uANDI508-testPage [role=list].ANDI508-element.ANDI508-highlight
+		{border:2.5px dashed #e161e1 !important; outline:0 !important; animation:pulse_uANDI_list 3s linear infinite !important;}
+		@keyframes pulse_uANDI_list{
+			50% {border-color:#9b1b9b !important;}
+		}
+	#ANDI508-testPage.uANDI508-testPage li.ANDI508-element.ANDI508-highlight,
+	#ANDI508-testPage.uANDI508-testPage dt.ANDI508-element.ANDI508-highlight,
+	#ANDI508-testPage.uANDI508-testPage dd.ANDI508-element.ANDI508-highlight,
+	#ANDI508-testPage.uANDI508-testPage [role=listitem].ANDI508-element.ANDI508-highlight
+		{border:1px dashed #9786ec !important; outline:0 !important; animation:pulse_uANDI 3s linear infinite !important;}
 	#ANDI508-testPage.uANDI508-testPage .ANDI508-element.ANDI508-highlight.ANDI508-element-active
-		{outline:4px solid deeppink !important; border-color:transparent !important}
-	#ANDI508-testPage.uANDI508-testPage table.ANDI508-element.ANDI508-highlight.ANDI508-element-active,
-	#ANDI508-testPage.uANDI508-testPage [role=table].ANDI508-element.ANDI508-highlight.ANDI508-element-active,
-	#ANDI508-testPage.uANDI508-testPage [role=grid].ANDI508-element.ANDI508-highlight.ANDI508-element-active
-		{border:4px solid deeppink !important; outline:0 !important;}
+		{outline:4px solid deeppink !important;}
 		
+	#ANDI508-testPage span.ANDI508-overlay.ANDI508-overlay-readingOrder
+		{background:#d89fec}

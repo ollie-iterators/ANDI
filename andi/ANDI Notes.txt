@@ -57,11 +57,11 @@ kANDI  - iFrames
 mANDI  - Links
 nANDI  - Buttons
 oANDI  - Headers
-pANDI  - Lists
-qANDI  - Landmarks
-rANDI  - Live Regions
-uANDI  - Tables
-vANDI  - Fake Headers
+pANDI  - Fake Headers
+qANDI  - Lists
+rANDI  - Landmarks
+uANDI  - Live Regions
+vANDI  - Tables
 wANDI  - Attributes
 
 # NOTE: Think about putting attributes like role and lang, ... into their own file

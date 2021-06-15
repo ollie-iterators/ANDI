@@ -1,5 +1,5 @@
 //==========================================//
-//pANDI: lists ANDI                         //
+//pANDI: fake headings ANDI                 //
 //Created By Social Security Administration //
 //==========================================//
 function init_module() {
@@ -7,59 +7,64 @@ function init_module() {
     var pANDIVersionNumber = "4.1.4";
 
     //create pANDI instance
-    var pANDI = new AndiModule(pANDIVersionNumber, "p");
+    var pANDI = new AndiModule(pANDIVersionNumber, "s");
 
-    var listsArray = [];
-    var listsCount = 0;
-    var olCount = 0;
-    var ulCount = 0;
-    var dlCount = 0;
-    var listRoleCount = 0;
+    var headingsArray = [];
 
     //This function will analyze the test page for graphics/image related markup relating to accessibility
     pANDI.analyze = function () {
         //Loop through every visible element
         $(TestPageData.allElements).each(function () {
-            if ($(this).isSemantically("[role=listitem],[role=list]", "ol,ul,li,dl,dd,dt")) {
-                //Add to the lists array
-                listsArray.push($(this));
-                structureExists = true;
+            // Test whether any element that could be a heading should possibly be a heading
+            if ($(this).is("p,div,span,strong,em")) {
+                if (pANDI.isFakeHeading(this)) {
 
-                if ($(this).isSemantically("[role=list]", "ol,ul,dl")) {
-                    if ($(this).is("ul")) {
-                        ulCount++;
-                    } else if ($(this).is("ol")) {
-                        olCount++;
-                    } else if ($(this).is("dl")) {
-                        dlCount++;
-                    } else {
-                        listRoleCount++;
-                    }
-                    listsCount++;
+                    andiData = new AndiData(this);
+
+                    andiAlerter.throwAlert(alert_0190);
+                    AndiData.attachDataToElement(this);
                 }
-
-                andiData = new AndiData(this);
-
-                //Is the listitem contained by an appropriate list container?
-                if ($(this).is("[role=listitem]")) {
-                    if (!$(this).closest("[role=list]").length)
-                        andiAlerter.throwAlert(alert_0079, ["[role=listitem]", "[role=list]"]);
-                } else if ($(this).is("li")) {
-                    var listContainer = $(this).closest("ol,ul");
-                    if (!$(listContainer).length) {
-                        andiAlerter.throwAlert(alert_0079, ["&lt;li&gt;", "&lt;ol&gt; or &lt;ul&gt;"]);
-                    } else { //check if listContainer is still semantically a list
-                        var listContainer_role = $(listContainer).attr("role");
-                        if (listContainer_role && listContainer_role !== "list")
-                            andiAlerter.throwAlert(alert_0185, [listContainer_role]);
-                    }
-                } else if ($(this).is("dd,dt") && !$(this).closest("dl").length) {//Is the dl,dt contained by a dl?
-                    andiAlerter.throwAlert(alert_007A);
-                }
-                andiCheck.commonNonFocusableElementChecks(andiData, $(this));
-                AndiData.attachDataToElement(this);
             }
         });
+    };
+
+    //This function determine's if the element looks like a heading but is not semantically a heading
+    pANDI.isFakeHeading = function (element) {
+        var isFakeHeading = false;
+
+        var text = $.trim($(element).text());
+        if (text.length > 0 && text.length < 30) {
+            //text is not empty, but less than char limit
+
+            var fakeHeading_fontSize = parseInt($(element).css("font-size"));
+            var fakeHeading_fontWeight = $(element).css("font-weight");
+
+            if (fakeHeading_fontSize > 22 || (isBold(fakeHeading_fontWeight) && fakeHeading_fontSize > 15)) {
+                //fakeHeading_fontSize is greater than size limit
+
+                var nextElement = $(element).next().filter(":visible");
+
+                if ($.trim($(nextElement).text()) !== "") { //next element has text
+
+                    var nextElement_fontWeight = $(nextElement).css("font-weight");
+                    var nextElement_fontSize = parseInt($(nextElement).css("font-size"));
+
+                    if (nextElement_fontSize < fakeHeading_fontSize) {
+                        //next element's font-size is smaller than fakeHeading font-size
+                        isFakeHeading = true;
+                    }
+                    else if (isBold(fakeHeading_fontWeight) && !isBold(nextElement_fontWeight)) {
+                        //next element's font-weight is lighter than fakeHeading font-weight
+                        isFakeHeading = true;
+                    }
+                }
+            }
+        }
+        return isFakeHeading;
+
+        function isBold(weight) {
+            return (weight === "bold" || weight === "bolder" || weight >= 700);
+        }
     };
 
     //Initialize outline
@@ -73,7 +78,24 @@ function init_module() {
         var role = $(element).attr("role");
         var ariaLevel = $(element).attr("aria-level");
 
-        var outlineItem = "<a href='#' data-andi508-relatedindex='" + $(element).attr('data-andi508-index') + "'>&lt;" + tagName;
+        //Indent the heading according to the level
+        //Results in h1 = 1% left margin, h2 = 2% left margin, etc.
+        var indentLevel;
+        if (ariaLevel) {
+            //Check if positive integar
+            if (parseInt(ariaLevel) > 0 && parseInt(ariaLevel) == ariaLevel)
+                indentLevel = parseInt(ariaLevel);
+            else //aria-level is not a positive integar, default to 2 (defined in ARIA spec, and screen readers are doing this)
+                indentLevel = 2;
+        }
+        else {
+            if (role === "heading")
+                indentLevel = 2; //no aria-level and role=heading, so default to 2 (defined in ARIA spec)
+            else
+                indentLevel = parseInt(tagName.slice(1)); //get second character from h tag
+        }
+
+        var outlineItem = "<a style='margin-left:" + indentLevel + "%' href='#' data-andi508-relatedindex='" + $(element).attr('data-andi508-index') + "'>&lt;" + tagName;
 
         //display relevant attributes
         if (role)
@@ -96,35 +118,50 @@ function init_module() {
     //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
     pANDI.results = function () {
 
-        $("#ANDI508-lists-button")
-            .attr("aria-selected", "true")
-            .addClass("ANDI508-module-action-active");
-        //No outline for lists mode
 
-        andiBar.updateResultsSummary("List Elements: " + listsArray.length);
-        var listCounts = "";
-        var delimiter = "";
-        var listTypesUsed = "";
+        andiBar.updateResultsSummary("Headings: " + headingsArray.length);
 
-        listCounts += olCount + " ordered list (ol)";
-        listTypesUsed += "ol";
-        delimiter = ", ";
+        //Build Outline
+        for (var x = 0; x < headingsArray.length; x++) {
+            pANDI.outline += pANDI.getOutlineItem(headingsArray[x]);
+        }
+        pANDI.outline += "</div>";
 
-        listCounts += delimiter + ulCount + " unordered list (ul)";
-        listTypesUsed += delimiter + "ul";
-        delimiter = ", ";
+        $("#ANDI508-additionalPageResults").html("<button id='ANDI508-viewOutline-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>" + listIcon + "view headings list</button><div id='pANDI508-outline-container' class='ANDI508-viewOtherResults-expanded' tabindex='0'></div>");
 
-        listCounts += delimiter + dlCount + " description list (dl)";
-        listTypesUsed += delimiter + "dl";
+        //Define outline button
+        $("#ANDI508-viewOutline-button").click(function () {
+            if ($(this).attr("aria-expanded") === "true") {
+                //hide Outline, show alert list
+                $("#pANDI508-outline-container").slideUp(AndiSettings.andiAnimationSpeed);
+                if (testPageData.numberOfAccessibilityAlertsFound > 0) {
+                    $("#ANDI508-alerts-list").show();
+                }
+                $(this)
+                    .addClass("ANDI508-viewOtherResults-button-expanded")
+                    .html(listIcon + "view headings list")
+                    .attr("aria-expanded", "false")
+                    .removeClass("ANDI508-viewOtherResults-button-expanded ANDI508-module-action-active");
+            }
+            else {
+                //show Outline, hide alert list
+                $("#ANDI508-alerts-list").hide();
 
-        listCounts += delimiter + listRoleCount + " role=list";
-        listTypesUsed += delimiter + "[role=list]";
-
-        $("#ANDI508-additionalPageResults").html(listCounts);
+                andiSettings.minimode(false);
+                $(this)
+                    .html(listIcon + "hide headings list")
+                    .attr("aria-expanded", "true")
+                    .addClass("ANDI508-viewOtherResults-button-expanded ANDI508-module-action-active")
+                    .find("img").attr("src", icons_url + "list-on.png");
+                $("#pANDI508-outline-container").slideDown(AndiSettings.andiAnimationSpeed).focus();
+            }
+            andiResetter.resizeHeights();
+            return false;
+        });
 
         if (!andiBar.focusIsOnInspectableElement()) {
             andiBar.showElementControls();
-            andiBar.showStartUpSummary("List structure found.<br />Determine if the <span class='ANDI508-module-name-s'>list</span> container types used (" + listTypesUsed + ") are appropriately applied.", true);
+            andiBar.showStartUpSummary("Heading structure found.<br />Determine if <span class='ANDI508-module-name-s'>headings</span> are appropriately applied.", true);
         }
 
         $("#pANDI508-outline-container")
@@ -164,6 +201,7 @@ function init_module() {
         andiAlerter.updateAlertList();
 
         $("#ANDI508").focus();
+
     };
 
     //This function will update the info in the Active Element Inspection.
@@ -192,15 +230,13 @@ function init_module() {
         function getDefault_ariaLive(element, elementData) {
             var val = $.trim($(element).attr("aria-live"));
             if (!val) {
-                if (elementData.role === "alert") {
+                if (elementData.role === "alert")
                     val = "assertive";
-                } else if (elementData.role === "log" || elementData.role === "status") {
+                else if (elementData.role === "log" || elementData.role === "status")
                     val = "polite";
-                } else if (elementData.role === "marquee" || elementData.role === "timer") {
+                else if (elementData.role === "marquee" || elementData.role === "timer")
                     val = "off";
-                } else {
-                    return; //no default
-                }
+                else return; //no default
             }
             return ["aria-live", val];
         }
@@ -209,17 +245,16 @@ function init_module() {
         function getDefault_ariaAtomic(element, elementData) {
             var val = $.trim($(element).attr("aria-atomic"));
             if (!val) {
-                if (elementData.role === "alert" || elementData.role === "status") {
+                if (elementData.role === "alert" || elementData.role === "status")
                     val = "true";
-                } else if (elementData.role === "log" || elementData.role === "marquee" || elementData.role === "timer") {
+                else if (elementData.role === "log" || elementData.role === "marquee" || elementData.role === "timer")
                     val = "false";
-                } else {
-                    return; //no default
-                }
+                else return; //no default
             }
             return ["aria-atomic", val];
         }
     };
     pANDI.analyze();
     pANDI.results();
+
 }//end init

@@ -31,52 +31,6 @@ function init_module() {
         });
     };
 
-    //This function determine's if the element looks like a heading but is not semantically a heading
-    sANDI.isFakeHeading = function (element) {
-
-        var isFakeHeading = false;
-
-        var limit_textLength = 30; //text longer than this will not be considered a fake heading
-
-        var limit_fontSize = 22; //px  (an h2 starts around 24px)
-        var limit_boldFontSize = 15; //px
-
-        var text = $.trim($(element).text());
-        if (text.length > 0 && text.length < limit_textLength) {
-            //text is not empty, but less than char limit
-
-            var fakeHeading_fontSize = parseInt($(element).css("font-size"));
-            var fakeHeading_fontWeight = $(element).css("font-weight");
-
-            if (fakeHeading_fontSize > limit_fontSize ||
-                (isBold(fakeHeading_fontWeight) && fakeHeading_fontSize > limit_boldFontSize)
-            ) { //fakeHeading_fontSize is greater than size limit
-
-                var nextElement = $(element).next().filter(":visible");
-
-                if ($.trim($(nextElement).text()) !== "") { //next element has text
-
-                    var nextElement_fontWeight = $(nextElement).css("font-weight");
-                    var nextElement_fontSize = parseInt($(nextElement).css("font-size"));
-
-                    if (nextElement_fontSize < fakeHeading_fontSize) {
-                        //next element's font-size is smaller than fakeHeading font-size
-                        isFakeHeading = true;
-                    }
-                    else if (isBold(fakeHeading_fontWeight) && !isBold(nextElement_fontWeight)) {
-                        //next element's font-weight is lighter than fakeHeading font-weight
-                        isFakeHeading = true;
-                    }
-                }
-            }
-        }
-        return isFakeHeading;
-
-        function isBold(weight) {
-            return (weight === "bold" || weight === "bolder" || weight >= 700);
-        }
-    };
-
     //Initialize outline
     sANDI.outline = "<h3 tabindex='-1' id='sANDI508-outline-heading'>Headings List (ordered by occurance):</h3><div class='ANDI508-scrollable'>";
 
@@ -294,8 +248,6 @@ function init_module() {
 
             var elementData = $(element).data("andi508");
 
-
-
             var addOnProps = AndiData.getAddOnProps(element, elementData,
                 [
                     "aria-level",
@@ -306,14 +258,6 @@ function init_module() {
                 ]);
 
             andiBar.displayTable(elementData, element, addOnProps);
-
-            if (AndiModule.activeActionButtons.liveRegions) { //For Live Region mode, update the output live
-                //Copy from the AC table
-                var innerText = $("#ANDI508-accessibleComponentsTable td.ANDI508-display-innerText").first().html();
-                if (innerText) {
-                    elementData.accName = "<span class='ANDI508-display-innerText'>" + innerText + "</span>";
-                }
-            }
 
             andiBar.displayOutput(elementData, element, addOnProps);
         }

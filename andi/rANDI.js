@@ -1,5 +1,5 @@
 //==========================================//
-//rANDI: live regions ANDI 					//
+//rANDI: landmarks ANDI 					//
 //Created By Social Security Administration //
 //==========================================//
 function init_module() {
@@ -7,39 +7,25 @@ function init_module() {
     var rANDIVersionNumber = "4.1.4";
 
     //create rANDI instance
-    var rANDI = new AndiModule(rANDIVersionNumber, "r");
+    var rANDI = new AndiModule(rANDIVersionNumber, "q");
 
-    var liveRegionsArray = [];
+    var landmarksArray = [];
 
     //This function will analyze the test page for graphics/image related markup relating to accessibility
     rANDI.analyze = function () {
 
         //Loop through every visible element
         $(TestPageData.allElements).each(function () {
-            if ($(this).is("[role=alert],[role=status],[role=log],[role=marquee],[role=timer],[aria-live=polite],[aria-live=assertive]")) {
-                //Add to the live regions array
-                liveRegionsArray.push($(this));
+            if ($(this).isSemantically("[role=banner],[role=complementary],[role=contentinfo],[role=form],[role=main],[role=navigation],[role=search],[role=region]", "main,header,footer,nav,form,aside")) {
+                //Add to the landmarks array
+                landmarksArray.push($(this));
 
-                andiData = new AndiData(this);
+                if (AndiModule.activeActionButtons.landmarks) {
+                    andiData = new AndiData(this);
 
-                if ($(this).isContainerElement()) {
-                    var innerText = andiUtility.getVisibleInnerText(this);
-                    if (innerText) {
-                        //For live regions, screen readers only use the innerText
-                        //override the accName to just the innerText
-                        andiData.accName = "<span class='ANDI508-display-innerText'>" + innerText + "</span>";
-                    } else {//no visible innerText
-                        andiAlerter.throwAlert(alert_0133);
-                        andiData.accName = "";
-                    }
-                    //accDesc should not appear in output
-                    delete andiData.accDesc;
+                    andiCheck.commonNonFocusableElementChecks(andiData, $(this));
+                    AndiData.attachDataToElement(this);
                 }
-                else//not a container element
-                    andiAlerter.throwAlert(alert_0184);
-                if ($(this).find("textarea,input:not(:hidden,[type=submit],[type=button],[type=image],[type=reset]),select").length)
-                    andiAlerter.throwAlert(alert_0182);
-                AndiData.attachDataToElement(this);
             }
         });
     };
@@ -53,12 +39,15 @@ function init_module() {
         var displayCharLength = 60; //for truncating innerText
         var tagName = $(element).prop("tagName").toLowerCase();
         var role = $(element).attr("role");
+        var ariaLevel = $(element).attr("aria-level");
 
         var outlineItem = "<a href='#' data-andi508-relatedindex='" + $(element).attr('data-andi508-index') + "'>&lt;" + tagName;
 
         //display relevant attributes
         if (role)
             outlineItem += " role='" + role + "' ";
+        if (ariaLevel)
+            outlineItem += " aria-level='" + ariaLevel + "' ";
 
         outlineItem += "&gt;";
         outlineItem += "<span class='ANDI508-display-innerText'>";
@@ -74,10 +63,11 @@ function init_module() {
 
     //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
     rANDI.results = function () {
-        andiBar.updateResultsSummary("Live Regions: " + liveRegionsArray.length);
+        //No outline for landmarks mode
+        andiBar.updateResultsSummary("Landmarks: " + landmarksArray.length);
         if (!andiBar.focusIsOnInspectableElement()) {
             andiBar.showElementControls();
-            andiBar.showStartUpSummary("<span class='ANDI508-module-name-s'>Live regions</span> found.<br />Discover the Output of the <span class='ANDI508-module-name-s'>live regions</span> by hovering over the highlighted areas or using the next/previous buttons. For updated Output, refresh ANDI whenever the Live Region changes.", true);
+            andiBar.showStartUpSummary("Landmark structure found.<br />Ensure that each <span class='ANDI508-module-name-s'>landmark</span> is applied appropriately to the corresponding section of the page.", true);
         }
 
         $("#rANDI508-outline-container")
@@ -127,22 +117,16 @@ function init_module() {
             andiBar.prepareActiveElementInspection(element);
 
             var elementData = $(element).data("andi508");
-
             var addOnProps = AndiData.getAddOnProps(element, elementData,
-                [getDefault_ariaLive(element, elementData),
-                getDefault_ariaAtomic(element, elementData),
+                [
+                    "aria-level",
+                    getDefault_ariaLive(element, elementData),
+                    getDefault_ariaAtomic(element, elementData),
                     "aria-busy",
                     "aria-relevant"
                 ]);
 
             andiBar.displayTable(elementData, element, addOnProps);
-
-            //For Live Region mode, update the output live
-            //Copy from the AC table
-            var innerText = $("#ANDI508-accessibleComponentsTable td.ANDI508-display-innerText").first().html();
-            if (innerText) {
-                elementData.accName = "<span class='ANDI508-display-innerText'>" + innerText + "</span>";
-            }
 
             andiBar.displayOutput(elementData, element, addOnProps);
         }
@@ -179,6 +163,8 @@ function init_module() {
             return ["aria-atomic", val];
         }
     };
+
     rANDI.analyze();
     rANDI.results();
+
 }//end init
