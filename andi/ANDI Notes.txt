@@ -26,6 +26,8 @@ NOTE:
  1. iandi was changed, but the changes were reverted
  2. andi.js, handi.js, and fandi.js were changed, but it was just to get rid of the rest of the allVisibleElements
     that were used
+ 3. sandi.js was changed to remove the condition that stopped elements from being tested if they were fake headers
+    if no headers were found on the page
 
 NOTES about attributes to get
 1. Get attributes from add-on props. Confirm that they are in the code

@@ -11,5 +11,5 @@ var alert_0163 = new Alert("caution", "16", "Link text is vague and does not ide
 var alert_0164 = new Alert("warning", "16", "Link has click event but is not keyboard accessible.", "link_click_no_keyboard_access");
 var alert_0168 = new Alert("warning", "16", "&lt;a&gt; without [href] may not be recognized as a link; add [role=link] or [href].", "not_recognized_as_link");
 
-  - This alert is used in the function isElementInTabOrder
+  - This alert is used in the function isElementInTabOrder (Used for links and buttons)
 var alert_0125 = new Alert("warning", "12", "Element with [role=%%%] not in the keyboard tab order.", "role_tab_order");
