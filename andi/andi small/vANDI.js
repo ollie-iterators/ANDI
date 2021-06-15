@@ -88,7 +88,6 @@ function init_module() {
             vANDI.tables.tableCount++;
         });
 
-
         if (!activeElementFound) {
             vANDI.tables.tableIndex = 0;//Analyze first table
         }
@@ -164,11 +163,12 @@ function init_module() {
 
                 var presentationTablesShouldNotHave = "";
 
-                if ($(table).find("caption").filter(":visible").first().length)
+                if ($(table).find("caption").filter(":visible").first().length) {
                     presentationTablesShouldNotHave += "a &lt;caption&gt;, ";
-
-                if ($(all_th).first().length)
+                }
+                if ($(all_th).first().length) {
                     presentationTablesShouldNotHave += "&lt;th&gt; cells, ";
+                }
 
                 cellCount = 0;
 
@@ -176,22 +176,26 @@ function init_module() {
                 var presTableWithHeaders = false;
                 $(all_cells).each(function () {
                     cellCount++;
-                    if ($(this).attr("scope"))
+                    if ($(this).attr("scope")) {
                         presTableWithScope = true;
-                    if ($(this).attr("headers"))
+                    }
+                    if ($(this).attr("headers")) {
                         presTableWithHeaders = true;
+                    }
                 });
 
-                if (presTableWithScope)
+                if (presTableWithScope) {
                     presentationTablesShouldNotHave += "cells with [scope] attributes, ";
-                if (presTableWithHeaders)
+                }
+                if (presTableWithHeaders) {
                     presentationTablesShouldNotHave += "cells with [headers] attributes, ";
-
-                if ($(table).attr("summary"))
+                }
+                if ($(table).attr("summary")) {
                     presentationTablesShouldNotHave += "a [summary] attribute, ";
-
-                if (presentationTablesShouldNotHave)
+                }
+                if (presentationTablesShouldNotHave) {
                     alert = [alert_0041, [presentationTablesShouldNotHave.slice(0, -2)]];
+                }
 
                 AndiData.attachDataToElement(table);
 
@@ -224,8 +228,9 @@ function init_module() {
                     cells = $(row).find("th,td").filter(":visible");
 
                     //Set colCount
-                    if (colCount < cells.length)
+                    if (colCount < cells.length) {
                         colCount = cells.length;
+                    }
 
                     //Figure out colIndex/rowIndex colgroupIndex/rowgroupIndex
                     $(cells).each(function loopA() {
@@ -233,11 +238,12 @@ function init_module() {
                         cell = $(this);
                         if ($(cell).is("th")) {
                             thCount++;
-                            if (thCount > 1)
+                            if (thCount > 1) {
                                 hasThRow = true;
-                            if (rowCount > 1)
+                            }
+                            if (rowCount > 1) {
                                 hasThCol = true;
-
+                            }
                             scope = $(cell).attr("scope");
                             if (scope) {
                                 if (scope == "colgroup") {
@@ -324,16 +330,19 @@ function init_module() {
                     });
 
                     //Determine if table is using colgroupSegmentation
-                    if (colgroupSegmentation_colgroupsPerRowCounter == 1)
+                    if (colgroupSegmentation_colgroupsPerRowCounter == 1) {
                         colgroupSegmentation_segments++;
-                    if (colgroupSegmentation_segments > 1)
+                    }
+                    if (colgroupSegmentation_segments > 1) {
                         colgroupSegmentation = true;
+                    }
 
                     //There are no more cells in this row, however, the rest of the rowspanArray needs to be decremented.
                     //Decrement any additional rowspans from previous rows
                     for (var d = colIndex; d < rowspanArray.length; d++) {
-                        if (rowspanArray[d] > 1)
+                        if (rowspanArray[d] > 1) {
                             rowspanArray[d]--;
+                        }
                     }
                     rowIndex++;
                 });
@@ -367,8 +376,9 @@ function init_module() {
                                     lastRowgroupIndex = $(this).attr("data-vANDI508-rowgroupindex");
                                     //Get rowspan
                                     lastRowgroupRowSpan = $(this).attr("rowspan");
-                                    if (!lastRowgroupRowSpan)
+                                    if (!lastRowgroupRowSpan) {
                                         lastRowgroupRowSpan = 1;
+                                    }
                                 } else if (lastRowgroupIndex && lastRowgroupRowSpan > 0) {
                                     $(this).attr("data-vANDI508-rowgroupindex", lastRowgroupIndex);
                                 }
@@ -387,11 +397,11 @@ function init_module() {
                     scope = $(cell).attr("scope");
                     headers = $(cell).attr("headers");
 
-                    if (headers)
+                    if (headers) {
                         tableHasHeaders = true;
+                    }
 
                     if (scope && $(cell).is("th")) {
-
                         if (scope == "row" || scope == "rowgroup") {
                             tableHasScopes = true;
 
@@ -449,23 +459,28 @@ function init_module() {
                         //andiData.grab_scope($(cell));
                         if (AndiModule.activeActionButtons.scopeMode) {
                             //Only throw scope alerts if in "scope mode"
-                            if (tooManyScopeRowLevels)
+                            if (tooManyScopeRowLevels) {
                                 alert = [alert_0043, [4, "row"]];
-                            if (tooManyScopeColLevels)
+                            }
+                            if (tooManyScopeColLevels) {
                                 alert = [alert_0043, [4, "col"]];
+                            }
                             andiCheck.detectDeprecatedHTML($(cell));
-                            if (scope !== "col" && scope !== "row" && scope !== "colgroup" && scope !== "rowgroup")//scope value is invalid
+                            if (scope !== "col" && scope !== "row" && scope !== "colgroup" && scope !== "rowgroup") { //scope value is invalid
                                 alert = [alert_007C, [scope]];
+                            }
                         }
                     }
 
-                    if (headers)
+                    if (headers) {
                         vANDI.grab_headers(cell, andiData, table);
+                    }
 
                     //If this is not the upper left cell
-                    if ($(cell).is("th") && !andiData.accName && !($(this).attr("data-vANDI508-rowindex") === "1" && $(this).attr("data-vANDI508-colindex") === "1"))
+                    if ($(cell).is("th") && !andiData.accName && !($(this).attr("data-vANDI508-rowindex") === "1" && $(this).attr("data-vANDI508-colindex") === "1")) {
                         //Header cell is empty
                         alert = [alert_0132];
+                    }
 
                     AndiData.attachDataToElement(cell);
                 });
@@ -487,8 +502,9 @@ function init_module() {
                     }
                 } else { //Has th cells
                     if (AndiModule.activeActionButtons.scopeMode) {
-                        if (hasThRow && hasThCol)
+                        if (hasThRow && hasThCol) {
                             scopeRequired = true;
+                        }
 
                         if (!tableHasScopes) {
                             //Table Has No Scopes
@@ -516,20 +532,24 @@ function init_module() {
                                     var yDirectionThCount = 0;
                                     $(all_th).each(function () {
                                         //determine if x direction multiple th at this rowindex
-                                        if (rowIndex == $(this).attr("data-vANDI508-rowindex"))
+                                        if (rowIndex == $(this).attr("data-vANDI508-rowindex")) {
                                             xDirectionThCount++;
-                                        if (colIndex == $(this).attr("data-vANDI508-colindex"))
+                                        }
+                                        if (colIndex == $(this).attr("data-vANDI508-colindex")) {
                                             yDirectionThCount++;
-
-                                        if (xDirectionThCount > 1)
+                                        }
+                                        if (xDirectionThCount > 1) {
                                             xDirectionHasTh = true;
-                                        if (yDirectionThCount > 1)
+                                        }
+                                        if (yDirectionThCount > 1) {
                                             yDirectionHasTh = true;
+                                        }
 
                                         if (xDirectionHasTh && yDirectionHasTh) {
                                             //This cell is at th intersection and doesn't have scope
-                                            if (!$(cell).hasClass("ANDI508-element-danger"))
+                                            if (!$(cell).hasClass("ANDI508-element-danger")) {
                                                 $(cell).addClass("ANDI508-element-danger");
+                                            }
                                             andiAlerter.throwAlertOnOtherElement($(cell).attr("data-andi508-index"), alert_0047);
                                             return false; //breaks out of the loop
                                         }
@@ -617,8 +637,9 @@ function init_module() {
                 cells = $(row).find("th,[role=columnheader],[role=rowheader]," + cell_role).filter(":visible");
 
                 //Set colCount
-                if (colCount < cells.length)
+                if (colCount < cells.length) {
                     colCount = cells.length;
+                }
 
                 //Figure out colIndex/rowIndex colgroupIndex/rowgroupIndex
                 $(cells).each(function loopA() {
@@ -626,11 +647,12 @@ function init_module() {
                     cell = $(this);
                     if ($(cell).is("th,[role=columnheader],[role=rowheader]")) {
                         headerCount++;
-                        if (headerCount > 1)
+                        if (headerCount > 1) {
                             hasHeaderRow = true;
-                        if (rowCount > 1)
+                        }
+                        if (rowCount > 1) {
                             hasHeaderCol = true;
-
+                        }
                         if ($(cell).is("th") && !$(cell).is("[role=columnheader],[role=rowheader]")) {
                             //table cell is missing role
                             headersMissingRoleCount++;
@@ -712,8 +734,9 @@ function init_module() {
                 //There are no more cells in this row, however, the rest of the rowspanArray needs to be decremented.
                 //Decrement any additional rowspans from previous rows
                 for (var d = colIndex; d < rowspanArray.length; d++) {
-                    if (rowspanArray[d] > 1)
+                    if (rowspanArray[d] > 1) {
                         rowspanArray[d]--;
+                    }
                 }
                 rowIndex++;
             });
@@ -740,9 +763,10 @@ function init_module() {
 
 
                     //If this is not the upper left cell
-                    if ($(cell).is("[role=columnheader],[role=rowheader]") && !andiData.accName && !($(this).attr("data-vANDI508-rowindex") === "1" && $(this).attr("data-vANDI508-colindex") === "1"))
+                    if ($(cell).is("[role=columnheader],[role=rowheader]") && !andiData.accName && !($(this).attr("data-vANDI508-rowindex") === "1" && $(this).attr("data-vANDI508-colindex") === "1")) {
                         //Header cell is empty
                         alert = [alert_0132];
+                    }
 
                     AndiData.attachDataToElement(cell);
                 } else {
@@ -762,8 +786,9 @@ function init_module() {
 
             andiCheck.commonNonFocusableElementChecks(andiData, $(table));
 
-            if (role === "grid")
+            if (role === "grid") {
                 alert = [alert_0233];
+            }
 
             if (all_rows.length === 0) { //no rows
                 alert = [alert_004H, [role]];
@@ -776,12 +801,14 @@ function init_module() {
             }
 
             //If any header is missing a role, throw alert
-            if (headersMissingRoleCount)
+            if (headersMissingRoleCount) {
                 alert = [alert_004J, [role, headersMissingRoleCount]];
+            }
 
             //If a cell is not contained by a role=row, throw alert
-            if (cellsNotContainedByRow)
+            if (cellsNotContainedByRow) {
                 alert = [alert_004K, [role, cellsNotContainedByRow]];
+            }
 
             cellCount = headerCount + nonHeaderCount;
 
@@ -803,8 +830,9 @@ function init_module() {
                         }
                     });
                 }
-                if (!isContainedByRow)
+                if (!isContainedByRow) {
                     cellsNotContainedByRow++;
+                }
                 return isContainedByRow;
             }
         }
@@ -872,8 +900,9 @@ function init_module() {
                         }
                     }
 
-                    if (referencedElementText !== "") //Add referenceId
+                    if (referencedElementText !== "") { //Add referenceId
                         displayHeaders += andiLaser.createLaserTarget(referencedElement, "<span class='ANDI508-display-id'>#" + idsArray[x] + "</span>");
+                    }
 
                     //Add to accumulatedText
                     accumulatedText += referencedElementText + " ";
@@ -881,9 +910,10 @@ function init_module() {
             }//end for loop
             andiCheck.areThereMissingReferences("headers", missingReferences);
 
-            if ($.trim(accumulatedText) === "")
+            if ($.trim(accumulatedText) === "") {
                 //ALL of the headers references do not return any text
                 alert = [alert_0068];
+            }
 
             return displayHeaders;
 
@@ -895,7 +925,9 @@ function init_module() {
                     for (z = 0; z < tableThIds.length; z++) {
                         if (id === tableThIds[z].id) {
                             idMatchesFound++;
-                            if (idMatchesFound === 2) break; //duplicate found so stop searching, for performance
+                            if (idMatchesFound === 2) {
+                                break; //duplicate found so stop searching, for performance
+                            }
                         }
                     }
                     if (idMatchesFound > 1) {//Duplicate Found
