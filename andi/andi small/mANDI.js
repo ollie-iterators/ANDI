@@ -1,5 +1,5 @@
 //==========================================//
-//mANDI: links ANDI (small version)         //
+//mANDI: links ANDI (small code)            //
 //Created By Social Security Administration //
 //==========================================//
 //NOTE: This only contains the code for finding errors and none for displaying the error code
