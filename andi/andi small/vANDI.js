@@ -92,14 +92,8 @@ function init_module() {
             //When each cell has been evaluated, it will then attach alerts to the table element.
 
             //These variables keep track of properties of the table
-
-            var scopeRowLevel = ["", "", ""];
-            var tooManyScopeColLevels = false;
-            var scopeColLevel = ["", "", ""];
             var colgroupIndex = 0;
             var rowgroupIndex = 0;
-            var colgroupSegmentation = false;
-            var colgroupSegmentation_segments = 0;
             var colgroupSegmentation_colgroupsPerRowCounter = 0;
 
             //This array is used to keep track of the rowspan of the previous row
@@ -263,14 +257,12 @@ function init_module() {
                         rowspan = parseInt(rowspan);
                     }
 
-
                     //Increase the rowspanArray length if needed
                     if ((rowspanArray.length === 0) || (rowspanArray[colIndex] === undefined)) {
                         rowspanArray.push(parseInt(rowspan));
                     } else {
                         firstRow = false;
                     }
-
 
                     //store colIndex
                     if (!firstRow) {
