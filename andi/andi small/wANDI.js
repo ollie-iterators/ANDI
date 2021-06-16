@@ -19,40 +19,6 @@ function init_module() {
     // NOTE: Extracted preCalculateTableName so that it was not deleted when removing a table creation function
     // NOTE: # of Alert_ text: 30
 
-    //Override Previous Element Button to jump to and analyze the previous table:
-    $("#ANDI508-button-prevElement").off("click").click(function () {
-        var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
-        if (isNaN(index)) { //no active element yet
-            vANDI.tables.tableIndex = 0;
-            andiFocuser.focusByIndex(testPageData.andiElementIndex); //first element
-        } else if (index == 1) {
-            if (vANDI.tables.tableCount <= 1) { //If there is only 1 table, loop back to last cell
-                andiFocuser.focusByIndex(testPageData.andiElementIndex);
-            } else {
-                //Analyze previous table
-                $("#ANDI508-prevTable-button").click();
-                //Focus on last cell
-                andiFocuser.focusByIndex(testPageData.andiElementIndex);
-            }
-        } else { //Go to previous element in this table
-            andiFocuser.focusByIndex(index - 1);
-        }
-    });
-
-    //Override Next Element Button to jump to and analyze the next table:
-    $("#ANDI508-button-nextElement").off("click").click(function () {
-        var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
-        if (index == testPageData.andiElementIndex || isNaN(index)) {
-            if (vANDI.tables.tableCount <= 1) { //If there is only 1 table, loop back to first cell
-                andiFocuser.focusByIndex(1);
-            } else { //Analyze previous table
-                $("#ANDI508-nextTable-button").click();
-            }
-        } else { //Go to next element in this table
-            andiFocuser.focusByIndex(index + 1);
-        }
-    });
-
     //These variables are for the current table being analyzed (the active table)
     var cellCount = 0;					//The total number of <th> and <td>
     var rowCount = 0;					//The total number of <tr>
