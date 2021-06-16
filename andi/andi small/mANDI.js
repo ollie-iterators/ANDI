@@ -33,7 +33,6 @@ function init_module() {
 
     //This function will analyze the test page for link related markup relating to accessibility
     mANDI.analyze = function () {
-
         mANDI.links = new Links();
 
         //Variables used to build the links list array.
@@ -41,7 +40,6 @@ function init_module() {
 
         //Loop through every visible element and run tests
         $(TestPageData.allElements).each(function () {
-            //ANALYZE LINKS
             if ($(this).isSemantically("[role=link]", "a[href],a[tabindex],area")) {
                 if (!andiCheck.isThisElementDisabled(this)) {
 
