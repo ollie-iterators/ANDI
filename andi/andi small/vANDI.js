@@ -339,7 +339,6 @@ function init_module() {
                         andiCheck.commonNonFocusableElementChecks(andiData, $(cell));
                     }
 
-
                     //If this is not the upper left cell
                     if ($(cell).is("[role=columnheader],[role=rowheader]") && !andiData.accName && !($(this).attr("data-vANDI508-rowindex") === "1" && $(this).attr("data-vANDI508-colindex") === "1")) {
                         //Header cell is empty
