@@ -45,7 +45,6 @@ function init_module() {
                 vANDI.tables.tableIndex = vANDI.tables.tableCount;//set this index to this table
                 activeElementFound = true;
             }
-
             vANDI.tables.tableCount++;
         });
 
