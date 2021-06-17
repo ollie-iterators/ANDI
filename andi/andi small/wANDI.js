@@ -12,7 +12,6 @@ function init_module() {
         this.list = [];             //Stores all tables in an array
         this.count = 0;
         this.tableCount = 0;        //The total number of tables
-        this.presentationCount = 0; //The total number of presentation tables
         this.dataCount = 0;         //The total number of data tables (tables that aren't presentation tables)
         this.tableIndex = -1;       //The array index of the active table
     }
