@@ -68,11 +68,6 @@ function init_module() {
 
         rowCount = 0;
         colCount = 0;
-        var row, cell;
-        var rowspan;
-        var rowIndexPlusRowspan, colIndexPlusColspan;
-        var indexValue;
-        var child;
 
         //loop through the <table> and set data-* attributes
 
