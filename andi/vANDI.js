@@ -20,7 +20,7 @@ function init_module() {
     //Holding the shift key will prevent inspection from changing.
     AndiModule.hoverability = function (event) {
         //When hovering, inspect the cells of the data table, not the table itself. Unless it's a presentation table
-        if (!event.shiftKey && !$(this).is("table:not([role=presentation],[role=none]),[role=table],[role=grid],[role=treegrid]"))
+        if (!event.shiftKey && !$(this).is("table:not([role=presentation],[role=none])"))
             AndiModule.inspect(this);
     };
 
@@ -100,14 +100,11 @@ function init_module() {
                 tableArray.push($(this));
 
                 //Is this a presentation table?
-                if ($(this).is("[role=presentation],[role=none]")) {
-                    //It's a presentation table
+                if ($(this).is("[role=presentation],[role=none]")) { //It's a presentation table
                     presentationTablesCount++;
-                } else if ($(this).isSemantically("", "table")) {
-                    //It's a data table
+                } else if ($(this).isSemantically("", "table")) { //It's a data table
                     dataTablesCount++;
-                } else {
-                    //It table with a non-typical role
+                } else { //It table with a non-typical role
                     presentationTablesCount++;
                 }
 
@@ -120,8 +117,6 @@ function init_module() {
 
                 tableCountTotal++;
             });
-
-            //If the page has tables
 
             var moduleActionButtons = "";
 
@@ -241,46 +236,31 @@ function init_module() {
     vANDI.results = function () {
 
         //Update Results Summary text depending on the active table type (data or presentation)
-        andiBar.updateResultsSummary("Tables: " + tableCountTotal + " (data tables: " + dataTablesCount + ", presentation tables: " + presentationTablesCount + ")");
+        andiBar.updateResultsSummary("Tables: " + tableCountTotal + " (presentation tables: " + presentationTablesCount + ")");
 
-        if (tableCountTotal > 0) {
-            if (!vANDI.viewList_buttonAppended) {
-                $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewTableList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>" + listIcon + "view table list</button>");
+        if (!vANDI.viewList_buttonAppended) {
+            $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewTableList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>" + listIcon + "view table list</button>");
 
-                //viewTableList Button
-                $("#ANDI508-viewTableList-button").click(function () {
-                    if (!vANDI.viewList_tableReady) {
-                        vANDI.viewList_buildTable();
-                        vANDI.viewList_attachEvents();
-                        vANDI.viewList_tableReady = true;
-                    }
-                    vANDI.viewList_toggle(this);
-                    andiResetter.resizeHeights();
-                    return false;
-                });
+            //viewTableList Button
+            $("#ANDI508-viewTableList-button").click(function () {
+                if (!vANDI.viewList_tableReady) {
+                    vANDI.viewList_buildTable();
+                    vANDI.viewList_attachEvents();
+                    vANDI.viewList_tableReady = true;
+                }
+                vANDI.viewList_toggle(this);
+                andiResetter.resizeHeights();
+                return false;
+            });
 
-                vANDI.viewList_buttonAppended = true;
-            }
+            vANDI.viewList_buttonAppended = true;
         }
 
-        if (dataTablesCount > 0) {
-            andiBar.showElementControls();
-            if (!andiBar.focusIsOnInspectableElement()) {
-                var startupMessage = "Discover accessibility markup for <span class='ANDI508-module-name-t'>tables</span> by tabbing to or hovering over the table cells. " +
-                    "Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every data table cell. ";
-                if (dataTablesCount + presentationTablesCount > 1)
-                    startupMessage += "Tables should be tested one at a time - Press the next table button <img src='" + icons_url + "next-table.png' style='width:12px' alt='' /> to cycle through the tables.";
-                andiBar.showStartUpSummary(startupMessage, true);
-            }
-            else
-                $("#ANDI508-pageAnalysis").show();
-        } else if (presentationTablesCount > 0) {
-            andiBar.showElementControls();
-            if (!andiBar.focusIsOnInspectableElement()) {
-                andiBar.showStartUpSummary("Only <span class='ANDI508-module-name-t'>presentation tables</span> were found on this page, no data tables.", true);
-            } else {
-                $("#ANDI508-pageAnalysis").show();
-            }
+        andiBar.showElementControls();
+        if (!andiBar.focusIsOnInspectableElement()) {
+            andiBar.showStartUpSummary("Only <span class='ANDI508-module-name-t'>presentation tables</span> were found on this page, no data tables.", true);
+        } else {
+            $("#ANDI508-pageAnalysis").show();
         }
         andiAlerter.updateAlertList();
         if (!AndiModule.activeActionButtons.viewTableList && testPageData.numberOfAccessibilityAlertsFound > 0)
@@ -298,7 +278,7 @@ function init_module() {
         //Highlight This Element
         $(element).addClass("vANDI508-highlight");
 
-        var associatedHeaderCellsText = (!$(element).is("table,[role=table],[role=grid],[role=treegrid]")) ? grabHeadersAndHighlightRelatedCells(element) : "";
+        var associatedHeaderCellsText = (!$(element).is("table")) ? grabHeadersAndHighlightRelatedCells(element) : "";
 
         var elementData = $(element).data("andi508");
 
@@ -311,8 +291,6 @@ function init_module() {
             [
                 ["scope", $(element).attr("scope")],
                 ["id", element.id],
-                "colspan",
-                "rowspan",
                 "aria-colcount",
                 "aria-rowcount",
                 "aria-colindex",
@@ -335,7 +313,7 @@ function init_module() {
         function grabHeadersAndHighlightRelatedCells(element) {
             var accumulatedHeaderText = "";
             var accumulatedHeaderTextArray = []; //will store each text block so it can be compared against
-            var table = $(element).closest("table,[role=table],[role=grid],[role=treegrid]");
+            var table = $(element).closest("table");
             var rowIndex = $(element).attr("data-vandi508-rowindex");
             var colIndex = $(element).attr("data-vandi508-colindex");
             var colgroupIndex = $(element).attr("data-vandi508-colgroupindex");
@@ -588,7 +566,7 @@ function init_module() {
         var role = $.trim($(table).attr("role"));
 
         //temporarily hide any nested tables so they don't interfere with analysis
-        $(table).find("table,[role=table],[role=grid],[role=treegrid]").each(function () {
+        $(table).find("table").each(function () {
             $(this)
                 .attr("andi508-temporaryhide", $(this).css("display"))
                 .css("display", "none");
@@ -597,7 +575,7 @@ function init_module() {
         rowCount = 0;
         colCount = 0;
         var row, cell;
-        var colIndex, rowIndex, colspan, rowspan;
+        var colIndex, rowIndex;
         var child;
 
         //loop through the <table> and set data-* attributes
