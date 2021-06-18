@@ -1,7 +1,7 @@
-//======================================================//
-//vANDI: presentation tables ANDI - Loop A (small code) //
-//Created By Social Security Administration             //
-//======================================================//
+//=============================================//
+//vANDI: presentation tables ANDI (small code) //
+//Created By Social Security Administration    //
+//=============================================//
 //NOTE: This only contains the code for finding errors and none for displaying the error code
 function init_module() {
     //create vANDI instance
