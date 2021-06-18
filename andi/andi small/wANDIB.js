@@ -277,8 +277,6 @@ function init_module() {
             //These variables keep track of the <tr>, <th>, <td> on each <table>
             var headerCount = 0;
             var nonHeaderCount = 0
-            var hasHeaderRow = false;		//true when there are two or more th in a row
-            var hasHeaderCol = false;		//true when two or more rows contain a th
             var headersMissingRoleCount = 0;//used for alert_004J
             var cellsNotContainedByRow = 0;	//used for alert_004K
             var cell_role = (role === "table") ? "[role=cell]" : "[role=gridcell]";
@@ -339,128 +337,7 @@ function init_module() {
             AndiData.attachDataToElement(table);
 
             testPageData.andiElementIndex = lastIndex; //set the index back to the last element's index so things dependent on this number don't break
-
-            //This function determines if the cell is contained by an element with role=row
-            //  and if that row is within the current table
-            function isContainedByRowRole(cell) {
-                var containingRow = $(cell).closest("[role=row]");
-                var isContainedByRow = false;
-                if (containingRow) {
-                    //Check if the containing row is part of this table's role=row elements
-                    $(all_rows).each(function () {
-                        if ($(this).is(containingRow)) {
-                            isContainedByRow = true;
-                            return false; //break out of each loop
-                        }
-                    });
-                }
-                if (!isContainedByRow) {
-                    cellsNotContainedByRow++;
-                }
-                return isContainedByRow;
-            }
         }
     }
-
-    vANDI.grab_headers = function (element, elementData, table) {
-        var headers = $.trim($(element).attr("headers"));
-        var headersText = "";
-        if (headers !== undefined) {
-            if (!$(element).is("th") && !$(element).is("td")) {
-                alert = [alert_0045];
-            } else {
-                headers = getHeadersReferences(element, headers, table);
-            }
-        }
-        //stores the actual vaule of the headers, not the parsed (grabbed) headersText
-        elementData.components.headers = headers;
-
-        function getHeadersReferences(element, headers, table) {
-            var idsArray = headers.split(" "); //split the list on the spaces, store into array. So it can be parsed through one at a time.
-            var accumulatedText = "";//this variable is going to store what is found. And will be returned
-            var message, splitMessage = "";
-            var referencedElement, referencedElementText;
-            var missingReferences = [];
-            var displayHeaders = "";
-            var tableIds = $(table).find("[id]"); //array of all elements within the table that have an id
-            var tableThIds = $(table).find("th[id]"); //array of all th cells within the table that have an id
-
-            //Traverse through the array
-            for (var x = 0; x < idsArray.length; x++) {
-                //Can the aria list id be found somewhere on the page?
-                if (idsArray[x] !== "") {
-
-                    //Set the referenced element (only looking for the id within the same table)
-                    referencedElement = undefined; //set to undefined
-
-                    //Loop through all elements within the table that have an id
-                    $.each(tableIds, function () {
-                        if (this.id === idsArray[x]) {
-                            referencedElement = this;
-                            return;
-                        }
-                    });
-
-                    referencedElementText = "";
-
-                    if ($(referencedElement).html() !== undefined && $(referencedElement).closest("table").is(table)) {
-                        //element with id was found within the same table
-                        if ($(referencedElement).is("td")) { //referenced element is a td
-                            alert = [alert_0067, [idsArray[x]]];
-                        } else if (!$(referencedElement).is("th")) { //referenced element is not a th
-                            alert = [alert_0066, [idsArray[x]]];
-                        } else { //referenced element is a th
-                            //Check if this is referencing a duplicate id within the same table
-                            areThereAnyDuplicateIds_headers(idsArray[x], tableThIds);
-                            referencedElementText += andiUtility.getVisibleInnerText(referencedElement);
-                        }
-                    } else { //referenced element was not found or was not within the same table
-                        referencedElement = document.getElementById(idsArray[x]); //search within entire document for this id
-
-                        if ($(referencedElement).html() !== undefined) {
-                            alert = [alert_0062, [idsArray[x]]]; //referenced element is in another table
-                        } else { //No, this id was not found at all, add to list.
-                            missingReferences.push(idsArray[x]);
-                        }
-                    }
-
-                    if (referencedElementText !== "") { //Add referenceId
-                        displayHeaders += andiLaser.createLaserTarget(referencedElement, "<span class='ANDI508-display-id'>#" + idsArray[x] + "</span>");
-                    }
-
-                    //Add to accumulatedText
-                    accumulatedText += referencedElementText + " ";
-                }
-            }//end for loop
-            andiCheck.areThereMissingReferences("headers", missingReferences);
-
-            if ($.trim(accumulatedText) === "") {
-                //ALL of the headers references do not return any text
-                alert = [alert_0068];
-            }
-
-            return displayHeaders;
-
-            //This function will search the table for th cells with duplicate ids.
-            function areThereAnyDuplicateIds_headers(id, tableThIds) {
-                if (id && tableThIds.length > 1) {
-                    var idMatchesFound = 0;
-                    //loop through tableThIds and compare
-                    for (z = 0; z < tableThIds.length; z++) {
-                        if (id === tableThIds[z].id) {
-                            idMatchesFound++;
-                            if (idMatchesFound === 2) {
-                                break; //duplicate found so stop searching, for performance
-                            }
-                        }
-                    }
-                    if (idMatchesFound > 1) {//Duplicate Found
-                        var message = "[headers] attribute is referencing a duplicate id [id=" + id + "] within the same table";
-                        alert = [alert_0011, [message]];
-                    }
-                }
-            }
-        }
-    };
     vANDI.analyze();
 }//end init
