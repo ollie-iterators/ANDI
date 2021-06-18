@@ -1,5 +1,5 @@
 //=========================================//
-//vANDI: tables ANDI					   //
+//vANDI: presentation tables ANDI          //
 //Created By Social Security Administration//
 //=========================================//
 
@@ -598,8 +598,6 @@ function init_module() {
         colCount = 0;
         var row, cell;
         var colIndex, rowIndex, colspan, rowspan;
-        var rowIndexPlusRowspan, colIndexPlusColspan;
-        var indexValue;
         var child;
 
         //loop through the <table> and set data-* attributes
@@ -626,15 +624,6 @@ function init_module() {
         var scopeColLevel = ["", "", ""];
         var colgroupIndex = 0;
         var rowgroupIndex = 0;
-        var colgroupSegmentation = false;
-        var colgroupSegmentation_segments = 0;
-        var colgroupSegmentation_colgroupsPerRowCounter = 0;
-
-        //This array is used to keep track of the rowspan of the previous row
-        //They will be checked against before assigning the colIndex.
-        //This technique is only needed for setting colIndex
-        //since the rowIndex is handled more "automatically" by the <tr> tags
-        var rowspanArray = [];
 
         //Cache the visible elements (performance)
         var all_rows = $(table).find("tr").filter(":visible");
