@@ -71,10 +71,6 @@ function init_module() {
 
         //loop through the <table> and set data-* attributes
 
-        //The way vANDI analyzes the table is that it begins looking at the cells first
-        //to determine if there is any existing scenarios that should trigger an alert.
-        //When each cell has been evaluated, it will then attach alerts to the table element.
-
         //Cache the visible elements (performance)
         var all_rows = $(table).find("tr").filter(":visible");
         var all_th = $(all_rows).find("th").filter(":visible");
