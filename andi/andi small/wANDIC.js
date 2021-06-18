@@ -17,12 +17,13 @@ function init_module() {
     }
     // NOTE: Extracted preCalculateTableName because it was a long function
 
+    // TODO: Work on understanding why alerts are found in wANDI small code files. If there is no way
+    // to not get the alert_ in the file, then remove the alert from the code
+
     //These variables are for the current table being analyzed (the active table)
     var cellCount = 0;					//The total number of <th> and <td>
     var rowCount = 0;					//The total number of <tr>
     var colCount = 0;					//The total number of columns (maximum number of <th> or <td> in a <tr>)
-
-    // NOTE: Get rid of scopeMode
 
     //This function will analyze the test page for table related markup relating to accessibility
     vANDI.analyze = function () {
