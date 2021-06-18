@@ -1,7 +1,7 @@
-//=================================================//
-//wANDI: data tables - ANDI Loop A(small code)     //
-//Created By Social Security Administration        //
-//=================================================//
+//==================================================//
+//wANDI: data tables ANDI - Loop C (small code)     //
+//Created By Social Security Administration         //
+//==================================================//
 //NOTE: This only contains the code for finding errors and none for displaying the error code
 function init_module() {
     //create vANDI instance
@@ -113,144 +113,107 @@ function init_module() {
             //Cache the visible elements (performance)
             var all_rows = $(table).find("tr").filter(":visible");
             var all_th = $(all_rows).find("th").filter(":visible");
+            var all_cells = $(all_rows).find("th,td").filter(":visible");
             //==DATA TABLE==//
             //This is a little hack to force the table tag to go first in the index
             //so that it is inspected first with the previous and next buttons.
             //Skip index 0, so that later the table can be placed at 0
             testPageData.andiElementIndex = 1;
 
-            //Loop A (establish the rowIndex/colIndex)
-            rowIndex = 0;
-            var firstRow = true;
+            //Loop C (grab the accessibility components)
+            $(all_cells).each(function loopC() {
+                cell = $(this);
 
-            var cells;
-            $(all_rows).each(function () {
-                //Reset variables for this row
-                row = $(this);
-                rowCount++;
-                colIndex = 0;
-                colgroupSegmentation_colgroupsPerRowCounter = 0;
+                //scope
+                scope = $(cell).attr("scope");
+                headers = $(cell).attr("headers");
 
-                cells = $(row).find("th,td").filter(":visible");
-
-                //Set colCount
-                if (colCount < cells.length) {
-                    colCount = cells.length;
+                if (headers) {
+                    tableHasHeaders = true;
                 }
 
-                //Figure out colIndex/rowIndex colgroupIndex/rowgroupIndex
-                $(cells).each(function loopA() {
-                    //Increment cell counters
-                    cell = $(this);
-                    if ($(cell).is("th")) {
-                        thCount++;
-                        if (thCount > 1) {
-                            hasThRow = true;
-                        }
-                        if (rowCount > 1) {
-                            hasThCol = true;
-                        }
-                        scope = $(cell).attr("scope");
-                        if (scope) {
-                            if (scope == "colgroup") {
-                                //TODO: more logic here to catch misuse of colgroup
-                                colgroupIndex++;
-                                $(cell).attr("data-vANDI508-colgroupindex", colgroupIndex);
-                                colgroupSegmentation_colgroupsPerRowCounter++;
-                            } else if (scope == "rowgroup") {
-                                //TODO: more logic here to catch misuse of colgroup
-                                rowgroupIndex++;
-                                $(cell).attr("data-vANDI508-rowgroupindex", rowgroupIndex);
+                if (scope && $(cell).is("th")) {
+                    if (scope == "row" || scope == "rowgroup") {
+                        tableHasScopes = true;
+
+                        //Determine if there are "too many" scope rows
+                        if (!tooManyScopeRowLevels) {
+                            colIndex = $(cell).attr("data-vANDI508-colindex");
+                            for (var f = 0; f <= 4; f++) {
+                                if (!scopeRowLevel[f] || (!scopeRowLevel[f] && (scopeRowLevel[f - 1] != colIndex))) {
+                                    //scope found at this colIndex
+                                    scopeRowLevel[f] = colIndex;
+                                    break;
+                                } else if ((f == 4) && (colIndex >= f)) {
+                                    //scope levelLimit has been exceeeded
+                                    tooManyScopeRowLevels = true;
+                                }
                             }
                         }
-                    } else {
-                        tdCount++;
-                    }
+                    } else if (scope == "col" || scope == "colgroup") {
+                        tableHasScopes = true;
 
-                    //get colspan
-                    //TODO: mark for alert here if value is invalid
-                    colspan = $(cell).attr("colspan");
-                    if (colspan === undefined) {
-                        colspan = 1;
-                    } else {
-                        colspan = parseInt(colspan);
-                    }
-                    //get rowspan
-                    //TODO: mark for alert here if value is invalid
-                    rowspan = $(cell).attr("rowspan");
-                    if (rowspan === undefined) {
-                        rowspan = 1;
-                    } else {
-                        rowspan = parseInt(rowspan);
-                    }
-
-                    //Increase the rowspanArray length if needed
-                    if ((rowspanArray.length === 0) || (rowspanArray[colIndex] === undefined)) {
-                        rowspanArray.push(parseInt(rowspan));
-                    } else {
-                        firstRow = false;
-                    }
-
-                    //store colIndex
-                    if (!firstRow) {
-                        //loop through the rowspanArray until a 1 is found
-                        for (var a = colIndex; a < rowspanArray.length; a++) {
-                            if (rowspanArray[a] == 1) {
-                                break;
-                            } else if (rowspanArray[a] > 1) {
-                                //there is a rowspan at this colIndex that is spanning over this row
-                                //decrement this item in the rowspan array
-                                rowspanArray[a]--;
-                                //increment the colIndex an extra amount to essentially skip this colIndex location
-                                colIndex++;
+                        //Determine if there are too many scope columns
+                        if (!tooManyScopeColLevels) {
+                            rowIndex = $(cell).attr("data-vANDI508-rowindex");
+                            for (var g = 0; g <= 4; g++) {
+                                if (!scopeColLevel[g] || (!scopeColLevel[g] && (scopeColLevel[g - 1] != rowIndex))) {
+                                    //scope found at this rowIndex
+                                    scopeColLevel[g] = rowIndex;
+                                    break;
+                                } else if ((g == 4) && (rowIndex >= g)) {
+                                    //scope levelLimit has been exceeeded
+                                    tooManyScopeColLevels = true;
+                                }
                             }
                         }
                     }
+                }
 
-                    if (colspan < 2) {
-                        $(cell).attr("data-vANDI508-colindex", colIndex);
-                        rowspanArray[colIndex] = rowspan;
-                        colIndex++;
-                    } else { //colspan > 1
-                        indexValue = "";
-                        colIndexPlusColspan = parseInt(colIndex) + colspan;
-                        for (var b = colIndex; b < colIndexPlusColspan; b++) {
-                            indexValue += b + " ";
-                            rowspanArray[colIndex] = rowspan;
-                            colIndex++;
+                //FOR EACH CELL...
+                //Determine if cell has a child element (link, form element, img)
+                child = $(cell).find("a,button,input,select,textarea,img").first();
+
+                //Grab accessibility components from the cell
+                andiData = new AndiData(cell[0]);
+
+                if (child.length) {
+                    //Also grab accessibility components from the child
+                    //andiData.grabComponents($(child), true);//overwrite with components from the child, except for innerText
+                    //Do alert checks for the child
+                    andiCheck.commonFocusableElementChecks(andiData, $(child));
+                } else { //Do alert checks for the cell
+                    andiCheck.commonNonFocusableElementChecks(andiData, $(cell));
+                }
+
+                if (scope) {
+                    //andiData.grab_scope($(cell));
+                    if (AndiModule.activeActionButtons.scopeMode) {
+                        //Only throw scope alerts if in "scope mode"
+                        if (tooManyScopeRowLevels) {
+                            alert = [alert_0043, [4, "row"]];
                         }
-                        $(cell).attr("data-vANDI508-colindex", $.trim(indexValue));
-                    }
-
-                    //store rowIndex
-                    if (rowspan < 2) {
-                        $(cell).attr("data-vANDI508-rowindex", rowIndex);
-                    } else {
-                        //rowspanArray[colIndex] = rowspan;
-                        indexValue = "";
-                        rowIndexPlusRowspan = parseInt(rowIndex) + rowspan;
-                        for (var c = rowIndex; c < rowIndexPlusRowspan; c++)
-                            indexValue += c + " ";
-                        $(cell).attr("data-vANDI508-rowindex", $.trim(indexValue));
-                    }
-                });
-
-                //Determine if table is using colgroupSegmentation
-                if (colgroupSegmentation_colgroupsPerRowCounter == 1) {
-                    colgroupSegmentation_segments++;
-                }
-                if (colgroupSegmentation_segments > 1) {
-                    colgroupSegmentation = true;
-                }
-
-                //There are no more cells in this row, however, the rest of the rowspanArray needs to be decremented.
-                //Decrement any additional rowspans from previous rows
-                for (var d = colIndex; d < rowspanArray.length; d++) {
-                    if (rowspanArray[d] > 1) {
-                        rowspanArray[d]--;
+                        if (tooManyScopeColLevels) {
+                            alert = [alert_0043, [4, "col"]];
+                        }
+                        andiCheck.detectDeprecatedHTML($(cell));
+                        if (scope !== "col" && scope !== "row" && scope !== "colgroup" && scope !== "rowgroup") { //scope value is invalid
+                            alert = [alert_007C, [scope]];
+                        }
                     }
                 }
-                rowIndex++;
+
+                if (headers) {
+                    vANDI.grab_headers(cell, andiData, table);
+                }
+
+                //If this is not the upper left cell
+                if ($(cell).is("th") && !andiData.accName && !($(this).attr("data-vANDI508-rowindex") === "1" && $(this).attr("data-vANDI508-colindex") === "1")) {
+                    //Header cell is empty
+                    alert = [alert_0132];
+                }
+
+                AndiData.attachDataToElement(cell);
             });
 
             //FOR THE DATA TABLE...
@@ -382,129 +345,44 @@ function init_module() {
             //Cache the visible elements (performance)
             var all_rows = $(table).find("[role=row]").filter(":visible");
             //var all_th = $(all_rows).find("[role=columnheader],[role=rowheader]").filter(":visible");
+            var all_cells = $(table).find("[role=columnheader],[role=rowheader]," + cell_role).filter(":visible");
 
             //This is a little hack to force the table tag to go first in the index
             //so that it is inspected first with the previous and next buttons.
             //Skip index 0, so that later the table can be placed at 0
             testPageData.andiElementIndex = 1;
 
-            //Loop A (establish the rowIndex/colIndex)
-            rowIndex = 0;
-            var firstRow = true;
-            var x;
-            var cells;
-            $(all_rows).each(function () {
-                //Reset variables for this row
-                row = $(this);
-                rowCount++;
-                colIndex = 0;
-                colgroupSegmentation_colgroupsPerRowCounter = 0;
+            //Loop C (grab the accessibility components for each cell)
+            $(all_cells).each(function loopC() {
+                cell = $(this);
 
-                cells = $(row).find("th,[role=columnheader],[role=rowheader]," + cell_role).filter(":visible");
+                if (isContainedByRowRole(cell)) {//Is the cell contained by an element with role=row?
+                    //Determine if cell has a child element (link, form element, img)
+                    child = $(cell).find("a,button,input,select,textarea,img").first();
 
-                //Set colCount
-                if (colCount < cells.length) {
-                    colCount = cells.length;
+                    //Grab accessibility components from the cell
+                    andiData = new AndiData(cell[0]);
+
+                    if (child.length) {
+                        //Also grab accessibility components from the child
+                        //andiData.grabComponents($(child), true);//overwrite with components from the child, except for innerText
+                        //Do alert checks for the child
+                        andiCheck.commonFocusableElementChecks(andiData, $(child));
+                    } else { //Do alert checks for the cell
+                        andiCheck.commonNonFocusableElementChecks(andiData, $(cell));
+                    }
+
+
+                    //If this is not the upper left cell
+                    if ($(cell).is("[role=columnheader],[role=rowheader]") && !andiData.accName && !($(this).attr("data-vANDI508-rowindex") === "1" && $(this).attr("data-vANDI508-colindex") === "1")) {
+                        //Header cell is empty
+                        alert = [alert_0132];
+                    }
+
+                    AndiData.attachDataToElement(cell);
+                } else {
+                    console.log("ALERT: table cell is not contained by role=row")
                 }
-
-                //Figure out colIndex/rowIndex colgroupIndex/rowgroupIndex
-                $(cells).each(function loopA() {
-                    //Increment cell counters
-                    cell = $(this);
-                    if ($(cell).is("th,[role=columnheader],[role=rowheader]")) {
-                        headerCount++;
-                        if (headerCount > 1) {
-                            hasHeaderRow = true;
-                        }
-                        if (rowCount > 1) {
-                            hasHeaderCol = true;
-                        }
-                        if ($(cell).is("th") && !$(cell).is("[role=columnheader],[role=rowheader]")) {
-                            //table cell is missing role
-                            headersMissingRoleCount++;
-                        }
-                    } else {
-                        nonHeaderCount++;
-                    }
-
-                    //get colspan
-                    colspan = $(cell).attr("aria-colspan");
-                    if (colspan === undefined) {
-                        colspan = 1;
-                    } else {
-                        colspan = parseInt(colspan);
-                    }
-
-                    //get rowspan
-                    rowspan = $(cell).attr("aria-rowspan");
-                    if (rowspan === undefined) {
-                        rowspan = 1;
-                    } else {
-                        rowspan = parseInt(rowspan);
-                    }
-
-
-                    //Increase the rowspanArray length if needed
-                    if ((rowspanArray.length === 0) || (rowspanArray[colIndex] === undefined)) {
-                        rowspanArray.push(parseInt(rowspan));
-                    } else {
-                        firstRow = false;
-                    }
-
-
-                    //store colIndex
-                    if (!firstRow) {
-                        //loop through the rowspanArray until a 1 is found
-                        for (var a = colIndex; a < rowspanArray.length; a++) {
-                            if (rowspanArray[a] == 1) {
-                                break;
-                            } else if (rowspanArray[a] > 1) {
-                                //there is a rowspan at this colIndex that is spanning over this row
-                                //decrement this item in the rowspan array
-                                rowspanArray[a]--;
-                                //increment the colIndex an extra amount to essentially skip this colIndex location
-                                colIndex++;
-                            }
-                        }
-                    }
-
-                    if (colspan < 2) {
-                        $(cell).attr("data-vANDI508-colindex", colIndex);
-                        rowspanArray[colIndex] = rowspan;
-                        colIndex++;
-                    } else { //colspan > 1
-                        indexValue = "";
-                        colIndexPlusColspan = parseInt(colIndex) + colspan;
-                        for (var b = colIndex; b < colIndexPlusColspan; b++) {
-                            indexValue += b + " ";
-                            rowspanArray[colIndex] = rowspan;
-                            colIndex++;
-                        }
-                        $(cell).attr("data-vANDI508-colindex", $.trim(indexValue));
-                    }
-
-                    //store rowIndex
-                    if (rowspan < 2) {
-                        $(cell).attr("data-vANDI508-rowindex", rowIndex);
-                    } else {
-                        //rowspanArray[colIndex] = rowspan;
-                        indexValue = "";
-                        rowIndexPlusRowspan = parseInt(rowIndex) + rowspan;
-                        for (var c = rowIndex; c < rowIndexPlusRowspan; c++) {
-                            indexValue += c + " ";
-                        }
-                        $(cell).attr("data-vANDI508-rowindex", $.trim(indexValue));
-                    }
-                });
-
-                //There are no more cells in this row, however, the rest of the rowspanArray needs to be decremented.
-                //Decrement any additional rowspans from previous rows
-                for (var d = colIndex; d < rowspanArray.length; d++) {
-                    if (rowspanArray[d] > 1) {
-                        rowspanArray[d]--;
-                    }
-                }
-                rowIndex++;
             });
 
             //Default to scope mode

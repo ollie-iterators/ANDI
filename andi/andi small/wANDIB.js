@@ -1,7 +1,7 @@
-//=================================================//
-//wANDI: data tables - ANDI Loop A(small code)     //
-//Created By Social Security Administration        //
-//=================================================//
+//=========================================//
+//wANDI: data tables ANDI (small code)     //
+//Created By Social Security Administration//
+//=========================================//
 //NOTE: This only contains the code for finding errors and none for displaying the error code
 function init_module() {
     //create vANDI instance
@@ -113,145 +113,54 @@ function init_module() {
             //Cache the visible elements (performance)
             var all_rows = $(table).find("tr").filter(":visible");
             var all_th = $(all_rows).find("th").filter(":visible");
+            var all_cells = $(all_rows).find("th,td").filter(":visible");
             //==DATA TABLE==//
             //This is a little hack to force the table tag to go first in the index
             //so that it is inspected first with the previous and next buttons.
             //Skip index 0, so that later the table can be placed at 0
             testPageData.andiElementIndex = 1;
 
-            //Loop A (establish the rowIndex/colIndex)
-            rowIndex = 0;
-            var firstRow = true;
-
-            var cells;
-            $(all_rows).each(function () {
-                //Reset variables for this row
-                row = $(this);
-                rowCount++;
-                colIndex = 0;
-                colgroupSegmentation_colgroupsPerRowCounter = 0;
-
-                cells = $(row).find("th,td").filter(":visible");
-
-                //Set colCount
-                if (colCount < cells.length) {
-                    colCount = cells.length;
-                }
-
-                //Figure out colIndex/rowIndex colgroupIndex/rowgroupIndex
-                $(cells).each(function loopA() {
-                    //Increment cell counters
-                    cell = $(this);
-                    if ($(cell).is("th")) {
-                        thCount++;
-                        if (thCount > 1) {
-                            hasThRow = true;
-                        }
-                        if (rowCount > 1) {
-                            hasThCol = true;
-                        }
-                        scope = $(cell).attr("scope");
-                        if (scope) {
-                            if (scope == "colgroup") {
-                                //TODO: more logic here to catch misuse of colgroup
-                                colgroupIndex++;
-                                $(cell).attr("data-vANDI508-colgroupindex", colgroupIndex);
-                                colgroupSegmentation_colgroupsPerRowCounter++;
-                            } else if (scope == "rowgroup") {
-                                //TODO: more logic here to catch misuse of colgroup
-                                rowgroupIndex++;
-                                $(cell).attr("data-vANDI508-rowgroupindex", rowgroupIndex);
+            //Loop B - colgroup/rowgroup segementation
+            if (colgroupSegmentation || rowgroupIndex > 0) {
+                var lastColgroupIndex, colgroupsInThisRow, c;
+                var lastRowgroupIndex, lastRowgroupRowSpan = 1;
+                $(all_rows).each(function loopB() {
+                    row = $(this);
+                    if (colgroupSegmentation) {
+                        colgroupsInThisRow = 0;
+                        $(row).find("th,td").filter(":visible").each(function () {
+                            if ($(this).attr("scope") == "colgroup") {
+                                colgroupsInThisRow++;
+                                //store this colgroupIndex to temp variable
+                                c = $(this).attr("data-vANDI508-colgroupindex");
+                            } else if (lastColgroupIndex) { //set this cell's colgroupIndex
+                                $(this).attr("data-vANDI508-colgroupindex", lastColgroupIndex);
                             }
+                        });
+
+                        if (colgroupsInThisRow === 1) {
+                            lastColgroupIndex = c;
+                            $(row).attr("data-vANDI508-colgroupsegment", "true");
                         }
-                    } else {
-                        tdCount++;
                     }
-
-                    //get colspan
-                    //TODO: mark for alert here if value is invalid
-                    colspan = $(cell).attr("colspan");
-                    if (colspan === undefined) {
-                        colspan = 1;
-                    } else {
-                        colspan = parseInt(colspan);
-                    }
-                    //get rowspan
-                    //TODO: mark for alert here if value is invalid
-                    rowspan = $(cell).attr("rowspan");
-                    if (rowspan === undefined) {
-                        rowspan = 1;
-                    } else {
-                        rowspan = parseInt(rowspan);
-                    }
-
-                    //Increase the rowspanArray length if needed
-                    if ((rowspanArray.length === 0) || (rowspanArray[colIndex] === undefined)) {
-                        rowspanArray.push(parseInt(rowspan));
-                    } else {
-                        firstRow = false;
-                    }
-
-                    //store colIndex
-                    if (!firstRow) {
-                        //loop through the rowspanArray until a 1 is found
-                        for (var a = colIndex; a < rowspanArray.length; a++) {
-                            if (rowspanArray[a] == 1) {
-                                break;
-                            } else if (rowspanArray[a] > 1) {
-                                //there is a rowspan at this colIndex that is spanning over this row
-                                //decrement this item in the rowspan array
-                                rowspanArray[a]--;
-                                //increment the colIndex an extra amount to essentially skip this colIndex location
-                                colIndex++;
+                    if (rowgroupIndex > 0) {
+                        $(row).find("th,td").filter(":visible").each(function () {
+                            if ($(this).attr("scope") == "rowgroup") { //Rowgroup
+                                lastRowgroupIndex = $(this).attr("data-vANDI508-rowgroupindex");
+                                //Get rowspan
+                                lastRowgroupRowSpan = $(this).attr("rowspan");
+                                if (!lastRowgroupRowSpan) {
+                                    lastRowgroupRowSpan = 1;
+                                }
+                            } else if (lastRowgroupIndex && lastRowgroupRowSpan > 0) {
+                                $(this).attr("data-vANDI508-rowgroupindex", lastRowgroupIndex);
                             }
-                        }
-                    }
-
-                    if (colspan < 2) {
-                        $(cell).attr("data-vANDI508-colindex", colIndex);
-                        rowspanArray[colIndex] = rowspan;
-                        colIndex++;
-                    } else { //colspan > 1
-                        indexValue = "";
-                        colIndexPlusColspan = parseInt(colIndex) + colspan;
-                        for (var b = colIndex; b < colIndexPlusColspan; b++) {
-                            indexValue += b + " ";
-                            rowspanArray[colIndex] = rowspan;
-                            colIndex++;
-                        }
-                        $(cell).attr("data-vANDI508-colindex", $.trim(indexValue));
-                    }
-
-                    //store rowIndex
-                    if (rowspan < 2) {
-                        $(cell).attr("data-vANDI508-rowindex", rowIndex);
-                    } else {
-                        //rowspanArray[colIndex] = rowspan;
-                        indexValue = "";
-                        rowIndexPlusRowspan = parseInt(rowIndex) + rowspan;
-                        for (var c = rowIndex; c < rowIndexPlusRowspan; c++)
-                            indexValue += c + " ";
-                        $(cell).attr("data-vANDI508-rowindex", $.trim(indexValue));
+                        });
+                        //Decrement lastRowgroupRowSpan
+                        lastRowgroupRowSpan--;
                     }
                 });
-
-                //Determine if table is using colgroupSegmentation
-                if (colgroupSegmentation_colgroupsPerRowCounter == 1) {
-                    colgroupSegmentation_segments++;
-                }
-                if (colgroupSegmentation_segments > 1) {
-                    colgroupSegmentation = true;
-                }
-
-                //There are no more cells in this row, however, the rest of the rowspanArray needs to be decremented.
-                //Decrement any additional rowspans from previous rows
-                for (var d = colIndex; d < rowspanArray.length; d++) {
-                    if (rowspanArray[d] > 1) {
-                        rowspanArray[d]--;
-                    }
-                }
-                rowIndex++;
-            });
+            }
 
             //FOR THE DATA TABLE...
             //This is a little hack to force the table to go first in the index
@@ -367,7 +276,7 @@ function init_module() {
 
             //These variables keep track of the <tr>, <th>, <td> on each <table>
             var headerCount = 0;
-            var nonHeaderCount = 0;
+            var nonHeaderCount = 0
             var hasHeaderRow = false;		//true when there are two or more th in a row
             var hasHeaderCol = false;		//true when two or more rows contain a th
             var headersMissingRoleCount = 0;//used for alert_004J
@@ -382,130 +291,12 @@ function init_module() {
             //Cache the visible elements (performance)
             var all_rows = $(table).find("[role=row]").filter(":visible");
             //var all_th = $(all_rows).find("[role=columnheader],[role=rowheader]").filter(":visible");
+            var all_cells = $(table).find("[role=columnheader],[role=rowheader]," + cell_role).filter(":visible");
 
             //This is a little hack to force the table tag to go first in the index
             //so that it is inspected first with the previous and next buttons.
             //Skip index 0, so that later the table can be placed at 0
             testPageData.andiElementIndex = 1;
-
-            //Loop A (establish the rowIndex/colIndex)
-            rowIndex = 0;
-            var firstRow = true;
-            var x;
-            var cells;
-            $(all_rows).each(function () {
-                //Reset variables for this row
-                row = $(this);
-                rowCount++;
-                colIndex = 0;
-                colgroupSegmentation_colgroupsPerRowCounter = 0;
-
-                cells = $(row).find("th,[role=columnheader],[role=rowheader]," + cell_role).filter(":visible");
-
-                //Set colCount
-                if (colCount < cells.length) {
-                    colCount = cells.length;
-                }
-
-                //Figure out colIndex/rowIndex colgroupIndex/rowgroupIndex
-                $(cells).each(function loopA() {
-                    //Increment cell counters
-                    cell = $(this);
-                    if ($(cell).is("th,[role=columnheader],[role=rowheader]")) {
-                        headerCount++;
-                        if (headerCount > 1) {
-                            hasHeaderRow = true;
-                        }
-                        if (rowCount > 1) {
-                            hasHeaderCol = true;
-                        }
-                        if ($(cell).is("th") && !$(cell).is("[role=columnheader],[role=rowheader]")) {
-                            //table cell is missing role
-                            headersMissingRoleCount++;
-                        }
-                    } else {
-                        nonHeaderCount++;
-                    }
-
-                    //get colspan
-                    colspan = $(cell).attr("aria-colspan");
-                    if (colspan === undefined) {
-                        colspan = 1;
-                    } else {
-                        colspan = parseInt(colspan);
-                    }
-
-                    //get rowspan
-                    rowspan = $(cell).attr("aria-rowspan");
-                    if (rowspan === undefined) {
-                        rowspan = 1;
-                    } else {
-                        rowspan = parseInt(rowspan);
-                    }
-
-
-                    //Increase the rowspanArray length if needed
-                    if ((rowspanArray.length === 0) || (rowspanArray[colIndex] === undefined)) {
-                        rowspanArray.push(parseInt(rowspan));
-                    } else {
-                        firstRow = false;
-                    }
-
-
-                    //store colIndex
-                    if (!firstRow) {
-                        //loop through the rowspanArray until a 1 is found
-                        for (var a = colIndex; a < rowspanArray.length; a++) {
-                            if (rowspanArray[a] == 1) {
-                                break;
-                            } else if (rowspanArray[a] > 1) {
-                                //there is a rowspan at this colIndex that is spanning over this row
-                                //decrement this item in the rowspan array
-                                rowspanArray[a]--;
-                                //increment the colIndex an extra amount to essentially skip this colIndex location
-                                colIndex++;
-                            }
-                        }
-                    }
-
-                    if (colspan < 2) {
-                        $(cell).attr("data-vANDI508-colindex", colIndex);
-                        rowspanArray[colIndex] = rowspan;
-                        colIndex++;
-                    } else { //colspan > 1
-                        indexValue = "";
-                        colIndexPlusColspan = parseInt(colIndex) + colspan;
-                        for (var b = colIndex; b < colIndexPlusColspan; b++) {
-                            indexValue += b + " ";
-                            rowspanArray[colIndex] = rowspan;
-                            colIndex++;
-                        }
-                        $(cell).attr("data-vANDI508-colindex", $.trim(indexValue));
-                    }
-
-                    //store rowIndex
-                    if (rowspan < 2) {
-                        $(cell).attr("data-vANDI508-rowindex", rowIndex);
-                    } else {
-                        //rowspanArray[colIndex] = rowspan;
-                        indexValue = "";
-                        rowIndexPlusRowspan = parseInt(rowIndex) + rowspan;
-                        for (var c = rowIndex; c < rowIndexPlusRowspan; c++) {
-                            indexValue += c + " ";
-                        }
-                        $(cell).attr("data-vANDI508-rowindex", $.trim(indexValue));
-                    }
-                });
-
-                //There are no more cells in this row, however, the rest of the rowspanArray needs to be decremented.
-                //Decrement any additional rowspans from previous rows
-                for (var d = colIndex; d < rowspanArray.length; d++) {
-                    if (rowspanArray[d] > 1) {
-                        rowspanArray[d]--;
-                    }
-                }
-                rowIndex++;
-            });
 
             //Default to scope mode
             vANDI.hideModeButtons();
