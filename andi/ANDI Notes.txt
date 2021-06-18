@@ -60,8 +60,9 @@ pANDI  - Fake Headers
 qANDI  - Lists
 rANDI  - Landmarks
 uANDI  - Live Regions
-vANDI  - Tables
-wANDI  - Attributes
+vANDI  - Presentation Tables
+wANDI  - Data Tables
+xANDI  - Attributes
 
 # NOTE: Think about putting attributes like role and lang, ... into their own file
     - role and lang apply to all elemens on the page
