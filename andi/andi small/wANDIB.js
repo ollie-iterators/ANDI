@@ -15,15 +15,12 @@ function init_module() {
         this.dataCount = 0;         //The total number of data tables (tables that aren't presentation tables)
         this.tableIndex = -1;       //The array index of the active table
     }
-    // NOTE: Extracted preCalculateTableName so that it was not deleted when removing a table creation function
-    // NOTE: # of Alert_ text: 30
+    // NOTE: Extracted preCalculateTableName because it was a long function
 
     //These variables are for the current table being analyzed (the active table)
     var cellCount = 0;					//The total number of <th> and <td>
     var rowCount = 0;					//The total number of <tr>
     var colCount = 0;					//The total number of columns (maximum number of <th> or <td> in a <tr>)
-
-    // NOTE: Get rid of scopeMode
 
     //This function will analyze the test page for table related markup relating to accessibility
     vANDI.analyze = function () {
@@ -67,7 +64,7 @@ function init_module() {
         rowCount = 0;
         colCount = 0;
         var row, cell;
-        var colIndex, rowIndex, rowspan;
+        var colIndex, rowIndex;
 
         if (role === "table" || ((role === "grid" || role === "treegrid") && $(table).find("[role=gridcell]").first().length)) {
             //if role=table or role=grid and has a descendent with role=gridcell
@@ -88,29 +85,13 @@ function init_module() {
             var hasThRow = false;		//true when there are two or more th in a row
             var hasThCol = false;		//true when two or more rows contain a th
             var scopeRequired = false;	//true when scope is required for this table
-            var tableHasScopes = false;	//true when cells in the table have scope
-            var tableHasHeaders = false;//true when cells in the table have headers
-            var scope, headers;
-            var tooManyScopeRowLevels = false;
-            var scopeRowLevel = ["", "", ""];
-            var tooManyScopeColLevels = false;
-            var scopeColLevel = ["", "", ""];
             var colgroupIndex = 0;
             var rowgroupIndex = 0;
             var colgroupSegmentation = false;
-            var colgroupSegmentation_segments = 0;
-            var colgroupSegmentation_colgroupsPerRowCounter = 0;
-
-            //This array is used to keep track of the rowspan of the previous row
-            //They will be checked against before assigning the colIndex.
-            //This technique is only needed for setting colIndex
-            //since the rowIndex is handled more "automatically" by the <tr> tags
-            var rowspanArray = [];
 
             //Cache the visible elements (performance)
             var all_rows = $(table).find("tr").filter(":visible");
             var all_th = $(all_rows).find("th").filter(":visible");
-            var all_cells = $(all_rows).find("th,td").filter(":visible");
             //==DATA TABLE==//
             //This is a little hack to force the table tag to go first in the index
             //so that it is inspected first with the previous and next buttons.
@@ -180,16 +161,6 @@ function init_module() {
                         scopeRequired = true;
                     }
 
-                    if (!tableHasScopes) {
-                        //Table Has No Scopes
-                        if (tableHasHeaders) { //No Scope, Has Headers
-                            alert = [alert_004B];
-                        } else { //No Scope, No Headers
-                            alert = [alert_0048];
-                        }
-
-                    }
-
                     if (scopeRequired) {
                         //Check intersections for scope
                         var xDirectionHasTh, yDirectionHasTh;
@@ -231,18 +202,6 @@ function init_module() {
                             }
                         });
                     }
-                } else if (!AndiModule.activeActionButtons.scopeMode) {
-                    if (!tableHasHeaders) { //Table Has No Headers
-                        if (tableHasScopes) { //No Headers, Has Scope
-                            alert = [alert_004C];
-                        } else { //No Headers, No Scope
-                            alert = [alert_004A];
-                        }
-                    }
-                }
-
-                if (tableHasHeaders && tableHasScopes) { //Table is using both scopes and headers
-                    alert = [alert_0049];
                 }
             }
 
@@ -277,16 +236,10 @@ function init_module() {
             var headersMissingRoleCount = 0;//used for alert_004J
             var cellsNotContainedByRow = 0;	//used for alert_004K
             var cell_role = (role === "table") ? "[role=cell]" : "[role=gridcell]";
-            //This array is used to keep track of the rowspan of the previous row
-            //They will be checked against before assigning the colIndex.
-            //This technique is only needed for setting colIndex
-            //since the rowIndex is handled more "automatically" by the <tr> tags
-            var rowspanArray = [];
 
             //Cache the visible elements (performance)
             var all_rows = $(table).find("[role=row]").filter(":visible");
             //var all_th = $(all_rows).find("[role=columnheader],[role=rowheader]").filter(":visible");
-            var all_cells = $(table).find("[role=columnheader],[role=rowheader]," + cell_role).filter(":visible");
 
             //This is a little hack to force the table tag to go first in the index
             //so that it is inspected first with the previous and next buttons.

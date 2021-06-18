@@ -15,8 +15,7 @@ function init_module() {
         this.dataCount = 0;         //The total number of data tables (tables that aren't presentation tables)
         this.tableIndex = -1;       //The array index of the active table
     }
-    // NOTE: Extracted preCalculateTableName so that it was not deleted when removing a table creation function
-    // NOTE: # of Alert_ text: 30
+    // NOTE: Extracted preCalculateTableName because it was a long function
 
     //These variables are for the current table being analyzed (the active table)
     var cellCount = 0;					//The total number of <th> and <td>
@@ -66,10 +65,8 @@ function init_module() {
 
         rowCount = 0;
         colCount = 0;
-        var row, cell;
-        var colIndex, rowIndex, colspan, rowspan;
-        var rowIndexPlusRowspan, colIndexPlusColspan;
-        var indexValue;
+        var cell;
+        var colIndex, rowIndex;
         var child;
 
         if (role === "table" || ((role === "grid" || role === "treegrid") && $(table).find("[role=gridcell]").first().length)) {

@@ -15,8 +15,7 @@ function init_module() {
         this.dataCount = 0;         //The total number of data tables (tables that aren't presentation tables)
         this.tableIndex = -1;       //The array index of the active table
     }
-    // NOTE: Extracted preCalculateTableName so that it was not deleted when removing a table creation function
-    // NOTE: # of Alert_ text: 30
+    // NOTE: Extracted preCalculateTableName because it was a long function
 
     //These variables are for the current table being analyzed (the active table)
     var cellCount = 0;					//The total number of <th> and <td>
@@ -85,19 +84,12 @@ function init_module() {
             //When each cell has been evaluated, it will then attach alerts to the table element.
 
             //These variables keep track of properties of the table
-
             var thCount = 0;
             var tdCount = 0;
             var hasThRow = false;		//true when there are two or more th in a row
             var hasThCol = false;		//true when two or more rows contain a th
             var scopeRequired = false;	//true when scope is required for this table
-            var tableHasScopes = false;	//true when cells in the table have scope
-            var tableHasHeaders = false;//true when cells in the table have headers
-            var scope, headers;
-            var tooManyScopeRowLevels = false;
-            var scopeRowLevel = ["", "", ""];
-            var tooManyScopeColLevels = false;
-            var scopeColLevel = ["", "", ""];
+            var scope;
             var colgroupIndex = 0;
             var rowgroupIndex = 0;
             var colgroupSegmentation = false;
@@ -274,16 +266,6 @@ function init_module() {
                         scopeRequired = true;
                     }
 
-                    if (!tableHasScopes) {
-                        //Table Has No Scopes
-                        if (tableHasHeaders) { //No Scope, Has Headers
-                            alert = [alert_004B];
-                        } else { //No Scope, No Headers
-                            alert = [alert_0048];
-                        }
-
-                    }
-
                     if (scopeRequired) {
                         //Check intersections for scope
                         var xDirectionHasTh, yDirectionHasTh;
@@ -325,18 +307,6 @@ function init_module() {
                             }
                         });
                     }
-                } else if (!AndiModule.activeActionButtons.scopeMode) {
-                    if (!tableHasHeaders) { //Table Has No Headers
-                        if (tableHasScopes) { //No Headers, Has Scope
-                            alert = [alert_004C];
-                        } else { //No Headers, No Scope
-                            alert = [alert_004A];
-                        }
-                    }
-                }
-
-                if (tableHasHeaders && tableHasScopes) { //Table is using both scopes and headers
-                    alert = [alert_0049];
                 }
             }
 
