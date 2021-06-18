@@ -67,10 +67,7 @@ function init_module() {
         rowCount = 0;
         colCount = 0;
         var row, cell;
-        var colIndex, rowIndex, colspan, rowspan;
-        var rowIndexPlusRowspan, colIndexPlusColspan;
-        var indexValue;
-        var child;
+        var colIndex, rowIndex, rowspan;
 
         if (role === "table" || ((role === "grid" || role === "treegrid") && $(table).find("[role=gridcell]").first().length)) {
             //if role=table or role=grid and has a descendent with role=gridcell

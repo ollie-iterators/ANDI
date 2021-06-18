@@ -98,17 +98,6 @@ function init_module() {
             var scopeRowLevel = ["", "", ""];
             var tooManyScopeColLevels = false;
             var scopeColLevel = ["", "", ""];
-            var colgroupIndex = 0;
-            var rowgroupIndex = 0;
-            var colgroupSegmentation = false;
-            var colgroupSegmentation_segments = 0;
-            var colgroupSegmentation_colgroupsPerRowCounter = 0;
-
-            //This array is used to keep track of the rowspan of the previous row
-            //They will be checked against before assigning the colIndex.
-            //This technique is only needed for setting colIndex
-            //since the rowIndex is handled more "automatically" by the <tr> tags
-            var rowspanArray = [];
 
             //Cache the visible elements (performance)
             var all_rows = $(table).find("tr").filter(":visible");
@@ -331,16 +320,9 @@ function init_module() {
             //These variables keep track of the <tr>, <th>, <td> on each <table>
             var headerCount = 0;
             var nonHeaderCount = 0;
-            var hasHeaderRow = false;		//true when there are two or more th in a row
-            var hasHeaderCol = false;		//true when two or more rows contain a th
             var headersMissingRoleCount = 0;//used for alert_004J
             var cellsNotContainedByRow = 0;	//used for alert_004K
             var cell_role = (role === "table") ? "[role=cell]" : "[role=gridcell]";
-            //This array is used to keep track of the rowspan of the previous row
-            //They will be checked against before assigning the colIndex.
-            //This technique is only needed for setting colIndex
-            //since the rowIndex is handled more "automatically" by the <tr> tags
-            var rowspanArray = [];
 
             //Cache the visible elements (performance)
             var all_rows = $(table).find("[role=row]").filter(":visible");

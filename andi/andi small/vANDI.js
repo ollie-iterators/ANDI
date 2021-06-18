@@ -69,253 +69,78 @@ function init_module() {
         rowCount = 0;
         colCount = 0;
         var row, cell;
-        var colIndex, rowIndex, colspan, rowspan;
+        var rowspan;
         var rowIndexPlusRowspan, colIndexPlusColspan;
         var indexValue;
         var child;
 
-        if (role === "table" || ((role === "grid" || role === "treegrid") && $(table).find("[role=gridcell]").first().length)) {
-            //if role=table or role=grid and has a descendent with role=gridcell
-            analyzeTable_ARIA(table, role);
-        } else {
-            //loop through the <table> and set data-* attributes
-            //Each cell in a row is given a rowIndex
-            //Each cell in a column is given a colIndex
+        //loop through the <table> and set data-* attributes
 
-            //The way vANDI analyzes the table is that it begins looking at the cells first
-            //to determine if there is any existing scenarios that should trigger an alert.
-            //When each cell has been evaluated, it will then attach alerts to the table element.
+        //The way vANDI analyzes the table is that it begins looking at the cells first
+        //to determine if there is any existing scenarios that should trigger an alert.
+        //When each cell has been evaluated, it will then attach alerts to the table element.
 
-            //These variables keep track of properties of the table
-            var colgroupSegmentation_colgroupsPerRowCounter = 0;
+        //Cache the visible elements (performance)
+        var all_rows = $(table).find("tr").filter(":visible");
+        var all_th = $(all_rows).find("th").filter(":visible");
+        var all_cells = $(all_rows).find("th,td").filter(":visible");
 
-            //This array is used to keep track of the rowspan of the previous row
-            //They will be checked against before assigning the colIndex.
-            //This technique is only needed for setting colIndex
-            //since the rowIndex is handled more "automatically" by the <tr> tags
-            var rowspanArray = [];
+        if (role === "presentation" || role === "none") {
+            //==PRESENTATION TABLE==//
+            andiData = new AndiData(table[0]);
+            andiCheck.commonNonFocusableElementChecks(andiData, $(table));
 
-            //Cache the visible elements (performance)
-            var all_rows = $(table).find("tr").filter(":visible");
-            var all_th = $(all_rows).find("th").filter(":visible");
-            var all_cells = $(all_rows).find("th,td").filter(":visible");
+            var presentationTablesShouldNotHave = "";
 
-            if (role === "presentation" || role === "none") {
-                //==PRESENTATION TABLE==//
-                andiData = new AndiData(table[0]);
-                andiCheck.commonNonFocusableElementChecks(andiData, $(table));
-
-                var presentationTablesShouldNotHave = "";
-
-                if ($(table).find("caption").filter(":visible").first().length) {
-                    presentationTablesShouldNotHave += "a &lt;caption&gt;, ";
-                }
-                if ($(all_th).first().length) {
-                    presentationTablesShouldNotHave += "&lt;th&gt; cells, ";
-                }
-
-                cellCount = 0;
-
-                var presTableWithScope = false;
-                var presTableWithHeaders = false;
-                $(all_cells).each(function () {
-                    cellCount++;
-                    if ($(this).attr("scope")) {
-                        presTableWithScope = true;
-                    }
-                    if ($(this).attr("headers")) {
-                        presTableWithHeaders = true;
-                    }
-                });
-
-                if (presTableWithScope) {
-                    presentationTablesShouldNotHave += "cells with [scope] attributes, ";
-                }
-                if (presTableWithHeaders) {
-                    presentationTablesShouldNotHave += "cells with [headers] attributes, ";
-                }
-                if ($(table).attr("summary")) {
-                    presentationTablesShouldNotHave += "a [summary] attribute, ";
-                }
-                if (presentationTablesShouldNotHave) {
-                    alert = [alert_0041, [presentationTablesShouldNotHave.slice(0, -2)]];
-                }
-
-                AndiData.attachDataToElement(table);
-
-                vANDI.hideModeButtons();
-                AndiModule.activeActionButtons.scopeMode = true;
-            } else if ($.trim(role) && role !== "table" && role !== "grid" && role !== "treegrid") {
-                //==TABLE WITH NONTYPICAL ROLE==//
-                andiData = new AndiData(table[0]);
-                alert = [alert_004I, [role]];
-                AndiData.attachDataToElement(table);
+            if ($(table).find("caption").filter(":visible").first().length) {
+                presentationTablesShouldNotHave += "a &lt;caption&gt;, ";
             }
+            if ($(all_th).first().length) {
+                presentationTablesShouldNotHave += "&lt;th&gt; cells, ";
+            }
+
+            cellCount = 0;
+
+            var presTableWithScope = false;
+            var presTableWithHeaders = false;
+            $(all_cells).each(function () {
+                cellCount++;
+                if ($(this).attr("scope")) {
+                    presTableWithScope = true;
+                }
+                if ($(this).attr("headers")) {
+                    presTableWithHeaders = true;
+                }
+            });
+
+            if (presTableWithScope) {
+                presentationTablesShouldNotHave += "cells with [scope] attributes, ";
+            }
+            if (presTableWithHeaders) {
+                presentationTablesShouldNotHave += "cells with [headers] attributes, ";
+            }
+            if ($(table).attr("summary")) {
+                presentationTablesShouldNotHave += "a [summary] attribute, ";
+            }
+            if (presentationTablesShouldNotHave) {
+                alert = [alert_0041, [presentationTablesShouldNotHave.slice(0, -2)]];
+            }
+
+            AndiData.attachDataToElement(table);
+
+            vANDI.hideModeButtons();
+            AndiModule.activeActionButtons.scopeMode = true;
+        } else if ($.trim(role) && role !== "table" && role !== "grid" && role !== "treegrid") {
+            //==TABLE WITH NONTYPICAL ROLE==//
+            andiData = new AndiData(table[0]);
+            alert = [alert_004I, [role]];
+            AndiData.attachDataToElement(table);
         }
         $(table).find("[andi508-temporaryhide]").each(function () {
             $(this)
                 .css("display", $(this).attr("andi508-temporaryhide"))
                 .removeAttr("andi508-temporaryhide");
         });
-
-        //This function will a table. Only one table at a time
-        //Paramaters:
-        //	table: the table element
-        //	role: the ARIA role (role=table or role=grid or role=treegrid)
-        function analyzeTable_ARIA(table, role) {
-            //loop through the <table> and set data-* attributes
-            //Each cell in a row is given a rowIndex
-            //Each cell in a column is given a colIndex
-
-            //The way vANDI analyzes the table is that it begins looking at the cells first
-            //to determine if there is any existing scenarios that should trigger an alert.
-            //When each cell has been evaluated, it will then attach alerts to the table element.
-
-            //These variables keep track of the <tr>, <th>, <td> on each <table>
-            var headerCount = 0;
-            var nonHeaderCount = 0;
-            var hasHeaderRow = false;		//true when there are two or more th in a row
-            var hasHeaderCol = false;		//true when two or more rows contain a th
-            var headersMissingRoleCount = 0;//used for alert_004J
-            var cellsNotContainedByRow = 0;	//used for alert_004K
-            var cell_role = (role === "table") ? "[role=cell]" : "[role=gridcell]";
-            //This array is used to keep track of the rowspan of the previous row
-            //They will be checked against before assigning the colIndex.
-            //This technique is only needed for setting colIndex
-            //since the rowIndex is handled more "automatically" by the <tr> tags
-            var rowspanArray = [];
-
-            //Cache the visible elements (performance)
-            var all_rows = $(table).find("[role=row]").filter(":visible");
-            //var all_th = $(all_rows).find("[role=columnheader],[role=rowheader]").filter(":visible");
-            var all_cells = $(table).find("[role=columnheader],[role=rowheader]," + cell_role).filter(":visible");
-
-            //This is a little hack to force the table tag to go first in the index
-            //so that it is inspected first with the previous and next buttons.
-            //Skip index 0, so that later the table can be placed at 0
-            testPageData.andiElementIndex = 1;
-
-            //Loop A (establish the rowIndex/colIndex)
-            rowIndex = 0;
-            var firstRow = true;
-            var x;
-            var cells;
-            $(all_rows).each(function () {
-                //Reset variables for this row
-                row = $(this);
-                rowCount++;
-                colIndex = 0;
-                colgroupSegmentation_colgroupsPerRowCounter = 0;
-
-                cells = $(row).find("th,[role=columnheader],[role=rowheader]," + cell_role).filter(":visible");
-
-                //Set colCount
-                if (colCount < cells.length) {
-                    colCount = cells.length;
-                }
-
-                //Figure out colIndex/rowIndex grabHeadersAndHighlightRelatedCells
-                $(cells).each(function loopA() {
-                    //Increment cell counters
-                    cell = $(this);
-                    if ($(cell).is("th,[role=columnheader],[role=rowheader]")) {
-                        headerCount++;
-                        if (headerCount > 1) {
-                            hasHeaderRow = true;
-                        }
-                        if (rowCount > 1) {
-                            hasHeaderCol = true;
-                        }
-                        if ($(cell).is("th") && !$(cell).is("[role=columnheader],[role=rowheader]")) {
-                            //table cell is missing role
-                            headersMissingRoleCount++;
-                        }
-                    } else {
-                        nonHeaderCount++;
-                    }
-
-                    //get colspan
-                    colspan = $(cell).attr("aria-colspan");
-                    if (colspan === undefined) {
-                        colspan = 1;
-                    } else {
-                        colspan = parseInt(colspan);
-                    }
-
-                    //get rowspan
-                    rowspan = $(cell).attr("aria-rowspan");
-                    if (rowspan === undefined) {
-                        rowspan = 1;
-                    } else {
-                        rowspan = parseInt(rowspan);
-                    }
-
-                    //Increase the rowspanArray length if needed
-                    if ((rowspanArray.length === 0) || (rowspanArray[colIndex] === undefined)) {
-                        rowspanArray.push(parseInt(rowspan));
-                    } else {
-                        firstRow = false;
-                    }
-
-                    //store colIndex
-                    if (!firstRow) {
-                        //loop through the rowspanArray until a 1 is found
-                        for (var a = colIndex; a < rowspanArray.length; a++) {
-                            if (rowspanArray[a] == 1) {
-                                break;
-                            } else if (rowspanArray[a] > 1) {
-                                //there is a rowspan at this colIndex that is spanning over this row
-                                //decrement this item in the rowspan array
-                                rowspanArray[a]--;
-                                //increment the colIndex an extra amount to essentially skip this colIndex location
-                                colIndex++;
-                            }
-                        }
-                    }
-
-                    if (colspan < 2) {
-                        $(cell).attr("data-vANDI508-colindex", colIndex);
-                        rowspanArray[colIndex] = rowspan;
-                        colIndex++;
-                    } else { //colspan > 1
-                        indexValue = "";
-                        colIndexPlusColspan = parseInt(colIndex) + colspan;
-                        for (var b = colIndex; b < colIndexPlusColspan; b++) {
-                            indexValue += b + " ";
-                            rowspanArray[colIndex] = rowspan;
-                            colIndex++;
-                        }
-                        $(cell).attr("data-vANDI508-colindex", $.trim(indexValue));
-                    }
-
-                    //store rowIndex
-                    if (rowspan < 2) {
-                        $(cell).attr("data-vANDI508-rowindex", rowIndex);
-                    } else {
-                        //rowspanArray[colIndex] = rowspan;
-                        indexValue = "";
-                        rowIndexPlusRowspan = parseInt(rowIndex) + rowspan;
-                        for (var c = rowIndex; c < rowIndexPlusRowspan; c++) {
-                            indexValue += c + " ";
-                        }
-                        $(cell).attr("data-vANDI508-rowindex", $.trim(indexValue));
-                    }
-                });
-
-                //There are no more cells in this row, however, the rest of the rowspanArray needs to be decremented.
-                //Decrement any additional rowspans from previous rows
-                for (var d = colIndex; d < rowspanArray.length; d++) {
-                    if (rowspanArray[d] > 1) {
-                        rowspanArray[d]--;
-                    }
-                }
-                rowIndex++;
-            });
-
-            //Default to scope mode
-            vANDI.hideModeButtons();
-            AndiModule.activeActionButtons.scopeMode = true;
-        }
     }
     vANDI.analyze();
 }//end init

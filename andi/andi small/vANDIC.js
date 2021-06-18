@@ -60,7 +60,7 @@ function init_module() {
         var role = $.trim($(table).attr("role"));
 
         //temporarily hide any nested tables so they don't interfere with analysis
-        $(table).find("table,[role=treegrid]").each(function () {
+        $(table).find("table").each(function () {
             $(this)
                 .attr("andi508-temporaryhide", $(this).css("display"))
                 .css("display", "none");
@@ -68,161 +68,74 @@ function init_module() {
 
         rowCount = 0;
         colCount = 0;
-        var cell, child;
 
-        if (role === "table" || ((role === "grid" || role === "treegrid") && $(table).find("[role=gridcell]").first().length)) {
-            //if role=table or role=grid and has a descendent with role=gridcell
-            analyzeTable_ARIA(table, role);
-        } else {
-            //loop through the <table> and set data-* attributes
+        //loop through the <table> and set data-* attributes
 
-            //The way vANDI analyzes the table is that it begins looking at the cells first
-            //to determine if there is any existing scenarios that should trigger an alert.
-            //When each cell has been evaluated, it will then attach alerts to the table element.
+        //The way vANDI analyzes the table is that it begins looking at the cells first
+        //to determine if there is any existing scenarios that should trigger an alert.
+        //When each cell has been evaluated, it will then attach alerts to the table element.
 
-            //Cache the visible elements (performance)
-            var all_rows = $(table).find("tr").filter(":visible");
-            var all_th = $(all_rows).find("th").filter(":visible");
-            var all_cells = $(all_rows).find("th,td").filter(":visible");
+        //Cache the visible elements (performance)
+        var all_rows = $(table).find("tr").filter(":visible");
+        var all_th = $(all_rows).find("th").filter(":visible");
+        var all_cells = $(all_rows).find("th,td").filter(":visible");
 
-            if (role === "presentation" || role === "none") {
-                //==PRESENTATION TABLE==//
-                andiData = new AndiData(table[0]);
-                andiCheck.commonNonFocusableElementChecks(andiData, $(table));
+        if (role === "presentation" || role === "none") {
+            //==PRESENTATION TABLE==//
+            andiData = new AndiData(table[0]);
+            andiCheck.commonNonFocusableElementChecks(andiData, $(table));
 
-                var presentationTablesShouldNotHave = "";
+            var presentationTablesShouldNotHave = "";
 
-                if ($(table).find("caption").filter(":visible").first().length) {
-                    presentationTablesShouldNotHave += "a &lt;caption&gt;, ";
-                }
-                if ($(all_th).first().length) {
-                    presentationTablesShouldNotHave += "&lt;th&gt; cells, ";
-                }
-
-                cellCount = 0;
-
-                var presTableWithScope = false;
-                var presTableWithHeaders = false;
-                $(all_cells).each(function () {
-                    cellCount++;
-                    if ($(this).attr("scope")) {
-                        presTableWithScope = true;
-                    }
-                    if ($(this).attr("headers")) {
-                        presTableWithHeaders = true;
-                    }
-                });
-
-                if (presTableWithScope) {
-                    presentationTablesShouldNotHave += "cells with [scope] attributes, ";
-                }
-                if (presTableWithHeaders) {
-                    presentationTablesShouldNotHave += "cells with [headers] attributes, ";
-                }
-                if ($(table).attr("summary")) {
-                    presentationTablesShouldNotHave += "a [summary] attribute, ";
-                }
-                if (presentationTablesShouldNotHave) {
-                    alert = [alert_0041, [presentationTablesShouldNotHave.slice(0, -2)]];
-                }
-
-                AndiData.attachDataToElement(table);
-
-                vANDI.hideModeButtons();
-                AndiModule.activeActionButtons.scopeMode = true;
-            } else if ($.trim(role) && role !== "table" && role !== "grid" && role !== "treegrid") {
-                //==TABLE WITH NONTYPICAL ROLE==//
-                andiData = new AndiData(table[0]);
-                alert = [alert_004I, [role]];
-                AndiData.attachDataToElement(table);
+            if ($(table).find("caption").filter(":visible").first().length) {
+                presentationTablesShouldNotHave += "a &lt;caption&gt;, ";
             }
+            if ($(all_th).first().length) {
+                presentationTablesShouldNotHave += "&lt;th&gt; cells, ";
+            }
+
+            cellCount = 0;
+
+            var presTableWithScope = false;
+            var presTableWithHeaders = false;
+            $(all_cells).each(function () {
+                cellCount++;
+                if ($(this).attr("scope")) {
+                    presTableWithScope = true;
+                }
+                if ($(this).attr("headers")) {
+                    presTableWithHeaders = true;
+                }
+            });
+
+            if (presTableWithScope) {
+                presentationTablesShouldNotHave += "cells with [scope] attributes, ";
+            }
+            if (presTableWithHeaders) {
+                presentationTablesShouldNotHave += "cells with [headers] attributes, ";
+            }
+            if ($(table).attr("summary")) {
+                presentationTablesShouldNotHave += "a [summary] attribute, ";
+            }
+            if (presentationTablesShouldNotHave) {
+                alert = [alert_0041, [presentationTablesShouldNotHave.slice(0, -2)]];
+            }
+
+            AndiData.attachDataToElement(table);
+
+            vANDI.hideModeButtons();
+            AndiModule.activeActionButtons.scopeMode = true;
+        } else if ($.trim(role) && role !== "table" && role !== "grid" && role !== "treegrid") {
+            //==TABLE WITH NONTYPICAL ROLE==//
+            andiData = new AndiData(table[0]);
+            alert = [alert_004I, [role]];
+            AndiData.attachDataToElement(table);
         }
         $(table).find("[andi508-temporaryhide]").each(function () {
             $(this)
                 .css("display", $(this).attr("andi508-temporaryhide"))
                 .removeAttr("andi508-temporaryhide");
         });
-
-        //This function will a table. Only one table at a time
-        //Paramaters:
-        //	table: the table element
-        //	role: the ARIA role (role=table or role=grid or role=treegrid)
-        function analyzeTable_ARIA(table, role) {
-            //loop through the <table> and set data-* attributes
-
-            //The way vANDI analyzes the table is that it begins looking at the cells first
-            //to determine if there is any existing scenarios that should trigger an alert.
-            //When each cell has been evaluated, it will then attach alerts to the table element.
-
-            //These variables keep track of the <tr>, <th>, <td> on each <table>
-            var cell_role = (role === "table") ? "[role=cell]" : "[role=gridcell]";
-
-            //Cache the visible elements (performance)
-            var all_rows = $(table).find("[role=row]").filter(":visible");
-            //var all_th = $(all_rows).find("[role=columnheader],[role=rowheader]").filter(":visible");
-            var all_cells = $(table).find("[role=columnheader],[role=rowheader]," + cell_role).filter(":visible");
-
-            //This is a little hack to force the table tag to go first in the index
-            //so that it is inspected first with the previous and next buttons.
-            //Skip index 0, so that later the table can be placed at 0
-            testPageData.andiElementIndex = 1;
-
-            //Loop C (grab the accessibility components for each cell)
-            $(all_cells).each(function loopC() {
-                cell = $(this);
-
-                if (isContainedByRowRole(cell)) {//Is the cell contained by an element with role=row?
-                    //Determine if cell has a child element (link, form element, img)
-                    child = $(cell).find("a,button,input,select,textarea,img").first();
-
-                    //Grab accessibility components from the cell
-                    andiData = new AndiData(cell[0]);
-
-                    if (child.length) {
-                        //Also grab accessibility components from the child
-                        //andiData.grabComponents($(child), true);//overwrite with components from the child, except for innerText
-                        //Do alert checks for the child
-                        andiCheck.commonFocusableElementChecks(andiData, $(child));
-                    } else { //Do alert checks for the cell
-                        andiCheck.commonNonFocusableElementChecks(andiData, $(cell));
-                    }
-
-                    //If this is not the upper left cell
-                    if ($(cell).is("[role=columnheader],[role=rowheader]") && !andiData.accName && !($(this).attr("data-vANDI508-rowindex") === "1" && $(this).attr("data-vANDI508-colindex") === "1")) {
-                        //Header cell is empty
-                        alert = [alert_0132];
-                    }
-
-                    AndiData.attachDataToElement(cell);
-                } else {
-                    console.log("ALERT: table cell is not contained by role=row")
-                }
-            });
-
-            //Default to scope mode
-            vANDI.hideModeButtons();
-            AndiModule.activeActionButtons.scopeMode = true;
-
-            //This function determines if the cell is contained by an element with role=row
-            //  and if that row is within the current table
-            function isContainedByRowRole(cell) {
-                var containingRow = $(cell).closest("[role=row]");
-                var isContainedByRow = false;
-                if (containingRow) {
-                    //Check if the containing row is part of this table's role=row elements
-                    $(all_rows).each(function () {
-                        if ($(this).is(containingRow)) {
-                            isContainedByRow = true;
-                            return false; //break out of each loop
-                        }
-                    });
-                }
-                if (!isContainedByRow) {
-                    cellsNotContainedByRow++;
-                }
-                return isContainedByRow;
-            }
-        }
     }
     vANDI.analyze();
 }//end init
