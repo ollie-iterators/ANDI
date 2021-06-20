@@ -5,7 +5,7 @@
 //NOTE: This only contains the code for finding errors and none for displaying the error code
 function init_module() {
     //create vANDI instance
-    var vANDI = new AndiModule("11.1.0", "v");
+    var vANDI = new AndiModule("11.1.0", "w");
 
     //This object class is used to keep track of the tables on the page
     function Tables() {
