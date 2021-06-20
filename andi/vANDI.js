@@ -897,24 +897,6 @@ function init_module() {
         }
         return match;
     }
-    //This function returns true if any indexes in "a" are greater than "b".
-    //The colIndex/rowIndex could contain a space delimited array
-    function index_greaterThan(a, b) {
-        var greaterThan = false;
-        var aX = buildArrayOnIndex(a);
-        var bY = buildArrayOnIndex(b);
-
-        //compare
-        for (var x = 0; x < a.length; x++) {
-            for (var y = 0; y < b.length; y++) {
-                if (aX[x] > bY[y]) {
-                    greaterThan = true;
-                    break;
-                }
-            }
-        }
-        return greaterThan;
-    }
 
     //This function will build an array based on the value passed in.
     //If it is space delimited it returns an array greater than 1.
