@@ -20,7 +20,7 @@ function init_module() {
     //Holding the shift key will prevent inspection from changing.
     AndiModule.hoverability = function (event) {
         //When hovering, inspect the cells of the data table, not the table itself. Unless it's a presentation table
-        if (!event.shiftKey && !$(this).is("table:not([role=presentation],[role=none]),[role=table],[role=grid],[role=treegrid]"))
+        if (!event.shiftKey && !$(this).is("table,[role=table],[role=grid],[role=treegrid]"))
             AndiModule.inspect(this);
     };
 
@@ -1589,24 +1589,6 @@ function init_module() {
             }
         }
         return match;
-    }
-    //This function returns true if any indexes in "a" are greater than "b".
-    //The colIndex/rowIndex could contain a space delimited array
-    function index_greaterThan(a, b) {
-        var greaterThan = false;
-        var aX = buildArrayOnIndex(a);
-        var bY = buildArrayOnIndex(b);
-
-        //compare
-        for (var x = 0; x < a.length; x++) {
-            for (var y = 0; y < b.length; y++) {
-                if (aX[x] > bY[y]) {
-                    greaterThan = true;
-                    break;
-                }
-            }
-        }
-        return greaterThan;
     }
 
     //This function will build an array based on the value passed in.
