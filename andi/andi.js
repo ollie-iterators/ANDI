@@ -2161,19 +2161,12 @@ AndiData.textAlternativeComputation = function(root){
 	//Stops at #ANDI508-testPage because another check will stop ANDI if aria-hidden=true is on body or html
 	//TODO: This is expensive
 	function traverseAriaHidden(element){
-		var closestAriaHidden = $(element).closest('[aria-hidden="true"]');
-		if (closestAriaHidden) {
-			return true;
-		} else {
+		if($(element).is("#ANDI508-testPage"))
 			return false;
-		}
-		return ($(element).parents().attr("aria-hidden") === "true")
-		// if($(element).is("#ANDI508-testPage"))
-		// 	return false;
-		// else if($(element).attr("aria-hidden") === "true")
-		// 	return true;
-		// else
-		// 	return traverseAriaHidden($(element).parent());
+		else if($(element).attr("aria-hidden") === "true")
+			return true;
+		else
+			return traverseAriaHidden($(element).parent());
 	}
 
 	function calcAccName(result){
