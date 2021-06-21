@@ -2161,6 +2161,12 @@ AndiData.textAlternativeComputation = function(root){
 	//Stops at #ANDI508-testPage because another check will stop ANDI if aria-hidden=true is on body or html
 	//TODO: This is expensive
 	function traverseAriaHidden(element){
+		var closestAriaHidden = $(element).closest("[aria-hidden]=");
+		if (closestAriaHidden) {
+			return true;
+		} else {
+			return false;
+		}
 		return ($(element).parents().attr("aria-hidden") === "true")
 		// if($(element).is("#ANDI508-testPage"))
 		// 	return false;
