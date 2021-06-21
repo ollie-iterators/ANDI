@@ -1,0 +1,8 @@
+# Table ARIA Alerts from andi.js
+  - Alerts that are just for table ARIA:
+var alert_004F = new Alert("danger", "4", "ARIA %%% has no %%% cells.", "aria_table_grid_structure");
+var alert_004G = new Alert("danger", "4", "ARIA %%% has no [role=columnheader] or [role=rowheader] cells.", "aria_table_grid_structure");
+var alert_004H = new Alert("danger", "4", "ARIA %%% has no [role=row] rows.", "aria_table_grid_structure");
+var alert_004J = new Alert("warning", "4", "&lt;table[role=%%%]&gt; has %%% &lt;th&gt; cells missing columnheader or rowheader role.", "header_missing_role");
+var alert_004K = new Alert("warning", "4", "&lt;table[role=%%%]&gt; has %%% cells not contained by [role=row].", "cells_not_contained_by_row_role");
+var alert_0233 = new Alert("caution", "23", "[role=grid] found; test navigation of design pattern.", "grid_navigation_test");

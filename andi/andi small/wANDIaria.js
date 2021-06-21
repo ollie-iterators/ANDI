@@ -102,8 +102,8 @@ function init_module() {
             var nonHeaderCount = 0;
             var hasHeaderRow = false;		//true when there are two or more th in a row
             var hasHeaderCol = false;		//true when two or more rows contain a th
-            var headersMissingRoleCount = 0;//used for alert_004J
-            var cellsNotContainedByRow = 0;	//used for alert_004K
+            var headersMissingRoleCount = 0;
+            var cellsNotContainedByRow = 0;
             var cell_role = (role === "table") ? "[role=cell]" : "[role=gridcell]";
             //This array is used to keep track of the rowspan of the previous row
             //They will be checked against before assigning the colIndex.
@@ -124,7 +124,6 @@ function init_module() {
             //Loop A (establish the rowIndex/colIndex)
             rowIndex = 0;
             var firstRow = true;
-            var x;
             var cells;
             $(all_rows).each(function () {
                 //Reset variables for this row
