@@ -154,24 +154,25 @@ function init_module() {
                             //table cell is missing role
                             headersMissingRoleCount++;
                         }
-                    }
-                    else {
+                    } else {
                         nonHeaderCount++;
                     }
 
                     //get colspan
                     colspan = $(cell).attr("aria-colspan");
-                    if (colspan === undefined)
+                    if (colspan === undefined) {
                         colspan = 1;
-                    else
+                    } else {
                         colspan = parseInt(colspan);
+                    }
 
                     //get rowspan
                     rowspan = $(cell).attr("aria-rowspan");
-                    if (rowspan === undefined)
+                    if (rowspan === undefined) {
                         rowspan = 1;
-                    else
+                    } else {
                         rowspan = parseInt(rowspan);
+                    }
 
                     //Increase the rowspanArray length if needed
                     if ((rowspanArray.length === 0) || (rowspanArray[colIndex] === undefined))
@@ -214,8 +215,7 @@ function init_module() {
                     //store rowIndex
                     if (rowspan < 2) {
                         $(cell).attr("data-wANDI508-rowindex", rowIndex);
-                    }
-                    else {
+                    } else {
                         //rowspanArray[colIndex] = rowspan;
                         indexValue = "";
                         rowIndexPlusRowspan = parseInt(rowIndex) + rowspan;
@@ -250,9 +250,9 @@ function init_module() {
                         //andiData.grabComponents($(child), true);//overwrite with components from the child, except for innerText
                         //Do alert checks for the child
                         andiCheck.commonFocusableElementChecks(andiData, $(child));
-                    }
-                    else//Do alert checks for the cell
+                    } else { //Do alert checks for the cell
                         andiCheck.commonNonFocusableElementChecks(andiData, $(cell));
+                    }
 
                     //If this is not the upper left cell
                     if ($(cell).is("[role=columnheader],[role=rowheader]") && !andiData.accName && !($(this).attr("data-wANDI508-rowindex") === "1" && $(this).attr("data-wANDI508-colindex") === "1"))
@@ -260,8 +260,7 @@ function init_module() {
                         andiAlerter.throwAlert(alert_0132);
 
                     AndiData.attachDataToElement(cell);
-                }
-                else {
+                } else {
                     console.log("ALERT: table cell is not contained by role=row")
                 }
             });
@@ -320,8 +319,6 @@ function init_module() {
             }
         }
     }
-
     //analyze tables
     wANDI.analyze();
-
 }//end init
