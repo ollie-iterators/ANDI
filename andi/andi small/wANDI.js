@@ -4,17 +4,8 @@
 //=========================================//
 
 function init_module() {
-
-    var wANDIVersionNumber = "11.1.0";
-
     //create wANDI instance
-    var wANDI = new AndiModule(wANDIVersionNumber, "w");
-
-    //a scope at this depth level triggers an alert
-    wANDI.scopeLevelLimit = 4;
-
-    //Delimeter for the the header cells
-    wANDI.associatedHeaderCellsDelimeter = " <span aria-hidden='true'>|</span> ";
+    var wANDI = new AndiModule("11.1.0", "w");
 
     //These variables are for the page
     var tableCountTotal = 0;			//The total number of tables
@@ -77,8 +68,7 @@ function init_module() {
 
         if (role === "table" || ((role === "grid" || role === "treegrid") && $(table).find("[role=gridcell]").first().length)) {
             //if role=table or role=grid and has a descendent with role=gridcell
-        }
-        else {
+        } else {
             //loop through the <table> and set data-* attributes
             //Each cell in a row is given a rowIndex
             //Each cell in a column is given a colIndex
@@ -160,47 +150,49 @@ function init_module() {
                                 colgroupIndex++;
                                 $(cell).attr("data-wANDI508-colgroupindex", colgroupIndex);
                                 colgroupSegmentation_colgroupsPerRowCounter++;
-                            }
-                            else if (scope == "rowgroup") {
+                            } else if (scope == "rowgroup") {
                                 //TODO: more logic here to catch misuse of colgroup
                                 rowgroupIndex++;
                                 $(cell).attr("data-wANDI508-rowgroupindex", rowgroupIndex);
                             }
                         }
-                    }
-                    else {
+                    } else {
                         tdCount++;
                     }
 
                     //get colspan
                     //TODO: mark for alert here if value is invalid
                     colspan = $(cell).attr("colspan");
-                    if (colspan === undefined)
+                    if (colspan === undefined) {
                         colspan = 1;
-                    else
+                    } else {
                         colspan = parseInt(colspan);
+                    }
+                        
 
                     //get rowspan
                     //TODO: mark for alert here if value is invalid
                     rowspan = $(cell).attr("rowspan");
-                    if (rowspan === undefined)
+                    if (rowspan === undefined) {
                         rowspan = 1;
-                    else
+                    } else {
                         rowspan = parseInt(rowspan);
-
+                    }
+                    
                     //Increase the rowspanArray length if needed
-                    if ((rowspanArray.length === 0) || (rowspanArray[colIndex] === undefined))
+                    if ((rowspanArray.length === 0) || (rowspanArray[colIndex] === undefined)) {
                         rowspanArray.push(parseInt(rowspan));
-                    else
+                    } else {
                         firstRow = false;
-
+                    }
+                    
                     //store colIndex
                     if (!firstRow) {
                         //loop through the rowspanArray until a 1 is found
                         for (var a = colIndex; a < rowspanArray.length; a++) {
-                            if (rowspanArray[a] == 1)
+                            if (rowspanArray[a] == 1) {
                                 break;
-                            else if (rowspanArray[a] > 1) {
+                            } else if (rowspanArray[a] > 1) {
                                 //there is a rowspan at this colIndex that is spanning over this row
                                 //decrement this item in the rowspan array
                                 rowspanArray[a]--;
@@ -214,8 +206,7 @@ function init_module() {
                         $(cell).attr("data-wANDI508-colindex", colIndex);
                         rowspanArray[colIndex] = rowspan;
                         colIndex++;
-                    }
-                    else {//colspan > 1
+                    } else {//colspan > 1
                         indexValue = "";
                         colIndexPlusColspan = parseInt(colIndex) + colspan;
                         for (var b = colIndex; b < colIndexPlusColspan; b++) {
@@ -229,8 +220,7 @@ function init_module() {
                     //store rowIndex
                     if (rowspan < 2) {
                         $(cell).attr("data-wANDI508-rowindex", rowIndex);
-                    }
-                    else {
+                    } else {
                         //rowspanArray[colIndex] = rowspan;
                         indexValue = "";
                         rowIndexPlusRowspan = parseInt(rowIndex) + rowspan;
@@ -268,10 +258,9 @@ function init_module() {
                                 colgroupsInThisRow++;
                                 //store this colgroupIndex to temp variable
                                 c = $(this).attr("data-wANDI508-colgroupindex");
-                            }
-                            else if (lastColgroupIndex)
-                                //set this cell's colgroupIndex
+                            } else if (lastColgroupIndex) { //set this cell's colgroupIndex
                                 $(this).attr("data-wANDI508-colgroupindex", lastColgroupIndex);
+                            }
                         });
 
                         if (colgroupsInThisRow === 1) {
@@ -288,8 +277,7 @@ function init_module() {
                                 lastRowgroupRowSpan = $(this).attr("rowspan");
                                 if (!lastRowgroupRowSpan)
                                     lastRowgroupRowSpan = 1;
-                            }
-                            else if (lastRowgroupIndex && lastRowgroupRowSpan > 0)
+                            } else if (lastRowgroupIndex && lastRowgroupRowSpan > 0)
                                 $(this).attr("data-wANDI508-rowgroupindex", lastRowgroupIndex);
                         });
                         //Decrement lastRowgroupRowSpan
@@ -311,7 +299,6 @@ function init_module() {
                     tableHasHeaders = true;
 
                 if (scope && $(cell).is("th")) {
-
                     if (scope == "row" || scope == "rowgroup") {
                         tableHasScopes = true;
 
@@ -323,28 +310,26 @@ function init_module() {
                                     //scope found at this colIndex
                                     scopeRowLevel[f] = colIndex;
                                     break;
-                                }
-                                else if ((f == wANDI.scopeLevelLimit) && (colIndex >= f))
-                                    //scope levelLimit has been exceeeded
+                                } else if ((f == 4) && (colIndex >= f)) { //scope levelLimit has been exceeeded
                                     tooManyScopeRowLevels = true;
+                                }
                             }
                         }
-                    }
-                    else if (scope == "col" || scope == "colgroup") {
+                    } else if (scope == "col" || scope == "colgroup") {
                         tableHasScopes = true;
 
                         //Determine if there are too many scope columns
                         if (!tooManyScopeColLevels) {
                             rowIndex = $(cell).attr("data-wANDI508-rowindex");
-                            for (var g = 0; g <= wANDI.scopeLevelLimit; g++) {
+                            for (var g = 0; g <= 4; g++) {
                                 if (!scopeColLevel[g] || (!scopeColLevel[g] && (scopeColLevel[g - 1] != rowIndex))) {
                                     //scope found at this rowIndex
                                     scopeColLevel[g] = rowIndex;
                                     break;
-                                }
-                                else if ((g == wANDI.scopeLevelLimit) && (rowIndex >= g))
-                                    //scope levelLimit has been exceeeded
+                                } else if ((g == 4) && (rowIndex >= g)) { //scope levelLimit has been exceeeded
                                     tooManyScopeColLevels = true;
+                                }
+                                    
                             }
                         }
                     }
@@ -362,17 +347,17 @@ function init_module() {
                     //andiData.grabComponents($(child), true);//overwrite with components from the child, except for innerText
                     //Do alert checks for the child
                     andiCheck.commonFocusableElementChecks(andiData, $(child));
-                }
-                else//Do alert checks for the cell
+                } else { //Do alert checks for the cell
                     andiCheck.commonNonFocusableElementChecks(andiData, $(cell));
+                }
 
                 if (scope) {
                     //andiData.grab_scope($(cell));
                     //Only throw scope alerts if in "scope mode"
                     if (tooManyScopeRowLevels)
-                        andiAlerter.throwAlert(alert_0043, [wANDI.scopeLevelLimit, "row"]);
+                        andiAlerter.throwAlert(alert_0043, [4, "row"]);
                     if (tooManyScopeColLevels)
-                        andiAlerter.throwAlert(alert_0043, [wANDI.scopeLevelLimit, "col"]);
+                        andiAlerter.throwAlert(alert_0043, [4, "col"]);
                     andiCheck.detectDeprecatedHTML($(cell));
                     if (scope !== "col" && scope !== "row" && scope !== "colgroup" && scope !== "rowgroup")//scope value is invalid
                         andiAlerter.throwAlert(alert_007C, [scope]);
@@ -399,22 +384,22 @@ function init_module() {
             //andiCheck.detectDeprecatedHTML($(table));
 
             if (thCount === 0) {
-                if (tdCount === 0)//No td or th cells
+                if (tdCount === 0) { //No td or th cells
                     andiAlerter.throwAlert(alert_004E);
-                else//No th cells
+                } else {  //No th cells
                     andiAlerter.throwAlert(alert_0046);
-            }
-            else {
+                }
+            } else {
                 //Has th cells
                 if (hasThRow && hasThCol)
                     scopeRequired = true;
 
-                if (!tableHasScopes) {
-                    //Table Has No Scopes
-                    if (tableHasHeaders)//No Scope, Has Headers
+                if (!tableHasScopes) { //Table Has No Scopes
+                    if (tableHasHeaders) { //No Scope, Has Headers
                         andiAlerter.throwAlert(alert_004B);
-                    else//No Scope, No Headers
+                    } else { //No Scope, No Headers
                         andiAlerter.throwAlert(alert_0048);
+                    }
                 }
 
                 if (scopeRequired) {
@@ -454,14 +439,12 @@ function init_module() {
                         }
                     });
                 }
-                if (!tableHasHeaders) {
-                    //Table Has No Headers
-                    if (tableHasScopes)
-                        //No Headers, Has Scope
+                if (!tableHasHeaders) { //Table Has No Headers
+                    if (tableHasScopes) { //No Headers, Has Scope
                         andiAlerter.throwAlert(alert_004C);
-                    else
-                        //No Headers, No Scope
+                    } else { //No Headers, No Scope
                         andiAlerter.throwAlert(alert_004A);
+                    }                        
                 }
 
                 if (tableHasHeaders && tableHasScopes) {
@@ -487,10 +470,11 @@ function init_module() {
         var headers = $.trim($(element).attr("headers"));
         var headersText = "";
         if (headers !== undefined) {
-            if (!$(element).is("th") && !$(element).is("td"))
+            if (!$(element).is("th") && !$(element).is("td")) {
                 andiAlerter.throwAlert(alert_0045);
-            else
+            } else {
                 headers = getHeadersReferences(element, headers, table);
+            }
         }
         //stores the actual vaule of the headers, not the parsed (grabbed) headersText
         elementData.components.headers = headers;
@@ -525,24 +509,23 @@ function init_module() {
 
                     if ($(referencedElement).html() !== undefined && $(referencedElement).closest("table").is(table)) {
                         //element with id was found within the same table
-                        if ($(referencedElement).is("td")) //referenced element is a td
+                        if ($(referencedElement).is("td")) { //referenced element is a td
                             andiAlerter.throwAlert(alert_0067, [idsArray[x]]);
-                        else if (!$(referencedElement).is("th"))//referenced element is not a th
+                        } else if (!$(referencedElement).is("th")) { //referenced element is not a th
                             andiAlerter.throwAlert(alert_0066, [idsArray[x]]);
-                        else {//referenced element is a th
+                        } else {//referenced element is a th
                             //Check if this is referencing a duplicate id within the same table
                             areThereAnyDuplicateIds_headers(idsArray[x], tableThIds);
                             referencedElementText += andiUtility.getVisibleInnerText(referencedElement);
                         }
-                    }
-                    else {//referenced element was not found or was not within the same table
+                    } else {//referenced element was not found or was not within the same table
                         referencedElement = document.getElementById(idsArray[x]); //search within entire document for this id
 
                         if ($(referencedElement).html() !== undefined) {
                             andiAlerter.throwAlert(alert_0062, [idsArray[x]]); //referenced element is in another table
-                        }
-                        else //No, this id was not found at all, add to list.
+                        } else {  //No, this id was not found at all, add to list.
                             missingReferences.push(idsArray[x]);
+                        }
                     }
 
                     if (referencedElementText !== "") //Add referenceId
@@ -579,8 +562,6 @@ function init_module() {
             }
         }
     };
-
     //analyze tables
     wANDI.analyze();
-
 }//end init
