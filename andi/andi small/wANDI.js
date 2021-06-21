@@ -29,32 +29,30 @@ function init_module() {
 
     //This function will analyze the test page for table related markup relating to accessibility
     wANDI.analyze = function () {
-        if (TestPageData.page_using_table) {
-            //Loop through each visible table
-            var activeElementFound = false;
-            $(TestPageData.allElements).filter("table,[role=table],[role=grid],[role=treegrid]").each(function () {
-                //Store this table in the array
-                tableArray.push($(this));
+        //Loop through each visible table
+        var activeElementFound = false;
+        $(TestPageData.allElements).filter("table,[role=table],[role=grid],[role=treegrid]").each(function () {
+            //Store this table in the array
+            tableArray.push($(this));
 
-                if ($(this).isSemantically("[role=table],[role=grid],[role=treegrid]", "table")) {
-                    //It's a data table
-                    dataTablesCount++;
-                }
+            if ($(this).isSemantically("[role=table],[role=grid],[role=treegrid]", "table")) {
+                //It's a data table
+                dataTablesCount++;
+            }
 
-                //Determine if this is a refresh of wANDI (there is an active element)
-                if (!activeElementFound &&
-                    ($(this).hasClass("ANDI508-element-active") || $(this).find("th.ANDI508-element-active,td.ANDI508-element-active").first().length)) {
-                    activeTableIndex = tableCountTotal;//set this index to this table
-                    activeElementFound = true;
-                }
+            //Determine if this is a refresh of wANDI (there is an active element)
+            if (!activeElementFound &&
+                ($(this).hasClass("ANDI508-element-active") || $(this).find("th.ANDI508-element-active,td.ANDI508-element-active").first().length)) {
+                activeTableIndex = tableCountTotal;//set this index to this table
+                activeElementFound = true;
+            }
 
-                tableCountTotal++;
-            });
+            tableCountTotal++;
+        });
 
-            if (!activeElementFound)
-                activeTableIndex = 0;//Analyze first table
-            analyzeTable(tableArray[activeTableIndex]);
-        }
+        if (!activeElementFound)
+            activeTableIndex = 0;//Analyze first table
+        analyzeTable(tableArray[activeTableIndex]);
     };
 
     //This function will a table. Only one table at a time
