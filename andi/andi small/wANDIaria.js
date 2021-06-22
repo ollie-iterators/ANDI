@@ -1,5 +1,6 @@
 //=========================================//
-//wANDIaria: data tables (analyze table aria) ANDI //
+//wANDIaria: data tables (small code) ANDI //
+// this is focusing on table aria          //
 //Created By Social Security Administration//
 //=========================================//
 
@@ -245,8 +246,6 @@ function init_module() {
                     andiData = new AndiData(cell[0]);
 
                     if (child.length) {
-                        //Also grab accessibility components from the child
-                        //andiData.grabComponents($(child), true);//overwrite with components from the child, except for innerText
                         //Do alert checks for the child
                         andiCheck.commonFocusableElementChecks(andiData, $(child));
                     } else { //Do alert checks for the cell
