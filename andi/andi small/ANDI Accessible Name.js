@@ -666,3 +666,177 @@ AndiData.textAlternativeComputation = function(root){
 		return (captionText !== undefined) ? [captionText, caption] : undefined;
 	}
 };//end textAlternativeComputation
+
+// Other Necessary Functions
+AndiUtility.getVisibleInnerText = function (element, root) {
+	var innerText = "";
+	var exclusions = ".ANDI508-overlay,script,noscript,iframe";
+	var node;
+	if (!$(element).is(exclusions) && element.childNodes) {
+		//Loop through this element's child nodes
+		lookForPseudoContent("before", element);
+
+		for (var z = 0; z < element.childNodes.length; z++) {
+			node = element.childNodes[z];
+			if (node.nodeType === 1) {//element node
+				if ($(node).is(":shown") && !$(node).is("[aria-hidden=true]")) {
+					if (root != node && !isEmbeddedControl(node))
+						innerText += AndiUtility.getVisibleInnerText(node, root);
+
+					if (andiUtility.isBlockElement(node))
+						innerText += " ";
+				}
+			}
+			else if (node.nodeType === 3) {//text node
+				innerText += andiUtility.condenseWhitespace(node.nodeValue);
+			}
+		}
+
+		lookForPseudoContent("after", element);
+	}
+	return innerText;
+
+	//This function is essentially StepE of the TAC
+	function isEmbeddedControl(node) {
+		var component;
+		if ($(node).is("input[type=text]")) { //get value
+			innerText += $(node).val();
+			return true;
+		}
+		else if ($(node).is("[role=combobox],[role=listbox]")) { //get chosen option
+			component = $(node).find("[role=option][aria-selected=true]").first().text();
+			if (component && $.trim(component) !== "") {
+				innerText += component;
+			}
+			return true;
+		}
+		else if ($(node).is("select")) { //get chosen option
+			component = $(node).find("option:selected").first().text();
+			if (component && $.trim(component) !== "") {
+				innerText += component;
+			}
+			return true;
+		}
+		else if ($(node).is("[role=progressbar],[role=scrollbar],[role=slider],[role=spinbutton]")) {
+			component = $(node).attr("aria-valuetext");
+			if (component && $.trim(component) !== "") {
+				innerText += component;
+			}
+			else {
+				component = $(node).attr("aria-valuenow");
+				if (component && $.trim(component) !== "") {
+					innerText += component;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	//This function checks for pseudo element content and adds to the innerText
+	function lookForPseudoContent(pseudo, element, data) {
+		var pseudoObject = andiUtility.getPseudoContent(pseudo, element);
+		if (pseudoObject) {
+			innerText += pseudoObject[0];
+		}
+	}
+};
+
+AndiUtlity.isBlockElement = function (node) {
+	var blockStyles = {
+		display: ["block", "grid", "table", "flex", "list-item"],
+		position: ["absolute", "fixed"],
+		float: ["left", "right", "inline"],
+		clear: ["left", "right", "both", "inline"]
+	};
+
+	var blockElements = ["address", "article", "aside", "blockquote", "br", "caption", "dd", "div", "dl", "dt", "fieldset",
+		"figcaption", "figure", "footer", "h1", "h2", "h3", "h4", "h5", "h6", "hr", "header", "legend",
+		"li", "main", "nav", "ol", "output", "p", "pre", "section", "table", "td", "tfoot", "th", "tr", "ul"];
+
+	for (var prop in blockStyles) {
+		if (blockStyles.hasOwnProperty(prop)) {
+			var values = blockStyles[prop];
+			var style = $(node).css(prop);
+			for (var i = 0; i < values.length; i++) {
+				if (style &&
+					((values[i].indexOf("!") === 0 &&
+						[values[i].slice(1), "inherit", "initial", "unset"].indexOf(style) === -1) ||
+						style.indexOf(values[i]) !== -1)
+				) {
+					return true;
+				}
+			}
+		}
+	}
+	if (node.nodeName && blockElements.indexOf(node.nodeName.toLowerCase()) !== -1) {
+		return true;
+	}
+	return false;
+};
+
+//This function checks for pseudo element content
+//Return: Array [displayText, contentLiteral]
+AndiUtility.getPseudoContent = function (pseudo, element) {
+	if (!oldIE && window.getComputedStyle(element, ":" + pseudo).display !== "none") {
+		//pseudo element is not display:none
+		var contentLiteral = window.getComputedStyle(element, ":" + pseudo).content;
+
+		if (contentLiteral !== "none" && contentLiteral !== "normal" && contentLiteral !== "counter" && contentLiteral !== "\"\"") {//content is not none or empty string
+			var displayText = "";
+			if (!!hasReadableCharacters(contentLiteral));
+			return [displayText, contentLiteral];
+		}
+	}
+	return undefined;
+
+	function hasReadableCharacters(content) {
+		var unicode, c;
+
+		//replaces \a with a space
+		content = content.replace(/\\a /, " ");
+
+		content = stripContentKeywords(content);
+
+		for (var i = 0; i < content.length; i++) {
+			unicode = content.charCodeAt(i);
+
+			c = content.charAt(i);
+			if ( //if unicode is not in a private use range
+				(unicode < 57344) ||
+				!(
+					(unicode >= 57344 && unicode <= 63743) ||
+					(unicode >= 983040 && unicode <= 1048573) ||
+					(unicode >= 1048576 && unicode <= 1114109)
+				)
+			) {
+				displayText += c;
+			}
+		}
+
+		//strip double quotes
+		//TODO: do it more "carefully"
+		var regex_everydoublequote = /"/g;
+		displayText = displayText.replace(regex_everydoublequote, '');
+
+		return displayText;
+	}
+
+	//This function removes CSS content keywords for display purposes
+	function stripContentKeywords(c) {
+		//gets common content keywords and their values between parens and the parens
+		var regex_keywords = /(url\()(.*)(\))|(counter\()(.*)(\))|(counters\()(.*)(\))/;
+
+		//removes common content keywords and their values between parens and the parens
+		c = c.replace(regex_keywords, '');
+
+		return c;
+	}
+};
+
+AndiUtility.condenseWhitespace = function (string) {
+	var whitespace_regex = /\s+/g;
+	if (string !== undefined) {
+		return string.replace(whitespace_regex, " ");
+	}
+};
