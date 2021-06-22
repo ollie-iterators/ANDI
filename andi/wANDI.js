@@ -869,8 +869,6 @@ function init_module() {
                 andiData = new AndiData(cell[0]);
 
                 if (child.length) {
-                    //Also grab accessibility components from the child
-                    //andiData.grabComponents($(child), true);//overwrite with components from the child, except for innerText
                     //Do alert checks for the child
                     andiCheck.commonFocusableElementChecks(andiData, $(child));
                 }
@@ -878,7 +876,6 @@ function init_module() {
                     andiCheck.commonNonFocusableElementChecks(andiData, $(cell));
 
                 if (scope) {
-                    //andiData.grab_scope($(cell));
                     if (AndiModule.activeActionButtons.scopeMode) {
                         //Only throw scope alerts if in "scope mode"
                         if (tooManyScopeRowLevels)
@@ -1179,8 +1176,6 @@ function init_module() {
                     andiData = new AndiData(cell[0]);
 
                     if (child.length) {
-                        //Also grab accessibility components from the child
-                        //andiData.grabComponents($(child), true);//overwrite with components from the child, except for innerText
                         //Do alert checks for the child
                         andiCheck.commonFocusableElementChecks(andiData, $(child));
                     }

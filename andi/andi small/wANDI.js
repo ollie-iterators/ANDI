@@ -343,8 +343,6 @@ function init_module() {
                 andiData = new AndiData(cell[0]);
 
                 if (child.length) {
-                    //Also grab accessibility components from the child
-                    //andiData.grabComponents($(child), true);//overwrite with components from the child, except for innerText
                     //Do alert checks for the child
                     andiCheck.commonFocusableElementChecks(andiData, $(child));
                 } else { //Do alert checks for the cell
@@ -352,7 +350,6 @@ function init_module() {
                 }
 
                 if (scope) {
-                    //andiData.grab_scope($(cell));
                     //Only throw scope alerts if in "scope mode"
                     if (tooManyScopeRowLevels)
                         andiAlerter.throwAlert(alert_0043, [4, "row"]);
