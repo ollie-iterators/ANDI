@@ -1,5 +1,10 @@
 //This object sets up the check logic to determine if an alert should be thrown.
 function AndiCheck(){
+	// Necessary Information //
+	// NOTE: If other things are necessary to check, check andi.js
+	TestPageData.allElements = $("#ANDI508-testPage *");
+	TestPageData.allFors = $(TestPageData.allElements).filter("label[for]");
+
 	//==Mult-Point Checks==//
 
 	//This function is used to check for alerts related to focusable elements
