@@ -4,6 +4,8 @@ function AndiCheck(){
 	// NOTE: If other things are necessary to check, check andi.js
 	TestPageData.allElements = $("#ANDI508-testPage *");
 	TestPageData.allFors = $(TestPageData.allElements).filter("label[for]");
+	//all the ids of elements on the page for duplicate comparisons
+	this.allIds = $(TestPageData.allElements).filter("[id]");
 
 	//==Mult-Point Checks==//
 
