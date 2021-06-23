@@ -2,13 +2,19 @@
 //ANDI: Accessible Name & Description Inspector//
 //Created By Social Security Administration    //
 //=============================================//
-// NOTE: For now, this is the only place to alter andi.js
+//This is a temporary space for removing alerts and code that are not used in andi.js
+// NOTE: Text Alternative Computation is in ANDI Accessible Name.js
+// NOTE getAddOnProps is in ANDI getAddOnProps.js
+// NOTE: jqueryPreferredVersion: 3.6.0
+// NOTE: jqueryMinimumVersion: 1.9.1
 var andiVersionNumber = "27.4.0";
 
 //==============//
 // ANDI CONFIG: //
 //==============//
 //URLs
+var host_url = "https://ollie-iterators.github.io/ANDI/andi/";
+var help_url = "https://ollie-iterators.github.io/ANDI/andi/help/";
 var icons_url = "https://ollie-iterators.github.io/ANDI/andi/icons/";
 
 //Load andi.css file immediately to minimize page flash
@@ -29,71 +35,41 @@ var icons_url = "https://ollie-iterators.github.io/ANDI/andi/icons/";
 //===============//
 // ANDI OBJECTS: //
 //===============//
-var testPageData;                    //Test Page Data Storage/Analysis, instantiated within module launch
-var andiData;                        //Element Data Storage/Analysis, instatiated within module's analysis logic
+var testPageData;                          //Test Page Data Storage/Analysis, instantiated within module launch
+var andiData;                              //Element Data Storage/Analysis, instatiated within module's analysis logic
 
 //Define the overlay and find icons (not using background-image because of ie7 issues with sizing)
-var overlayIcon = "<img src='https://ollie-iterators.github.io/ANDI/andi/icons/overlay-off.png' class='ANDI508-overlayIcon' aria-label='overLay' />";
-var findIcon = "<img src='https://ollie-iterators.github.io/ANDI/andi/icons/find-off.png' class='ANDI508-findIcon' aria-label='find' />";
-var listIcon = "<img src='https://ollie-iterators.github.io/ANDI/andi/icons/list-off.png' class='ANDI508-listIcon' alt='' />";
+var overlayIcon = "<img src='" + icons_url + "overlay-off.png' class='ANDI508-overlayIcon' aria-label='overLay' />";
+var findIcon = "<img src='" + icons_url + "find-off.png' class='ANDI508-findIcon' aria-label='find' />";
+var listIcon = "<img src='" + icons_url + "list-off.png' class='ANDI508-listIcon' alt='' />";
+
+// ANDI Alerts about aria-hidden on the page
+//Check <html> and <body> elements for aria-hidden=true
+if ($("html").first().attr("aria-hidden") === "true" || $("body").first().attr("aria-hidden") === "true") {
+	var ariaHiddenMessage = "ANDI has detected aria-hidden=true on the <html> or <body> elements which would render this page invisible to a screen reader.";
+	ariaHiddenMessage += " Press OK to remove the aria-hidden=true from the <html> and <body> elements to continue."
+	if (confirm(ariaHiddenMessage)) {
+		$("html").removeAttr("aria-hidden");
+		$("body").removeAttr("aria-hidden");
+	} else {
+		alert("ANDI will not continue while aria-hidden=true is on <html> or <body> elements.");
+		return; //Stops ANDI
+	}
+}
+
+// NOTE: Work on frameset code. ANDI does not work on framesets
+
+//Global Checks (To see the code, look in AndiCheck.js)
+// andiCheck.isThereExactlyOnePageTitle();
+// andiCheck.areThereMoreExclusiveChildrenThanParents();
 
 //==================//
 // ANDI INITIALIZE: //
 //==================//
 //This main function is called when jQuery is ready.
 function launchAndi() {
-	(window.andi508 = function () {
-		//Ensure that $ is mapped to jQuery
-		window.jQuery = window.$ = jQuery;
-
-		//Check <html> and <body> elements for aria-hidden=true
-		if ($("html").first().attr("aria-hidden") === "true" || $("body").first().attr("aria-hidden") === "true") {
-			if (confirm("ANDI has detected aria-hidden=true on the <html> or <body> elements which would render this page invisible to a screen reader.\n\nPress OK to remove the aria-hidden=true from the <html> and <body> elements to continue.")) {
-				$("html").removeAttr("aria-hidden");
-				$("body").removeAttr("aria-hidden");
-			}
-			else {
-				alert("ANDI will not continue while aria-hidden=true is on <html> or <body> elements.");
-				return; //Stops ANDI
-			}
-		}
-
-		//Frames handling
-		if (document.getElementsByTagName("frameset")[0]) {
-			if (confirm("ANDI has detected frames:\nPress OK to stay on the page.\nPress Cancel to test an individual frame.") !== true) {
-				var oldLocation = document.location;
-				var framesSelectionHead = "<head><title>ANDI Frame Selection</title><style>body{margin-left:1em;}*{font-family:Verdana,Sans-Serif;font-size:12pt}h1{font-weight:bold;font-size:20pt}h2{font-weight:bold;font-size:13pt}li{margin:7px}a{font-family:monospace;margin-right:8px}</style></head>";
-				var framesSelectionBody = "<h1 id='ANDI508-frameSelectionUI'>ANDI</h1><p>This page uses frames. The page title is: '" + document.title + "'.<br /><br />Each frame must be tested individually. Select a frame from the list below, then launch ANDI.</p><h2>Frames:</h2><ol>";
-				var title, titleDisplay, framesrc;
-				$("frame").each(function () {
-					//Build Title Display
-					title = $(this).attr("title");
-					framesrc = $(this).attr("src");
-					titleDisplay = (!title) ? " <span style='color:#c4532c'><img style='width:18px' src='https://ollie-iterators.github.io/ANDI/andi/icons/danger.png' alt='danger: ' /> No title attribute on this &lt;frame&gt;.</span>" : " <span style='color:#058488'>title=\"" + title + "\"</span>";
-					framesSelectionBody += "<li><a href='" + framesrc + "'>" + framesrc + "</a>" + titleDisplay + "</li>";
-				});
-				framesSelectionBody += "</ol><button id='ANDI508-frameSelectionUI-goBack'>Go Back</button>";
-				$("frameset").remove();
-				$("html head").html(framesSelectionHead);
-				$("html").append(document.createElement("body"));
-				$("html body").append(framesSelectionBody);
-				$("#ANDI508-frameSelectionUI-goBack").click(function () { document.location = oldLocation; });
-			}
-			else {//Reload the test page so that the ANDI files that were added are removed.
-				location.reload();
-			}
-			return; //Stops ANDI
-		}
-		//Prevent running ANDI on the frame selection UI
-		if (document.getElementById("ANDI508-frameSelectionUI")) {
-			//ANDI was launched while the frame selection UI was open.
-			alert("Select a frame, then launch ANDI.");
-			return;
-		}
-
-		//Get ANDI ready to launch the first module
-		andiReady();
-	})();
+	//Get ANDI ready to launch the first module
+	andiReady();
 }
 
 //================//
@@ -108,150 +84,22 @@ function Alert(level, group, message, info, alertButton) {
 	this.alertButton = alertButton; //(optional) an alert button object
 }
 //Define Alerts used by all modules
-var alert_0001 = new Alert("danger", "0", " has no accessible name, associated &lt;label&gt;, or [title].", "no_name_form_element");
-var alert_0002 = new Alert("danger", "0", " has no accessible name, innerText, or [title].", "no_name_generic");
-var alert_0003 = new Alert("danger", "0", " has no accessible name, [alt], or [title].", "no_name_image");
-var alert_0004 = new Alert("danger", "0", "Table has no accessible name, &lt;caption&gt;, or [title].", "no_name_table");
-var alert_0005 = new Alert("danger", "0", "Figure has no accessible name, &lt;figcaption&gt;, or [title].", "no_name_figure");
-var alert_0007 = new Alert("danger", "0", "Iframe has no accessible name or [title].", "no_name_iframe");
-var alert_0008 = new Alert("danger", "0", " has no accessible name.", "no_name_generic");
-var alert_0009 = new Alert("warning", "0", "Iframe has no accessible name or [title].", "no_name_iframe");
-
-var alert_0011 = new Alert("danger", "1", "%%%; element ids should be unique.", "dup_id");
-var alert_0012 = new Alert("danger", "1", "More than one &lt;label[for=%%%]&gt; associates with this element [id=%%%].", "dup_for");
-
-var alert_0021 = new Alert("warning", "2", "[aria-describedby] should be used in combination with a component that provides an accessible name.", "dby_alone");
-var alert_0022 = new Alert("danger", "2", "&lt;legend&gt; should be used in combination with a component that provides an accessible name.", "legend_alone");
-
-var alert_0031 = new Alert("danger", "3", "[aria-labeledby] is mispelled, use [aria-labelledby].", "misspell");
-var alert_0032 = new Alert("danger", "3", "[aria-role] not a valid attribute, use [role] instead.", "aria_role");
-
-var alert_0041 = new Alert("warning", "4", "Presentation table has data table markup (%%%); Is this a data table?", "pres_table_not_have");
-var alert_0043 = new Alert("caution", "4", "Table has more than %%% levels of [scope=%%%].", "too_many_scope_levels");
-var alert_0045 = new Alert("danger", "4", "[headers] attribute only valid on &lt;th&gt; or &lt;td&gt;.", "headers_only_for_th_td");
-var alert_0046 = new Alert("danger", "4", "Table has no &lt;th&gt; cells.", "table_has_no_th");
-var alert_0047 = new Alert("warning", "4", "Scope association needed at intersection of &lt;th&gt;.", "no_scope_at_intersection");
-var alert_0048 = new Alert("caution", "4", "Table has no [scope] associations.", "table_has_no_scope");
-var alert_0049 = new Alert("danger", "4", "Table using both [scope] and [headers], may cause screen reader issues.", "table_mixing_scope_and_headers");
-var alert_004A = new Alert("danger", "4", "Table has no [headers/id] associations.", "table_has_no_headers");
-var alert_004B = new Alert("danger", "4", "Table has no [scope] but does have [headers], switch to 'headers/id mode'.", "switch_table_analysis_mode");
-var alert_004C = new Alert("danger", "4", "Table has no [headers/id] but does have [scope], switch to 'scope mode'.", "switch_table_analysis_mode");
-var alert_004E = new Alert("danger", "4", "Table has no &lt;th&gt; or &lt;td&gt; cells.", "table_has_no_th_or_td");
-var alert_004F = new Alert("danger", "4", "ARIA %%% has no %%% cells.", "aria_table_grid_structure");
-var alert_004G = new Alert("danger", "4", "ARIA %%% has no [role=columnheader] or [role=rowheader] cells.", "aria_table_grid_structure");
-var alert_004H = new Alert("danger", "4", "ARIA %%% has no [role=row] rows.", "aria_table_grid_structure");
-var alert_004I = new Alert("warning", "4", "&lt;table&gt; with [role=%%%] is not recognized as a data table.", "table_nontypical_role");
-var alert_004J = new Alert("warning", "4", "&lt;table[role=%%%]&gt; has %%% &lt;th&gt; cells missing columnheader or rowheader role.", "header_missing_role");
-var alert_004K = new Alert("warning", "4", "&lt;table[role=%%%]&gt; has %%% cells not contained by [role=row].", "cells_not_contained_by_row_role");
-
-var alert_0052 = new Alert("danger", "5", "[accessKey] value \"%%%\" has more than one character.", "accesskey_more_one");
-var alert_0054 = new Alert("danger", "5", "Duplicate [accessKey=%%%] found on button.", "accesskey_duplicate");
-var alert_0055 = new Alert("caution", "5", "Duplicate [accessKey=%%%] found.", "accesskey_duplicate");
-var alert_0056 = new Alert("danger", "5", "Duplicate [accessKey=%%%] found on link.", "accesskey_duplicate");
-
-var alert_0062 = new Alert("danger", "6", "[headers] attribute is referencing an element [id=%%%] external to its own table.", "headers_ref_external");
-var alert_0063 = new Alert("warning", "6", "Element referenced by [%%%] with [id=%%%] not found.", "ref_id_not_found");
-var alert_0065 = new Alert("danger", "6", "Improper use of [%%%] possible: Referenced ids \"%%%\" not found.", "improper_ref_id_usage");
-var alert_0066 = new Alert("danger", "6", "Element referenced by [headers] attribute with [id=%%%] is not a &lt;th&gt;.", "headers_ref_not_th");
-var alert_0067 = new Alert("warning", "6", "[headers] attribute is referencing a &lt;td&gt; with [id=%%%].", "headers_ref_is_td");
-var alert_0068 = new Alert("warning", "6", "Element\'s [headers] references provide no association text.", "headers_refs_no_text");
-var alert_0069 = new Alert("warning", "6", "In-page anchor target with [id=%%%] not found.", "anchor_target_not_found");
-var alert_006A = new Alert("danger", "6", "&lt;img&gt; referenced by image map %%% not found.", "image_map_ref_not_found");
-var alert_006B = new Alert("warning", "6", "[%%%] is referencing a legend which may cause speech verbosity.", "ref_legend");
-var alert_006C = new Alert("warning", "6", "[%%%] reference contains another [%%%] reference which won't be used for this Output.", "ref_has_ref");
-var alert_006D = new Alert("warning", "6", "[%%%] is directly referencing [id=%%%] multiple times which may cause speech verbosity.", "ref_is_duplicate");
-var alert_006E = new Alert("warning", "6", "[%%%] is directly and indirectly referencing [id=%%%] which may cause speech verbosity.", "ref_is_direct_and_indirect");
-var alert_006F = new Alert("warning", "6", "Element nested in &lt;label&gt; but label[for=%%%] does not match element [id=%%%].", "nested_label_for_no_match");
-
-var alert_0071 = new Alert("danger", "7", "Page &lt;title&gt; cannot be empty.", "page_title_empty");
-var alert_0072 = new Alert("danger", "7", "Page has no &lt;title&gt;.", "page_title_none");
-var alert_0073 = new Alert("warning", "7", "Page has more than one &lt;title&gt; tag.", "page_title_multiple");
+var alert_0071 = new Alert("danger", "7", "Page <title> cannot be empty.", "page_title_empty");
+var alert_0072 = new Alert("danger", "7", "Page has no <title>.", "page_title_none");
+var alert_0073 = new Alert("warning", "7", "Page has more than one <title> tag.", "page_title_multiple");
 var alert_0074 = new Alert("danger", "7", "There are more legends (%%%) than fieldsets (%%%).", "too_many_legends");
 var alert_0075 = new Alert("danger", "7", "There are more figcaptions (%%%) than figures (%%%).", "too_many_figcaptions");
 var alert_0076 = new Alert("danger", "7", "There are more captions (%%%) than tables (%%%).", "too_many_captions");
 var alert_0077 = new Alert("danger", "7", "Tabindex value \"%%%\" is not a number.", "tabindex_not_number");
-var alert_0078 = new Alert("warning", "7", "Using HTML5, found deprecated %%%.", "deprecated_html");
-var alert_0079 = new Alert("danger", "7", "List item %%% is not contained by a list container %%%.", "li_no_container");
-var alert_007A = new Alert("danger", "7", "Description list item is not contained by a description list container &lt;dl&gt;.", "dd_dt_no_container");
-var alert_007B = new Alert("caution", "7", "This &lt;a&gt; element has [name=%%%] which is a deprecated way of making an anchor target; use [id].", "deprecated_html_a_name");
-var alert_007C = new Alert("warning", "7", "[scope=%%%] value is invalid; acceptable values are col, row, colgroup, or rowgroup.", "scope_value_invalid");
-
-var alert_0081 = new Alert("warning", "8", "[alt] attribute is meant for &lt;img&gt; elements.", "alt_only_for_images");
-
-var alert_0091 = new Alert("warning", "9", "Explicit &lt;label[for]&gt; only works with form elements.", "explicit_label_for_forms");
-
-var alert_0101 = new Alert("warning", "10", "Combining %%% may produce inconsistent screen reader results.", "unreliable_component_combine");
-
-var alert_0112 = new Alert("caution", "11", "JavaScript event %%% may cause keyboard accessibility issues; investigate.", "javascript_event_caution");
-
 var alert_0121 = new Alert("caution", "12", "Focusable element is not in keyboard tab order; should it be tabbable?", "not_in_tab_order");
 var alert_0122 = new Alert("caution", "12", "Focusable element is not in keyboard tab order and has no accessible name; should it be tabbable?", "not_in_tab_order_no_name");
 var alert_0123 = new Alert("warning", "12", "Iframe contents are not in keyboard tab order because iframe has negative tabindex.", "iframe_contents_not_in_tab_order");
-var alert_0124 = new Alert("warning", "12", "If &lt;canvas&gt; element is interactive with mouse, it's not keyboard accessible because there is no focusable fallback content.", "canvas_not_keyboard_accessible");
-var alert_0125 = new Alert("warning", "12", "Element with [role=%%%] not in the keyboard tab order.", "role_tab_order");
-var alert_0126 = new Alert("danger", "12", "Image defined as decorative is in the keyboard tab order.", "decorative_image_tab_order");
-var alert_0127 = new Alert("caution", "12", "&lt;canvas&gt; element has focusable fallback content; Test for keyboard equivalency to mouse functionality.", "canvas_has_focusable_fallback");
-var alert_0128 = new Alert("warning", "12", "&lt;a&gt; element has no [href], [id], or [tabindex]; This might be a link that only works with a mouse.", "anchor_purpose_unclear");
-var alert_0129 = new Alert("caution", "12", "&lt;a&gt; element has no [href], or [tabindex]; This might be a link that only works with a mouse.", "anchor_purpose_unclear");
-var alert_012A = new Alert("caution", "12", "This &lt;a&gt; element is the target of another link; When link is followed, target may not receive visual indication of focus.", "is_anchor_target_no_focus");
 
-var alert_0132 = new Alert("caution", "13", "Empty header cell.", "empty_header_cell");
-var alert_0133 = new Alert("caution", "13", "Live region has no innerText content.", "live_region_empty");
-
-var alert_0142 = new Alert("caution", "14", "Image is presentational; its [alt] will not be used in output.", "image_alt_not_used");
-
-var alert_0151 = new Alert("warning", "15", "[%%%] attribute length exceeds " + 250 + " characters; consider condensing.", "character_length");
-
-var alert_0161 = new Alert("warning", "16", "Ambiguous Link: same name/description as another link but different href.", "ambiguous_link");
-var alert_0162 = new Alert("caution", "16", "Ambiguous Link: same name/description as another link but different href.", "ambiguous_link");//caution level thrown for internal links
-var alert_0163 = new Alert("caution", "16", "Link text is vague and does not identify its purpose.", "vague_link");
-var alert_0164 = new Alert("warning", "16", "Link has click event but is not keyboard accessible.", "link_click_no_keyboard_access");
-var alert_0168 = new Alert("warning", "16", "&lt;a&gt; without [href] may not be recognized as a link; add [role=link] or [href].", "not_recognized_as_link");
-
-var alert_0171 = new Alert("danger", "17", "&lt;marquee&gt; element found, do not use.", "marquee_found");
-var alert_0172 = new Alert("danger", "17", "&lt;blink&gt; element found, do not use.", "blink_found");
-var alert_0173 = new Alert("danger", "17", "Server side image maps are not accessible.", "server_side_image_map");
-var alert_0174 = new Alert("caution", "17", "Redundant phrase in image [alt] text.", "image_alt_redundant_phrase");
-var alert_0175 = new Alert("warning", "17", "Image [alt] text contains file name.", "image_alt_contains_file_name");
-var alert_0176 = new Alert("danger", "17", "Image [alt] text is not descriptive.", "image_alt_not_descriptive");
-var alert_0177 = new Alert("caution", "17", "Ensure that background images are decorative.", "ensure_bg_images_decorative");
-var alert_0178 = new Alert("danger", "17", "&lt;area&gt; not contained in &lt;map&gt;.", "area_not_in_map");
-var alert_0179 = new Alert("caution", "17", "Screen reader will not recognize this font icon as an image; Add an appropriate role such as [role=img].", "");
-var alert_017A = new Alert("caution", "17", "Font Icon. Is this a meaningful image?", "");
-
-var alert_0180 = new Alert("warning", "18", "[aria-level] is not a greater-than-zero integar; level 2 will be assumed.", "arialevel_not_gt_zero_integar");
-var alert_0182 = new Alert("danger", "18", "Live Region contains a form element.", "live_region_form_element");
-var alert_0183 = new Alert("danger", "18", "[role=image] is invalid; Use [role=img].", "role_image_invalid");
-var alert_0184 = new Alert("danger", "18", "A live region can only be a container element.", "live_region_not_container");
-var alert_0185 = new Alert("danger", "18", "List item's container is not recognized as a list because it has [role=%%%].", "non_list_role");
-
-var alert_0190 = new Alert("warning", "19", "Element visually conveys heading meaning but not using semantic heading markup.", "not_semantic_heading");
-var alert_0191 = new Alert("warning", "19", "Heading element level &lt;%%%&gt; conflicts with [aria-level=%%%].", "conflicting_heading_level");
-var alert_0192 = new Alert("caution", "19", "[role=heading] used without [aria-level]; level 2 will be assumed.", "role_heading_no_arialevel");
-
-var alert_0200 = new Alert("warning", "20", "Non-unique button: same name/description as another button.", "non_unique_button");
-
-var alert_0210 = new Alert("caution", "21", "An associated &lt;label&gt; containing text would increase the clickable area of this %%%.", "label_clickable_area");
-
-var alert_0220 = new Alert("warning", "22", "Content has been injected using CSS pseudo-elements ::before or ::after.", "pseudo_before_after");
-
-var alert_0230 = new Alert("warning", "23", "Element has background-image; Perform manual contrast test.", "manual_contrast_test_bgimage");
-var alert_0231 = new Alert("caution", "23", "Page has images; If images contain meaningful text, perform manual contrast test.", "manual_contrast_test_img");
-var alert_0232 = new Alert("warning", "23", "Opacity less than 100%; Perform manual contrast test.", "manual_contrast_test_opacity");
-var alert_0233 = new Alert("caution", "23", "[role=grid] found; test navigation of design pattern.", "grid_navigation_test");
-
-var alert_0240 = new Alert("danger", "24", "Text does not meet %%%minimum %%% contrast ratio (%%%:1).", "min_contrast");
-
-var alert_0250 = new Alert("warning", "25", "Page has %%% disabled %%%; Disabled elements are not in the keyboard tab order.", "disabled_elements");
-var alert_0251 = new Alert("caution", "25", "Page has %%% disabled elements; Disabled elements do not require sufficient contrast.", "disabled_contrast");
-
-var alert_0260 = new Alert("danger", "26", "Element is hidden from screen reader using [aria-hidden=true] resulting in no output.", "ariahidden");
-var alert_0261 = new Alert("warning", "26", "Element is hidden from screen reader using [aria-hidden=true] resulting in no output.", "ariahidden");
+var alert_0151 = new Alert("warning", "15", "[%%%] attribute length exceeds 250 characters; consider condensing.", "character_length");
 
 //==================//
 // DISPLAY HANDLING //
 //==================//
-
 //This private function will get ANDI ready
 //Will add dependencies, insert the ANDI bar, add legacy css, define the controls
 function andiReady() {
@@ -261,17 +109,28 @@ function andiReady() {
 	function dependencies() {
 		//Define :focusable and :tabbable pseudo classes. Code from jQuery UI
 		$.extend($.expr[':'], {
-			data: $.expr.createPseudo ? $.expr.createPseudo(function (dataName) { return function (elem) { return !!$.data(elem, dataName); }; }) : function (elem, i, match) { return !!$.data(elem, match[3]); },
-			focusable: function (element) { return focusable(element, !isNaN($.attr(element, 'tabindex'))); },
+			data: $.expr.createPseudo ? $.expr.createPseudo(function (dataName) {
+				return function (elem) {
+					return !!$.data(elem, dataName);
+				};
+			}) : function (elem, i, match) {
+				return !!$.data(elem, match[3]);
+			},
+			focusable: function (element) {
+				return focusable(element, !isNaN($.attr(element, 'tabindex')));
+			},
 			tabbable: function (element) {
-				var tabIndex = $.attr(element, 'tabindex'), isTabIndexNaN = isNaN(tabIndex); return (isTabIndexNaN || tabIndex >= 0) && focusable(element, !isTabIndexNaN);
+				var tabIndex = $.attr(element, 'tabindex'), isTabIndexNaN = isNaN(tabIndex);
+				return (isTabIndexNaN || tabIndex >= 0) && focusable(element, !isTabIndexNaN);
 			}
 		});
 
 		//Define :shown
 		//Similar to :visible but doesn't include elements with visibility:hidden,
 		$.extend(jQuery.expr[':'], {
-			shown: function (elem) { return $(elem).css("visibility") !== "hidden" && $(elem).is(":visible"); }
+			shown: function (elem) {
+				return $(elem).css("visibility") !== "hidden" && $(elem).is(":visible");
+			}
 		});
 
 		//Define isSemantically, Based on jquery .is method
@@ -301,8 +160,7 @@ function andiReady() {
 				if (!element.href || !mapName || map.nodeName.toLowerCase() !== "map") {
 					return false;
 				}
-				var img = $("img[usemap=\\#" + mapName + "]")[0];
-				return !!img && visibleParents(img);
+				var img = $("img[usemap=\\#" + mapName + "]")[0]; return !!img && visibleParents(img);
 			}
 			return (
 				/^(input|select|textarea|button|iframe|summary)$/.test(nodeName) ?
@@ -340,8 +198,11 @@ function andiReady() {
 		//Define isContainerElement: This support function will return true if an element can contain text (is not a void element)
 		(function ($) {
 			var visibleVoidElements = ['area', 'br', 'embed', 'hr', 'img', 'input', 'menuitem', 'track', 'wbr'];
-			$.fn.isContainerElement = function () { return ($.inArray($(this).prop("tagName").toLowerCase(), visibleVoidElements) == -1); };
+			$.fn.isContainerElement = function () {
+				return ($.inArray($(this).prop("tagName").toLowerCase(), visibleVoidElements) == -1);
+			};
 		}(jQuery));
+
 	}
 }
 
@@ -361,15 +222,10 @@ function AndiData(element, skipTAC) {
 
 	AndiData.grab_semantics(element, AndiData.data);
 
-	if (!skipTAC) {
-		//do the text alternative computation
+	if (!skipTAC) { //do the text alternative computation
 		AndiData.textAlternativeComputation(element);
 		AndiData.grab_coreProperties(element);
 	}
-
-	$(element)
-		.addClass("ANDI508-element")
-		.attr("data-andi508-index", AndiData.data.andiElementIndex);
 
 	return AndiData.data;
 }
@@ -387,22 +243,24 @@ AndiData.grab_coreProperties = function (element) {
 			if (tabindex < 0) {
 				AndiData.data.isTabbable = false;
 				if ($(element).is("iframe")) {
-					if ($(element).contents().find(":focusable").length) { //check if iframe has focusable contents
-						alert = alert_0123;
+					//check if iframe has focusable contents
+					if ($(element).contents().find(":focusable").length) {
+						alerts = [alert_0123];
 					}
-				} else if (!$(element).parent().is(":tabbable")) { //element and parent are not tabbable
+				} else if (!$(element).parent().is(":tabbable")) {
+					//element and parent are not tabbable
 					if (AndiData.data.accName) {
-						alert = alert_0121;
+						alerts = [alert_0121];
 					} else {
-						alert = alert_0122;
+						alerts = [alert_0122];
 					}
 				}
 			} else if (isNaN(tabindex)) {//tabindex is not a number
-				alert = [alert_0077, [tabindex]];
+				alerts = [alert_0077, [tabindex]];
 				if (!$(element).is(nativelyTabbableElements))
 					AndiData.data.isTabbable = false;
 			}
-			//else element is tabbable
+			//element is tabbable
 			AndiData.data.tabindex = tabindex;
 		} else if (!$(element).is(nativelyTabbableElements)) {
 			AndiData.data.isTabbable = false;
@@ -440,7 +298,6 @@ AndiData.grab_coreProperties = function (element) {
 // Grab Semantics://
 //================//
 AndiData.grab_semantics = function (element, data) {
-
 	grab_tagName();
 	grab_role();
 
@@ -460,46 +317,15 @@ AndiData.grab_semantics = function (element, data) {
 	}
 };
 
-//==============================//
-// Text Alternative Computation://
-//==============================//
-AndiData.textAlternativeComputation = function (root) {
-	var isAriaHidden = traverseAriaHidden(root);
-
-	//This function recursively travels up the anscestor tree looking for aria-hidden=true.
-	//Stops at #ANDI508-testPage because another check will stop ANDI if aria-hidden=true is on body or html
-	//TODO: This is expensive
-	function traverseAriaHidden(element) {
-		if ($(element).is("#ANDI508-testPage")) {
-			return false;
-		} else if ($(element).attr("aria-hidden") === "true") {
-			return true;
-		} else {
-			return traverseAriaHidden($(element).parent());
-		}
-	}
-
-	if (isAriaHidden) {
-		AndiData.data.isAriaHidden = true;
-	}
-
-};//end textAlternativeComputation
-
 TestPageData.allElements = undefined;
 //This class is used to store temporary variables for the test page
 function TestPageData() {
 	TestPageData.allElements = $("#ANDI508-testPage *");
 
-	//all the fors of visible elements on the page for duplicate comparisons
-	this.allFors = "";
-
 	//Keeps track of the number of focusable elements ANDI has found, used to assign unique indexes.
 	//the first element's index will start at 1.
 	//When ANDI is done analyzing the page, this number will equal the total number of elements found.
 	this.andiElementIndex = 0;
-	//Get all fors on the page and store for later comparison
-	if ($(TestPageData.allElements).filter("label").length * 1 > 0) {
-		//get all 'for's on the page and store for later comparison
-		this.allFors = $(TestPageData.allElements).filter("label[for]");
-	}
 }
+
+launchAndi(); //initialize ANDI
