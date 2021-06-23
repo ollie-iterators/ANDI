@@ -162,17 +162,22 @@ function andiReady() {
 				}
 				var img = $("img[usemap=\\#" + mapName + "]")[0]; return !!img && visibleParents(img);
 			}
-			return (
-				/^(input|select|textarea|button|iframe|summary)$/.test(nodeName) ?
-					!element.disabled
-					: nodeName === "a" ?
-						(element.href && !element.disabled) || isTabIndexNotNaN
-						: isTabIndexNotNaN ||
-						//check for focusable svg
-						(nodeName === "svg" && $.attr(element, "focusable") === "true") ||
-						//check for contenteditable="true" or contenteditable=""
-						($.attr(element, "contenteditable") === "true" || $.attr(element, "contenteditable") === "")
-			) && visibleParents(element);
+			// TODO: Work on expanding the code in this return statement to understand it better
+			var returnValue = "";
+			if (/^(input|select|textarea|button|iframe|summary)$/.test(nodeName)) {
+				returnValue = !element.disabled;
+			} else {
+				if (nodeName === "a") {
+					returnValue = (element.href && !element.disabled) || isTabIndexNotNaN;
+				} else {
+					returnValue = isTabIndexNotNaN ||
+								  //check for focusable svg
+								  (nodeName === "svg" && $.attr(element, "focusable") === "true") ||
+								  //check for contenteditable="true" or contenteditable=""
+								  ($.attr(element, "contenteditable") === "true" || $.attr(element, "contenteditable") === "");
+				}
+			}
+		    return (returnValue && visibleParents(element));
 			function visibleParents(element) {
 				return !$(element).parents().addBack().filter(function () {
 					return $.css(this, "visibility") === "hidden";

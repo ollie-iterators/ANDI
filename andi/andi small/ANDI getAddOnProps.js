@@ -25,10 +25,24 @@ AndiData.getAddOnProps = function (element, elementData, extraProps) {
 		pushProp();
 	}
 	if (hasProp("aria-checked")) {
-		if (hasRole("option,radio,switch,menuitemcheckbox,menuitemradio,treeitem"))
-			prop.out = (prop.val === "true") ? "checked" : "not checked";
-		else if (hasRole("checkbox"))
-			prop.out = (prop.val === "true") ? "checked" : (prop.val === "mixed") ? "partially checked" : "unchecked";
+		if (hasRole("option,radio,switch,menuitemcheckbox,menuitemradio,treeitem")) {
+			if (prop.val === "true") {
+				prop.out = "checked";
+			} else {
+				prop.out = "not checked";
+			}
+		} else if (hasRole("checkbox")) {
+			if (prop.val === "true") {
+				prop.out = "checked"
+			} else {
+				if (prop.val === "mixed") {
+					prop.out =  "partially checked";
+				} else {
+					prop.out = "unchecked";
+				}
+			}
+		}
+			
 		pushProp();
 	}
 	if (hasProp("aria-controls")) {
@@ -54,7 +68,27 @@ AndiData.getAddOnProps = function (element, elementData, extraProps) {
 		pushProp();
 	}
 	if (hasProp("aria-haspopup")) {
-		prop.out = (prop.val === "true" || prop.val === "menu") ? "menu" : (prop.val === "listbox") ? "listbox" : (prop.val === "tree") ? "tree" : (prop.val === "grid") ? "grid" : (prop.val === "dialog") ? "dialog" : "";
+		if (prop.val === "true" || prop.val === "menu") {
+			prop.out = "menu";
+		} else {
+			if (prop.val === "listbox") {
+				prop.out = "listbox";
+			} else {
+				if (prop.val === "tree") {
+					prop.out = "tree";
+				} else {
+					if (prop.val === "grid") {
+						prop.out = "grid";
+					} else {
+						if (prop.val === "dialog") {
+							prop.out = "dialog"
+						} else {
+							prop.out = "";
+						}
+					}
+				}
+			}
+		}
 		pushProp();
 	}
 	if (elementData.isAriaHidden) {
@@ -84,21 +118,32 @@ AndiData.getAddOnProps = function (element, elementData, extraProps) {
 		pushProp();
 	}
 	if (hasProp("aria-pressed")) {
-		if (hasRole("button", "button,input[type=button],input[type=submit],input[type=image],input[type=reset]"))
-			prop.out = (prop.val === "true") ? "pressed" : "not pressed";
+		if (hasRole("button", "button,input[type=button],input[type=submit],input[type=image],input[type=reset]")) {
+			if (prop.val === "true") {
+				prop.out = "pressed";
+			} else {
+				prop.out = "not pressed";
+			}
+		}
 		pushProp();
 	}
 	if (hasProp("aria-roledescription")) {
 		pushProp();
 	}
 	if (hasProp("aria-selected")) {
-		if (hasRole("gridcell,option,row,tab,columnheader,rowheader,treeitem"))
-			prop.out = (prop.val === "true") ? "selected" : "";
+		if (hasRole("gridcell,option,row,tab,columnheader,rowheader,treeitem")) {
+			if (prop.val === "true") {
+				prop.out = "selected";
+			} else {
+				prop.out = "";
+			}
+		}	
 		pushProp();
 	}
 	if (hasProp("contenteditable")) {
-		if (prop.val === "")//set to true
+		if (prop.val === "") { //set to true
 			prop.val = "true";
+		}
 		pushProp();
 	}
 
@@ -126,8 +171,13 @@ AndiData.getAddOnProps = function (element, elementData, extraProps) {
 		pushProp();
 	}
 	if (hasProp("aria-expanded")) {
-		if (!expandedInOutput && hasRole("button,combobox,document,link,section,sectionhead,window", "button,a,section"))
-			prop.out = (prop.val === "true") ? "expanded" : "collapsed";
+		if (!expandedInOutput && hasRole("button,combobox,document,link,section,sectionhead,window", "button,a,section")) {
+			if (prop.val === "true") {
+				prop.out = "expanded";
+			} else {
+				prop.out = "collapsed";
+			}
+		}
 		pushProp();
 	}
 
@@ -184,8 +234,14 @@ AndiData.getAddOnProps = function (element, elementData, extraProps) {
 		}
 	}
 	if (hasProp("aria-required")) {
-		if (!readonlyInOutput && hasRole("checkbox,combobox,gridcell,listbox,radio,radiogroup,slider,spinbutton,textbox", "input:not([type=submit],[type=button],[type=image],[type=reset]),select,textarea"))
-			prop.out = (!requiredInOutput && prop.val === "true") ? "required" : "";
+		if (!readonlyInOutput && hasRole("checkbox,combobox,gridcell,listbox,radio,radiogroup,slider,spinbutton,textbox", "input:not([type=submit],[type=button],[type=image],[type=reset]),select,textarea")) {
+			if (!requiredInOutput && prop.val === "true") {
+				prop.out = "required";
+			} else {
+				prop.out = "";
+			}
+		}
+			
 		pushProp();
 	}
 
@@ -221,7 +277,19 @@ AndiData.getAddOnProps = function (element, elementData, extraProps) {
 	//sort
 	if (hasRole("columnheader,rowheader", "th")) {
 		if (hasProp("aria-sort")) {
-			prop.out = (prop.val === "ascending") ? "ascending" : (prop.val === "descending") ? "descending" : (prop.val === "other") ? "other" : "";
+			if (prop.val === "ascending") {
+				prop.out = "ascending";
+			} else {
+				if (prop.val === "descending") {
+					prop.out = "descending";
+				} else {
+					if (prop.val === "other") {
+						prop.out = "other";
+					} else {
+						prop.out = "";
+					}
+				}
+			}
 			pushProp();
 		}
 	}
@@ -229,11 +297,25 @@ AndiData.getAddOnProps = function (element, elementData, extraProps) {
 		var header = $(element).parent();//using .parent() instead of .closest() to help with performance
 		if ($(header).is("th,[role=columnheader],[role=rowheader]")) {
 			var ariaSort = $(header).attr("aria-sort");
+			var propOut = ""
 			if (ariaSort) {
+				if (ariaSort === "ascending") {
+					propOut = "ascending";
+				} else {
+					if (ariaSort === "descending") {
+						propOut = "descending";
+					} else {
+						if (ariaSort === "other") {
+							propOut = "other";
+						} else {
+							propOut = "";
+						}
+					}
+				}
 				prop = {
 					name: "aria-sort",
 					val: ariaSort,
-					out: (ariaSort === "ascending") ? "ascending" : (ariaSort === "descending") ? "descending" : (ariaSort === "other") ? "other" : ""
+					out:  propOut
 				};
 				pushProp();
 			}
@@ -263,9 +345,15 @@ AndiData.getAddOnProps = function (element, elementData, extraProps) {
 
 	//===Get properties already in AndiData
 	if (elementData.accesskey) {
+		var propVal = "";
+		if (elementData.accesskey !== " ") {
+			propVal = $.trim(elementData.accesskey.toUpperCase());
+		} else {
+			propVal = " ";
+		}
 		prop = {
 			name: "accesskey",
-			val: (elementData.accesskey !== " ") ? $.trim(elementData.accesskey.toUpperCase()) : " ",
+			val:  propVal,
 			out: "accesskey \"" + elementData.accesskey + "\""
 		};
 		pushProp();

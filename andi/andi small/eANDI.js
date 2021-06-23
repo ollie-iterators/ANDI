@@ -32,7 +32,7 @@ function init_module() {
             //Determine if the image is contained by an interactive widget (link, button)
             isImageContainedByInteractiveWidget = false; //reset boolean
             if ($(this).not("[tabindex]").is("img,[role=img]")) {
-                //Is Image contained by a link or button?
+                //Is Image contained by a link or button
                 closestWidgetParent = $(this).closest("a,button,[role=button],[role=link]");
                 if ($(closestWidgetParent).length) {
                     if ($(closestWidgetParent).isSemantically("[role=link]", "a")) {
@@ -146,7 +146,7 @@ function init_module() {
                     //has accessible name. Needs role=img if meaningful image.
                     alert = [alert_0179];
                 } else {
-                    //no accessible name. Is it meaningful?
+                    //no accessible name. Is it meaningful
                     //alert = [alert_017A);
                 }
             }
@@ -177,7 +177,11 @@ function init_module() {
             return (hasPrivateUseUnicode("before") || hasPrivateUseUnicode("after"));
 
             function hasPrivateUseUnicode(psuedo) {
-                var content = (oldIE) ? "" : window.getComputedStyle(element, ":" + psuedo).content;
+                if (oldIE) {
+                    content = "";
+                } else {
+                    content = window.getComputedStyle(element, ":" + psuedo).content;
+                }
                 if (content !== "none" && content !== "normal" && content !== "counter" && content !== "\"\"") {//content is not none or empty string
                     var unicode;
                     //starts at 1 and end at length-1 to ignore the starting and ending double quotes

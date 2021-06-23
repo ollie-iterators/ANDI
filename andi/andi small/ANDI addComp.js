@@ -34,7 +34,9 @@ AndiData.addComp = function (data, componentType, component, hasNodebeenTraverse
 			}
 		}
 	}
-
-	//if node is traversed return empty string, otherwise return displayText
-	return (!hasNodebeenTraversed) ? displayText : "";
+	if (!hasNodebeenTraversed) {
+		return displayText;
+	} else {
+		return "";
+	}
 };

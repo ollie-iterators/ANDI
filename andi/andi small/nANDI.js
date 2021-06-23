@@ -106,7 +106,7 @@ function init_module() {
             
                                 //Set the nonUniqueIndex
                                 var m; //will store the nonUniqueIndex for this match
-                                //Does the first instance already have a nonUniqueIndex?
+                                //Does the first instance already have a nonUniqueIndex
                                 relatedElement = $(nANDI.buttons.list[y].element);
                                 if (nANDI.buttons.list[y].nonUniqueIndex) { //Yes. Copy the nonUniqueIndex from the first instance
                                     m = nANDI.buttons.list[y].nonUniqueIndex;

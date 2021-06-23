@@ -411,7 +411,11 @@ function init_module() {
 
         function valueToHex(c) {
             var hex = c.toString(16);
-            return hex.length == 1 ? "0" + hex : hex;
+            if (hex.length == 1) {
+                return "0" + hex;
+            } else {
+                return hex;
+            }
         }
     }
 
@@ -483,8 +487,11 @@ function init_module() {
 
                     rgb /= 255;
 
-                    rgb = rgb < 0.03928 ? rgb / 12.92 : Math.pow((rgb + 0.055) / 1.055, 2.4);
-
+                    if (rgb < 0.03928) {
+                        rgb = rgb / 12.92;
+                    } else {
+                        rgb = Math.pow((rgb + 0.055) / 1.055, 2.4);
+                    }
                     rgba[i] = rgb;
                 }
 
@@ -501,7 +508,21 @@ function init_module() {
             },
 
             toString: function () {
-                return 'rgb' + (this.alpha < 1 ? 'a' : '') + '(' + this.rgba.slice(0, this.alpha >= 1 ? 3 : 4).join(', ') + ')';
+                // TODO: This replaces (this.alpha < 1 ? 'a' : ''). Check if it is correct
+                var valueOne = "";
+                if (this.alpha < 1) {
+                    valueOne = 'a';
+                } else {
+                    valueOne = '';
+                }
+                // TODO: This changes the code: this.rgba.slice(0, this.alpha >= 1 ? 3 : 4). Check if this is correct
+                var valueTwo = "";
+                if (this.alpha >= 1) {
+                    valueTwo = 3;
+                } else {
+                    valueTwo = 4;
+                }
+                return 'rgb' + (valueOne) + '(' + this.rgba.slice(0, valueTwo).join(', ') + ')';
             },
 
             clone: function () {
@@ -586,6 +607,12 @@ function init_module() {
                 } else if (onWhite.luminance < color.luminance) {
                     min = contrastOnWhite;
                 }
+                var furthestVal = "";
+                if (onWhite == max) {
+                    furthestVal = _.WHITE;
+                } else {
+                    furthestVal = _.BLACK;
+                }
 
                 return {
                     ratio: (min + max) / 2,
@@ -593,7 +620,7 @@ function init_module() {
                     min: min,
                     max: max,
                     closest: closest,
-                    farthest: onWhite == max ? _.WHITE : _.BLACK
+                    farthest: furthestVal 
                 };
             }
         };

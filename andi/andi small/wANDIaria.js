@@ -105,7 +105,11 @@ function init_module() {
             var hasHeaderCol = false;		//true when two or more rows contain a th
             var headersMissingRoleCount = 0;
             var cellsNotContainedByRow = 0;
-            var cell_role = (role === "table") ? "[role=cell]" : "[role=gridcell]";
+            if (role === "table") {
+                var cell_Role = "[role=cell]";
+            } else {
+                var cell_role = "[role=gridcell]";
+            }
             //This array is used to keep track of the rowspan of the previous row
             //They will be checked against before assigning the colIndex.
             //This technique is only needed for setting colIndex
@@ -238,7 +242,7 @@ function init_module() {
             $(all_cells).each(function loopC() {
                 cell = $(this);
 
-                if (isContainedByRowRole(cell)) {//Is the cell contained by an element with role=row?
+                if (isContainedByRowRole(cell)) {//Is the cell contained by an element with role=row
                     //Determine if cell has a child element (link, form element, img)
                     child = $(cell).find("a,button,input,select,textarea,img").first();
 

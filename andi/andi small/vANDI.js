@@ -32,7 +32,7 @@ function init_module() {
             //Store this table in the array
             vANDI.tables.list.push($(this));
 
-            //Is this a presentation table?
+            //Is this a presentation table
             if ($(this).is("[role=presentation],[role=none]")) { //It's a presentation table
                 vANDI.tables.presentationCount++;
             } else { //It table with a non-typical role

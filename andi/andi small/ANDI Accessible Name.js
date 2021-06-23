@@ -87,8 +87,14 @@ AndiData.textAlternativeComputation = function (root) {
 	function stepB(element, data, isProcessRefTraversal) {
 		var accumulatedText = "";
 		if (!isProcessRefTraversal) {
-			var componentType = (isCalcAccDesc) ? "ariaDescribedby" : "ariaLabelledby";
-			var attribute = (isCalcAccDesc) ? "aria-describedby" : "aria-labelledby";
+			if (isCalcAccDesc) {
+				var componentType = "ariaDescribedby";
+				var attribute = "aria-describedby";
+			} else {
+				var componentType = "ariaLabelledby";
+				var attribute = "aria-labelledby";
+			}
+			
 			var component = $(element).attr(attribute);
 
 			if (component !== undefined) {
@@ -566,16 +572,20 @@ AndiData.textAlternativeComputation = function (root) {
 		var accumulatedText = grab_labelNested(element);
 		if (accumulatedText === undefined)
 			accumulatedText = grab_labelFor(element);
-
-		return (accumulatedText !== undefined) ? [accumulatedText, labelElement] : undefined;
+		
+		if (accumulatedText !== undefined) {
+			return [accumulatedText, labelElement];
+		} else {
+			return undefined;
+		}
 
 		//This function attempts to grab the nested label if it exists
 		function grab_labelNested(element) {
 			var labelText;
-			//Is the element nested inside a label?
+			//Is the element nested inside a label
 			var closestLabel = $(element).closest("label", "body");
 			if (closestLabel.length) {//element is nested inside a label
-				//Is this label explictly associated with something else?
+				//Is this label explictly associated with something else
 				var forAttr = $(closestLabel).attr("for");
 				if (forAttr && forAttr != element.id) {
 					andiAlerter.throwAlert(alert_006F, [forAttr, element.id]);
@@ -590,7 +600,7 @@ AndiData.textAlternativeComputation = function (root) {
 		//This function attempts to grab the label with a [for] value that matches the element's id
 		function grab_labelFor(element) {
 			var labelText;
-			//Does it contain an id, and therefore, possibly an associated label with 'for' attribute value that matches value of this elemtent's id?
+			//Does it contain an id, and therefore, possibly an associated label with 'for' attribute value that matches value of this elemtent's id
 			if (element.id !== "") {
 				//Loop through the labels that have [for] attributes and search for a match with this id
 				var labelFor;
@@ -615,7 +625,11 @@ AndiData.textAlternativeComputation = function (root) {
 
 	function grab_legend(element) {
 		var legendText;
-		var fieldset = ($(element).is("fieldset")) ? $(element) : $(element).closest("fieldset");
+		if ($(element).is("fieldset")) {
+			var fieldset = $(element);
+		} else {
+			var fieldset = $(element).closest("fieldset");
+		}
 		var legend;
 		if (fieldset.length) {
 			legend = $(fieldset).find("legend").first();
@@ -623,7 +637,12 @@ AndiData.textAlternativeComputation = function (root) {
 				legendText = $(legend).text();
 			}
 		}
-		return (legendText !== undefined) ? [legendText, legend] : undefined;
+
+		if (legendText !== undefined) {
+			return [legendText, legend];
+		} else {
+			return undefined;
+		}
 	}
 
 	function grab_figcaption(element) {
@@ -632,7 +651,12 @@ AndiData.textAlternativeComputation = function (root) {
 		if ($(figcaption).length) {
 			figcaptionText = $(figcaption).text();
 		}
-		return (figcaptionText !== undefined) ? [figcaptionText, figcaption] : undefined;
+
+		if (figcaptionText !== undefined) {
+			return [figcaptionText, figcaption];
+		} else {
+			return undefined;
+		}
 	}
 
 	function grab_caption(element) {
@@ -641,7 +665,12 @@ AndiData.textAlternativeComputation = function (root) {
 		if ($(caption).length) {
 			captionText = $(caption).text();
 		}
-		return (captionText !== undefined) ? [captionText, caption] : undefined;
+
+		if (captionText !== undefined) {
+			return [captionText, caption];
+		} else {
+			return undefined;
+		}
 	}
 };//end textAlternativeComputation
 

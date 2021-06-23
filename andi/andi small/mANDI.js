@@ -50,8 +50,11 @@ function init_module() {
                     if ($(this).is("a,area") || andiData.role === "link") {
                         //set nameDescription
                         nameDescription = getNameDescription(andiData.accName, andiData.accDesc);
-
-                        href = ($(this).is("a,area")) ? mANDI.normalizeHref(this) : "";
+                        if ($(this).is("a,area")) {
+                            href = mANDI.normalizeHref(this);
+                        } else {
+                            href = "";
+                        }
                         alerts = "";
                         linkPurpose = ""; //i=internal, e=external
                         target = $.trim($(this).attr("target"));
@@ -193,7 +196,7 @@ function init_module() {
 
                         //Set the ambiguousIndex
                         var i; //will store the ambiguousIndex for this match
-                        //Does the first instance already have an ambiguousIndex?
+                        //Does the first instance already have an ambiguousIndex
                         relatedElement = $(mANDI.links.list[x].element);
                         if (mANDI.links.list[x].ambiguousIndex) {
                             //Yes. Copy the ambiguousIndex from the first instance

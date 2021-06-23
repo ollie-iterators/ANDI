@@ -62,7 +62,7 @@ function preCalculateTableName(table) {
         var referencedId, referencedElement, referencedElementText;
         //Traverse through the array
         for (var x = 0; x < idsArray.length; x++) {
-            //Can the aria list id be found somewhere on the page?
+            //Can the aria list id be found somewhere on the page
             if (idsArray[x] !== "") {
                 referencedElement = document.getElementById(idsArray[x]);
                 referencedElementText = "";

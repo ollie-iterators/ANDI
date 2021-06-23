@@ -50,7 +50,7 @@ function init_module() {
                 if ($(this).is("[role=listitem]")) {
                     qANDI.lists.listItemRoleCount += 1;
                     closestListItem = $(this).closest("[role=list]").length;
-                    if (!closestListItem) { //Is the listitem contained by an appropriate list container?
+                    if (!closestListItem) { //Is the listitem contained by an appropriate list container
                         alert = [alert_0079, ["[role=listitem]", "[role=list]"]];
                     }
                 } else if ($(this).is("li")) {

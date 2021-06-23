@@ -122,14 +122,12 @@ function AndiCheck(){
 							alert = [alert_0007];
 						else//no tabindex
 							alert = [alert_0009];
-					}
-					else if(elementData.isTabbable){
-						//Does this element have a role?
+					} else if(elementData.isTabbable){ //Does this element have a role
 						if(elementData.role){
 							var roleCapitalized = elementData.role.charAt(0).toUpperCase()+elementData.role.slice(1);
 							alert = [alert_0008, roleCapitalized+" Element"+alert_0008.message];
 						}
-						//Is this an input element, excluding input[image]?
+						//Is this an input element, excluding input[image]
 						else if(tagNameText.includes("input") && tagNameText != "input[type=image]"){
 							switch(tagNameText){
 							case "input[type=text]":
@@ -179,9 +177,7 @@ function AndiCheck(){
 							default:
 								alert = [alert_0002, "Element"+alert_0002.message];
 						}
-					}
-					else{//not tabbable
-						//Does this element have a role?
+					} else {//not tabbable. Does this element have a role
 						if(elementData.role === "img"){
 							alert = [alert_0008, "[role=img] Element"+alert_0008.message];
 						}

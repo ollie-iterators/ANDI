@@ -39,7 +39,7 @@ function init_module() {
                 ($.trim($(this).html()) === "" || ($.trim($(this).text()) === "" &&
                         $(this).find(elementsNeedingTesting).length === 0))) {
                 needsTesting = false; //this element doesn't need testing
-            } else if (!isContainerElement && $(this).is(elementsNeedingTesting)) { //Is this element one that needs testing?
+            } else if (!isContainerElement && $(this).is(elementsNeedingTesting)) { //Is this element one that needs testing
                 needsTesting = false; //this element doesn't need testing
             }
 
@@ -158,7 +158,7 @@ function init_module() {
         }
 
         //This function returns true if the style of an element is not hidden
-        //TODO: Can this be replaced by getting the pseudo element and reusing :shown ?
+        //TODO: Can this be replaced by getting the pseudo element and reusing :shown
         function isVisible(style) {
             if (style.getPropertyValue("visibility") === "hidden" ||
                 style.getPropertyValue("display") === "none" ||

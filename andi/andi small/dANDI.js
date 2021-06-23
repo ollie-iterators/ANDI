@@ -45,9 +45,9 @@ function init_module() {
         var duplicateComparator = "";
 
         this.push = function (element, accesskey) {
-            if (accesskey) {
-                //Is accesskey value more than one character?
-                if (accesskey.length > 1) { //TODO: could be a non-issue if browsers are supporting space delimited accesskey lists
+            if (accesskey) { 
+                if (accesskey.length > 1) { //Is accesskey value more than one character
+                    //TODO: could be a non-issue if browsers are supporting space delimited accesskey lists
                     alert = [alert_0052, [accesskey]];
                 } else { //Check for duplicate accesskey
                     if (duplicateComparator.includes(accesskey)) {
