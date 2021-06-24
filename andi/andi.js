@@ -2447,7 +2447,7 @@ AndiData.textAlternativeComputation = function(root){
 		}
 		// NOTE: The if statement below was added to make understanding the creation process of Accessible Names better
 		// Remove once the Accessible Names functions are added to the Python project
-		if($.trim(accumulatedText) !== "") {
+		if ($.trim(accumulatedText) !== "") {
 			accumulatedText += " (StepD) ";
 		}
 
@@ -2501,7 +2501,7 @@ AndiData.textAlternativeComputation = function(root){
 						//loop through selected options to accumulate text
 						$(node).find("option:selected").each(function(){
 							if(this.childNodes.length)
-								accumulatedText += AndiData.addComp(data, "innerText", stepG(this.childNodes[0], data)) + " (StepF) ";
+								accumulatedText += AndiData.addComp(data, "innerText", stepG(this.childNodes[0], data));
 						});
 					}
 					else if(!$(node).is(exclusions) && $(node).is(":shown")){
@@ -2524,19 +2524,25 @@ AndiData.textAlternativeComputation = function(root){
 							subtreeData = {};
 							accumulatedText += stepF(node, subtreeData, false, isProcessRefTraversal);
 							if(accumulatedText !== "" && andiUtility.isBlockElement(node))
-								accumulatedText += " " + " (StepF) "; //add extra space after block elements
+								accumulatedText += " "; //add extra space after block elements
 							pushSubtreeData(data, subtreeData, node);
 						}
 					}
 				}
 				else if(node.nodeType === 3){//text node
-					accumulatedText += AndiData.addComp(data, "innerText", stepG(node, data)) + " (StepF) ";
+					accumulatedText += AndiData.addComp(data, "innerText", stepG(node, data));
 				}
 			}
 		}
 
 		//get CSS ::after content
 		lookForPseudoContent("after", element, data);
+
+		// NOTE: The if statement below was added to make understanding the creation process of Accessible Names better
+		// Remove once the Accessible Names functions are added to the Python project
+		if ($.trim(accumulatedText) !== "") {
+			accumulatedText += " (StepF) ";
+		}
 
 		return accumulatedText;
 
