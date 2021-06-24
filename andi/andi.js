@@ -2344,7 +2344,7 @@ AndiData.textAlternativeComputation = function(root){
 				//TODO: what about svg <image>
 				if( $(element).is("img,input[type=image],area") && ( !role || role === "img" ) ){
 					if(!isEmptyComponent(component, "alt", element)){
-						accumulatedText += AndiData.addComp(data, "alt", component, hasNodeBeenTraversed(element)) + " (StepD) ";
+						accumulatedText += AndiData.addComp(data, "alt", component, hasNodeBeenTraversed(element));
 					}
 				}
 				else if($.trim(component) !== ""){//because alt="" is allowed for images only
@@ -2363,19 +2363,19 @@ AndiData.textAlternativeComputation = function(root){
 				if(!accumulatedText){
 					component = $(element).attr("value");
 					if(component){
-						accumulatedText += AndiData.addComp(data, "value", component, hasNodeBeenTraversed(element)) + " (StepD) ";
+						accumulatedText += AndiData.addComp(data, "value", component, hasNodeBeenTraversed(element));
 					}
 					else{//if type is submit or reset, add component
 						var type = $(element).attr("type");
 						if(type === "submit")
-							accumulatedText += AndiData.addComp(data, "value", "Submit", hasNodeBeenTraversed(element)) + " (StepD) ";
+							accumulatedText += AndiData.addComp(data, "value", "Submit", hasNodeBeenTraversed(element));
 						else if(type === "reset")
-							accumulatedText += AndiData.addComp(data, "value", "Reset", hasNodeBeenTraversed(element)) + " (StepD) ";
+							accumulatedText += AndiData.addComp(data, "value", "Reset", hasNodeBeenTraversed(element));
 					}
 				}
 			}
 			else if(isCalcAccDesc && !usedInName.value){
-				accumulatedText += data.value + " (StepD) ";
+				accumulatedText += data.value;
 			}
 		}
 
@@ -2388,11 +2388,11 @@ AndiData.textAlternativeComputation = function(root){
 					if(component && !accumulatedText){
 						var caption = AndiData.addComp(data, "caption", component, hasNodeBeenTraversed(element));
 						if(role !== "presentation" && role !== "none")
-							accumulatedText += caption + " (StepD) ";
+							accumulatedText += caption;
 					}
 				}
 				else if(isCalcAccDesc && !usedInName.caption){
-					accumulatedText += data.caption + " (StepD) ";
+					accumulatedText += data.caption;
 				}
 			}
 
@@ -2403,7 +2403,7 @@ AndiData.textAlternativeComputation = function(root){
 					if(!isEmptyComponent(component, "summary", element)){
 						var summary = AndiData.addComp(data, "summary", component, hasNodeBeenTraversed(element));
 						if(!accumulatedText && role !== "presentation" && role !== "none")
-							accumulatedText += summary + " (StepD) ";
+							accumulatedText += summary;
 					}
 				}
 			}
@@ -2413,37 +2413,42 @@ AndiData.textAlternativeComputation = function(root){
 				component = grab_label(element);
 				if(component !== undefined){
 					if(!isEmptyComponent(component[0], "label", element)){
-						accumulatedText += AndiData.addComp(data, "label", component, (isRecursion || hasNodeBeenTraversed(element))) + " (StepD) ";
+						accumulatedText += AndiData.addComp(data, "label", component, (isRecursion || hasNodeBeenTraversed(element)));
 					}
 				}
 			}
 			else if(testPageData.page_using_fieldset && $(element).is("fieldset")){
 				component = grab_legend(element);
 				if(component !== undefined){
-					accumulatedText += AndiData.addComp(data, "legend", component, hasNodeBeenTraversed(element)) + " (StepD) ";
+					accumulatedText += AndiData.addComp(data, "legend", component, hasNodeBeenTraversed(element));
 				}
 			}
 			else if(testPageData.page_using_figure && $(element).is("figure")){
 				component = grab_figcaption(element);
 				if(component !== undefined){
-					accumulatedText += AndiData.addComp(data, "figcaption", component, hasNodeBeenTraversed(element)) + " (StepD) ";
+					accumulatedText += AndiData.addComp(data, "figcaption", component, hasNodeBeenTraversed(element));
 				}
 			}
 			else if(browserSupports.svg && ( $(element).is("svg") || element instanceof SVGElement) ){
 				if(!hasNodeBeenTraversed(element)){
 					component = $(element).find("title").first().text();
 					if(component !== undefined){
-						accumulatedText += AndiData.addComp(data, "svgTitle", component) + " (StepD) ";
+						accumulatedText += AndiData.addComp(data, "svgTitle", component);
 					}
 
 					component = $(element).find("desc").first().text();
 					if(component !== undefined){
 						if(data.svgTitle)
 							accumulatedText += " ";
-						accumulatedText += AndiData.addComp(data, "svgDesc", component) + " (StepD) ";
+						accumulatedText += AndiData.addComp(data, "svgDesc", component);
 					}
 				}
 			}
+		}
+		// NOTE: The if statement below was added to make understanding the creation process of Accessible Names better
+		// Remove once the Accessible Names functions are added to the Python project
+		if($.trim(accumulatedText) !== "") {
+			accumulatedText += " (StepD) ";
 		}
 
 		return accumulatedText;
