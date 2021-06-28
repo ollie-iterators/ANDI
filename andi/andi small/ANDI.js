@@ -84,18 +84,10 @@ function Alert(level, group, message, info, alertButton) {
 	this.alertButton = alertButton; //(optional) an alert button object
 }
 //Define Alerts used by all modules
-var alert_0071 = new Alert("danger", "7", "Page <title> cannot be empty.", "page_title_empty");
-var alert_0072 = new Alert("danger", "7", "Page has no <title>.", "page_title_none");
-var alert_0073 = new Alert("warning", "7", "Page has more than one <title> tag.", "page_title_multiple");
-var alert_0074 = new Alert("danger", "7", "There are more legends (%%%) than fieldsets (%%%).", "too_many_legends");
-var alert_0075 = new Alert("danger", "7", "There are more figcaptions (%%%) than figures (%%%).", "too_many_figcaptions");
-var alert_0076 = new Alert("danger", "7", "There are more captions (%%%) than tables (%%%).", "too_many_captions");
 var alert_0077 = new Alert("danger", "7", "Tabindex value \"%%%\" is not a number.", "tabindex_not_number");
 var alert_0121 = new Alert("caution", "12", "Focusable element is not in keyboard tab order; should it be tabbable?", "not_in_tab_order");
 var alert_0122 = new Alert("caution", "12", "Focusable element is not in keyboard tab order and has no accessible name; should it be tabbable?", "not_in_tab_order_no_name");
 var alert_0123 = new Alert("warning", "12", "Iframe contents are not in keyboard tab order because iframe has negative tabindex.", "iframe_contents_not_in_tab_order");
-
-var alert_0151 = new Alert("warning", "15", "[%%%] attribute length exceeds 250 characters; consider condensing.", "character_length");
 
 //==================//
 // DISPLAY HANDLING //
