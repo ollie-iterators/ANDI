@@ -1,11 +1,21 @@
 # Notes about how to edit code
   - There are levels that dictate how much the code can be altered.
     - 1. DO NOT ALTER:
-         - This refers to all the code that came with the standard ANDI version (except for changing allVisibleElements
-           to allElements, changing the source_url for andi)
-             - NOTE: This may possibly include changing the condition to test the code to use whether it is tabbable to
-               replace ":focusable,canvas" as the condition for fandi because it makes the code look the same whether or
-               not all of the elements are being checked
+         - This refers to all the code that came with the standard ANDI version
+         - EXCEPTIONS:
+           - 1. Changing the source_url for andi.js so that the altered code works with the Iterators ANDI version of ANDI
+           - 2. Changing allVisibleElements to allElements so that all elements are found on the page, not just the
+                visible elements on the page, to know how many of each element are actually on the page
+           - 3. Changing fandi.js's filter condition '.is(":focusable,canvas")' to use the code in overlayTabOrder to
+                see if an element could be in the tab order so that fandi works like the other modules in looking for
+                all elements on the page.
+                - NOTE: Removing 'if($(this).is(":focusable,canvas")){' does not work because that causes it to analyze
+                  all elements on the page, which means even elements that are parts of other elements (Ex: line elements
+                  in SVG images with code on the page)
+           - 4. Changing the code in Accessible Name generation so that it is easy to understand which step caused the
+                Accessible Name to be generated to make it easier to understand which function should be worked on
+                - NOTE: This should be reverted once the code for all the Accessible Name functions have been added to the
+                        python Accesibility Testing project
     - 2. Improve formatting, Remove code that blocks things from being seen, DO NOT REMOVE FUNCTIONALITY FROM THE FILE
          - This refers to the files with capitalized ANDI in the filename in the main andi file
            - This means you can remove code that does not show things if there are no lists, or links, ..., but not things

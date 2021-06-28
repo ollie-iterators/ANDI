@@ -2312,7 +2312,7 @@ AndiData.textAlternativeComputation = function(root){
 
 		function calcRefName(result){
 			if(result){
-				accumulatedText += AndiData.addComp(data, componentType, [(result + " "), refElement, refElement.id]);
+				accumulatedText += AndiData.addComp(data, componentType, [(result + " "), refElement, refElement.id]) + " (StepB) ";
 				return true;
 			}
 			return false;
@@ -2325,7 +2325,7 @@ AndiData.textAlternativeComputation = function(root){
 		component = $(element).attr("aria-label");
 		if(component !== undefined){
 			if(!isEmptyComponent(component, "ariaLabel", element)){
-				accumulatedText += AndiData.addComp(data, "ariaLabel", component) + " ";
+				accumulatedText += AndiData.addComp(data, "ariaLabel", component) + " (StepC) ";
 			}
 		}
 		return accumulatedText;
@@ -2413,7 +2413,7 @@ AndiData.textAlternativeComputation = function(root){
 				component = grab_label(element);
 				if(component !== undefined){
 					if(!isEmptyComponent(component[0], "label", element)){
-						accumulatedText += AndiData.addComp(data, "label", component, (isRecursion || hasNodeBeenTraversed(element)) );
+						accumulatedText += AndiData.addComp(data, "label", component, (isRecursion || hasNodeBeenTraversed(element)));
 					}
 				}
 			}
@@ -2445,6 +2445,11 @@ AndiData.textAlternativeComputation = function(root){
 				}
 			}
 		}
+		// NOTE: The if statement below was added to make understanding the creation process of Accessible Names better
+		// Remove once the Accessible Names functions are added to the Python project
+		if ($.trim(accumulatedText) !== "") {
+			accumulatedText += " (StepD) ";
+		}
 
 		return accumulatedText;
 	}
@@ -2453,15 +2458,15 @@ AndiData.textAlternativeComputation = function(root){
 	function stepE(element, data){
 		var accumulatedText = "";
 		if($(element).is("input[type=text]")){
-			accumulatedText += $(element).val();
+			accumulatedText += $(element).val() + " (StepE) ";
 		}
 		else if($(element).is("select")){
 			var selectedOption = $(element).find("option:selected").first();
 			if(selectedOption)
-				accumulatedText += andiUtility.getVisibleInnerText(selectedOption[0], root);
+				accumulatedText += andiUtility.getVisibleInnerText(selectedOption[0], root) + " (StepE) ";
 		}
 		else if($(element).is("[role=combobox],[role=listbox],[role=progressbar],[role=scrollbar],[role=slider],[role=spinbutton]")){
-			accumulatedText += andiUtility.getVisibleInnerText(element, root);
+			accumulatedText += andiUtility.getVisibleInnerText(element, root) + " (StepE) ";
 		}
 		return accumulatedText;
 	}
@@ -2533,6 +2538,12 @@ AndiData.textAlternativeComputation = function(root){
 		//get CSS ::after content
 		lookForPseudoContent("after", element, data);
 
+		// NOTE: The if statement below was added to make understanding the creation process of Accessible Names better
+		// Remove once the Accessible Names functions are added to the Python project
+		if ($.trim(accumulatedText) !== "") {
+			accumulatedText += " (StepF) ";
+		}
+
 		return accumulatedText;
 
 		function calcSubtreeName(result, checkForBlockLevelElement){
@@ -2568,7 +2579,7 @@ AndiData.textAlternativeComputation = function(root){
 		var text = textNode.nodeValue;
 		if($.trim(text) !== ""){
 			if(!data.ariaLabelledby && !data.ariaLabel && !data.title){
-				accumulatedText += andiUtility.condenseWhitespace(text);
+				accumulatedText += andiUtility.condenseWhitespace(text) + " (StepG) ";
 			}
 		}
 		return accumulatedText;
@@ -2599,7 +2610,12 @@ AndiData.textAlternativeComputation = function(root){
 				if(role === "presentation" || role === "none")
 					return "";
 			}
-			accumulatedText += text;
+			// NOTE: if ($.trim(text) !== "")) is code added to make it possible to add " (StepI) " to the StepI Accessible Name code.
+			// Change back to accumulatedText += text; after StepI has been added to the Accessible Name generation
+			if ($.trim(text) !== "") {
+				accumulatedText += text + " (StepI) ";
+			}
+			
 		}
 	}
 
@@ -2611,7 +2627,7 @@ AndiData.textAlternativeComputation = function(root){
 			if($(element).is("textarea") || ( $(element).is("input") && $(element).is(":not([type]),[type=text],[type=password],[type=search],[type=tel],[type=email],[type=url],[type=number]") ) ){
 				component = $(element).attr("placeholder");
 				if($.trim(component) != ""){
-					accumulatedText += AndiData.addComp(data, "placeholder", component);
+					accumulatedText += AndiData.addComp(data, "placeholder", component) + " (StepJ) ";
 				}
 			}
 		}
@@ -2673,7 +2689,7 @@ AndiData.textAlternativeComputation = function(root){
 
 				function calcGroupingName(result){
 					if(result)
-						accumulatedText += result;
+						accumulatedText += result + " (StepZ) ";
 					return !!result;
 				}
 			}
