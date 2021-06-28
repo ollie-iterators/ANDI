@@ -216,8 +216,15 @@ function AndiData(element, skipTAC) {
 		andiElementIndex: testPageData.andiElementIndex,
 		components: {} //will store the accessible components as they are gathered
 	};
-
-	AndiData.grab_semantics(element, AndiData.data);
+	var tagNameText = $(element).prop("tagName").toLowerCase();
+	if (tagNameText === "input") {
+		tagNameText += "[type=" + $(element).prop("type").toLowerCase() + "]"; //add the type within brackets
+	}
+	AndiData.data.tagNameText = tagNameText;
+	var role = $.trim($(element).attr("role")).toLowerCase();
+	if (role) {
+		AndiData.data.role = role;
+	}
 
 	if (!skipTAC) { //do the text alternative computation
 		AndiData.textAlternativeComputation(element);
@@ -278,21 +285,6 @@ AndiData.grab_coreProperties = function (element) {
 	if (imageSrc) {
 		imageSrc = imageSrc.split("/").pop(); //get the filename and extension only
 		AndiData.data.src = imageSrc;
-	}
-};
-
-//================//
-// Grab Semantics://
-//================//
-AndiData.grab_semantics = function (element, data) {
-	var tagNameText = $(element).prop("tagName").toLowerCase();
-	if (tagNameText === "input") {
-		tagNameText += "[type=" + $(element).prop("type").toLowerCase() + "]"; //add the type within brackets
-	}
-	data.tagNameText = tagNameText;
-	var role = $.trim($(element).attr("role")).toLowerCase();
-	if (role) {
-		data.role = role;
 	}
 };
 
