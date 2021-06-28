@@ -8,7 +8,6 @@ function AndiCheck(){
 	this.allIds = $(TestPageData.allElements).filter("[id]");
 
 	//==Mult-Point Checks==//
-
 	//This function is used to check for alerts related to focusable elements
 	this.commonFocusableElementChecks = function(andiData, element){
 		this.hasThisElementBeenHiddenFromScreenReader(element, andiData, true);

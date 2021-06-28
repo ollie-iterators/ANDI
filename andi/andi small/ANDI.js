@@ -303,22 +303,14 @@ AndiData.grab_coreProperties = function (element) {
 // Grab Semantics://
 //================//
 AndiData.grab_semantics = function (element, data) {
-	grab_tagName();
-	grab_role();
-
-	function grab_tagName() {
-		var tagNameText = $(element).prop("tagName").toLowerCase();
-		if (tagNameText === "input") {
-			tagNameText += "[type=" + $(element).prop("type").toLowerCase() + "]"; //add the type within brackets
-		}
-		data.tagNameText = tagNameText;
+	var tagNameText = $(element).prop("tagName").toLowerCase();
+	if (tagNameText === "input") {
+		tagNameText += "[type=" + $(element).prop("type").toLowerCase() + "]"; //add the type within brackets
 	}
-
-	function grab_role() {
-		var role = $.trim($(element).attr("role")).toLowerCase();
-		if (role) {
-			data.role = role;
-		}
+	data.tagNameText = tagNameText;
+	var role = $.trim($(element).attr("role")).toLowerCase();
+	if (role) {
+		data.role = role;
 	}
 };
 
