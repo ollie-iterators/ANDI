@@ -66,7 +66,7 @@ if ($("html").first().attr("aria-hidden") === "true" || $("body").first().attr("
 //==================//
 // ANDI INITIALIZE: //
 //==================//
-//This main function is called when jQuery is ready.
+//This is called when jQuery is ready.
 function launchAndi() {
 	//Get ANDI ready to launch the first module
 	andiReady();
@@ -228,66 +228,56 @@ function AndiData(element, skipTAC) {
 }
 
 AndiData.grab_coreProperties = function (element) {
-	grab_tabindex();
-	grab_accesskey();
-	grab_imageSrc();
-
-	function grab_tabindex() {
-		AndiData.data.isTabbable = true; //assume true (prove to be false)
-		var tabindex = $.trim($(element).attr("tabindex"));
-		var nativelyTabbableElements = "a[href],button,input,select,textarea,iframe,area,[contenteditable=true],[contenteditable='']";
-		if (tabindex) {
-			if (tabindex < 0) {
-				AndiData.data.isTabbable = false;
-				if ($(element).is("iframe")) {
-					//check if iframe has focusable contents
-					if ($(element).contents().find(":focusable").length) {
-						alerts = [alert_0123];
-					}
-				} else if (!$(element).parent().is(":tabbable")) {
-					//element and parent are not tabbable
-					if (AndiData.data.accName) {
-						alerts = [alert_0121];
-					} else {
-						alerts = [alert_0122];
-					}
-				}
-			} else if (isNaN(tabindex)) {//tabindex is not a number
-				alerts = [alert_0077, [tabindex]];
-				if (!$(element).is(nativelyTabbableElements))
-					AndiData.data.isTabbable = false;
-			}
-			//element is tabbable
-			AndiData.data.tabindex = tabindex;
-		} else if (!$(element).is(nativelyTabbableElements)) {
+	AndiData.data.isTabbable = true; //assume true (prove to be false)
+	var tabindex = $.trim($(element).attr("tabindex"));
+	var nativelyTabbableElements = "a[href],button,input,select,textarea,iframe,area,[contenteditable=true],[contenteditable='']";
+	if (tabindex) {
+		if (tabindex < 0) {
 			AndiData.data.isTabbable = false;
-		}
-	}
-
-	function grab_accesskey() {
-		var accesskey = $(element).attr("accesskey");
-		if (accesskey && accesskey !== " ") { //accesskey is not the space character
-			accesskey = $.trim(accesskey.toUpperCase());
-			AndiData.data.accesskey = accesskey;
-		}
-	}
-
-	function grab_imageSrc() {
-		var imageSrc;
-		if ($(element).is("area")) {
-			var map = $(element).closest("map");
-			if (map) {
-				imageSrc = $("#ANDI508-testPage img[usemap=\\#" + $(map).attr("name") + "]").first().attr("src");
+			if ($(element).is("iframe")) {
+				//check if iframe has focusable contents
+				if ($(element).contents().find(":focusable").length) {
+					alerts = [alert_0123];
+				}
+			} else if (!$(element).parent().is(":tabbable")) {
+				//element and parent are not tabbable
+				if (AndiData.data.accName) {
+					alerts = [alert_0121];
+				} else {
+					alerts = [alert_0122];
+				}
 			}
-		} else if ($(element).is("img,input[type=image]")) {
-			imageSrc = $(element).attr("src");
-		} else if ($(element).is("svg")) {
-			imageSrc = ($(element).find("image").first().attr("src"));
+		} else if (isNaN(tabindex)) {//tabindex is not a number
+			alerts = [alert_0077, [tabindex]];
+			if (!$(element).is(nativelyTabbableElements))
+				AndiData.data.isTabbable = false;
 		}
-		if (imageSrc) {
-			imageSrc = imageSrc.split("/").pop(); //get the filename and extension only
-			AndiData.data.src = imageSrc;
+		//element is tabbable
+		AndiData.data.tabindex = tabindex;
+	} else if (!$(element).is(nativelyTabbableElements)) {
+		AndiData.data.isTabbable = false;
+	}
+
+	var accesskey = $(element).attr("accesskey");
+	if (accesskey && accesskey !== " ") { //accesskey is not the space character
+		accesskey = $.trim(accesskey.toUpperCase());
+		AndiData.data.accesskey = accesskey;
+	}
+
+	var imageSrc;
+	if ($(element).is("area")) {
+		var map = $(element).closest("map");
+		if (map) {
+			imageSrc = $("#ANDI508-testPage img[usemap=\\#" + $(map).attr("name") + "]").first().attr("src");
 		}
+	} else if ($(element).is("img,input[type=image]")) {
+		imageSrc = $(element).attr("src");
+	} else if ($(element).is("svg")) {
+		imageSrc = ($(element).find("image").first().attr("src"));
+	}
+	if (imageSrc) {
+		imageSrc = imageSrc.split("/").pop(); //get the filename and extension only
+		AndiData.data.src = imageSrc;
 	}
 };
 
