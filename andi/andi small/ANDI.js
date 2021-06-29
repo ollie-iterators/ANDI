@@ -110,72 +110,8 @@ function andiReady() {
 			},
 			focusable: function (element) {
 				return focusable(element, !isNaN($.attr(element, 'tabindex')));
-			},
-			tabbable: function (element) {
-				var tabIndex = $.attr(element, 'tabindex'), isTabIndexNaN = isNaN(tabIndex);
-				return (isTabIndexNaN || tabIndex >= 0) && focusable(element, !isTabIndexNaN);
 			}
 		});
-
-		//Define :shown
-		//Similar to :visible but doesn't include elements with visibility:hidden,
-		$.extend(jQuery.expr[':'], {
-			shown: function (elem) {
-				return $(elem).css("visibility") !== "hidden" && $(elem).is(":visible");
-			}
-		});
-
-		//Define isSemantically, Based on jquery .is method
-		//Parameters: should be css selector strings
-		//	roles:	semantic roles to check against. Example: "[role=link]"
-		//	tags:	semantic tags to check against. Example: "a"
-		//If the role is a trimmed empty string, gets semantics from the tagName
-		$.fn.extend({
-			isSemantically: function (roles, tags) {
-				//If this has one of the roles or (is one of the tags and doesn't have another role that isn't empty)
-				if ($.trim($(this).attr("role"))) {
-					return $(this).is(roles);
-				} else {
-					return $(this).is(tags);
-				}
-			}
-		});
-
-		//Define focusable function: Determines if something is focusable and its ancestors are visible.
-		//Code based on jQuery UI, modifications: disabled links, svg[focusable=true], tabindex=""
-		function focusable(element) {
-			var nodeName = element.nodeName.toLowerCase();
-			var tabindex = $.attr(element, "tabindex"); //intentionally using jquery
-			var isTabIndexNotNaN = !isNaN(tabindex) && tabindex !== "";
-			if (nodeName === "area") {
-				var map = element.parentNode; var mapName = map.name;
-				if (!element.href || !mapName || map.nodeName.toLowerCase() !== "map") {
-					return false;
-				}
-				var img = $("img[usemap=\\#" + mapName + "]")[0]; return !!img && visibleParents(img);
-			}
-			// TODO: Work on expanding the code in this return statement to understand it better
-			var returnValue = "";
-			if (/^(input|select|textarea|button|iframe|summary)$/.test(nodeName)) {
-				returnValue = !element.disabled;
-			} else {
-				if (nodeName === "a") {
-					returnValue = (element.href && !element.disabled) || isTabIndexNotNaN;
-				} else {
-					returnValue = isTabIndexNotNaN ||
-								  //check for focusable svg
-								  (nodeName === "svg" && $.attr(element, "focusable") === "true") ||
-								  //check for contenteditable="true" or contenteditable=""
-								  ($.attr(element, "contenteditable") === "true" || $.attr(element, "contenteditable") === "");
-				}
-			}
-		    return (returnValue && visibleParents(element));
-			function visibleParents(element) {
-				return !$(element).parents().addBack().filter(function () {
-					return $.css(this, "visibility") === "hidden";
-				}).length;
-			}
-		}
 
 		//Define .includes() to make indexOf more readable.
 		if (!String.prototype.includes) {
@@ -191,16 +127,77 @@ function andiReady() {
 				}
 			};
 		}
-
-		//Define isContainerElement: This support function will return true if an element can contain text (is not a void element)
-		(function ($) {
-			var visibleVoidElements = ['area', 'br', 'embed', 'hr', 'img', 'input', 'menuitem', 'track', 'wbr'];
-			$.fn.isContainerElement = function () {
-				return ($.inArray($(this).prop("tagName").toLowerCase(), visibleVoidElements) == -1);
-			};
-		}(jQuery));
-
 	}
+}
+
+//Define isContainerElement: This support function will return true if an element can contain text (is not a void element)
+function isContainerElement(element)  {
+	var visibleVoidElements = ['area', 'br', 'embed', 'hr', 'img', 'input', 'menuitem', 'track', 'wbr'];
+	if ($(element).prop("tagName").toLowerCase() in visibleVoidElements) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+//Define isSemantically, Based on jquery .is method
+//	roles:	semantic roles to check against (Should be css selector strings). Example: "[role=link]"
+//	tags:	semantic tags to check against (Should be css selector strings). Example: "a"
+//If the role is a trimmed empty string, gets semantics from the tagName
+function isSemantically(element, roles, tags) {
+	//If this has one of the roles or (is one of the tags and doesn't have another role that isn't empty)
+	if ($.trim($(element).attr("role"))) {
+		return $(element).is(roles);
+	} else {
+		return $(element).is(tags);
+	}
+}
+
+//Define focusable function: Determines if something is focusable and its ancestors are visible.
+//Code based on jQuery UI, modifications: disabled links, svg[focusable=true], tabindex=""
+function focusable(element) {
+	var nodeName = element.nodeName.toLowerCase();
+	var tabindex = $.attr(element, "tabindex"); //intentionally using jquery
+	var isTabIndexNotNaN = !isNaN(tabindex) && tabindex !== "";
+	if (nodeName === "area") {
+		var map = element.parentNode; var mapName = map.name;
+		if (!element.href || !mapName || map.nodeName.toLowerCase() !== "map") {
+			return false;
+		}
+		var img = $("img[usemap=\\#" + mapName + "]")[0]; return !!img && visibleParents(img);
+	}
+	
+	var returnValue = "";
+	if (/^(input|select|textarea|button|iframe|summary)$/.test(nodeName)) {
+		returnValue = !element.disabled;
+	} else {
+		if (nodeName === "a") {
+			returnValue = (element.href && !element.disabled) || isTabIndexNotNaN;
+		} else {
+			returnValue = isTabIndexNotNaN ||
+							//check for focusable svg
+							(nodeName === "svg" && $.attr(element, "focusable") === "true") ||
+							//check for contenteditable="true" or contenteditable=""
+							($.attr(element, "contenteditable") === "true" || $.attr(element, "contenteditable") === "");
+		}
+	}
+	return (returnValue && visibleParents(element));
+	function visibleParents(element) {
+		return !$(element).parents().addBack().filter(function () {
+			return $.css(this, "visibility") === "hidden";
+		}).length;
+	}
+}
+
+//shown: Similar to :visible but doesn't include elements with visibility:hidden,
+function shown(element) {
+	return $(element).css("visibility") !== "hidden" && $(element).is(":visible");
+}
+
+function tabbable(element) {
+	var tabIndex = $.attr(element, 'tabindex')
+	var isTabIndexNaN = isNaN(tabIndex);
+	return (isTabIndexNaN || tabIndex >= 0) && focusable(element, !isTabIndexNaN);
 }
 
 //==================//
