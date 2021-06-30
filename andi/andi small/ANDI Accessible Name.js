@@ -541,7 +541,6 @@ AndiData.textAlternativeComputation = function (root) {
 	}
 
 	//Support Functions
-
 	function isEmptyComponent(component, componentType, element) {
 		if ($.trim(component) == "") {
 			if (element == root)//only record empty components for the root
