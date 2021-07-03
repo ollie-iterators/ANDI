@@ -712,7 +712,7 @@ function andiReady(){
 		$.extend($.expr[ ':' ], {data: $.expr.createPseudo ? $.expr.createPseudo(function(dataName){return function(elem){return !!$.data(elem, dataName);};}) : function(elem, i, match){return !!$.data(elem, match[ 3 ]);},
 			focusable: function(element){return focusable(element, !isNaN($.attr(element, 'tabindex')));},
 			tabbable: function(element){var tabIndex = $.attr(element, 'tabindex'),isTabIndexNaN = isNaN(tabIndex); return (isTabIndexNaN || tabIndex >= 0) && focusable(element, !isTabIndexNaN);},
-			nativelyTabbable: function(element){return $(element).is("a[href],button,input,input[type],select,textarea,iframe,area,[contenteditable=true],[contenteditable='']");
+			nativelyTabbable: function(element){return $(element).is("a[href],button,input,select,textarea,iframe,area,[contenteditable=true],[contenteditable='']");
 		
 		}});
 		//nativeTab: function(element){return $(element).is("a[href],button,input,select,textarea,iframe,area,[contenteditable=true],[contenteditable='']");};
