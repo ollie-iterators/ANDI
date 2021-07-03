@@ -22,7 +22,7 @@ fANDI.analyze = function(){
 	
 	//Loop through every visible element and run tests
 	$(TestPageData.allElements).each(function(){
-		if($(this).is(":tabbable")){//If element is focusable, search for accessibility components.
+		if($(this).is(":nativelyTabbable")){//If element is focusable, search for accessibility components.
 			andiData = new AndiData(this);
 			
 			andiCheck.commonFocusableElementChecks(andiData, $(this));
