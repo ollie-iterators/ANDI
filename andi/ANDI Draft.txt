@@ -1,0 +1,22 @@
+# Notes about how I want ANDI to look like
+
+ - There are different branches of ANDI that have different changes to how ANDI works
+   - Fork 1: (Can merge changes from ANDI easily)
+       - Mostly unchanged fork. The things that are changed are:
+         - Change the source_url to make the ANDI version work
+         - Change allVisibleElements to allElements
+         - No code should be added to this area
+   - Fork 2: (Used to be able to see changes to the code)
+       - Change how ANDI works:
+         - Use object classes to group how the attributes are found
+         - Make it so that fandi can find more elements on the page by making new :tabbable
+           group called nativelyTabbable so that elements that are nativelyTabbable are treated
+           like focusable elements
+         - Make it so that tables can show all element modules for ANDI
+         - Make it so that all element modules can be seen on the dropdown even if there aren't elements there
+  - Fork 3: (Self contained module area version)
+       - Make it so that all code that is used in the modules are in the module
+       - Remove all code that is not related to alerts in module areas
+       - for andi.js
+
+  
