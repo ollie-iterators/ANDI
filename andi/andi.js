@@ -2315,7 +2315,7 @@ AndiData.textAlternativeComputation = function(root){
 
 		function calcRefName(result){
 			if(result){
-				accumulatedText += AndiData.addComp(data, componentType, [(result + " "), refElement, refElement.id]) + " (StepB) ";
+				accumulatedText += AndiData.addComp(data, componentType, [(result + " "), refElement, refElement.id]);
 				return true;
 			}
 			return false;
@@ -2328,7 +2328,7 @@ AndiData.textAlternativeComputation = function(root){
 		component = $(element).attr("aria-label");
 		if(component !== undefined){
 			if(!isEmptyComponent(component, "ariaLabel", element)){
-				accumulatedText += AndiData.addComp(data, "ariaLabel", component) + " (StepC) ";
+				accumulatedText += AndiData.addComp(data, "ariaLabel", component);
 			}
 		}
 		return accumulatedText;
@@ -2461,15 +2461,15 @@ AndiData.textAlternativeComputation = function(root){
 	function stepE(element, data){
 		var accumulatedText = "";
 		if($(element).is("input[type=text]")){
-			accumulatedText += $(element).val() + " (StepE) ";
+			accumulatedText += $(element).val();
 		}
 		else if($(element).is("select")){
 			var selectedOption = $(element).find("option:selected").first();
 			if(selectedOption)
-				accumulatedText += andiUtility.getVisibleInnerText(selectedOption[0], root) + " (StepE) ";
+				accumulatedText += andiUtility.getVisibleInnerText(selectedOption[0], root);
 		}
 		else if($(element).is("[role=combobox],[role=listbox],[role=progressbar],[role=scrollbar],[role=slider],[role=spinbutton]")){
-			accumulatedText += andiUtility.getVisibleInnerText(element, root) + " (StepE) ";
+			accumulatedText += andiUtility.getVisibleInnerText(element, root);
 		}
 		return accumulatedText;
 	}
@@ -2582,7 +2582,7 @@ AndiData.textAlternativeComputation = function(root){
 		var text = textNode.nodeValue;
 		if($.trim(text) !== ""){
 			if(!data.ariaLabelledby && !data.ariaLabel && !data.title){
-				accumulatedText += andiUtility.condenseWhitespace(text) + " (StepG) ";
+				accumulatedText += andiUtility.condenseWhitespace(text);
 			}
 		}
 		return accumulatedText;
@@ -2613,12 +2613,6 @@ AndiData.textAlternativeComputation = function(root){
 				if(role === "presentation" || role === "none")
 					return "";
 			}
-			// NOTE: if ($.trim(text) !== "")) is code added to make it possible to add " (StepI) " to the StepI Accessible Name code.
-			// Change back to accumulatedText += text; after StepI has been added to the Accessible Name generation
-			if ($.trim(text) !== "") {
-				accumulatedText += text + " (StepI) ";
-			}
-			
 		}
 	}
 
@@ -2630,7 +2624,7 @@ AndiData.textAlternativeComputation = function(root){
 			if($(element).is("textarea") || ( $(element).is("input") && $(element).is(":not([type]),[type=text],[type=password],[type=search],[type=tel],[type=email],[type=url],[type=number]") ) ){
 				component = $(element).attr("placeholder");
 				if($.trim(component) != ""){
-					accumulatedText += AndiData.addComp(data, "placeholder", component) + " (StepJ) ";
+					accumulatedText += AndiData.addComp(data, "placeholder", component);
 				}
 			}
 		}
@@ -2692,7 +2686,7 @@ AndiData.textAlternativeComputation = function(root){
 
 				function calcGroupingName(result){
 					if(result)
-						accumulatedText += result + " (StepZ) ";
+						accumulatedText += result;
 					return !!result;
 				}
 			}
