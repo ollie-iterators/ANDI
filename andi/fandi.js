@@ -32,7 +32,17 @@ fANDI.analyze = function(){
 			testPageData.firstLaunchedModulePrep(this, andiData);
 			AndiData.attachDataToElement(this);
 		}
-		else{
+		else if ($(this).is(":nativeTabScript")) {
+			andiData = new AndiData(this);
+			
+			andiCheck.commonFocusableElementChecks(andiData, $(this));
+			andiCheck.lookForCanvasFallback(this);
+			if(andiData.accesskey)
+				fANDI.accesskeys.push(this, andiData.accesskey, andiData.andiElementIndex);
+			testPageData.firstLaunchedModulePrep(this, andiData);
+			AndiData.attachDataToElement(this);
+		}
+		else {
 			testPageData.firstLaunchedModulePrep(this);
 			andiCheck.isThisElementDisabled(this);
 		}
