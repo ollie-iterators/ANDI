@@ -2448,11 +2448,6 @@ AndiData.textAlternativeComputation = function(root){
 				}
 			}
 		}
-		// NOTE: The if statement below was added to make understanding the creation process of Accessible Names better
-		// Remove once the Accessible Names functions are added to the Python project
-		if ($.trim(accumulatedText) !== "") {
-			accumulatedText += " (StepD) ";
-		}
 
 		return accumulatedText;
 	}
@@ -2540,12 +2535,6 @@ AndiData.textAlternativeComputation = function(root){
 
 		//get CSS ::after content
 		lookForPseudoContent("after", element, data);
-
-		// NOTE: The if statement below was added to make understanding the creation process of Accessible Names better
-		// Remove once the Accessible Names functions are added to the Python project
-		if ($.trim(accumulatedText) !== "") {
-			accumulatedText += " (StepF) ";
-		}
 
 		return accumulatedText;
 
