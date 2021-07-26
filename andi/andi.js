@@ -713,7 +713,7 @@ function andiReady(){
 			focusable: function(element){return focusable(element, !isNaN($.attr(element, 'tabindex')));},
 			tabbable: function(element){var tabIndex = $.attr(element, 'tabindex'),isTabIndexNaN = isNaN(tabIndex); return (isTabIndexNaN || tabIndex >= 0) && focusable(element, !isTabIndexNaN);},
 			nativelyTabbable: function(element){return $(element).is("a[href],button,input,select,textarea,iframe,area,[contenteditable=true],[contenteditable='']");},
-			nativeTabScript: function(element){return $(element).is("'script, input'");}
+			//nativeTabScript: function(element){return $(element).is("'script, input'");} // TODO: Think about how to use script, to find elements
 			// Areas to add if this works: 'script, a[href]' 'script, button', ,'script, select',... textarea,iframe,area,[contenteditable=true],[contenteditable='']
 		
 		});
