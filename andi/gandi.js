@@ -45,7 +45,7 @@ gANDI.analyze = function(){
 	var isImageContainedByInteractiveWidget; //boolean if image is contained by link or button
 
 	//Loop through every visible element
-	$(TestPageData.allVisibleElements).each(function(){
+	$(TestPageData.allElements).each(function(){
 
 		var closestWidgetParent;
 		//Determine if the image is contained by an interactive widget (link, button)
