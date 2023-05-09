@@ -11,7 +11,7 @@ var iANDI = new AndiModule(iandiVersionNumber,"i");
 
 //This function will analyze the test page for iframes
 iANDI.analyze = function(){
-	$(TestPageData.allVisibleElements).each(function(){
+	$(TestPageData.allElements).each(function(){
 		if($(this).is("iframe")){
 			andiData = new AndiData(this);
 			andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);

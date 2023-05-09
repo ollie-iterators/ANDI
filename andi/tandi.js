@@ -98,7 +98,7 @@ tANDI.analyze = function(){
 	if(TestPageData.page_using_table){
 		//Loop through each visible table
 		var activeElementFound = false;
-		$(TestPageData.allVisibleElements).filter("table,[role=table],[role=grid],[role=treegrid]").each(function(){
+		$(TestPageData.allElements).filter("table,[role=table],[role=grid],[role=treegrid]").each(function(){
 			//Store this table in the array
 			tableArray.push($(this));
 

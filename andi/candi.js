@@ -30,7 +30,7 @@ AndiModule.initActiveActionButtons({
 cANDI.analyze = function(){
 
 	//Elements that are disabled or have aria-disabled="true" do not need to be tested
-	$(TestPageData.allVisibleElements).filter("*:not(option)").each(function(){
+	$(TestPageData.allElements).filter("*:not(option)").each(function(){
 
 		if($(this).is("img[src],input:image[src],svg,canvas")){
 			imgCount++;
