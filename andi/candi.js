@@ -11,9 +11,6 @@ var cANDIVersionNumber = "4.1.4";
 //create cANDI instance
 var cANDI = new AndiModule(cANDIVersionNumber,"c");
 
-var imgCount = 0;
-var elementsContainingTextCount = 0;
-
 //This function will set the values of the require ratios for a given WCAG level
 var wcagLevel = {
 	level: "AA",
@@ -27,20 +24,20 @@ AndiModule.initActiveActionButtons({
 });
 
 //This function will run tests on text containing elements
-cANDI.analyze = function(){
+cANDI.analyze = function(objectClass){
 
 	//Elements that are disabled or have aria-disabled="true" do not need to be tested
 	$(TestPageData.allElements).filter("*:not(option)").each(function(){
 
 		if($(this).is("img[src],input:image[src],svg,canvas")){
-			imgCount++;
+			objectClass.numImages++;
 		}
 		else{
 			if(hasTextExcludingChildren(this)){
 				if(!hasAdditionalHidingTechniques(this)){
 					//Element is not hidden and contains text.
 
-					elementsContainingTextCount++;
+					objectClass.elementsWithText++;
 
 					//Try to get the contrast ratio automatically
 					var cANDI_data = cANDI.getContrast($(this));
@@ -98,11 +95,11 @@ cANDI.analyze = function(){
 };
 
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-cANDI.results = function(){
+cANDI.results = function(objectClass){
 
-	andiBar.updateResultsSummary("Elements Containing Text: "+elementsContainingTextCount);
+	andiBar.updateResultsSummary("Elements Containing Text: "+objectClass.elementsWithText);
 
-	if(imgCount > 0)
+	if(objectClass.numImages > 0)
 		andiAlerter.throwAlert(alert_0231,alert_0231.message,0);
 
 	//Contrast Playground HTML
@@ -210,19 +207,12 @@ cANDI.results = function(){
 		return false;
 	});
 
-	if(elementsContainingTextCount > 0){
-		if(!andiBar.focusIsOnInspectableElement()){
-			andiBar.showElementControls();
-			andiBar.showStartUpSummary("Discover the <span class='ANDI508-module-name-c'>color contrast</span> for elements containing text.",true);
-		}
-		if(testPageData.disabledElementsCount > 0)
-			andiAlerter.throwAlert(alert_0251,[testPageData.disabledElementsCount],0);
-	}
-	else{
-		//No text containing elements were found
-		andiBar.hideElementControls();
-		andiBar.showStartUpSummary("No elements containing text were found on this page.");
-	}
+    if(!andiBar.focusIsOnInspectableElement()){
+        andiBar.showElementControls();
+        andiBar.showStartUpSummary("Discover the <span class='ANDI508-module-name-c'>color contrast</span> for elements containing text.",true);
+    }
+    if(testPageData.disabledElementsCount > 0)
+        andiAlerter.throwAlert(alert_0251,[testPageData.disabledElementsCount],0);
 
 	andiAlerter.updateAlertList();
 
@@ -991,7 +981,27 @@ _.WHITE = new _([255,255,255]);
 //color.js End
 //===============
 
-cANDI.analyze();
-cANDI.results();
+//This object class is used to store data about the color contrast of the element. Object instances will be placed into an array.
+function Contrast(element, index, rowClass) {
+    this.element      = element;
+    this.index        = index;
+    this.columnValues = [element, index];
+    this.rowClass     = rowClass;
+}
+
+//This object class is used to keep track of the color contrast of the elements on the page
+function Contrasts() {
+    this.list             = [];
+    this.numImages        = 0;
+    this.elementsWithText = 0;
+    this.count            = 0;
+    this.index            = 1;
+    this.columnNames      = ["element", "index"];
+}
+
+cANDI.contrasts = new Contrasts();
+
+cANDI.analyze(cANDI.contrasts);
+cANDI.results(cANDI.contrasts);
 
 }//end init
