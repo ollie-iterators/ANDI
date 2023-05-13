@@ -12,7 +12,7 @@ var nANDI = new AndiModule(nANDIVersionNumber,"n");
 //This function removes markup in the test page that was added by this module
 AndiModule.cleanup = function(testPage, element){
     if(element)
-        $(element).removeClass("nANDI508-internalLink nANDI508-externalLink nANDI508-ambiguous nANDI508-anchorTarget");
+        $(element).removeClass("nANDI508-ambiguous");
 };
 
 //This object class is used to store data about each button. Object instances will be placed into an array.
@@ -52,8 +52,6 @@ var alertIcons = new function(){//new is intentional
 };
 
 AndiModule.initActiveActionButtons({
-    viewLinksList:false,
-    highlightAmbiguousLinks:false,
     viewButtonsList:false,
     highlightNonUniqueButtons:false
 });
@@ -190,8 +188,6 @@ nANDI.analyze = function(objectClass){
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 nANDI.results = function(objectClass){
     andiBar.updateResultsSummary("Buttons Found: "+nANDI.buttons.count);
-
-    $("#ANDI508-buttonsMode-button").attr("aria-selected","true").addClass("ANDI508-module-action-active");
 
     if(nANDI.buttons.nonUniqueCount > 0){
         //highlightNonUniqueButtons

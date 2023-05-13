@@ -45,7 +45,6 @@ var alertIcons = new function(){//new is intentional
 	this.warning_ambiguous = makeIcon("warning","Ambiguous: same name, different href");
 	this.caution_ambiguous = makeIcon("caution","Ambiguous: same name, different href");
 	this.caution_vagueText = makeIcon("caution","Vague: does not identify link purpose.");
-	this.warning_nonUnique = makeIcon("warning","Non-Unique: same name as another button");
 	this.warning_tabOrder = makeIcon("warning","Element not in tab order");
 
 	function makeIcon(alertLevel, titleText){
@@ -60,12 +59,8 @@ var alertIcons = new function(){//new is intentional
 };
 
 AndiModule.initActiveActionButtons({
-	linksMode:true,
 	viewLinksList:false,
 	highlightAmbiguousLinks:false,
-	buttonsMode:false,
-	viewButtonsList:false,
-	highlightNonUniqueButtons:false
 });
 
 lANDI.viewList_tableReady = false;
@@ -341,8 +336,6 @@ lANDI.analyze = function(objectClass){
 lANDI.results = function(objectClass){
 
     andiBar.updateResultsSummary("Links Found: "+lANDI.links.count);
-
-    $("#ANDI508-linksMode-button").attr("aria-selected","true").addClass("ANDI508-module-action-active");
 
     if(lANDI.links.ambiguousIndex > 0){
         //highlightAmbiguousLinks button

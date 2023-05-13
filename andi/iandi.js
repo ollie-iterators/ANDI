@@ -15,7 +15,9 @@ iANDI.analyze = function(objectClass){
 		if($(this).is("iframe")){
 			andiData = new AndiData(this);
 			andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
+            objectClass.list.push(new iFrame(this, objectClass.index, src, ""))
 			AndiData.attachDataToElement(this);
+            objectClass.index += 1
 		}
 	});
 };
@@ -110,9 +112,7 @@ AndiModule.inspect = function(element){
 	andiBar.prepareActiveElementInspection(element);
 
 	var elementData = $(element).data("andi508");
-	var addOnProps = AndiData.getAddOnProps(element, elementData,
-		["src"]
-	);
+	var addOnProps = AndiData.getAddOnProps(element, elementData, ["src"]);
 
 	andiBar.displayOutput(elementData, element, addOnProps);
 	andiBar.displayTable(elementData, element, addOnProps);

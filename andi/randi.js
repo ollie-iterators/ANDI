@@ -189,46 +189,11 @@ AndiModule.inspect = function(element){
 
         var elementData = $(element).data("andi508");
 
-        var addOnProps = AndiData.getAddOnProps(element, elementData,
-            [
-                "aria-level",
-                getDefault_ariaLive(element, elementData),
-                getDefault_ariaAtomic(element, elementData),
-                "aria-busy",
-                "aria-relevant"
-            ]);
+        var addOnProps = AndiData.getAddOnProps(element, elementData);
 
         andiBar.displayTable(elementData, element, addOnProps);
 
         andiBar.displayOutput(elementData, element, addOnProps);
-    }
-
-    //This function assumes the default values of aria-live based on the element's role as defined by spec
-    function getDefault_ariaLive(element, elementData){
-        var val = $.trim($(element).attr("aria-live"));
-        if(!val){
-            if(elementData.role === "alert")
-                val = "assertive";
-            else if(elementData.role === "log" || elementData.role === "status")
-                val = "polite";
-            else if(elementData.role === "marquee" || elementData.role === "timer")
-                val = "off";
-            else return; //no default
-        }
-        return ["aria-live", val];
-    }
-
-    //This function assumes the default values of aria-atomic based on the element's role as defined by spec
-    function getDefault_ariaAtomic(element, elementData){
-        var val = $.trim($(element).attr("aria-atomic"));
-        if(!val){
-            if(elementData.role === "alert" || elementData.role === "status")
-                val = "true";
-            else if(elementData.role === "log" || elementData.role === "marquee" || elementData.role === "timer")
-                val = "false";
-            else return; //no default
-        }
-        return ["aria-atomic", val];
     }
 };
 

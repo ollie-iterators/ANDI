@@ -37,32 +37,9 @@ function init_module(){
         this.externalCount = 0;
     }
 
-    //Alert icons for the links list table
-    //Ignore the jslint warning about the "new" declaration. It is needed.
-    var alertIcons = new function(){//new is intentional
-        this.danger_noAccessibleName = makeIcon("danger","No accessible name");
-        this.warning_anchorTargetNotFound = makeIcon("warning","In-page anchor target not found");
-        this.caution_vagueText = makeIcon("caution","Vague: does not identify link purpose.");
-        this.warning_tabOrder = makeIcon("warning","Element not in tab order");
-
-        function makeIcon(alertLevel, titleText){
-            //The sortPriority number allows alert icon sorting
-            var sortPriority = "3"; //default to caution
-            if(alertLevel=="warning")
-                sortPriority = "2";
-            else if(alertLevel=="danger")
-                sortPriority = "1";
-            return "<img src='"+icons_url+alertLevel+".png' alt='"+alertLevel+"' title='Accessibility Alert: "+titleText+"' /><i>"+sortPriority+" </i>";
-        }
-    };
-
     AndiModule.initActiveActionButtons({
-        linksMode:true,
         viewLinksList:false,
         highlightAmbiguousLinks:false,
-        buttonsMode:false,
-        viewButtonsList:false,
-        highlightNonUniqueButtons:false
     });
 
     mANDI.viewList_tableReady = false;
@@ -144,8 +121,6 @@ function init_module(){
     mANDI.results = function(objectClass){
 
         andiBar.updateResultsSummary("Links Found: "+mANDI.links.count);
-
-        $("#ANDI508-linksMode-button").attr("aria-selected","true").addClass("ANDI508-module-action-active");
 
         if(mANDI.links.ambiguousIndex > 0){
             //highlightAmbiguousLinks button

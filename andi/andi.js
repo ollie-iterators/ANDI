@@ -268,12 +268,6 @@ AndiModule.engageActiveActionButtons = function(buttonsArray){
 //These functions show/hide the module selection menu
 AndiModule.showMenu = function(){
 	$("#ANDI508-moduleMenu").addClass("ANDI508-moduleMenu-expanded");
-	//Hide tANDI
-	if(!TestPageData.page_using_table)
-		AndiModule.disableModuleButton("t");
-	//Hide iANDI
-	if($(TestPageData.allVisibleElements).filter("iframe").length == 0)
-		AndiModule.disableModuleButton("i");
 };
 AndiModule.hideMenu = function(){
 	//setTimeout and :focus check are needed to fix a timing issue in firefox and chrome
