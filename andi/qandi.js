@@ -237,9 +237,8 @@ AndiModule.inspect = function(element){
 
         var addOnProps = AndiData.getAddOnProps(element, elementData);
 
-        andiBar.displayTable(elementData, element, addOnProps);
-
         andiBar.displayOutput(elementData, element, addOnProps);
+        andiBar.displayTable(elementData, element, addOnProps);
     }
 };
 

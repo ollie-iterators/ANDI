@@ -336,8 +336,8 @@ function init_module(){
 
             var addOnProps = AndiData.getAddOnProps(element, elementData, ["aria-level"]);
 
-            andiBar.displayTable(elementData, element, addOnProps);
             andiBar.displayOutput(elementData, element, addOnProps);
+            andiBar.displayTable(elementData, element, addOnProps);
         }
     };
 

@@ -363,9 +363,8 @@ AndiModule.inspect = function(element){
                 "aria-level"
             ]);
 
-        andiBar.displayTable(elementData, element, addOnProps);
-
         andiBar.displayOutput(elementData, element, addOnProps);
+        andiBar.displayTable(elementData, element, addOnProps);
     }
 };
 

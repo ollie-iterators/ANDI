@@ -10,9 +10,6 @@ var uANDIVersionNumber = "11.2.1";
 //create uANDI instance
 var uANDI = new AndiModule(uANDIVersionNumber,"t");
 
-//a scope at this depth level triggers an alert
-uANDI.scopeLevelLimit = 4;
-
 //Delimeter for the the header cells
 uANDI.associatedHeaderCellsDelimeter = " <span aria-hidden='true'>|</span> ";
 
@@ -312,9 +309,7 @@ AndiModule.inspect = function(element){
             "aria-colcount",
             "aria-rowcount",
             "aria-colindex",
-            "aria-rowindex",
-            "aria-colspan",
-            "aria-rowspan"
+            "aria-rowindex"
         ]);
 
     andiBar.displayOutput(elementData, element, addOnProps);

@@ -10,9 +10,6 @@ var vANDIVersionNumber = "11.2.1";
 //create vANDI instance
 var vANDI = new AndiModule(vANDIVersionNumber,"t");
 
-//a scope at this depth level triggers an alert
-vANDI.scopeLevelLimit = 4;
-
 //Delimeter for the the header cells
 vANDI.associatedHeaderCellsDelimeter = " <span aria-hidden='true'>|</span> ";
 
@@ -857,13 +854,13 @@ function analyzeTable(table){
                     //Determine if there are "too many" scope rows
                     if(!tooManyScopeRowLevels){
                         colIndex = $(cell).attr("data-vANDI508-colindex");
-                        for(var f=0; f<=vANDI.scopeLevelLimit; f++){
+                        for(var f=0; f<=4; f++){
                             if(!scopeRowLevel[f] || (!scopeRowLevel[f] && (scopeRowLevel[f-1] != colIndex))){
                                 //scope found at this colIndex
                                 scopeRowLevel[f] = colIndex;
                                 break;
                             }
-                            else if((f == vANDI.scopeLevelLimit) && (colIndex >= f))
+                            else if((f == 4) && (colIndex >= f))
                                 //scope levelLimit has been exceeeded
                                 tooManyScopeRowLevels = true;
                         }
@@ -875,13 +872,13 @@ function analyzeTable(table){
                     //Determine if there are too many scope columns
                     if(!tooManyScopeColLevels){
                         rowIndex = $(cell).attr("data-vANDI508-rowindex");
-                        for(var g=0; g<=vANDI.scopeLevelLimit; g++){
+                        for(var g=0; g<=4; g++){
                             if(!scopeColLevel[g] || (!scopeColLevel[g] && (scopeColLevel[g-1] != rowIndex))){
                                 //scope found at this rowIndex
                                 scopeColLevel[g] = rowIndex;
                                 break;
                             }
-                            else if((g == vANDI.scopeLevelLimit) && (rowIndex >= g))
+                            else if((g == 4) && (rowIndex >= g))
                                 //scope levelLimit has been exceeeded
                                 tooManyScopeColLevels = true;
                         }
@@ -908,9 +905,9 @@ function analyzeTable(table){
                 if(AndiModule.activeActionButtons.scopeMode){
                     //Only throw scope alerts if in "scope mode"
                     if(tooManyScopeRowLevels)
-                        andiAlerter.throwAlert(alert_0043,[vANDI.scopeLevelLimit,"row"]);
+                        andiAlerter.throwAlert(alert_0043,[4,"row"]);
                     if(tooManyScopeColLevels)
-                        andiAlerter.throwAlert(alert_0043,[vANDI.scopeLevelLimit,"col"]);
+                        andiAlerter.throwAlert(alert_0043,[4,"col"]);
                     andiCheck.detectDeprecatedHTML($(cell));
                     if(scope !== "col" && scope !== "row" && scope !== "colgroup" && scope !== "rowgroup")//scope value is invalid
                         andiAlerter.throwAlert(alert_007C,[scope]);

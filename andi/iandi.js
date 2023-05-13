@@ -11,21 +11,21 @@ var iANDI = new AndiModule(iandiVersionNumber,"i");
 
 //This function will analyze the test page for iframes
 iANDI.analyze = function(objectClass){
-	$(TestPageData.allElements).each(function(){
-		if($(this).is("iframe")){
-			andiData = new AndiData(this);
-			andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
+    $(TestPageData.allElements).each(function(){
+        if($(this).is("iframe")){
+            andiData = new AndiData(this);
+            andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
             objectClass.list.push(new iFrame(this, objectClass.index, src, ""))
-			AndiData.attachDataToElement(this);
+            AndiData.attachDataToElement(this);
             objectClass.index += 1
-		}
-	});
+        }
+    });
 };
 
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 //Inserts some counter totals, displays the accesskey list
 iANDI.results = function(objectClass){
-	andiBar.updateResultsSummary("Iframes with Content: "+testPageData.andiElementIndex);
+    andiBar.updateResultsSummary("Iframes with Content: "+testPageData.andiElementIndex);
 
     var iframesSelectionMenu = "";
     var iframesSelectionLinks = "";
@@ -101,41 +101,41 @@ iANDI.results = function(objectClass){
 
     andiBar.showStartUpSummary("To test the contents of <span class='ANDI508-module-name-i'>iframes</span>, each must be viewed independently.<br />Inspect an iframe, press the \"test in new tab\" button, then launch ANDI.", true);
 
-	andiAlerter.updateAlertList();
+    andiAlerter.updateAlertList();
 
-	$("#ANDI508").focus();
+    $("#ANDI508").focus();
 };
 
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
 AndiModule.inspect = function(element){
-	andiBar.prepareActiveElementInspection(element);
+    andiBar.prepareActiveElementInspection(element);
 
-	var elementData = $(element).data("andi508");
-	var addOnProps = AndiData.getAddOnProps(element, elementData, ["src"]);
+    var elementData = $(element).data("andi508");
+    var addOnProps = AndiData.getAddOnProps(element, elementData, ["src"]);
 
-	andiBar.displayOutput(elementData, element, addOnProps);
-	andiBar.displayTable(elementData, element, addOnProps);
+    andiBar.displayOutput(elementData, element, addOnProps);
+    andiBar.displayTable(elementData, element, addOnProps);
 
-	$("#ANDI508-additionalElementDetails").html("<button>test in new tab</button>");
-	$("#ANDI508-additionalElementDetails button").click(function(){
-		iANDI.openIframeInNewWindow(element);
-		return false;
-	});
+    $("#ANDI508-additionalElementDetails").html("<button>test in new tab</button>");
+    $("#ANDI508-additionalElementDetails button").click(function(){
+        iANDI.openIframeInNewWindow(element);
+        return false;
+    });
 };
 
 //This function will open an iframe in a new window
 iANDI.openIframeInNewWindow = function(iframe){
-	var iframeWindow;
-	var url = $(iframe).attr("src");
+    var iframeWindow;
+    var url = $(iframe).attr("src");
 
-	if(url){
-		iframeWindow = window.open(url, "_blank"); //opens user preference, usually new tab
-		iframeWindow.focus();
-	}
-	else{
-		alert("This iframe has no [src] and cannot be opened independently. ANDI cannot be used to test the contents of this iframe.");
-	}
+    if(url){
+        iframeWindow = window.open(url, "_blank"); //opens user preference, usually new tab
+        iframeWindow.focus();
+    }
+    else{
+        alert("This iframe has no [src] and cannot be opened independently. ANDI cannot be used to test the contents of this iframe.");
+    }
 };
 
 //This object class is used to store data about each hidden element. Object instances will be placed into an array.
