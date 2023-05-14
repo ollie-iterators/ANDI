@@ -4143,6 +4143,8 @@ var oldIE = false; //used to determine if old version of IE is being used.
         return moduleList;
     }
 
+    var andiResults = new AndiResults();
+
     //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
     //Inserts some counter totals, displays the accesskey list
     andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
