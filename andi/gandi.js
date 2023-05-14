@@ -236,6 +236,7 @@ gANDI.analyze = function(objectClass){
     }
 };
 
+var startUpSummaryText = "";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 gANDI.results = function(objectClass){
 
@@ -347,8 +348,6 @@ gANDI.results = function(objectClass){
         andiResetter.resizeHeights();
         return false;
     });
-
-    var startUpSummaryText = "";
 
     andiBar.showElementControls();
     if(!andiBar.focusIsOnInspectableElement())

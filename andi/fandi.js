@@ -337,5 +337,6 @@ fANDI.tableInfo = new TableInfo();
 
 fANDI.analyze(fANDI.focusables);
 fANDI.results(fANDI.focusables);
+andiBar.results(fANDI.focusables, fANDI.tableInfo, [], startUpSummaryText);
 
 }//end init
