@@ -348,14 +348,14 @@ gANDI.results = function(objectClass){
         return false;
     });
 
-    var startupSummaryText = "";
+    var startUpSummaryText = "";
 
     andiBar.showElementControls();
     if(!andiBar.focusIsOnInspectableElement())
-        startupSummaryText += "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. ";
+        startUpSummaryText += "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. ";
 
-    startupSummaryText += "Ensure that every meaningful/non-decorative image has a text equivalent.";
-    andiBar.showStartUpSummary(startupSummaryText, true);
+    startUpSummaryText += "Ensure that every meaningful/non-decorative image has a text equivalent.";
+    andiBar.showStartUpSummary(startUpSummaryText, true);
 
     AndiModule.engageActiveActionButtons([
         "fadeInlineImages",
