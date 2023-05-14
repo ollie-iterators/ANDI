@@ -138,6 +138,7 @@ pANDI.getOutlineItem = function(element){
     return outlineItem;
 };
 
+var showStartUpSummaryText = "Heading structure found.<br />Determine if <span class='ANDI508-module-name-s'>headings</span> are appropriately applied.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 pANDI.results = function(objectClass){
 
@@ -301,7 +302,7 @@ pANDI.results = function(objectClass){
 
     if(!andiBar.focusIsOnInspectableElement()){
         andiBar.showElementControls();
-        andiBar.showStartUpSummary("Heading structure found.<br />Determine if <span class='ANDI508-module-name-s'>headings</span> are appropriately applied.",true);
+        andiBar.showStartUpSummary(showStartUpSummaryText,true);
     }
 
     $("#pANDI508-outline-container")
@@ -460,6 +461,7 @@ pANDI.possibleHeaders = new PossibleHeaders();
 pANDI.tableInfo = new TableInfo();
 
 pANDI.analyze(pANDI.possibleHeaders);
-pANDI.results(pANDI.possibleHeaders);
+//pANDI.results(pANDI.possibleHeaders);
+andiBar.results(pANDI.possibleHeaders, pANDI.tableInfo, [], startUpSummaryText);
 
 }//end init

@@ -332,6 +332,7 @@ lANDI.analyze = function(objectClass){
     }
 };
 
+var showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-l'>links</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every link.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 lANDI.results = function(objectClass){
 
@@ -382,7 +383,7 @@ lANDI.results = function(objectClass){
     //Show Startup Summary
     if(!andiBar.focusIsOnInspectableElement()){
         andiBar.showElementControls();
-        andiBar.showStartUpSummary("Discover accessibility markup for <span class='ANDI508-module-name-l'>links</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every link.",true);
+        andiBar.showStartUpSummary(showStartUpSummaryText,true);
     }
 
     andiAlerter.updateAlertList();

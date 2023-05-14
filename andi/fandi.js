@@ -109,6 +109,7 @@ function AndiAccesskeys(){
     };
 }
 
+var startUpSummaryText = "Discover accessibility markup for focusable elements by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every focusable element.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 //Inserts some counter totals, displays the accesskey list
 fANDI.results = function(objectClass){
@@ -186,7 +187,7 @@ fANDI.results = function(objectClass){
 
     andiBar.focusIsOnInspectableElement();
     andiBar.showElementControls();
-    andiBar.showStartUpSummary("Discover accessibility markup for focusable elements by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every focusable element.",true);
+    andiBar.showStartUpSummary(startUpSummaryText,true);
 
     andiAlerter.updateAlertList();
 

@@ -22,6 +22,7 @@ iANDI.analyze = function(objectClass){
     });
 };
 
+var startUpSummaryText = "To test the contents of <span class='ANDI508-module-name-i'>iframes</span>, each must be viewed independently.<br />Inspect an iframe, press the \"test in new tab\" button, then launch ANDI.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 //Inserts some counter totals, displays the accesskey list
 iANDI.results = function(objectClass){
@@ -99,7 +100,7 @@ iANDI.results = function(objectClass){
         });
     });
 
-    andiBar.showStartUpSummary("To test the contents of <span class='ANDI508-module-name-i'>iframes</span>, each must be viewed independently.<br />Inspect an iframe, press the \"test in new tab\" button, then launch ANDI.", true);
+    andiBar.showStartUpSummary(showStartUpSummaryText, true);
 
     andiAlerter.updateAlertList();
 
@@ -165,6 +166,7 @@ iANDI.iFrames = new iFrames();
 iANDI.tableInfo = new TableInfo();
 
 iANDI.analyze(iANDI.iFrames);
-iANDI.results(iANDI.iFrames);
+//iANDI.results(iANDI.iFrames);
+andiBar.results(iANDI.iFrames, iANDI.tableInfo, [], startUpSummaryText);
 
 }//end init

@@ -554,6 +554,7 @@ hANDI.hiddenElements = new HiddenElements();
 hANDI.tableInfo = new TableInfo();
 
 hANDI.analyze(hANDI.hiddenElements);
-hANDI.results(hANDI.hiddenElements);
+//hANDI.results(hANDI.hiddenElements);
+andiBar.results(hANDI.hiddenElements, hANDI.tableInfo, [], startUpSummaryText);
 
 }//end init

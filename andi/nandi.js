@@ -185,6 +185,7 @@ nANDI.analyze = function(objectClass){
     }
 };
 
+var showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-l'>buttons</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every button.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 nANDI.results = function(objectClass){
     andiBar.updateResultsSummary("Buttons Found: "+nANDI.buttons.count);
@@ -232,7 +233,7 @@ nANDI.results = function(objectClass){
     //Show Startup Summary
     if(!andiBar.focusIsOnInspectableElement()){
         andiBar.showElementControls();
-        andiBar.showStartUpSummary("Discover accessibility markup for <span class='ANDI508-module-name-l'>buttons</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every button.",true);
+        andiBar.showStartUpSummary(showStartUpSummaryText,true);
     }
 
     andiAlerter.updateAlertList();

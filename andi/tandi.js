@@ -238,6 +238,7 @@ tANDI.analyze = function(objectClass){
     }
 };
 
+var showStartUpSummaryText = "Only <span class='ANDI508-module-name-t'>presentation tables</span> were found on this page, no data tables.";
 //This function updates the results in the ANDI Bar
 tANDI.results = function(objectClass){
 
@@ -266,7 +267,7 @@ tANDI.results = function(objectClass){
 
     andiBar.showElementControls();
     if(!andiBar.focusIsOnInspectableElement())
-        andiBar.showStartUpSummary("Only <span class='ANDI508-module-name-t'>presentation tables</span> were found on this page, no data tables.",true);
+        andiBar.showStartUpSummary(showStartUpSummaryText,true);
     else
         $("#ANDI508-pageAnalysis").show();
 

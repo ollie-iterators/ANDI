@@ -453,6 +453,7 @@ gANDI.images = new Images();
 gANDI.tableInfo = new TableInfo();
 
 gANDI.analyze(gANDI.images);
-gANDI.results(gANDI.images);
+//gANDI.results(gANDI.images);
+andiBar.results(gANDI.images, gANDI.tableInfo, [], startUpSummaryText);
 
 }//end init

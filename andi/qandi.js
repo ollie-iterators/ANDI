@@ -97,6 +97,7 @@ qANDI.analyze = function(objectClass){
     });
 };
 
+var showStartUpSummaryText = "List structure found.<br />Determine if the <span class='ANDI508-module-name-s'>list</span> container types used (ol, ul, li, dl, dd, dt, role=list, role=listitem) are appropriately applied.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 qANDI.results = function(objectClass){
 
@@ -236,7 +237,7 @@ qANDI.results = function(objectClass){
 
     if(!andiBar.focusIsOnInspectableElement()){
         andiBar.showElementControls();
-        andiBar.showStartUpSummary("List structure found.<br />Determine if the <span class='ANDI508-module-name-s'>list</span> container types used ("+listTypesUsed+") are appropriately applied.",true);
+        andiBar.showStartUpSummary(showStartUpSummaryText,true);
     }
 
     andiAlerter.updateAlertList();
@@ -352,6 +353,7 @@ qANDI.lists = new Lists();
 qANDI.tableInfo = new TableInfo();
 
 qANDI.analyze(qANDI.lists);
-qANDI.results(qANDI.lists);
+//qANDI.results(qANDI.lists);
+andiBar.results(qANDI.lists, qANDI.tableInfo, [], startUpSummaryText);
 
 }//end init

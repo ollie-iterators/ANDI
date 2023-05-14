@@ -41,6 +41,7 @@ rANDI.analyze = function(objectClass){
     });
 };
 
+var showStartUpSummaryText = "Landmark structure found.<br />Ensure that each <span class='ANDI508-module-name-s'>landmark</span> is applied appropriately to the corresponding section of the page.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 rANDI.results = function(objectClass){
 
@@ -166,7 +167,7 @@ rANDI.results = function(objectClass){
     andiBar.updateResultsSummary("Landmarks: "+objectClass.list.length);
     if(!andiBar.focusIsOnInspectableElement()){
         andiBar.showElementControls();
-        andiBar.showStartUpSummary("Landmark structure found.<br />Ensure that each <span class='ANDI508-module-name-s'>landmark</span> is applied appropriately to the corresponding section of the page.",true);
+        andiBar.showStartUpSummary(showStartUpSummaryText,true);
     }
 
     andiAlerter.updateAlertList();
@@ -282,6 +283,7 @@ rANDI.landmarks = new Landmarks();
 rANDI.tableInfo = new TableInfo();
 
 rANDI.analyze(rANDI.landmarks);
-rANDI.results(rANDI.landmarks);
+//rANDI.results(rANDI.landmarks);
+andiBar.results(rANDI.landmarks, rANDI.tableInfo, [], startUpSummaryText);
 
 }//end init

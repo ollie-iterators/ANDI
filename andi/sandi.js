@@ -59,6 +59,7 @@ sANDI.analyze = function(objectClass){
     });
 };
 
+var showStartUpSummaryText = "<span class='ANDI508-module-name-s'>Live regions</span> found.<br />Discover the Output of the <span class='ANDI508-module-name-s'>live regions</span> by hovering over the highlighted areas or using the next/previous buttons. For updated Output, refresh ANDI whenever the Live Region changes.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 sANDI.results = function(objectClass){
 
@@ -183,7 +184,7 @@ sANDI.results = function(objectClass){
     andiBar.updateResultsSummary("Live Regions: "+objectClass.list.length);
     if(!andiBar.focusIsOnInspectableElement()){
         andiBar.showElementControls();
-        andiBar.showStartUpSummary("<span class='ANDI508-module-name-s'>Live regions</span> found.<br />Discover the Output of the <span class='ANDI508-module-name-s'>live regions</span> by hovering over the highlighted areas or using the next/previous buttons. For updated Output, refresh ANDI whenever the Live Region changes.",true);
+        andiBar.showStartUpSummary(showStartUpSummaryText,true);
     }
 
     andiAlerter.updateAlertList();
@@ -340,5 +341,6 @@ sANDI.tableInfo = new TableInfo();
 
 sANDI.analyze(sANDI.liveRegions);
 sANDI.results(sANDI.liveRegions);
+andiBar.results(sANDI.liveRegions, sANDI.tableInfo, [], startUpSummaryText);
 
 }//end init

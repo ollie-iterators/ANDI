@@ -93,7 +93,7 @@ cANDI.analyze = function(objectClass){
     }
 };
 
-var startUpSummaryText = "";
+var startUpSummaryText = "Discover the <span class='ANDI508-module-name-c'>color contrast</span> for elements containing text.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 cANDI.results = function(objectClass){
 
@@ -209,7 +209,7 @@ cANDI.results = function(objectClass){
 
     if(!andiBar.focusIsOnInspectableElement()){
         andiBar.showElementControls();
-        andiBar.showStartUpSummary("Discover the <span class='ANDI508-module-name-c'>color contrast</span> for elements containing text.",true);
+        andiBar.showStartUpSummary(startUpSummaryText,true);
     }
     if(testPageData.disabledElementsCount > 0)
         andiAlerter.throwAlert(alert_0251,[testPageData.disabledElementsCount],0);
@@ -1008,6 +1008,7 @@ cANDI.contrasts = new Contrasts();
 cANDI.tableInfo = new TableInfo();
 
 cANDI.analyze(cANDI.contrasts);
-cANDI.results(cANDI.contrasts);
+//cANDI.results(cANDI.contrasts);
+andiBar.results(cANDI.contrasts, cANDI.tableInfo, [], startUpSummaryText);
 
 }//end init

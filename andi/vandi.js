@@ -234,6 +234,7 @@ vANDI.analyze = function(objectClass){
     }
 };
 
+var showStartUpSummaryText = "";
 //This function updates the results in the ANDI Bar
 vANDI.results = function(objectClass){
 
@@ -263,11 +264,10 @@ vANDI.results = function(objectClass){
 
     andiBar.showElementControls();
     if(!andiBar.focusIsOnInspectableElement()){
-        var startupMessage = "Discover accessibility markup for <span class='ANDI508-module-name-t'>tables</span> by tabbing to or hovering over the table cells. "+
+        showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-t'>tables</span> by tabbing to or hovering over the table cells. "+
             "Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every data table cell. ";
-        if(dataTablesCount + presentationTablesCount > 1)
-            startupMessage += "Tables should be tested one at a time - Press the next table button <img src='"+icons_url+"next-table.png' style='width:12px' alt='' /> to cycle through the tables.";
-        andiBar.showStartUpSummary(startupMessage,true);
+        showStartUpSummaryText += "Tables should be tested one at a time - Press the next table button <img src='"+icons_url+"next-table.png' style='width:12px' alt='' /> to cycle through the tables.";
+        andiBar.showStartUpSummary(showStartUpSummaryText,true);
     }
     else
         $("#ANDI508-pageAnalysis").show();
