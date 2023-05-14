@@ -1002,6 +1002,7 @@ function Contrasts() {
 function TableInfo() {
     this.tableMode = "Color Contrasts";
     this.cssProperties = [];
+    this.buttonTextList = [];
 }
 
 cANDI.contrasts = new Contrasts();

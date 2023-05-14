@@ -455,6 +455,7 @@ function PossibleHeaders() {
 function TableInfo() {
     this.tableMode = "Possible Headers";
     this.cssProperties = [];
+    this.buttonTextList = [];
 }
 
 pANDI.possibleHeaders = new PossibleHeaders();

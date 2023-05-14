@@ -330,6 +330,7 @@ function Focusables() {
 function TableInfo() {
     this.tableMode = "Focusable Elements";
     this.cssProperties = [];
+    this.buttonTextList = [];
 }
 
 fANDI.focusables = new Focusables();

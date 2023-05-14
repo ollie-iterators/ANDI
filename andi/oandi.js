@@ -422,9 +422,11 @@ function CertainHeaders() {
 function TableInfo() {
     this.tableMode = "Certain Headers";
     this.cssProperties = [];
+    this.buttonTextList = [];
 }
 
 oANDI.certainHeaders = new CertainHeaders();
+
 oANDI.tableInfo = new TableInfo();
 
 oANDI.analyze(oANDI.certainHeaders);

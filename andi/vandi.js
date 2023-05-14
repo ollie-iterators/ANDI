@@ -1637,6 +1637,7 @@ function DataTables() {
 function TableInfo() {
     this.tableMode = "Data Tables";
     this.cssProperties = [];
+    this.buttonTextList = [];
 }
 
 vANDI.dataTables = new DataTables();

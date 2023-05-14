@@ -334,6 +334,7 @@ function LiveRegions() {
 function TableInfo() {
     this.tableMode = "Live Regions";
     this.cssProperties = [];
+    this.buttonTextList = [];
 }
 
 sANDI.liveRegions = new LiveRegions();

@@ -994,6 +994,7 @@ function PresentationTables() {
 function TableInfo() {
     this.tableMode = "Presentation Tables";
     this.cssProperties = [];
+    this.buttonTextList = [];
 }
 
 uANDI.presentationTables = new PresentationTables();

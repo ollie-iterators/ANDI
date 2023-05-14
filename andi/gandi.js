@@ -446,6 +446,7 @@ function Images() {
 function TableInfo() {
     this.tableMode = "Images";
     this.cssProperties = [];
+    this.buttonTextList = [];
 }
 
 gANDI.images = new Images();

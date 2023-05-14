@@ -347,6 +347,7 @@ function Lists() {
 function TableInfo() {
     this.tableMode = "Lists";
     this.cssProperties = [];
+    this.buttonTextList = [];
 }
 
 qANDI.lists = new Lists();

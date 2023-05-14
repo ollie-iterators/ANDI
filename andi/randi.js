@@ -277,6 +277,7 @@ function Landmarks() {
 function TableInfo() {
     this.tableMode = "Landmarks";
     this.cssProperties = [];
+    this.buttonTextList = [];
 }
 
 rANDI.landmarks = new Landmarks();
