@@ -319,7 +319,14 @@ function Focusables() {
     this.columnNames        = ["element", "index", "offset", "isAriaHidden", "ariaLabel", "ariaLabelledby", "ariaLabeledby", "role", "id", "onBlur", "onChange", "onDblclick", "height", "width"];
 }
 
+// This object class is used to keep track of the table information
+function TableInfo() {
+    this.tableMode = "Focusable Elements";
+    this.cssProperties = [];
+}
+
 fANDI.focusables = new Focusables();
+fANDI.tableInfo = new TableInfo();
 
 fANDI.analyze(fANDI.focusables);
 fANDI.results(fANDI.focusables);

@@ -430,7 +430,14 @@ function Images() {
     this.columnNames = ["element", "index"];
 }
 
+// This object class is used to keep track of the table information
+function TableInfo() {
+    this.tableMode = "Images";
+    this.cssProperties = [];
+}
+
 gANDI.images = new Images();
+gANDI.tableInfo = new TableInfo();
 
 gANDI.analyze(gANDI.images);
 gANDI.results(gANDI.images);

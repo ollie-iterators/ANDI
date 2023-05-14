@@ -401,7 +401,7 @@ AndiModule.inspect = function(element){
     if($(element).hasClass("ANDI508-element")){
 
         //Highlight the row in the links list that associates with this element
-        lANDI.viewList_rowHighlight($(element).attr("data-andi508-index"));
+        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
 
         andiBar.prepareActiveElementInspection(element);
 
@@ -518,16 +518,6 @@ lANDI.viewList_toggle = function(mode, btn){
     }
 };
 
-//This function will highlight the text of the row.
-lANDI.viewList_rowHighlight = function(index){
-    $("#ANDI508-viewList-table tbody tr").each(function(){
-        $(this).removeClass("ANDI508-table-row-inspecting");
-        if($(this).find("th").first().html() == index){
-            $(this).addClass("ANDI508-table-row-inspecting");
-        }
-    });
-};
-
 //This function attaches the click,hover,focus events to the items in the view list
 lANDI.viewList_attachEvents = function(){
     //Add focus click to each link (output) in the table
@@ -606,7 +596,7 @@ lANDI.viewList_attachEvents = function(){
         }
 
         //Highlight the row in the links list that associates with this element
-        lANDI.viewList_rowHighlight(focusGoesOnThisIndex);
+        andiBar.viewList_rowHighlight(focusGoesOnThisIndex);
         $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function(){
             this.scrollIntoView();
         });
@@ -646,7 +636,7 @@ lANDI.viewList_attachEvents = function(){
         }
 
         //Highlight the row in the links list that associates with this element
-        lANDI.viewList_rowHighlight(focusGoesOnThisIndex);
+        andiBar.viewList_rowHighlight(focusGoesOnThisIndex);
         $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function(){
             this.scrollIntoView();
         });

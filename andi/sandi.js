@@ -328,7 +328,14 @@ function LiveRegions() {
     this.columnNames = ["element", "index"];
 }
 
+// This object class is used to keep track of the table information
+function TableInfo() {
+    this.tableMode = "Live Regions";
+    this.cssProperties = [];
+}
+
 sANDI.liveRegions = new LiveRegions();
+sANDI.tableInfo = new TableInfo();
 
 sANDI.analyze(sANDI.liveRegions);
 sANDI.results(sANDI.liveRegions);

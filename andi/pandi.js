@@ -450,7 +450,14 @@ function PossibleHeaders() {
     this.outlineReady = false;
 }
 
+// This object class is used to keep track of the table information
+function TableInfo() {
+    this.tableMode = "Possible Headers";
+    this.cssProperties = [];
+}
+
 pANDI.possibleHeaders = new PossibleHeaders();
+pANDI.tableInfo = new TableInfo();
 
 pANDI.analyze(pANDI.possibleHeaders);
 pANDI.results(pANDI.possibleHeaders);

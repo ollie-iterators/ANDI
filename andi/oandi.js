@@ -417,7 +417,14 @@ function init_module(){
         this.outlineReady = false;
     }
 
+    // This object class is used to keep track of the table information
+    function TableInfo() {
+        this.tableMode = "Certain Headers";
+        this.cssProperties = [];
+    }
+
     oANDI.certainHeaders = new CertainHeaders();
+    oANDI.tableInfo = new TableInfo();
 
     oANDI.analyze(oANDI.certainHeaders);
     oANDI.results(oANDI.certainHeaders);

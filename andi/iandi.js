@@ -155,7 +155,14 @@ function iFrames() {
     this.columnNames = ["element", "index", "src"];
 }
 
+// This object class is used to keep track of the table information
+function TableInfo() {
+    this.tableMode = "iFrames";
+    this.cssProperties = [];
+}
+
 iANDI.iFrames = new iFrames();
+iANDI.tableInfo = new TableInfo();
 
 iANDI.analyze(iANDI.iFrames);
 iANDI.results(iANDI.iFrames);

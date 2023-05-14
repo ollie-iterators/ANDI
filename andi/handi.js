@@ -544,7 +544,14 @@ function HiddenElements() {
     this.columnNames       = ["element", "index", "hidingTypes"];
 }
 
+// This object class is used to keep track of the table information
+function TableInfo() {
+    this.tableMode = "Hidden Elements";
+    this.cssProperties = [];
+}
+
 hANDI.hiddenElements = new HiddenElements();
+hANDI.tableInfo = new TableInfo();
 
 hANDI.analyze(hANDI.hiddenElements);
 hANDI.results(hANDI.hiddenElements);

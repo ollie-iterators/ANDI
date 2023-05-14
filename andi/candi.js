@@ -983,8 +983,11 @@ function Contrast(element, index, rowClass) {
 }
 
 //This object class is used to keep track of the color contrast of the elements on the page
+//: 0 - count, 1 - numImages, 2 - elementsWithText
 function Contrasts() {
     this.list             = [];
+    this.elementNums      = [];
+    this.elementStrings   = [];
     this.numImages        = 0;
     this.elementsWithText = 0;
     this.count            = 0;
@@ -992,7 +995,14 @@ function Contrasts() {
     this.columnNames      = ["element", "index"];
 }
 
+// This object class is used to keep track of the table information
+function TableInfo() {
+    this.tableMode = "Color Contrasts";
+    this.cssProperties = [];
+}
+
 cANDI.contrasts = new Contrasts();
+cANDI.tableInfo = new TableInfo();
 
 cANDI.analyze(cANDI.contrasts);
 cANDI.results(cANDI.contrasts);

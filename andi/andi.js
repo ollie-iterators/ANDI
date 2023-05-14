@@ -335,13 +335,6 @@ AndiModule.launchModule = function(module){
     },1);//end setTimeout
 };
 
-//This function will hide the module corresponding to the letter passed in
-//unless the active module is the letter passed in
-AndiModule.disableModuleButton = function(letter){
-    if(AndiModule.module != letter) //This prevents disabling the module that is currently selected when no corresponding
-        $("#ANDI508-moduleMenu-button-"+letter).addClass("ANDI508-moduleMenu-unavailable");
-};
-
 //================//
 // ALERT MESSAGES //
 //================//
@@ -524,21 +517,37 @@ function andiReady(){
 
         var moduleButtons = "<div id='ANDI508-moduleMenu' role='menu' aria-label='Select a Module'><div id='ANDI508-moduleMenu-prompt'>Select Module:</div>"+
             //Default (fANDI)
-            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-f'>focusable elements</button>"+
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-f' aria-label='focusable images'>focusable elements</button>"+
             //gANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-g' aria-label='graphics slash images'>graphics/images</button>"+
             //lANDI
-            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-l' aria-label='links slash buttons'>links/buttons</button>"+
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-l' aria-label='certain links'>certain links</button>"+
+            //mANDI
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-m' aria-label='possible links'>possible links</button>"+
+            //nANDI
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-n' aria-label='buttons'>buttons</button>"+
             //tANDI
-            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-t'>tables</button>"+
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-t' aria-label='presentation tables'>presentation tables</button>"+
+            //uANDI
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-u' aria-label='strange tables'>strange tables</button>"+
+            //vANDI
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-v' aria-label='data tables'>data tables</button>"+
+            //oANDI
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-o' aria-label='certain headers'>certain headers</button>"+
+            //pANDI
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-p' aria-label='possible headers'>possible headers</button>"+
+            //qANDI
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-q' aria-label='lists'>lists</button>"+
+            //rANDI
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-r' aria-label='landmarks'>landmarks</button>"+
             //sANDI
-            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-s'>structures</button>"+
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-s' aria-label='live regions'>live regions</button>"+
             //cANDI
-            ((!oldIE) ? "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-c'>color contrast</button>" : "")+
+            ((!oldIE) ? "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-c' aria-label='color contrast'>color contrast</button>" : "")+
             //hANDI
-            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-h'>hidden content</button>"+
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-h' aria-label='hidden content'>hidden content</button>"+
             //iANDI
-            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-i'>iframes</button>"+
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-i' aria-label='iframes'>iframes</button>"+
             "</div>";
 
         var andiBar = "<section id='ANDI508' tabindex='-1' aria-label='ANDI' style='display:none'>"+
@@ -4122,4 +4131,161 @@ var oldIE = false; //used to determine if old version of IE is being used.
     else{ //sufficient version of jQuery already exists
         launchAndi(); //initialize ANDI
     }
+
+    // This is where the code that I changed is going to go so that it does not impact
+    // The spacing of the code above.
+
+    //This function will highlight the text of the row.
+    andiBar.viewList_rowHighlight = function(index){
+        $("#ANDI508-viewList-table tbody tr").each(function(){
+            $(this).removeClass("ANDI508-table-row-inspecting");
+            if($(this).find("th").first().html() == index){
+                $(this).addClass("ANDI508-table-row-inspecting");
+            }
+        });
+    };
+
+    //This function attaches the hover and focus events to the items in the view list
+    andiBar.viewList_attachFocusEvents = function (eventClass = "#ANDI508-viewList-table td") {
+        //Add focus click to each output in the table
+        $(eventClass + " a[data-andi508-relatedindex]").each(function () {
+            andiFocuser.addFocusClick($(this));
+            var relatedElement = $("#ANDI508-testPage [data-andi508-index=" + $(this).attr("data-andi508-relatedindex") + "]").first();
+            andiLaser.createLaserTrigger($(this), $(relatedElement));
+            $(this)
+            .hover(function () {
+                if (!event.shiftKey) {
+                    AndiModule.inspect(relatedElement[0]);
+                }
+            })
+            .focus(function () {
+                AndiModule.inspect(relatedElement[0]);
+            });
+        });
+    }
+
+    //This function attaches the hover and focus events to the items in the view list
+    this.viewList_attachFocusEvents = function (eventClass = "#ANDI508-viewList-table td") {
+        //Add focus click to each output in the table
+        $(eventClass + " a[data-andi508-relatedindex]").each(function () {
+            andiFocuser.addFocusClick($(this));
+            var relatedElement = $("#ANDI508-testPage [data-andi508-index=" + $(this).attr("data-andi508-relatedindex") + "]").first();
+            andiLaser.createLaserTrigger($(this), $(relatedElement));
+            $(this)
+            .hover(function () {
+                if (!event.shiftKey) {
+                    AndiModule.inspect(relatedElement[0]);
+                }
+            })
+            .focus(function () {
+                AndiModule.inspect(relatedElement[0]);
+            });
+        });
+    }
+    andiBar.viewList_attachSortEvent = function () {
+        //This will define the click logic for the table sorting.
+        //Table sorting does not use aria-sort because .removeAttr("aria-sort") crashes in old IE
+        $("#ANDI508-viewList-table th a").click(function () {
+            var table = $(this).closest("table");
+            $(table).find("th").find("i").html("")
+                .end().find("a");//remove all arrow
+
+                var rows = $(table).find("tr:gt(0)").toArray().sort(sortCompare($(this).parent().index()));
+                this.asc = !this.asc;
+                if (!this.asc) {
+                    rows = rows.reverse();
+                    $(this).attr("title", "descending")
+                        .parent().find("i").html("&#9650;");//up arrow
+                } else {
+                    $(this).attr("title", "ascending")
+                        .parent().find("i").html("&#9660;");//down arrow
+                }
+                for (var i = 0; i < rows.length; i += 1) {
+                    $(table).append(rows[i]);
+                }
+                //Table Sort Functionality
+                function sortCompare(index) {
+                    return function(a, b) {
+                        var valA = getCellValue(a, index);
+                        var valB = getCellValue(b, index);
+                        return !isNaN(valA) && !isNaN(valB) ? valA - valB : valA.localeCompare(valB);
+                    };
+                    function getCellValue(row, index) {
+                        return $(row).children("td,th").eq(index).text();
+                    }
+                }
+            });
+        }
+
+    //This function attaches the button events to the items in the view list
+    andiBar.viewList_attachButtonEvents = function () {
+        //Define tableANDI508-viewList-button-next button
+        $("#tableANDI508-viewList-button-next").click(function () {
+            //Get class name based on selected tab
+            var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
+            var focusGoesOnThisIndex;
+
+            if (index == testPageData.andiElementIndex || isNaN(index)) {
+                //No elements being inspected yet, get first element according to selected tab
+                focusGoesOnThisIndex = $("#ANDI508-testPage .ANDI508-element").first().attr("data-andi508-index");
+                andiFocuser.focusByIndex(focusGoesOnThisIndex);//loop back to first
+            } else {
+                //Find the next element with class from selected tab and data-andi508-index
+                //This will skip over elements that may have been removed from the DOM
+                for (var x = index; x < testPageData.andiElementIndex; x += 1) {
+                    //Get next element within set of selected tab type
+                    if ($("#ANDI508-testPage .ANDI508-element[data-andi508-index='" + (x + 1) + "']").length) {
+                        focusGoesOnThisIndex = x + 1;
+                        andiFocuser.focusByIndex(focusGoesOnThisIndex);
+                        break;
+                    }
+                }
+            }
+
+            //Highlight the row in the list that associates with this element
+            andiResults.viewList_rowHighlight(focusGoesOnThisIndex);
+            $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function () {
+                this.scrollIntoView();
+            });
+
+            return false;
+        });
+
+        //Define tableANDI508-viewList-button-prev button
+        $("#tableANDI508-viewList-button-prev").click(function () {
+            //Get class name based on selected tab
+            var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
+            var firstElementInListIndex = $("#ANDI508-testPage .ANDI508-element").first().attr("data-andi508-index");
+            var focusGoesOnThisIndex;
+
+            if (isNaN(index)) {//no active element yet
+                //get first element according to selected tab
+                andiFocuser.focusByIndex(firstElementInListIndex);//loop back to first
+                focusGoesOnThisIndex = firstElementInListIndex;
+            } else if (index == firstElementInListIndex) {
+                //Loop to last element in list
+                focusGoesOnThisIndex = $("#ANDI508-testPage .ANDI508-element").last().attr("data-andi508-index");
+                andiFocuser.focusByIndex(focusGoesOnThisIndex);//loop back to last
+            } else {
+                //Find the previous element with class from selected tab and data-andi508-index
+                //This will skip over elements that may have been removed from the DOM
+                for (var x = index; x > 0; x -= 1) {
+                    //Get next element within set of selected tab type
+                    if ($("#ANDI508-testPage .ANDI508-element[data-andi508-index='" + (x - 1) + "']").length) {
+                        focusGoesOnThisIndex = x - 1;
+                        andiFocuser.focusByIndex(focusGoesOnThisIndex);
+                        break;
+                    }
+                }
+            }
+
+            //Highlight the row in the list that associates with this element
+            andiResults.viewList_rowHighlight(focusGoesOnThisIndex);
+            $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function () {
+                this.scrollIntoView();
+            });
+
+            return false;
+        });
+    };
 })();

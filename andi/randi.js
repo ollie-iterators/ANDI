@@ -272,7 +272,14 @@ function Landmarks() {
     this.columnNames = ["element", "index"];
 }
 
+// This object class is used to keep track of the table information
+function TableInfo() {
+    this.tableMode = "Landmarks";
+    this.cssProperties = [];
+}
+
 rANDI.landmarks = new Landmarks();
+rANDI.tableInfo = new TableInfo();
 
 rANDI.analyze(rANDI.landmarks);
 rANDI.results(rANDI.landmarks);

@@ -989,7 +989,14 @@ function PresentationTables() {
     this.columnNames = ["element", "index", "role", "name"];
 }
 
+// This object class is used to keep track of the table information
+function TableInfo() {
+    this.tableMode = "Presentation Tables";
+    this.cssProperties = [];
+}
+
 uANDI.presentationTables = new PresentationTables();
+uANDI.tableInfo = new TableInfo();
 
 //analyze tables
 uANDI.analyze(uANDI.presentationTables);

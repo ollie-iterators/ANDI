@@ -301,11 +301,35 @@ body.ANDI508-testPage
 #ANDI508.ANDI508-module-t #ANDI508-module-name,
 #ANDI508.ANDI508-module-t #ANDI508-module-actions button.ANDI508-module-action-active
 	{color:#febadc !important;} /*ffc1fb*/
+/*uANDI*/
+#ANDI508 .ANDI508-module-name-u,
+#ANDI508 #ANDI508-moduleMenu-button-u,
+#ANDI508.ANDI508-module-u #ANDI508-module-name,
+#ANDI508.ANDI508-module-u #ANDI508-module-actions button.ANDI508-module-action-active
+	{color:#febadc !important;} /*ffc1fb*/
+/*tANDI*/
+#ANDI508 .ANDI508-module-name-v,
+#ANDI508 #ANDI508-moduleMenu-button-v,
+#ANDI508.ANDI508-module-v #ANDI508-module-name,
+#ANDI508.ANDI508-module-v #ANDI508-module-actions button.ANDI508-module-action-active
+	{color:#febadc !important;} /*ffc1fb*/
 /*lANDI*/
 #ANDI508 .ANDI508-module-name-l,
 #ANDI508 #ANDI508-moduleMenu-button-l,
 #ANDI508.ANDI508-module-l #ANDI508-module-name,
 #ANDI508.ANDI508-module-l #ANDI508-module-actions button.ANDI508-module-action-active
+	{color:#a4e8ff !important;} /*c5c5ff*/
+/*mANDI*/
+#ANDI508 .ANDI508-module-name-m,
+#ANDI508 #ANDI508-moduleMenu-button-m,
+#ANDI508.ANDI508-module-m #ANDI508-module-name,
+#ANDI508.ANDI508-module-m #ANDI508-module-actions button.ANDI508-module-action-active
+	{color:#a4e8ff !important;} /*c5c5ff*/
+/*nANDI*/
+#ANDI508 .ANDI508-module-name-n,
+#ANDI508 #ANDI508-moduleMenu-button-n,
+#ANDI508.ANDI508-module-n #ANDI508-module-name,
+#ANDI508.ANDI508-module-n #ANDI508-module-actions button.ANDI508-module-action-active
 	{color:#a4e8ff !important;} /*c5c5ff*/
 /*gANDI*/
 #ANDI508 .ANDI508-module-name-g,
@@ -313,6 +337,30 @@ body.ANDI508-testPage
 #ANDI508.ANDI508-module-g #ANDI508-module-name,
 #ANDI508.ANDI508-module-g #ANDI508-module-actions button.ANDI508-module-action-active
 	{color:#9fe3b0 !important;} /*d9ffc5*/
+/*oANDI*/
+#ANDI508 .ANDI508-module-name-o,
+#ANDI508 #ANDI508-moduleMenu-button-o,
+#ANDI508.ANDI508-module-o #ANDI508-module-name,
+#ANDI508.ANDI508-module-o #ANDI508-module-actions button.ANDI508-module-action-active
+	{color:#cbbaff !important;} /*daa6ff*/
+/*pANDI*/
+#ANDI508 .ANDI508-module-name-p,
+#ANDI508 #ANDI508-moduleMenu-button-p,
+#ANDI508.ANDI508-module-p #ANDI508-module-name,
+#ANDI508.ANDI508-module-p #ANDI508-module-actions button.ANDI508-module-action-active
+	{color:#cbbaff !important;} /*daa6ff*/
+/*qANDI*/
+#ANDI508 .ANDI508-module-name-q,
+#ANDI508 #ANDI508-moduleMenu-button-q,
+#ANDI508.ANDI508-module-q #ANDI508-module-name,
+#ANDI508.ANDI508-module-q #ANDI508-module-actions button.ANDI508-module-action-active
+	{color:#cbbaff !important;} /*daa6ff*/
+/*rANDI*/
+#ANDI508 .ANDI508-module-name-r,
+#ANDI508 #ANDI508-moduleMenu-button-r,
+#ANDI508.ANDI508-module-r #ANDI508-module-name,
+#ANDI508.ANDI508-module-r #ANDI508-module-actions button.ANDI508-module-action-active
+	{color:#cbbaff !important;} /*daa6ff*/
 /*sANDI*/
 #ANDI508 .ANDI508-module-name-s,
 #ANDI508 #ANDI508-moduleMenu-button-s,

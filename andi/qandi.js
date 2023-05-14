@@ -326,7 +326,14 @@ function Lists() {
     this.columnNames       = ["element", "index"];
 }
 
+// This object class is used to keep track of the table information
+function TableInfo() {
+    this.tableMode = "Lists";
+    this.cssProperties = [];
+}
+
 qANDI.lists = new Lists();
+qANDI.tableInfo = new TableInfo();
 
 qANDI.analyze(qANDI.lists);
 qANDI.results(qANDI.lists);
