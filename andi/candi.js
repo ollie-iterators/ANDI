@@ -18,19 +18,22 @@ AndiModule.initActiveActionButtons({
 
 //This function will run tests on text containing elements
 cANDI.analyze = function(objectClass){
+    objectClass = andiBar.createObjectValues(objectClass, 3);
 
     //Elements that are disabled or have aria-disabled="true" do not need to be tested
     $(TestPageData.allElements).filter("*:not(option)").each(function(){
 
         if($(this).is("img[src],input:image[src],svg,canvas")){
-            objectClass.numImages++;
+            objectClass.elementNums[1] += 1;
+            objectClass.elementStrings[1] = "images";
         }
         else{
             if(hasTextExcludingChildren(this)){
                 if(!hasAdditionalHidingTechniques(this)){
                     //Element is not hidden and contains text.
 
-                    objectClass.elementsWithText++;
+                    objectClass.elementNums[2] += 1;
+                    objectClass.elementStrings[2] = "elements with text";
 
                     //Try to get the contrast ratio automatically
                     var cANDI_data = cANDI.getContrast($(this));
@@ -42,7 +45,10 @@ cANDI.analyze = function(objectClass){
 
                         //Throw alerts if necessary
                         cANDI.processResult($(this));
-
+                        objectClass.list.push(new Contrast(this, objectClass.index, ""));
+                        objectClass.index += 1;
+                        objectClass.elementNums[0] += 1;
+                        objectClass.elementStrings[0] = "color contrast elements"
                         AndiData.attachDataToElement(this);
                     }
                     else
@@ -87,12 +93,13 @@ cANDI.analyze = function(objectClass){
     }
 };
 
+var startUpSummaryText = "";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 cANDI.results = function(objectClass){
 
-    andiBar.updateResultsSummary("Elements Containing Text: "+objectClass.elementsWithText);
+    andiBar.updateResultsSummary("Elements Containing Text: "+objectClass.elementNums[2]);
 
-    if(objectClass.numImages > 0)
+    if(objectClass.elementNums[1] > 0)
         andiAlerter.throwAlert(alert_0231,alert_0231.message,0);
 
     //Contrast Playground HTML
@@ -983,16 +990,12 @@ function Contrast(element, index, rowClass) {
 }
 
 //This object class is used to keep track of the color contrast of the elements on the page
-//: 0 - count, 1 - numImages, 2 - elementsWithText
 function Contrasts() {
-    this.list             = [];
-    this.elementNums      = [];
-    this.elementStrings   = [];
-    this.numImages        = 0;
-    this.elementsWithText = 0;
-    this.count            = 0;
-    this.index            = 1;
-    this.columnNames      = ["element", "index"];
+    this.list           = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
+    this.index          = 1;
+    this.columnNames    = ["element", "index"];
 }
 
 // This object class is used to keep track of the table information

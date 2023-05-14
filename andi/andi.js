@@ -4135,157 +4135,530 @@ var oldIE = false; //used to determine if old version of IE is being used.
     // This is where the code that I changed is going to go so that it does not impact
     // The spacing of the code above.
 
-    //This function will highlight the text of the row.
-    andiBar.viewList_rowHighlight = function(index){
-        $("#ANDI508-viewList-table tbody tr").each(function(){
-            $(this).removeClass("ANDI508-table-row-inspecting");
-            if($(this).find("th").first().html() == index){
-                $(this).addClass("ANDI508-table-row-inspecting");
-            }
-        });
+    andiBar.createObjectValues = function (moduleList, numOfElementTypes) {
+        for(var i = 0; i < numOfElementTypes; i++) {
+            moduleList.elementNums.push(0);
+            moduleList.elementStrings.push("");
+        }
+        return moduleList;
+    }
+
+    //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
+    //Inserts some counter totals, displays the accesskey list
+    andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
+        $("#ANDI508-resultsSummary-heading").html(tableModule.tableMode + " Found: " + moduleList.elementNums[0]);
+
+        andiResults.buildResultsDetails(moduleList);
+
+        for (var b = 0; b < tableModule.buttonTextList.length; b += 1) {
+            andiResults.addButton(tableModule.buttonTextList[b]);
+        }
+
+        andiResults.addElementListButton(tableModule.tableMode);
+
+        andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
+
+        andiBar.focusIsOnInspectableElement()
+        $("#ANDI508-elementControls button").css("display", "inline-block");
+        andiBar.showStartUpSummary(startUpSummaryText, true);
+
+        andiAlerter.updateAlertList();
+
+        $("#ANDI508").focus();
     };
 
-    //This function attaches the hover and focus events to the items in the view list
-    andiBar.viewList_attachFocusEvents = function (eventClass = "#ANDI508-viewList-table td") {
-        //Add focus click to each output in the table
-        $(eventClass + " a[data-andi508-relatedindex]").each(function () {
-            andiFocuser.addFocusClick($(this));
-            var relatedElement = $("#ANDI508-testPage [data-andi508-index=" + $(this).attr("data-andi508-relatedindex") + "]").first();
-            andiLaser.createLaserTrigger($(this), $(relatedElement));
-            $(this)
-            .hover(function () {
-                if (!event.shiftKey) {
-                    AndiModule.inspect(relatedElement[0]);
-                }
-            })
-            .focus(function () {
-                AndiModule.inspect(relatedElement[0]);
-            });
-        });
-    }
+    //This object handles the creating of the results table
+    function AndiResults() {
+        this.buildResultsDetails = function(moduleList) {
+            var resultsDetails = "";
 
-    //This function attaches the hover and focus events to the items in the view list
-    this.viewList_attachFocusEvents = function (eventClass = "#ANDI508-viewList-table td") {
-        //Add focus click to each output in the table
-        $(eventClass + " a[data-andi508-relatedindex]").each(function () {
-            andiFocuser.addFocusClick($(this));
-            var relatedElement = $("#ANDI508-testPage [data-andi508-index=" + $(this).attr("data-andi508-relatedindex") + "]").first();
-            andiLaser.createLaserTrigger($(this), $(relatedElement));
-            $(this)
-            .hover(function () {
-                if (!event.shiftKey) {
-                    AndiModule.inspect(relatedElement[0]);
+            for (var x = 1; x < moduleList.elementNums.length; x += 1) {
+                if (moduleList.elementStrings[x] != "") {
+                    resultsDetails += ", " + moduleList.elementNums[x] + " " + moduleList.elementStrings[x];
                 }
-            })
-            .focus(function () {
-                AndiModule.inspect(relatedElement[0]);
-            });
-        });
-    }
-    andiBar.viewList_attachSortEvent = function () {
-        //This will define the click logic for the table sorting.
-        //Table sorting does not use aria-sort because .removeAttr("aria-sort") crashes in old IE
-        $("#ANDI508-viewList-table th a").click(function () {
-            var table = $(this).closest("table");
-            $(table).find("th").find("i").html("")
-                .end().find("a");//remove all arrow
+            }
 
-                var rows = $(table).find("tr:gt(0)").toArray().sort(sortCompare($(this).parent().index()));
-                this.asc = !this.asc;
-                if (!this.asc) {
-                    rows = rows.reverse();
-                    $(this).attr("title", "descending")
-                        .parent().find("i").html("&#9650;");//up arrow
+            if (resultsDetails.length > 0) {
+                resultsDetails = resultsDetails.slice(2);
+
+                $("#ANDI508-additionalPageResults").append("<p tabindex='0'>" + resultsDetails + "</p>");
+            }
+        }
+        this.addElementListButton = function (buttonText, buttonClass = "ANDI508-viewOtherResults-button", pageClass = "#ANDI508-additionalPageResults") {
+            var buttonId = buttonText.replace(/ /g, "");
+            var button = "<button id='ANDI508-view" + buttonId + "List-button' class='" + buttonClass + "' aria-label='View " + buttonText + " List' aria-expanded='false'>" + listIcon + "View " + buttonText + " List</button>";
+
+            $(pageClass).append(button);
+        }
+        this.addElementListButtonLogic = function (moduleList, tableModule, attributesAdded) {
+            var elementListString = tableModule.tableMode.replace(" ", "");
+
+            //View Elements List Button
+            $("#ANDI508-view" + elementListString + "List-button").click(function () {
+                if ($(this).attr("aria-expanded") === "false") {
+                    andiResults.viewList_buildTable(moduleList, tableModule, attributesAdded);
+                    andiResults.viewList_attachFocusEvents();
+                    andiResults.viewList_attachSortEvent();
+                    andiResults.viewList_attachButtonEvents();
+                }
+                andiResults.viewList_toggle(tableModule.tableMode, this, "viewList");
+                andiResetter.resizeHeights();
+                return false;
+            });
+        }
+        //This function builds the table for the view list
+        // TODO: Make the code so that it works even if there are no elements found
+        //       on the website being tested.
+        this.viewList_buildTable = function (moduleList, tableModule, attributesAdded = [], tableHeaderValue = "", moduleClass = "viewList") {
+            var tableHTML = "";
+            var tableHeader = "";
+            var mode = tableModule.tableMode;
+
+            // NOTE: The function andiBar.findEvents can probably be used to get events.
+
+            // NOTE: onblur, onchange, and ondblclick need to be moved to new dictionary about .is("")
+            //       onblur, onchange, and ondblclick are used in fANDI
+
+            // NOTE: mANDI used onkeydown and onkeyup.
+
+            // NOTE: Create list of error attributes that are used for certain tests for modules.
+
+            if (tableHeaderValue == "") {
+                tableHeader = mode + " List";
+            } else {
+                tableHeader = tableHeaderValue;
+            }
+
+            var appendHTML = andiResults.viewList_buildTableHTML(tableHeader, moduleClass);
+            var nextPrevHTML = "<button id='tableANDI508-" + moduleClass + "-button-prev' aria-label='Previous Item in the list' accesskey='" + andiHotkeyList.key_prev.key + "'><img src='" + icons_url + "prev.png' alt='' /></button>" +
+                            "<button id='tableANDI508-" + moduleClass + "-button-next' aria-label='Next Item in the list'  accesskey='" + andiHotkeyList.key_next.key + "'><img src='" + icons_url + "next.png' alt='' /></button>" +
+                            "</div>" +
+                            "<div class='ANDI508-scrollable'><table id='ANDI508-" + moduleClass + "-table' aria-label='" + mode + " List' tabindex='-1'><thead><tr>";
+
+            if (moduleList.list.length > 0) {
+                // Build the column name
+                var columnName = "";
+
+                var attributesToAdd = [];
+                for (var x = 0; x < 1; x += 1) {
+                    if (moduleList.list[x].elementList[0].hasAttributes()) {
+                        var attrs = moduleList.list[x].elementList[0].getAttributeNames();
+                        for (var a = 0; a < attrs.length; a += 1) {
+                            if (attrs[a].includes("data-andi508-")) {
+                                var attrsFixed = attrs[a].replace("data-andi508", "");
+                                if (attrsFixed != "-index") {
+                                    if (String(attrsFixed).charAt(0).includes("-")) {
+                                        if (!attributesToAdd.includes(String(attrsFixed))) {
+                                            attributesToAdd.push(String(attrsFixed));
+                                        }
+                                    } else {
+                                        if (!attributesToAdd.includes(String(attrsFixed))) {
+                                            if (!attributesToAdd.includes("-" + String(attrsFixed))) {
+                                                attributesToAdd.push(String(attrsFixed));
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+                for (var a = 0; a < attributesAdded.length; a += 1) {
+                    if (!attributesToAdd.includes(attributesAdded[a])) {
+                        if (!attributesToAdd.includes("-" + String(attributesAdded[a]))) {
+                            attributesToAdd.push(String(attributesAdded[a]));
+                        }
+                    }
+                }
+
+                for (var x = 0; x < moduleList.columnNames.length; x += 1) {
+                    columnName += ", [" + moduleList.columnNames[x] + "]";
+                }
+
+                for (var x = 0; x < attributesToAdd.length; x += 1) {
+                    var valueToAdd;
+                    if (String(attributesToAdd[x]).charAt(0) == "-") {
+                        valueToAdd = String(attributesToAdd[x]).substring(1);
+                    } else {
+                        valueToAdd = String(attributesToAdd[x]);
+                    }
+                    columnName += ", [" + valueToAdd + "]";
+                }
+
+                columnName = columnName.slice(2);
+
+                // Build the table
+                for (var x = 0; x < moduleList.list.length; x += 1) {
+                    var rowValues = ""
+                    for (var r = 0; r < moduleList.list[x].columnValues.length; r += 1) {
+                        if (String(moduleList.list[x].columnValues[r]).charAt(0) == "[") {
+                            rowValues += ", " + moduleList.list[x].columnValues[r];
+                        } else {
+                            rowValues += ", [" + moduleList.list[x].columnValues[r] + "]";
+                        }
+                    }
+                    for (var r = 0; r < attributesToAdd.length; r += 1) {
+                        var attributeInList;
+                        if (String(attributesToAdd[r]).charAt(0) == "-") {
+                            attributeInList = "data-andi508" + String(attributesToAdd[r]);
+                        } else {
+                            attributeInList = String(attributesToAdd[r]);
+                        }
+                        var attributeToFind = $(moduleList.list[x].elementList[0]).attr(attributeInList);
+                        if (String(attributeToFind).charAt(0) == "[") {
+                            rowValues += ", " + String(attributeToFind);
+                        } else {
+                            rowValues += ", [" + String(attributeToFind) + "]";
+                        }
+                    }
+                    for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
+                        for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
+                            if (String($(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r])).charAt(0) == "[") {
+                                rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]);
+                            } else {
+                                rowValues += ", [" + $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]) + "]";
+                            }
+                        }
+                    }
+
+                    rowValues = rowValues.slice(2);
+
+                    tableHTML += "<tr class='" + $.trim(moduleList.list[x].rowClass) + "'><th scope='row'>" + moduleList.list[x].index + "</th><td>" +
+                                "<a href='javascript:void(0)' data-andi508-relatedindex='" + moduleList.list[x].index + "'>" + rowValues + "</a></td></tr>";
+                }
+
+                var tabsHTML = andiBar.addTabsButtons(tableModule);
+
+                if (tabsHTML != "") {
+                    appendHTML += tabsHTML;
+                }
+
+                appendHTML += nextPrevHTML + "<th scope='col' style='width:5%'><a href='javascript:void(0)' aria-label='" + mode.slice(0, -1) + " number'>#<i aria-hidden='true'></i></a></th>" +
+                "<th scope='col' style='width:95%'><a href='javascript:void(0)'>" + columnName + "<i aria-hidden='true'></i></a></th>";
+
+                $("#ANDI508-additionalPageResults").append(appendHTML + "</tr></thead><tbody>" + tableHTML + "</tbody></table></div></div>");
+
+                for (var x = 0; x < tableModule.tabsTextList.length; x += 1) {
+                    andiResults.addTabsButtonLogic(tableModule.tableModuleName, tableModule.tabsTextList[x], tableModule.tableMode, "viewList", tableModule.tabsTextList[x])
+                }
+
+                andiResults.addNextTabButtonLogic();
+
+                andiResults.initializeModuleActionGroups("ANDI508-additionalPageResults");
+            }
+        }
+        //This function builds the table HTML
+        this.viewList_buildTableHTML = function (tableHeader = "", moduleClass = "viewList", isFirst = false) {
+            var appendHTML = "<div id='ANDI508-" + moduleClass + "' class='ANDI508-viewOtherResults-expanded'"
+
+            if (isFirst) {
+                // NOTE: If the code fails, try adding: style='display:none;'> to the code below
+                appendHTML += " tabindex='0'>";
+            } else {
+                appendHTML += " style='display:none;'>";
+            }
+
+            if (tableHeader != "") {
+                appendHTML += "<h3 tabindex='-1' id='tableANDI508-" + moduleClass + "'>" + tableHeader + "</h3>";
+            }
+
+            appendHTML += "<div id='ANDI508-" + moduleClass + "-tabs'>";
+
+            return appendHTML;
+        }
+        //This function handles the selection of a tab.
+        this.viewList_selectTab = function (tab, buttonClass) {
+            $("#ANDI508-" + buttonClass + "-tabs button").removeClass().attr("aria-selected", "false");
+            $(tab).addClass("ANDI508-tab-active").attr("aria-selected", "true");
+        };
+
+        this.viewList_toggle = function (mode, btn, buttonClass, addClass = "") {
+            var origClass = "ANDI508-viewOtherResults-button-expanded";
+            var classToAdd = origClass + " " + addClass;
+            if ($(btn).attr("aria-expanded") === "false") {
+                //show List, hide alert list
+                $("#ANDI508-alerts-list").hide();
+                andiSettings.minimode(false);
+
+                var buttonHideText = listIcon + "Hide " + mode + " List";
+
+                $(btn)
+                    .addClass($.trim(classToAdd))
+                    .html($.trim(buttonHideText))
+                    .attr("aria-expanded", "true")
+                    .find("img").attr("src", icons_url + "list-on.png");
+                $("#ANDI508-" + buttonClass).slideDown(50).focus();
+            } else {
+                //hide List, show alert list
+                $("#ANDI508-" + buttonClass).slideUp(50);
+                $("#ANDI508-resultsSummary").show();
+
+                $("#ANDI508-alerts-list").show();
+
+                var buttonViewText = listIcon + "View " + mode + " List";
+
+                if (addClass == "") {
+                    $(btn)
+                    .removeClass($.trim(classToAdd))
+                    .html($.trim(buttonViewText))
+                    .attr("aria-expanded", "false");
                 } else {
-                    $(this).attr("title", "ascending")
-                        .parent().find("i").html("&#9660;");//down arrow
+                    $(btn)
+                    .removeClass($.trim(classToAdd))
+                    .html($.trim(buttonViewText))
+                    .attr("aria-expanded", "false")
+                    .addClass(origClass);
                 }
-                for (var i = 0; i < rows.length; i += 1) {
-                    $(table).append(rows[i]);
-                }
-                //Table Sort Functionality
-                function sortCompare(index) {
-                    return function(a, b) {
-                        var valA = getCellValue(a, index);
-                        var valB = getCellValue(b, index);
-                        return !isNaN(valA) && !isNaN(valB) ? valA - valB : valA.localeCompare(valB);
-                    };
-                    function getCellValue(row, index) {
-                        return $(row).children("td,th").eq(index).text();
+            }
+        }
+        this.alterTable = function (module, buttonClass, buttonType, buttonText) {
+            $("#ANDI508-" + buttonClass + "-table tbody tr").each(function () {
+                var tabsClassCondition = "list" + buttonType + "-" + buttonText.toLowerCase();
+
+                if (tabsClassCondition.includes("all")) {
+                    $(this).show();
+                } else {
+                    classToCheckFor = module + "508-" + tabsClassCondition;
+                    if ($(this).hasClass(classToCheckFor)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
                     }
                 }
             });
         }
-
-    //This function attaches the button events to the items in the view list
-    andiBar.viewList_attachButtonEvents = function () {
-        //Define tableANDI508-viewList-button-next button
-        $("#tableANDI508-viewList-button-next").click(function () {
-            //Get class name based on selected tab
-            var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
-            var focusGoesOnThisIndex;
-
-            if (index == testPageData.andiElementIndex || isNaN(index)) {
-                //No elements being inspected yet, get first element according to selected tab
-                focusGoesOnThisIndex = $("#ANDI508-testPage .ANDI508-element").first().attr("data-andi508-index");
-                andiFocuser.focusByIndex(focusGoesOnThisIndex);//loop back to first
-            } else {
-                //Find the next element with class from selected tab and data-andi508-index
-                //This will skip over elements that may have been removed from the DOM
-                for (var x = index; x < testPageData.andiElementIndex; x += 1) {
-                    //Get next element within set of selected tab type
-                    if ($("#ANDI508-testPage .ANDI508-element[data-andi508-index='" + (x + 1) + "']").length) {
-                        focusGoesOnThisIndex = x + 1;
-                        andiFocuser.focusByIndex(focusGoesOnThisIndex);
-                        break;
+        //This function attaches the hover and focus events to the items in the view list
+        this.viewList_attachFocusEvents = function (eventClass = "#ANDI508-viewList-table td") {
+            //Add focus click to each output in the table
+            $(eventClass + " a[data-andi508-relatedindex]").each(function () {
+                andiFocuser.addFocusClick($(this));
+                var relatedElement = $("#ANDI508-testPage [data-andi508-index=" + $(this).attr("data-andi508-relatedindex") + "]").first();
+                andiLaser.createLaserTrigger($(this), $(relatedElement));
+                $(this)
+                .hover(function () {
+                    if (!event.shiftKey) {
+                        AndiModule.inspect(relatedElement[0]);
                     }
-                }
+                })
+                .focus(function () {
+                    AndiModule.inspect(relatedElement[0]);
+                });
+            });
+        }
+        this.viewList_attachSortEvent = function () {
+            //This will define the click logic for the table sorting.
+            //Table sorting does not use aria-sort because .removeAttr("aria-sort") crashes in old IE
+            $("#ANDI508-viewList-table th a").click(function () {
+                var table = $(this).closest("table");
+                $(table).find("th").find("i").html("")
+                    .end().find("a");//remove all arrow
+
+                    var rows = $(table).find("tr:gt(0)").toArray().sort(sortCompare($(this).parent().index()));
+                    this.asc = !this.asc;
+                    if (!this.asc) {
+                        rows = rows.reverse();
+                        $(this).attr("title", "descending")
+                            .parent().find("i").html("&#9650;");//up arrow
+                    } else {
+                        $(this).attr("title", "ascending")
+                            .parent().find("i").html("&#9660;");//down arrow
+                    }
+                    for (var i = 0; i < rows.length; i += 1) {
+                        $(table).append(rows[i]);
+                    }
+                    //Table Sort Functionality
+                    function sortCompare(index) {
+                        return function(a, b) {
+                            var valA = getCellValue(a, index);
+                            var valB = getCellValue(b, index);
+                            return !isNaN(valA) && !isNaN(valB) ? valA - valB : valA.localeCompare(valB);
+                        };
+                        function getCellValue(row, index) {
+                            return $(row).children("td,th").eq(index).text();
+                        }
+                    }
+                });
             }
 
-            //Highlight the row in the list that associates with this element
-            andiResults.viewList_rowHighlight(focusGoesOnThisIndex);
-            $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function () {
-                this.scrollIntoView();
-            });
+        //This function attaches the button events to the items in the view list
+        this.viewList_attachButtonEvents = function () {
+            //Define tableANDI508-viewList-button-next button
+            $("#tableANDI508-viewList-button-next").click(function () {
+                //Get class name based on selected tab
+                var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
+                var focusGoesOnThisIndex;
 
-            return false;
-        });
-
-        //Define tableANDI508-viewList-button-prev button
-        $("#tableANDI508-viewList-button-prev").click(function () {
-            //Get class name based on selected tab
-            var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
-            var firstElementInListIndex = $("#ANDI508-testPage .ANDI508-element").first().attr("data-andi508-index");
-            var focusGoesOnThisIndex;
-
-            if (isNaN(index)) {//no active element yet
-                //get first element according to selected tab
-                andiFocuser.focusByIndex(firstElementInListIndex);//loop back to first
-                focusGoesOnThisIndex = firstElementInListIndex;
-            } else if (index == firstElementInListIndex) {
-                //Loop to last element in list
-                focusGoesOnThisIndex = $("#ANDI508-testPage .ANDI508-element").last().attr("data-andi508-index");
-                andiFocuser.focusByIndex(focusGoesOnThisIndex);//loop back to last
-            } else {
-                //Find the previous element with class from selected tab and data-andi508-index
-                //This will skip over elements that may have been removed from the DOM
-                for (var x = index; x > 0; x -= 1) {
-                    //Get next element within set of selected tab type
-                    if ($("#ANDI508-testPage .ANDI508-element[data-andi508-index='" + (x - 1) + "']").length) {
-                        focusGoesOnThisIndex = x - 1;
-                        andiFocuser.focusByIndex(focusGoesOnThisIndex);
-                        break;
+                if (index == testPageData.andiElementIndex || isNaN(index)) {
+                    //No elements being inspected yet, get first element according to selected tab
+                    focusGoesOnThisIndex = $("#ANDI508-testPage .ANDI508-element").first().attr("data-andi508-index");
+                    andiFocuser.focusByIndex(focusGoesOnThisIndex);//loop back to first
+                } else {
+                    //Find the next element with class from selected tab and data-andi508-index
+                    //This will skip over elements that may have been removed from the DOM
+                    for (var x = index; x < testPageData.andiElementIndex; x += 1) {
+                        //Get next element within set of selected tab type
+                        if ($("#ANDI508-testPage .ANDI508-element[data-andi508-index='" + (x + 1) + "']").length) {
+                            focusGoesOnThisIndex = x + 1;
+                            andiFocuser.focusByIndex(focusGoesOnThisIndex);
+                            break;
+                        }
                     }
                 }
-            }
 
-            //Highlight the row in the list that associates with this element
-            andiResults.viewList_rowHighlight(focusGoesOnThisIndex);
-            $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function () {
-                this.scrollIntoView();
+                //Highlight the row in the list that associates with this element
+                andiResults.viewList_rowHighlight(focusGoesOnThisIndex);
+                $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function () {
+                    this.scrollIntoView();
+                });
+
+                return false;
             });
 
-            return false;
-        });
-    };
+            //Define tableANDI508-viewList-button-prev button
+            $("#tableANDI508-viewList-button-prev").click(function () {
+                //Get class name based on selected tab
+                var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
+                var firstElementInListIndex = $("#ANDI508-testPage .ANDI508-element").first().attr("data-andi508-index");
+                var focusGoesOnThisIndex;
+
+                if (isNaN(index)) {//no active element yet
+                    //get first element according to selected tab
+                    andiFocuser.focusByIndex(firstElementInListIndex);//loop back to first
+                    focusGoesOnThisIndex = firstElementInListIndex;
+                } else if (index == firstElementInListIndex) {
+                    //Loop to last element in list
+                    focusGoesOnThisIndex = $("#ANDI508-testPage .ANDI508-element").last().attr("data-andi508-index");
+                    andiFocuser.focusByIndex(focusGoesOnThisIndex);//loop back to last
+                } else {
+                    //Find the previous element with class from selected tab and data-andi508-index
+                    //This will skip over elements that may have been removed from the DOM
+                    for (var x = index; x > 0; x -= 1) {
+                        //Get next element within set of selected tab type
+                        if ($("#ANDI508-testPage .ANDI508-element[data-andi508-index='" + (x - 1) + "']").length) {
+                            focusGoesOnThisIndex = x - 1;
+                            andiFocuser.focusByIndex(focusGoesOnThisIndex);
+                            break;
+                        }
+                    }
+                }
+
+                //Highlight the row in the list that associates with this element
+                andiResults.viewList_rowHighlight(focusGoesOnThisIndex);
+                $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function () {
+                    this.scrollIntoView();
+                });
+
+                return false;
+            });
+        };
+        //This function will highlight the text of the row.
+        this.viewList_rowHighlight = function (index, buttonClass) {
+            $("#ANDI508-" + buttonClass + "-table tbody tr").each(function () {
+                $(this).removeClass("ANDI508-table-row-inspecting");
+                if ($(this).find("th").first().html() == index) {
+                    $(this).addClass("ANDI508-table-row-inspecting");
+                }
+            });
+        };
+        //TODO: Think if the code below is necessary
+        this.addButton = function (buttonText) {
+            var buttonId = buttonText.replaceAll(" ", "");
+            buttonId = buttonId[0].toLowerCase() + buttonId.substring(1);
+            var button = "<button id='ANDI508-" + buttonId + "-button'";
+
+            button += " aria-label='" + buttonText + "' title='" + buttonText;
+            button += "' aria-pressed='false'>" + buttonText;
+            var buttonIcon = buttonText.split(" ")[0];
+            buttonIcon = buttonIcon.toLowerCase();
+            if (!["overlaid", "hide", "highlight", "find", "page"].includes(buttonIcon)) {
+                buttonIcon = "overlay";
+            } else if (buttonIcon == "page") {
+                buttonIcon = "";
+            } else if (buttonIcon == "overlaid") {
+                buttonIcon = "overlay"
+            }
+
+            if (buttonIcon != "") {
+                button += "<img src='" + icons_url + buttonIcon + "-off.png' class='ANDI508-" + buttonIcon + "Icon' aria-label='" + buttonIcon + "' />";
+            }
+            button += "</button>";
+
+            $("#ANDI508-module-actions").append(button);
+
+            andiResults.addButtonLogic(buttonId, buttonIcon);
+        }
+        this.addButtonLogic = function(buttonClass, icon, additionalClass = "") {
+            $("#ANDI508-" + buttonClass + "-button").click(function () {
+                var pageClass = "#ANDI508-testPage " + additionalClass;
+
+                if ($(this).attr("aria-pressed") === "false") {
+                    andiOverlay.overlayButton_on(icon, $(this));
+                    if (buttonClass == "tabSequence") {
+                        andiOverlay.overlayTabOrder();
+                    } else if (buttonClass == "titleAttributes") {
+                        andiOverlay.overlayTitleAttributes();
+                    } else if (buttonClass == "labelTags") {
+                        andiOverlay.overlayLabelTags();
+                    } else if (buttonClass == "tableMarkup") {
+                        andiOverlay.overlayTableMarkup();
+                    } else if (buttonClass == "readingOrder") {
+                        andiOverlay.overlayReadingOrder();
+                    } else if (buttonClass == "langAttributes") {
+                        andiOverlay.overlayLangAttributes();
+                    } else if (buttonClass == "roleAttributes") {
+                        andiOverlay.overlayRoleAttributes();
+                    } else {
+                        $($.trim(pageClass)).addClass("ANDI508-" + buttonClass);
+                    }
+                } else {
+                    andiOverlay.overlayButton_off(icon, $(this));
+                    if ($($.trim(pageClass)).hasClass("ANDI508-" + buttonClass)) {
+                        $($.trim(pageClass)).removeClass("ANDI508-" + buttonClass);
+                    } else {
+                        $("#ANDI508-testPage span.ANDI508-overlay-" + buttonClass).remove();
+                    }
+                }
+                andiResetter.resizeHeights();
+                return false;
+            });
+        }
+        this.addTabsButtonLogic = function (module, buttonText, buttonMode, buttonClass, technique = "") {
+            var buttonId = buttonText.toLowerCase();
+            buttonId = buttonId.replace(" ", "");
+            var buttonType = buttonMode.replace(" ", "");
+            var fullButtonClass = "#ANDI508-list" + buttonType + "-tab-" + buttonId;
+            $(fullButtonClass).click(function () {
+                andiBar.viewList_selectTab(this, buttonClass);
+                andiResults.alterTable(module, buttonClass, buttonType, buttonText);
+                //Alter which classes are still on the page
+                andiBar.alterClasses(module, "highlight", buttonText);
+                //Turn Off Ambiguous Button
+                if (module == "hANDI") {// TODO: Change to a different test
+                    andiBar.alterElements(technique);
+                }
+                andiOverlay.overlayButton_off("find", $("#ANDI508-highlightAmbiguous" + buttonType + "-button"));
+                andiResetter.resizeHeights();
+                return false;
+            });
+        }
+        this.addNextTabButtonLogic = function () {
+            //Define next tab button
+            $("#ANDI508-viewList-table button.lANDI508-nextTab").each(function () {
+                $(this).click(function () {
+                    var allElementsInTestPage = $("#ANDI508-testPage *");
+                    var idRef = $(this).attr("data-andi508-relatedid");
+                    var anchorTargetElement = document.getElementById(idRef) || document.getElementsByName(idRef)[0];
+                    var anchorTargetElementIndex = parseInt($(allElementsInTestPage).index($(anchorTargetElement)), 10);
+                    for (var x = anchorTargetElementIndex; x < allElementsInTestPage.length; x += 1) {
+                        if ($(allElementsInTestPage).eq(x).is(":tabbable")) {
+                            $(allElementsInTestPage).eq(x).focus();
+                            break;
+                        }
+                    }
+                });
+            });
+        }
+    }
 })();

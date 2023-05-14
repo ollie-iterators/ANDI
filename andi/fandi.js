@@ -17,6 +17,7 @@ AndiModule.initActiveActionButtons({
 
 //This function will analyze the test page for focusable element related markup relating to accessibility
 fANDI.analyze = function(objectClass){
+    objectClass = andiBar.createObjectValues(objectClass, 1);
 
     fANDI.accesskeys = new AndiAccesskeys();
 
@@ -30,6 +31,10 @@ fANDI.analyze = function(objectClass){
             if(andiData.accesskey)
                 fANDI.accesskeys.push(this, andiData.accesskey, andiData.andiElementIndex);
             testPageData.firstLaunchedModulePrep(this, andiData);
+            objectClass.list.push(new Focusable(this, objectClass.index, "", "", "", "", "", "", "", "", "", "", "", "", ""));
+            objectClass.index += 1;
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] = "focusable elements"
             AndiData.attachDataToElement(this);
         }
         else{
@@ -312,7 +317,8 @@ function Focusable(element, index, offset, isAriaHidden, ariaLabel, ariaLabelled
 //This object class is used to keep track of the focusable elements on the page
 function Focusables() {
     this.list               = [];
-    this.count              = 0;
+    this.elementNums        = [];
+    this.elementStrings     = [];
     this.index              = 1;
     this.numTitleAttributes = 0;
     this.numLabelTag        = 0;

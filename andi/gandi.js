@@ -31,6 +31,7 @@ AndiModule.initActiveActionButtons({
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 gANDI.analyze = function(objectClass){
+    objectClass = andiBar.createObjectValues(objectClass, 7);
 
     var isImageContainedByInteractiveWidget; //boolean if image is contained by link or button
 
@@ -44,11 +45,16 @@ gANDI.analyze = function(objectClass){
             //Is Image contained by a link or button?
             closestWidgetParent = $(this).closest("a,button,[role=button],[role=link]");
             if($(closestWidgetParent).length){
-                if($(closestWidgetParent).isSemantically(["link"],"a"))
-                    objectClass.imageLink++;
-                else if($(closestWidgetParent).isSemantically(["button"],"button"))
-                    objectClass.imageButton++;
-                objectClass.inline++;
+                if ($(closestWidgetParent).isSemantically(["link"],"a")) {
+                    objectClass.elementNums[5] += 1;
+                    objectClass.elementStrings[5] = "image links";
+                } else if ($(closestWidgetParent).isSemantically(["button"],"button")) {
+                    objectClass.elementNums[5] += 1;
+                    objectClass.elementStrings[5] = "inline buttons";
+                }
+
+                objectClass.elementNums[1] += 1;
+                objectClass.elementStrings[1] = "inline images";
                 isImageContainedByInteractiveWidget = true;
             }
         }
@@ -70,36 +76,43 @@ gANDI.analyze = function(objectClass){
 
             //Check for conditions based on semantics
             if($(this).is("marquee")){
-                objectClass.inline++;
+                objectClass.elementNums[1] += 1;
+                objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0171);
                 AndiData.attachDataToElement(this);
             }
             else if($(this).is("blink")){
-                objectClass.inline++;
+                objectClass.elementNums[1] += 1;
+                objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0172);
                 AndiData.attachDataToElement(this);
             }
             else if($(this).is("canvas")){
-                objectClass.inline++;
+                objectClass.elementNums[1] += 1;
+                objectClass.elementStrings[1] = "inline images";
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
                 AndiData.attachDataToElement(this);
             }
             else if($(this).is("input:image")){
-                objectClass.inline++;
+                objectClass.elementNums[1] += 1;
+                objectClass.elementStrings[1] = "inline images";
                 andiCheck.commonFocusableElementChecks(andiData, $(this));
                 altTextAnalysis($.trim($(this).attr("alt")));
                 AndiData.attachDataToElement(this);
             }
             //Check for server side image map
             else if($(this).is("img") && $(this).attr("ismap")){//Code is written this way to prevent bug in IE8
-                objectClass.inline++;
+                objectClass.elementNums[1] += 1;
+                objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0173);
                 AndiData.attachDataToElement(this);
             }
             else if(!isImageContainedByInteractiveWidget && $(this).isSemantically(["img"],"img,svg")){ //an image used by an image map is handled by the <area>
-                objectClass.inline++;
+                objectClass.elementNums[1] += 1;
+                objectClass.elementStrings[1] = "inline images";
                 if(isElementDecorative(this, andiData)){
-                    objectClass.decorative++;
+                    objectClass.elementNums[3] += 1;
+                    objectClass.elementStrings[3] = "decorative images";
                     $(this).addClass("gANDI508-decorative");
 
                     if($(this).prop("tabIndex") >= 0)
@@ -117,7 +130,8 @@ gANDI.analyze = function(objectClass){
                 AndiData.attachDataToElement(this);
             }
             else if($(this).is("area")){
-                objectClass.inline++;
+                objectClass.elementNums[1] += 1;
+                objectClass.elementStrings[1] = "inline images";
                 var map = $(this).closest("map");
                 if($(map).length){
                     //<area> is contained in <map>
@@ -137,13 +151,15 @@ gANDI.analyze = function(objectClass){
                     andiAlerter.throwAlert(alert_0178,alert_0178.message,0);
             }
             else if($(this).is("[role=image]")){
-                //objectClass.inline++;
+                //objectClass.elementNums[1] += 1;
+                //objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0134);
                 AndiData.attachDataToElement(this);
             }
         }
         else if($(this).css("background-image").includes("url(")){
-            objectClass.background++;
+            objectClass.elementNums[2] += 1;
+            objectClass.elementStrings[2] = "background images";
             $(this).addClass("gANDI508-background");
         }
 
@@ -162,7 +178,8 @@ gANDI.analyze = function(objectClass){
                 andiData = new AndiData(this);
                 AndiData.attachDataToElement(this);
             }
-            objectClass.fontIcon++;
+            objectClass.elementNums[4] += 1;
+            objectClass.elementStrings[4] = "font icons";
             $(this).addClass("gANDI508-fontIcon");
             //Throw alert
             if(andiData.accName && !andiData.isTabbable){
@@ -176,7 +193,7 @@ gANDI.analyze = function(objectClass){
         }
     });
 
-    if(objectClass.background > 0) //Page has background images
+    if(objectClass.elementNums[2] > 0) //Page has background images
         andiAlerter.throwAlert(alert_0177,alert_0177.message,0);
 
     //This returns true if the image is decorative.
@@ -222,31 +239,31 @@ gANDI.analyze = function(objectClass){
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 gANDI.results = function(objectClass){
 
-    var imagesCount = objectClass.inline + objectClass.background + objectClass.fontIcon;
+    var imagesCount = objectClass.elementNums[1] + objectClass.elementNums[2] + objectClass.elementNums[4];
 
     andiBar.updateResultsSummary("Images Found: "+imagesCount);
 
     //Create Image contained by html (number of image links and image buttons)
     var resultsDetails = "";
 
-    resultsDetails += objectClass.inline + " inline images, ";
-    resultsDetails += objectClass.imageLink + " image links, ";
-    resultsDetails += objectClass.imageButton + " image buttons, ";
-    resultsDetails += objectClass.fontIcon + " font icons, ";
-    resultsDetails += objectClass.background+ " background-images";
+    resultsDetails += objectClass.elementNums[1] + " inline images, ";
+    resultsDetails += objectClass.elementNums[5] + " image links, ";
+    resultsDetails += objectClass.elementNums[6] + " image buttons, ";
+    resultsDetails += objectClass.elementNums[4] + " font icons, ";
+    resultsDetails += objectClass.elementNums[2]+ " background-images";
 
     $("#ANDI508-additionalPageResults").append("<p tabindex='0'>"+resultsDetails+"</p>");
 
     //Add Module Mode Buttons
     var moduleActionButtons = "";
 
-    moduleActionButtons += "<button id='ANDI508-fadeInlineImages-button' aria-label='Hide "+objectClass.inline+" Inline Images' aria-pressed='false'>hide "+objectClass.inline+" inline</button>";
-    moduleActionButtons += "<button id='ANDI508-highlightDecorativeImages-button' aria-label='Highlight "+objectClass.decorative+" Decorative Inline Images' aria-pressed='false'>"+objectClass.decorative+" decorative inline"+findIcon+"</button>";
+    moduleActionButtons += "<button id='ANDI508-fadeInlineImages-button' aria-label='Hide "+objectClass.elementNums[1]+" Inline Images' aria-pressed='false'>hide "+objectClass.elementNums[1]+" inline</button>";
+    moduleActionButtons += "<button id='ANDI508-highlightDecorativeImages-button' aria-label='Highlight "+objectClass.elementNums[3]+" Decorative Inline Images' aria-pressed='false'>"+objectClass.elementNums[3]+" decorative inline"+findIcon+"</button>";
     moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span> ";
-    moduleActionButtons += "<button id='ANDI508-removeBackgroundImages-button' aria-label='Hide "+objectClass.background+" Background Images' aria-pressed='false'>hide "+objectClass.background+" background</button>";
-    moduleActionButtons += "<button id='ANDI508-highlightBackgroundImages-button' aria-label='Highlight "+objectClass.background+" Background Images' aria-pressed='false'>find "+objectClass.background+" background"+findIcon+"</button>";
+    moduleActionButtons += "<button id='ANDI508-removeBackgroundImages-button' aria-label='Hide "+objectClass.elementNums[2]+" Background Images' aria-pressed='false'>hide "+objectClass.elementNums[2]+" background</button>";
+    moduleActionButtons += "<button id='ANDI508-highlightBackgroundImages-button' aria-label='Highlight "+objectClass.elementNums[2]+" Background Images' aria-pressed='false'>find "+objectClass.elementNums[2]+" background"+findIcon+"</button>";
     moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span> ";
-    moduleActionButtons += "<button id='ANDI508-highlightFontIcons-button' aria-label='Find "+objectClass.fontIcon+" Font Icons' aria-pressed='false'>"+objectClass.fontIcon+" font icons</button>";
+    moduleActionButtons += "<button id='ANDI508-highlightFontIcons-button' aria-label='Find "+objectClass.elementNums[4]+" Font Icons' aria-pressed='false'>"+objectClass.elementNums[4]+" font icons</button>";
 
     $("#ANDI508-module-actions").html(moduleActionButtons);
 
@@ -418,16 +435,12 @@ function Image(element, index, rowClass) {
 
 //This object class is used to keep track of the graphics on the page
 function Images() {
-    this.list        = [];
-    this.inline      = 0; //inline images
-    this.background  = 0; //elements with background images
-    this.decorative  = 0; //images explicetly declared as decorative
-    this.fontIcon    = 0; //font icons
-    this.imageLink   = 0; //images contained in links
-    this.imageButton = 0; //images contained in buttons
-    this.count       = 0;
-    this.index       = 1;
-    this.columnNames = ["element", "index"];
+    this.list           = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
+    this.count          = 0;
+    this.index          = 1;
+    this.columnNames    = ["element", "index"];
 }
 
 // This object class is used to keep track of the table information

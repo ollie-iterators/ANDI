@@ -23,30 +23,46 @@ qANDI.analyze = function(objectClass){
 
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
+        objectClass = andiBar.createObjectValues(objectClass, 10);
         if($(this).isSemantically(["listitem","list"],"ol,ul,li,dl,dd,dt")){
             //Add to the lists array
             objectClass.list.push(new List(this, objectClass.index, ''));
+            objectClass.index += 1;
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] += "list elements";
 
             if($(this).isSemantically(["list"],"ol,ul,dl")){
-                if($(this).is("ul"))
-                    objectClass.ulCount++;
-                else if($(this).is("ol"))
-                    objectClass.olCount++;
-                else if($(this).is("dl"))
-                    objectClass.dlCount++;
-                else
-                    objectClass.listRoleCount++;
-                objectClass.listsCount++;
+                if ($(this).is("ul")) {
+                    objectClass.elementNums[2] += 1;
+                    objectClass.elementNums[2] = "ul elements";
+                } else if ($(this).is("ol")) {
+                    objectClass.elementNums[1] += 1;
+                    objectClass.elementNums[1] = "ol elements";
+                } else if ($(this).is("dl")) {
+                    objectClass.elementNums[4] += 1;
+                    objectClass.elementNums[4] = "dl elements";
+                }
+
+                else {
+                    objectClass.elementNums[7] += 1;
+                    objectClass.elementNums[7] = "list role elements";
+                }
+                objectClass.elementNums[9] += 1;
+                objectClass.elementNums[9] = "lists found";
             }
 
             andiData = new AndiData(this);
 
             //Is the listitem contained by an appropriate list container?
             if($(this).is("[role=listitem]")){
+                objectClass.elementNums[8] += 1;
+                objectClass.elementStrings[8] = "listitem role elements";
                 if(!$(this).closest("[role=list]").length)
                     andiAlerter.throwAlert(alert_0079, ["[role=listitem]","[role=list]"]);
             }
             else if($(this).is("li")){
+                objectClass.elementNums[3] += 1;
+                objectClass.elementNums[3] = "li elements";
                 var listContainer = $(this).closest("ol,ul");
                 if(!$(listContainer).length){
                     andiAlerter.throwAlert(alert_0079, ["&lt;li&gt;","&lt;ol&gt; or &lt;ul&gt;"]);
@@ -58,6 +74,14 @@ qANDI.analyze = function(objectClass){
                 }
             }
             else if($(this).is("dd,dt") && !$(this).closest("dl").length){//Is the dl,dt contained by a dl?
+                if ($(this).is("dd")) {
+                    objectClass.elementNums[5] += 1;
+                    objectClass.elementNums[6] = "dd elements";
+                } else if ($(this).is("dt")) {
+                    objectClass.elementNums[6] += 1;
+                    objectClass.elementStrings[6] = "dt elements";
+                }
+
                 andiAlerter.throwAlert(alert_007A);
             }
 
@@ -199,14 +223,14 @@ qANDI.results = function(objectClass){
     var delimiter = "";
     var listTypesUsed = "";
 
-    listCounts += objectClass.olCount + " ordered list (ol)";
+    listCounts += objectClass.elementNums[1] + " ordered list (ol)";
     listTypesUsed += "ol";
     delimiter = ", ";
-    listCounts += delimiter + objectClass.ulCount + " unordered list (ul)";
+    listCounts += delimiter + objectClass.elementNums[2] + " unordered list (ul)";
     listTypesUsed += delimiter + "ul";
-    listCounts += delimiter + objectClass.dlCount + " description list (dl)";
+    listCounts += delimiter + objectClass.elementNums[4] + " description list (dl)";
     listTypesUsed += delimiter + "dl";
-    listCounts += delimiter + objectClass.listRoleCount + " role=list";
+    listCounts += delimiter + objectClass.elementNums[7] + " role=list";
     listTypesUsed += delimiter + "[role=list]";
     $("#ANDI508-additionalPageResults").html(listCounts);
 
@@ -311,19 +335,11 @@ function List(element, index, rowClass) {
 
 //This object class is used to keep track of the certain headers on the page
 function Lists() {
-    this.list              = [];
-    this.olCount           = 0;
-    this.ulCount           = 0;
-    this.liCount           = 0;
-    this.dlCount           = 0;
-    this.ddCount           = 0;
-    this.dtCount           = 0;
-    this.listRoleCount     = 0;
-    this.listItemRoleCount = 0;
-    this.listsCount        = 0;
-    this.count             = 0;
-    this.index             = 1;
-    this.columnNames       = ["element", "index"];
+    this.list           = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
+    this.index          = 1;
+    this.columnNames    = ["element", "index"];
 }
 
 // This object class is used to keep track of the table information

@@ -178,7 +178,7 @@ hANDI.analyze = function(objectClass){
     });
 
     if(!oldIE){
-        hANDI.detectCssInjectedContent();
+        hANDI.detectCssInjectedContent(objectClass);
 
         if($("#ANDI508-testPage .hANDI508-hasHiddenCssContent").first().length)
             andiAlerter.throwAlert(alert_0220,alert_0220.message, 0);
@@ -187,7 +187,7 @@ hANDI.analyze = function(objectClass){
 
 //This function will detect content hidden using css :before :after content.
 //Current screen readers will not read text injected using this method in some browsers.
-hANDI.detectCssInjectedContent = function(){
+hANDI.detectCssInjectedContent = function(objectClass){
     var before_content, before_style, after_content, after_style, hasHiddenCSSContent, cssDisplay;
 
     //Loop through every element on the page

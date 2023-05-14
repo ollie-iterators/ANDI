@@ -26,6 +26,7 @@ sANDI.analyze = function(objectClass){
         if($(this).isSemantically(["alert","status","log","marquee","timer"],"[aria-live=polite],[aria-live=assertive]")){
             //Add to the live regions array
             objectClass.list.push(new LiveRegion(this, objectClass.index, ''));
+            objectClass.index += 1;
 
             andiData = new AndiData(this);
 
