@@ -435,7 +435,7 @@ function Images() {
 function TableInfo() {
     this.tableMode = "Images";
     this.cssProperties = [];
-    this.buttonTextList = ["Fade Inline Images", "Remove Background Images", "Highlight Background Images", "Highlight Decorative Images", "Highlight Font Icons"];
+    this.buttonTextList = ["Fade Inline Images", "Hide Background Images", "Highlight Background Images", "Highlight Decorative Images", "Highlight Font Icons"];
     this.tabsTextList = [];
 }
 
