@@ -20,8 +20,7 @@ qANDI.analyze = function(objectClass){
         objectClass = andiBar.createObjectValues(objectClass, 10);
         if($(this).isSemantically(["listitem","list"],"ol,ul,li,dl,dd,dt")){
             //Add to the lists array
-            objectClass.list.push(new List([this], objectClass.index, ''));
-            objectClass.index += 1;
+            objectClass.list.push(new List([this], objectClass.list.length + 1, ''));
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "list elements";
 
@@ -251,7 +250,6 @@ function Lists() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.index          = 1;
     this.columnNames    = ["element", "index"];
 }
 

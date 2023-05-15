@@ -19,8 +19,7 @@ sANDI.analyze = function(objectClass){
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["alert","status","log","marquee","timer"],"[aria-live=polite],[aria-live=assertive]")){
             //Add to the live regions array
-            objectClass.list.push(new LiveRegion([this], objectClass.index, ''));
-            objectClass.index += 1;
+            objectClass.list.push(new LiveRegion([this], objectClass.list.length + 1, ''));
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "live regions";
 
@@ -241,7 +240,6 @@ function LiveRegions() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.index          = 1;
     this.columnNames    = ["element", "index"];
 }
 

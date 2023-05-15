@@ -27,7 +27,7 @@ oANDI.analyze = function(objectClass){
             //Add to the headings array
 
             if(andiData.isAriaHidden != true)
-                objectClass.list.push(new CertainHeader([this], objectClass.index, ''));
+                objectClass.list.push(new CertainHeader([this], objectClass.list.length + 1, ''));
 
             if(andiData.role === "heading"){
 
@@ -327,7 +327,6 @@ function CertainHeaders() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.index          = 1;
     this.columnNames    = ["element", "index"];
     this.outlineReady   = false;
 }

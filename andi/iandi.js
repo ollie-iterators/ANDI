@@ -15,9 +15,10 @@ iANDI.analyze = function(objectClass){
         if($(this).is("iframe")){
             andiData = new AndiData(this);
             andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
-            objectClass.list.push(new iFrame([this], objectClass.index, src, ""))
+            objectClass.list.push(new iFrame([this], objectClass.list.length + 1, src, ""))
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] = "iframes";
             AndiData.attachDataToElement(this);
-            objectClass.index += 1
         }
     });
 };
@@ -26,7 +27,7 @@ var showStartUpSummaryText = "To test the contents of <span class='ANDI508-modul
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 //Inserts some counter totals, displays the accesskey list
 iANDI.results = function(objectClass){
-    andiBar.updateResultsSummary("Iframes with Content: "+testPageData.andiElementIndex);
+    andiBar.updateResultsSummary("Iframes with Content: "+objectClass.elementNums[0]);
 
     var iframesSelectionMenu = "";
     var iframesSelectionLinks = "";
@@ -153,8 +154,6 @@ function iFrames() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.count          = 0;
-    this.index          = 1;
     this.columnNames    = ["element", "index", "src"];
 }
 

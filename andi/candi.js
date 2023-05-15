@@ -44,8 +44,7 @@ cANDI.analyze = function(objectClass){
 
                         //Throw alerts if necessary
                         cANDI.processResult($(this));
-                        objectClass.list.push(new Contrast([this], objectClass.index, ""));
-                        objectClass.index += 1;
+                        objectClass.list.push(new Contrast([this], objectClass.list.length + 1, ""));
                         objectClass.elementNums[0] += 1;
                         objectClass.elementStrings[0] = "color contrast elements"
                         AndiData.attachDataToElement(this);
@@ -967,7 +966,6 @@ function Contrasts() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.index          = 1;
     this.columnNames    = ["element", "index"];
 }
 
