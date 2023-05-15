@@ -254,7 +254,7 @@ function Focusables() {
 function TableInfo() {
     this.tableMode = "Focusable Elements";
     this.cssProperties = [];
-    this.buttonTextList = ["Tab Order", "Title Attributes", "Label Tags"];
+    this.buttonTextList = ["Tab Sequence", "Title Attributes", "Label Tags"];
     this.tabsTextList = [];
 }
 
