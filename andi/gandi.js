@@ -228,7 +228,7 @@ gANDI.analyze = function(objectClass){
     }
 };
 
-var startUpSummaryText = "";
+var showStartUpSummaryText = "";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 gANDI.results = function(objectClass){
 
@@ -238,10 +238,10 @@ gANDI.results = function(objectClass){
 
     andiBar.showElementControls();
     if(!andiBar.focusIsOnInspectableElement())
-        startUpSummaryText += "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. ";
+        showStartUpSummaryText += "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. ";
 
-    startUpSummaryText += "Ensure that every meaningful/non-decorative image has a text equivalent.";
-    andiBar.showStartUpSummary(startUpSummaryText, true);
+    showStartUpSummaryText += "Ensure that every meaningful/non-decorative image has a text equivalent.";
+    andiBar.showStartUpSummary(showStartUpSummaryText, true);
 
     AndiModule.engageActiveActionButtons([
         "removeBackgroundImages",
@@ -341,6 +341,6 @@ gANDI.tableInfo = new TableInfo();
 
 gANDI.analyze(gANDI.images);
 //gANDI.results(gANDI.images);
-andiBar.results(gANDI.images, gANDI.tableInfo, [], startUpSummaryText);
+andiBar.results(gANDI.images, gANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

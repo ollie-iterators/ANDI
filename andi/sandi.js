@@ -255,6 +255,6 @@ sANDI.tableInfo = new TableInfo();
 
 sANDI.analyze(sANDI.liveRegions);
 sANDI.results(sANDI.liveRegions);
-andiBar.results(sANDI.liveRegions, sANDI.tableInfo, [], startUpSummaryText);
+andiBar.results(sANDI.liveRegions, sANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

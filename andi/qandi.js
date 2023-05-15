@@ -268,6 +268,6 @@ qANDI.tableInfo = new TableInfo();
 
 qANDI.analyze(qANDI.lists);
 //qANDI.results(qANDI.lists);
-andiBar.results(qANDI.lists, qANDI.tableInfo, [], startUpSummaryText);
+andiBar.results(qANDI.lists, qANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

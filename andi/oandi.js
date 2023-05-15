@@ -344,6 +344,6 @@ oANDI.tableInfo = new TableInfo();
 
 oANDI.analyze(oANDI.certainHeaders);
 //oANDI.results(oANDI.certainHeaders);
-andiBar.results(oANDI.certainHeaders, oANDI.tableInfo, [], startUpSummaryText);
+andiBar.results(oANDI.certainHeaders, oANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

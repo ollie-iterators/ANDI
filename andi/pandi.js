@@ -370,6 +370,6 @@ pANDI.tableInfo = new TableInfo();
 
 pANDI.analyze(pANDI.possibleHeaders);
 //pANDI.results(pANDI.possibleHeaders);
-andiBar.results(pANDI.possibleHeaders, pANDI.tableInfo, [], startUpSummaryText);
+andiBar.results(pANDI.possibleHeaders, pANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init
