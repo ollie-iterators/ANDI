@@ -61,7 +61,7 @@ gANDI.analyze = function(objectClass){
                     andiCheck.commonFocusableElementChecks(andiData, $(closestWidgetParent));
                     objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
                     objectClass.elementNums[0] += 1;
-                    objectClass.elementNums[0] = "images";
+                    objectClass.elementStrings[0] = "images";
                     AndiData.attachDataToElement(closestWidgetParent);
                 }
             }
@@ -76,7 +76,7 @@ gANDI.analyze = function(objectClass){
                 andiAlerter.throwAlert(alert_0171);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
                 objectClass.elementNums[0] += 1;
-                objectClass.elementNums[0] = "images";
+                objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             else if($(this).is("blink")){
@@ -85,7 +85,7 @@ gANDI.analyze = function(objectClass){
                 andiAlerter.throwAlert(alert_0172);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
                 objectClass.elementNums[0] += 1;
-                objectClass.elementNums[0] = "images";
+                objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             else if($(this).is("canvas")){
@@ -94,7 +94,7 @@ gANDI.analyze = function(objectClass){
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
                 objectClass.elementNums[0] += 1;
-                objectClass.elementNums[0] = "images";
+                objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             else if($(this).is("input:image")){
@@ -104,7 +104,7 @@ gANDI.analyze = function(objectClass){
                 altTextAnalysis($.trim($(this).attr("alt")));
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
                 objectClass.elementNums[0] += 1;
-                objectClass.elementNums[0] = "images";
+                objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             //Check for server side image map
@@ -114,7 +114,7 @@ gANDI.analyze = function(objectClass){
                 andiAlerter.throwAlert(alert_0173);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
                 objectClass.elementNums[0] += 1;
-                objectClass.elementNums[0] = "images";
+                objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             else if(!isImageContainedByInteractiveWidget && $(this).isSemantically(["img"],"img,svg")){ //an image used by an image map is handled by the <area>
@@ -139,7 +139,7 @@ gANDI.analyze = function(objectClass){
 
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
                 objectClass.elementNums[0] += 1;
-                objectClass.elementNums[0] = "images";
+                objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             else if($(this).is("area")){
@@ -155,7 +155,7 @@ gANDI.analyze = function(objectClass){
                         altTextAnalysis($.trim($(this).attr("alt")));
                         objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
                         objectClass.elementNums[0] += 1;
-                        objectClass.elementNums[0] = "images";
+                        objectClass.elementStrings[0] = "images";
                         AndiData.attachDataToElement(this);
                     }
                     else{//Image referenced by image map not found
@@ -172,7 +172,7 @@ gANDI.analyze = function(objectClass){
                 andiAlerter.throwAlert(alert_0134);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
                 objectClass.elementNums[0] += 1;
-                objectClass.elementNums[0] = "images";
+                objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
             }
         }
@@ -197,7 +197,7 @@ gANDI.analyze = function(objectClass){
                 andiData = new AndiData(this);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
                 objectClass.elementNums[0] += 1;
-                objectClass.elementNums[0] = "images";
+                objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             objectClass.elementNums[4] += 1;
