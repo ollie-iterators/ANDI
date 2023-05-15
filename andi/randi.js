@@ -25,6 +25,10 @@ rANDI.analyze = function(objectClass){
 
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
             AndiData.attachDataToElement(this);
+            objectClass.list.push(new Landmark([this], objectClass.index, ""));
+            objectClass.index += 1;
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] = "landmarks";
         }
 
         //For all elements on the page
@@ -182,7 +186,6 @@ function Landmarks() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.count          = 0;
     this.index          = 1;
     this.columnNames    = ["element", "index"];
 }

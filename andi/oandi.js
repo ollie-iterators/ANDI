@@ -19,7 +19,8 @@ oANDI.analyze = function(objectClass){
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["heading"],"h1,h2,h3,h4,h5,h6")){
 
-            objectClass.count++;
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] = "certain headings";
 
             andiData = new AndiData(this);
 
@@ -326,7 +327,6 @@ function CertainHeaders() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.count          = 0;
     this.index          = 1;
     this.columnNames    = ["element", "index"];
     this.outlineReady   = false;

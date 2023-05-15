@@ -258,7 +258,7 @@ hANDI.detectCssInjectedContent = function(objectClass){
 var showStartUpSummaryText = "";
 hANDI.results = function(objectClass){
 
-    andiBar.updateResultsSummary("Hidden Elements: "+objectClass.count);
+    andiBar.updateResultsSummary("Hidden Elements: "+objectClass.elementNums[0]);
 
     //Add Module Mode Buttons
     var moduleActionButtons = "";
@@ -521,7 +521,6 @@ function HiddenElements() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.count          = 0;
     this.index          = 1;
     this.columnNames    = ["element", "index", "hidingTypes"];
 }

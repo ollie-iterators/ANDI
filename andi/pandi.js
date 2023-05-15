@@ -26,6 +26,10 @@ pANDI.analyze = function(objectClass){
 
                 andiAlerter.throwAlert(alert_0190);
                 AndiData.attachDataToElement(this);
+                objectClass.list.push(new PossibleHeader([this], objectClass.index, ""));
+                objectClass.index += 1;
+                objectClass.elementNums[0] += 1;
+                objectClass.elementStrings[0] = "possible headings";
             }
         }
 
@@ -353,7 +357,6 @@ function PossibleHeaders() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.count          = 0;
     this.index          = 1;
     this.columnNames    = ["element", "index"];
     this.outlineReady   = false;

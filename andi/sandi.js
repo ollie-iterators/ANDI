@@ -21,6 +21,8 @@ sANDI.analyze = function(objectClass){
             //Add to the live regions array
             objectClass.list.push(new LiveRegion([this], objectClass.index, ''));
             objectClass.index += 1;
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] = "live regions";
 
             andiData = new AndiData(this);
 
@@ -239,7 +241,6 @@ function LiveRegions() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.count          = 0;
     this.index          = 1;
     this.columnNames    = ["element", "index"];
 }
