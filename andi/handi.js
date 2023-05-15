@@ -549,6 +549,7 @@ function TableInfo() {
     this.tableMode = "Hidden Elements";
     this.cssProperties = [];
     this.buttonTextList = [];
+    this.tabsTextList = [];
 }
 
 hANDI.hiddenElements = new HiddenElements();

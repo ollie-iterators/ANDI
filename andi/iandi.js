@@ -161,6 +161,7 @@ function TableInfo() {
     this.tableMode = "iFrames";
     this.cssProperties = [];
     this.buttonTextList = [];
+    this.tabsTextList = [];
 }
 
 iANDI.iFrames = new iFrames();

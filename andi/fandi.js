@@ -318,6 +318,7 @@ function TableInfo() {
     this.tableMode = "Focusable Elements";
     this.cssProperties = [];
     this.buttonTextList = [];
+    this.tabsTextList = [];
 }
 
 fANDI.focusables = new Focusables();
