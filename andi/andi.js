@@ -4241,12 +4241,10 @@ var oldIE = false; //used to determine if old version of IE is being used.
                 // Build the column name
                 var columnName = "";
 
-                // TODO: Think about replacing with element.getAttributes();
                 var attributesToAdd = [];
                 for (var x = 0; x < 1; x += 1) {
                     if (moduleList.list[x].elementList[0].hasAttributes()) {
-                        var attrs = moduleList.list[x].elementList[0].getAttributes();
-                        //var attrs = moduleList.list[x].elementList[0].getAttributeNames();
+                        var attrs = moduleList.list[x].elementList[0].getAttributeNames();
                         for (var a = 0; a < attrs.length; a += 1) {
                             if (attrs[a].includes("data-andi508-")) {
                                 var attrsFixed = attrs[a].replace("data-andi508", "");
