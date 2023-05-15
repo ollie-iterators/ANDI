@@ -4350,7 +4350,7 @@ var oldIE = false; //used to determine if old version of IE is being used.
 
                 andiResults.addNextTabButtonLogic();
 
-                andiResults.initializeModuleActionGroups("ANDI508-additionalPageResults");
+                andiBar.initializeModuleActionGroups("ANDI508-additionalPageResults");
             }
         }
         //This function builds the table HTML
