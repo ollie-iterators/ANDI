@@ -12,12 +12,6 @@ var sANDI = new AndiModule(sANDIVersionNumber,"s");
 var langAttributesCount = 0;
 var roleAttributesCount = 0;
 
-AndiModule.initActiveActionButtons({
-    readingOrder:false,
-    roleAttributes:false,
-    langAttributes:false
-});
-
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 sANDI.analyze = function(objectClass){
 
@@ -65,90 +59,14 @@ sANDI.results = function(objectClass){
 
     var moduleActionButtons = "";
 
-    moduleActionButtons += "<button id='ANDI508-readingOrder-button' aria-pressed='false'>reading order"+overlayIcon+"</button>";
-
     var moreDetails = "<button id='ANDI508-pageTitle-button'>page title</button>"+
-        "<button id='ANDI508-pageLanguage-button'>page language</button>"+
-        "<button id='ANDI508-roleAttributes-button' aria-pressed='false' aria-label='"+roleAttributesCount+" Role Attributes'>"+roleAttributesCount+" role attributes"+overlayIcon+"</button>"+
-        "<button id='ANDI508-langAttributes-button' aria-pressed='false' aria-label='"+langAttributesCount+" Lang Attributes'>"+langAttributesCount+" lang attributes"+overlayIcon+"</button>";
+        "<button id='ANDI508-pageLanguage-button'>page language</button>";
 
     moduleActionButtons += "<div class='ANDI508-moduleActionGroup'><button class='ANDI508-moduleActionGroup-toggler'>more details</button><div class='ANDI508-moduleActionGroup-options'>" + moreDetails + "</div></div>";
 
     $("#ANDI508-module-actions").html(moduleActionButtons);
 
     andiBar.initializeModuleActionGroups();
-
-    //Define readingOrder button functionality
-    $("#ANDI508-readingOrder-button").click(function(){
-        if($(this).attr("aria-pressed") == "false"){
-            andiOverlay.overlayButton_on("overlay",$(this));
-            andiOverlay.overlayReadingOrder();
-            AndiModule.activeActionButtons.readingOrder = true;
-        }
-        else{
-            andiOverlay.overlayButton_off("overlay",$(this));
-            andiOverlay.removeOverlay("ANDI508-overlay-readingOrder");
-            AndiModule.activeActionButtons.readingOrder = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    //Define the lang attributes button
-    $("#ANDI508-langAttributes-button").click(function(){
-        if($(this).attr("aria-pressed") == "false"){
-            andiOverlay.overlayButton_on("overlay",$(this));
-
-            var langOverlayText = "";
-            var overlayObject;
-            var langOfPartsCount = 0;
-            $("#ANDI508-testPage [lang]").filter(":visible").each(function(){
-                if($(this).prop("lang").trim() != ""){
-                    langOverlayText = $(this).prop("tagName").toLowerCase()+" lang="+$(this).prop("lang");
-                    overlayObject = andiOverlay.createOverlay("ANDI508-overlay-langAttributes", langOverlayText);
-                    andiOverlay.insertAssociatedOverlay(this, overlayObject);
-                    langOfPartsCount++;
-                }
-            });
-
-            AndiModule.activeActionButtons.langAttributes = true;
-        }
-        else{
-            andiOverlay.overlayButton_off("overlay",$(this));
-            andiOverlay.removeOverlay("ANDI508-overlay-langAttributes");
-            AndiModule.activeActionButtons.langAttributes = false;
-        }
-        andiResetter.resizeHeights();
-
-        return false;
-    });
-
-    //Define the lang attributes button
-    $("#ANDI508-roleAttributes-button").click(function(){
-        if($(this).attr("aria-pressed") == "false"){
-            andiOverlay.overlayButton_on("overlay",$(this));
-
-            var langOverlayText = "";
-            var overlayObject, role;
-            $("#ANDI508-testPage [role]:not('.ANDI508-overlay')").filter(":visible").each(function(){
-                role = $.trim($(this).attr("role")).toLowerCase();
-                if(role){ //if role is not empty
-                    langOverlayText = $(this).prop("tagName").toLowerCase()+" role="+role;
-                    overlayObject = andiOverlay.createOverlay("ANDI508-overlay-roleAttributes", langOverlayText);
-                    andiOverlay.insertAssociatedOverlay(this, overlayObject);
-                }
-            });
-
-            AndiModule.activeActionButtons.roleAttributes = true;
-        }
-        else{
-            andiOverlay.overlayButton_off("overlay",$(this));
-            andiOverlay.removeOverlay("ANDI508-overlay-roleAttributes");
-            AndiModule.activeActionButtons.roleAttributes = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
 
     //Define the page title button
     $("#ANDI508-pageTitle-button").click(function(){
@@ -188,12 +106,6 @@ sANDI.results = function(objectClass){
     }
 
     andiAlerter.updateAlertList();
-
-    AndiModule.engageActiveActionButtons([
-        "readingOrder",
-        "roleAttributes",
-        "langAttributes"
-    ]);
 
     $("#ANDI508").focus();
 
@@ -334,7 +246,7 @@ function LiveRegions() {
 function TableInfo() {
     this.tableMode = "Live Regions";
     this.cssProperties = [];
-    this.buttonTextList = [];
+    this.buttonTextList = ["Reading Order", "Role Attributes", "Lang Attributes"];
     this.tabsTextList = [];
 }
 

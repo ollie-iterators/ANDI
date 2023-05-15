@@ -48,8 +48,7 @@ AndiModule.initActiveActionButtons({
     forceReveal_fontSize:false,
     forceReveal_textIndent:false,
     forceReveal_html5Hidden:false,
-    highlightCssContent:false,
-    titleAttributes:false
+    highlightCssContent:false
 });
 
 if(!prevNextBtnsVisible){
@@ -283,10 +282,6 @@ hANDI.results = function(objectClass){
     moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span>&nbsp;";
     moduleActionButtons += "<button id='ANDI508-highlightCssContent-button' aria-label='content ::before ::after "+objectClass.elementNums[8]+" CSS Content' aria-pressed='false'>content ::before ::after "+objectClass.elementNums[8]+findIcon+"</button>";
 
-    if(TestPageData.page_using_titleAttr)
-        //Title Attributes Button
-        moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span>&nbsp;<button id='ANDI508-titleAttributes-button' aria-label='Title Attributes' aria-pressed='false'>title attributes"+overlayIcon+"</button>";
-
     moduleActionButtons += "<button id='ANDI508-ariaHiddenScan-button' aria-label='aria-hidden scan' aria-pressed='false'>aria-hidden scan</button>";
 
     $("#ANDI508-module-actions").html(moduleActionButtons);
@@ -365,23 +360,6 @@ hANDI.results = function(objectClass){
         return false;
     });
 
-    //=============================================
-    //Define titleAttributes button functionality
-    $("#ANDI508-titleAttributes-button").click(function(){
-        if($(this).attr("aria-pressed") === "false"){
-            andiOverlay.overlayButton_on("overlay",$(this));
-            andiOverlay.overlayTitleAttributes();
-            AndiModule.activeActionButtons.titleAttributes = true;
-        }
-        else{
-            andiOverlay.overlayButton_off("overlay",$(this));
-            andiOverlay.removeOverlay("ANDI508-overlay-titleAttributes");
-            AndiModule.activeActionButtons.titleAttributes = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
     $("#ANDI508-ariaHiddenScan-button").click(function(){
         if($(this).attr("aria-pressed") === "false"){
             alert('aria-hidden="true" was found on ' + $("#ANDI508-testPage [aria-hidden]").length + ' elements');
@@ -416,8 +394,7 @@ hANDI.results = function(objectClass){
         "forceReveal_fontSize",
         "forceReveal_textIndent",
         "forceReveal_html5Hidden",
-        "highlightCssContent",
-        "titleAttributes-button"
+        "highlightCssContent"
     ]);
 
     andiAlerter.updateAlertList();
@@ -553,7 +530,7 @@ function HiddenElements() {
 function TableInfo() {
     this.tableMode = "Hidden Elements";
     this.cssProperties = [];
-    this.buttonTextList = [];
+    this.buttonTextList = ["Title Attributes"];
     this.tabsTextList = [];
 }
 

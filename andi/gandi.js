@@ -21,14 +21,6 @@ AndiModule.cleanup = function(testPage, element){
     $(testPage).find(".gANDI508-background").removeClass("gANDI508-background");
 };
 
-AndiModule.initActiveActionButtons({
-    fadeInlineImages:false,
-    highlightDecorativeImages:false,
-    removeBackgroundImages:false,
-    highlightBackgroundImages:false,
-    highlightFontIcons:false
-});
-
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 gANDI.analyze = function(objectClass){
     objectClass = andiBar.createObjectValues(objectClass, 7);
@@ -244,100 +236,6 @@ gANDI.results = function(objectClass){
 
     andiBar.updateResultsSummary("Images Found: "+imagesCount);
 
-    //Add Module Mode Buttons
-    var moduleActionButtons = "";
-
-    moduleActionButtons += "<button id='ANDI508-fadeInlineImages-button' aria-label='Hide "+objectClass.elementNums[1]+" Inline Images' aria-pressed='false'>hide "+objectClass.elementNums[1]+" inline</button>";
-    moduleActionButtons += "<button id='ANDI508-highlightDecorativeImages-button' aria-label='Highlight "+objectClass.elementNums[3]+" Decorative Inline Images' aria-pressed='false'>"+objectClass.elementNums[3]+" decorative inline"+findIcon+"</button>";
-    moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span> ";
-    moduleActionButtons += "<button id='ANDI508-removeBackgroundImages-button' aria-label='Hide "+objectClass.elementNums[2]+" Background Images' aria-pressed='false'>hide "+objectClass.elementNums[2]+" background</button>";
-    moduleActionButtons += "<button id='ANDI508-highlightBackgroundImages-button' aria-label='Highlight "+objectClass.elementNums[2]+" Background Images' aria-pressed='false'>find "+objectClass.elementNums[2]+" background"+findIcon+"</button>";
-    moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span> ";
-    moduleActionButtons += "<button id='ANDI508-highlightFontIcons-button' aria-label='Find "+objectClass.elementNums[4]+" Font Icons' aria-pressed='false'>"+objectClass.elementNums[4]+" font icons</button>";
-
-    $("#ANDI508-module-actions").html(moduleActionButtons);
-
-    //Define fadeInlineImages button
-    $("#ANDI508-fadeInlineImages-button").click(function(){
-        //This button will change the image's opacity to almost zero
-        if($(this).attr("aria-pressed")=="false"){
-            $(this).attr("aria-pressed","true").addClass("ANDI508-module-action-active");
-            $("#ANDI508-testPage").addClass("gANDI508-fadeInline");
-            AndiModule.activeActionButtons.fadeInlineImages = true;
-        }
-        else{
-            $(this).attr("aria-pressed","false").removeClass("ANDI508-module-action-active");
-            $("#ANDI508-testPage").removeClass("gANDI508-fadeInline");
-            AndiModule.activeActionButtons.fadeInlineImages = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    //Define Remove removeBackgroundImages button
-    $("#ANDI508-removeBackgroundImages-button").click(function(){
-        if($(this).attr("aria-pressed")=="false"){
-            $(this).attr("aria-pressed","true").addClass("ANDI508-module-action-active");
-            $("#ANDI508-testPage").addClass("gANDI508-hideBackground");
-            AndiModule.activeActionButtons.removeBackgroundImages = true;
-        }
-        else{
-            $(this).attr("aria-pressed","false").removeClass("ANDI508-module-action-active");
-            $("#ANDI508-testPage").removeClass("gANDI508-hideBackground");
-            AndiModule.activeActionButtons.removeBackgroundImages = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    //Define highlightBackgroundImages button
-    $("#ANDI508-highlightBackgroundImages-button").click(function(){
-        if($(this).attr("aria-pressed")=="false"){
-            andiOverlay.overlayButton_on("find",$(this));
-            $("#ANDI508-testPage").addClass("gANDI508-highlightBackground");
-            AndiModule.activeActionButtons.highlightBackgroundImages = true;
-        }
-        else{
-            andiOverlay.overlayButton_off("find",$(this));
-            $("#ANDI508-testPage").removeClass("gANDI508-highlightBackground");
-            AndiModule.activeActionButtons.highlightBackgroundImages = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    //Define highlightDecorativeImages button
-    $("#ANDI508-highlightDecorativeImages-button").click(function(){
-        if($(this).attr("aria-pressed")=="false"){
-            andiOverlay.overlayButton_on("find",$(this));
-            $("#ANDI508-testPage").addClass("gANDI508-highlightDecorative");
-            AndiModule.activeActionButtons.highlightDecorativeImages = true;
-        }
-        else{
-            andiOverlay.overlayButton_off("find",$(this));
-            $("#ANDI508-testPage").removeClass("gANDI508-highlightDecorative");
-            AndiModule.activeActionButtons.highlightDecorativeImages = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    //Define highlightFontIcons button
-    $("#ANDI508-highlightFontIcons-button").click(function(){
-        if($(this).attr("aria-pressed")=="false"){
-            andiOverlay.overlayButton_on("find",$(this));
-            $("#ANDI508-testPage").addClass("gANDI508-highlightFontIcon");
-            AndiModule.activeActionButtons.highlightFontIcons = true;
-        }
-        else{
-            andiOverlay.overlayButton_off("find",$(this));
-            $("#ANDI508-testPage").removeClass("gANDI508-highlightFontIcon");
-            AndiModule.activeActionButtons.highlightFontIcons = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
     andiBar.showElementControls();
     if(!andiBar.focusIsOnInspectableElement())
         startUpSummaryText += "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. ";
@@ -346,7 +244,6 @@ gANDI.results = function(objectClass){
     andiBar.showStartUpSummary(startUpSummaryText, true);
 
     AndiModule.engageActiveActionButtons([
-        "fadeInlineImages",
         "removeBackgroundImages",
         "highlightBackgroundImages",
         "highlightDecorativeImages",
