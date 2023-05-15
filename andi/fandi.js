@@ -310,7 +310,7 @@ function Focusables() {
     this.index              = 1;
     this.numTitleAttributes = 0;
     this.numLabelTag        = 0;
-    this.columnNames        = ["element", "index", "offset", "isAriaHidden", "ariaLabel", "ariaLabelledby", "ariaLabeledby", "role", "id", "onBlur", "onChange", "onDblclick", "height", "width"];
+    this.columnNames        = ["element", "index"];
 }
 
 // This object class is used to keep track of the table information

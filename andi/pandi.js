@@ -441,7 +441,7 @@ function PossibleHeaders() {
     this.list         = [];
     this.count        = 0;
     this.index        = 1;
-    this.columnNames  = ["element", "index", "fontSize", "fontWeight", "nextElement", "nextFontSize", "nextFontWeight", "isFakeHeading"];
+    this.columnNames  = ["element", "index"];
     this.outlineReady = false;
 }
 
