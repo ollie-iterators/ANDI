@@ -45,7 +45,7 @@ cANDI.analyze = function(objectClass){
 
                         //Throw alerts if necessary
                         cANDI.processResult($(this));
-                        objectClass.list.push(new Contrast(this, objectClass.index, ""));
+                        objectClass.list.push(new Contrast([this], objectClass.index, ""));
                         objectClass.index += 1;
                         objectClass.elementNums[0] += 1;
                         objectClass.elementStrings[0] = "color contrast elements"
@@ -982,10 +982,10 @@ _.WHITE = new _([255,255,255]);
 //===============
 
 //This object class is used to store data about the color contrast of the element. Object instances will be placed into an array.
-function Contrast(element, index, rowClass) {
-    this.element      = element;
+function Contrast(elementList, index, rowClass) {
+    this.elementList  = elementList;
     this.index        = index;
-    this.columnValues = [element, index];
+    this.columnValues = [elementList, index];
     this.rowClass     = rowClass;
 }
 

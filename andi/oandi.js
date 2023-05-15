@@ -32,7 +32,7 @@ oANDI.analyze = function(objectClass){
             //Add to the headings array
 
             if(andiData.isAriaHidden != true)
-                objectClass.list.push(new CertainHeader(this, objectClass.index, ''));
+                objectClass.list.push(new CertainHeader([this], objectClass.index, ''));
 
             if(andiData.role === "heading"){
 
@@ -402,10 +402,10 @@ AndiOverlay.prototype.overlayReadingOrder = function(){
 };
 
 //This object class is used to store data about each certain header. Object instances will be placed into an array.
-function CertainHeader(element, index, rowClass) {
-    this.element      = element;
+function CertainHeader(elementList, index, rowClass) {
+    this.elementList  = elementList;;
     this.index        = index;
-    this.columnValues = [element, index];
+    this.columnValues = [elementList, index];
     this.rowClass     = rowClass;
 }
 

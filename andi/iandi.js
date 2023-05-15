@@ -15,7 +15,7 @@ iANDI.analyze = function(objectClass){
         if($(this).is("iframe")){
             andiData = new AndiData(this);
             andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
-            objectClass.list.push(new iFrame(this, objectClass.index, src, ""))
+            objectClass.list.push(new iFrame([this], objectClass.index, src, ""))
             AndiData.attachDataToElement(this);
             objectClass.index += 1
         }
@@ -140,11 +140,11 @@ iANDI.openIframeInNewWindow = function(iframe){
 };
 
 //This object class is used to store data about each hidden element. Object instances will be placed into an array.
-function iFrame(element, index, src, rowClass) {
-    this.element      = element;
+function iFrame(elementList, index, src, rowClass) {
+    this.elementList  = elementList;;
     this.index        = index;
     this.src          = src;
-    this.columnValues = [element, index, src];
+    this.columnValues = [elementList, index, src];
     this.rowClass     = rowClass;
 }
 

@@ -429,17 +429,11 @@ AndiOverlay.prototype.overlayReadingOrder = function(){
 };
 
 //This object class is used to store data about each possible header. Object instances will be placed into an array.
-function PossibleHeader(element, index, fontSize, fontWeight, nextElement, nextFontSize, nextFontWeight, isFakeHeading, rowClass) {
-    this.element        = element;
-    this.index          = index;
-    this.fontSize       = fontSize;
-    this.fontWeight     = fontWeight;
-    this.nextElement    = nextElement;
-    this.nextFontSize   = nextFontSize;
-    this.nextFontWeight = nextFontWeight;
-    this.isFakeHeading  = isFakeHeading
-    this.columnValues   = [element, index, fontSize, fontWeight, nextElement, nextFontSize, nextFontWeight, isFakeHeading];
-    this.rowClass       = rowClass;
+function PossibleHeader(elementList, index, rowClass) {
+    this.elementList  = elementList;
+    this.index        = index;
+    this.columnValues = [elementList, index];
+    this.rowClass     = rowClass;
 }
 
 //This object class is used to keep track of the possible headers on the page

@@ -26,7 +26,7 @@ qANDI.analyze = function(objectClass){
         objectClass = andiBar.createObjectValues(objectClass, 10);
         if($(this).isSemantically(["listitem","list"],"ol,ul,li,dl,dd,dt")){
             //Add to the lists array
-            objectClass.list.push(new List(this, objectClass.index, ''));
+            objectClass.list.push(new List([this], objectClass.index, ''));
             objectClass.index += 1;
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "list elements";
@@ -327,10 +327,10 @@ AndiOverlay.prototype.overlayReadingOrder = function(){
 };
 
 //This object class is used to store data about each list. Object instances will be placed into an array.
-function List(element, index, rowClass) {
-    this.element      = element;
+function List(elementList, index, rowClass) {
+    this.elementList  = elementList;;
     this.index        = index;
-    this.columnValues = [element, index];
+    this.columnValues = [elementList, index];
     this.rowClass     = rowClass;
 }
 

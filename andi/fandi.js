@@ -31,7 +31,7 @@ fANDI.analyze = function(objectClass){
             if(andiData.accesskey)
                 fANDI.accesskeys.push(this, andiData.accesskey, andiData.andiElementIndex);
             testPageData.firstLaunchedModulePrep(this, andiData);
-            objectClass.list.push(new Focusable(this, objectClass.index, "", "", "", "", "", "", "", "", "", "", "", "", ""));
+            objectClass.list.push(new Focusable([this], objectClass.index,  ""));
             objectClass.index += 1;
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "focusable elements"
@@ -295,24 +295,11 @@ AndiModule.inspect = function(element){
 };
 
 //This object class is used to store data about each focusable element. Object instances will be placed into an array.
-function Focusable(element, index, offset, isAriaHidden, ariaLabel, ariaLabelledby, ariaLabeledby, role, id, onBlur, onChange, onDblclick, height, width, rowClass) {
-    this.element        = element;
-    this.index          = index;
-    this.offset         = offset;
-    // Common Focusable Element Checks
-    this.isAriaHidden   = isAriaHidden;
-    this.ariaLabel      = ariaLabel;
-    this.ariaLabelledby = ariaLabelledby;
-    this.ariaLabeledby  = ariaLabeledby;
-    this.role           = role;
-    this.id             = id;
-    this.onBlur         = onBlur;
-    this.onChange       = onChange;
-    this.onDblclick     = onDblclick;
-    this.height         = height;
-    this.width          = width;
-    this.columnValues   = [element, index, offset, isAriaHidden, ariaLabel, ariaLabelledby, ariaLabeledby, role, id, onBlur, onChange, onDblclick, height, width];
-    this.rowClass       = rowClass;
+function Focusable(elementList, index, rowClass) {
+    this.elementList  = elementList;;
+    this.index        = index;
+    this.columnValues = [elementList, index];
+    this.rowClass     = rowClass;
 }
 
 //This object class is used to keep track of the focusable elements on the page
