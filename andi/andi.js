@@ -4331,7 +4331,9 @@ var oldIE = false; //used to determine if old version of IE is being used.
                                 "<a href='javascript:void(0)' data-andi508-relatedindex='" + moduleList.list[x].index + "'>" + rowValues + "</a></td></tr>";
                 }
 
-                var tabsHTML = andiBar.addTabsButtons(tableModule);
+                var tabsHTML = "";
+                // TODO: make addTabsButtons function
+                //var tabsHTML = andiResults.addTabsButtons(tableModule);
 
                 if (tabsHTML != "") {
                     appendHTML += tabsHTML;
