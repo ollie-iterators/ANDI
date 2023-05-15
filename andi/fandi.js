@@ -9,12 +9,6 @@ var fandiVersionNumber = "7.0.0";
 //create fANDI instance
 var fANDI = new AndiModule(fandiVersionNumber,"f");
 
-AndiModule.initActiveActionButtons({
-    tabOrder:false,
-    titleAttributes:false,
-    labelTags:false
-});
-
 //This function will analyze the test page for focusable element related markup relating to accessibility
 fANDI.analyze = function(objectClass){
     objectClass = andiBar.createObjectValues(objectClass, 1);
@@ -127,63 +121,6 @@ fANDI.results = function(objectClass){
         });
         $("#ANDI508-accesskeysFound").show();
     }
-
-    //Tab Order button
-    var moduleActionButtons = "<button id='ANDI508-tabOrder-button' aria-label='Tab Order Indicators' aria-pressed='false'>tab order"+overlayIcon+"</button>";
-    if(TestPageData.page_using_titleAttr)
-        moduleActionButtons += "<button id='ANDI508-titleAttributes-button' aria-label='Title Attributes' aria-pressed='false'>title attributes"+overlayIcon+"</button>";
-    if(testPageData.page_using_label)
-        moduleActionButtons += "<button id='ANDI508-labelTags-button' aria-label='Label Tags' aria-pressed='false'>label tags"+overlayIcon+"</button>";
-
-    $("#ANDI508-module-actions").append(moduleActionButtons);
-
-    //Define tabOrder button functionality
-    $("#ANDI508-tabOrder-button").click(function(){
-        if($(this).attr("aria-pressed") == "false"){
-            andiOverlay.overlayButton_on("overlay",$(this));
-            andiOverlay.overlayTabOrder();
-            AndiModule.activeActionButtons.tabOrder = true;
-        }
-        else{
-            andiOverlay.overlayButton_off("overlay",$(this));
-            andiOverlay.removeOverlay("ANDI508-overlay-tabSequence");
-            AndiModule.activeActionButtons.tabOrder = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    //Define titleAttributes button functionality
-    $("#ANDI508-titleAttributes-button").click(function(){
-        if($(this).attr("aria-pressed") == "false"){
-            andiOverlay.overlayButton_on("overlay",$(this));
-            andiOverlay.overlayTitleAttributes();
-            AndiModule.activeActionButtons.titleAttributes = true;
-        }
-        else{
-            andiOverlay.overlayButton_off("overlay",$(this));
-            andiOverlay.removeOverlay("ANDI508-overlay-titleAttributes");
-            AndiModule.activeActionButtons.titleAttributes = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    //Define titleAttributes button functionality
-    $("#ANDI508-labelTags-button").click(function(){
-        if($(this).attr("aria-pressed") == "false"){
-            andiOverlay.overlayButton_on("overlay",$(this));
-            andiOverlay.overlayLabelTags();
-            AndiModule.activeActionButtons.labelTags = true;
-        }
-        else{
-            andiOverlay.overlayButton_off("overlay",$(this));
-            andiOverlay.removeOverlay("ANDI508-overlay-labelTags");
-            AndiModule.activeActionButtons.labelTags = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
 
     andiBar.focusIsOnInspectableElement();
     andiBar.showElementControls();
@@ -317,7 +254,7 @@ function Focusables() {
 function TableInfo() {
     this.tableMode = "Focusable Elements";
     this.cssProperties = [];
-    this.buttonTextList = [];
+    this.buttonTextList = ["Tab Order", "Title Attributes", "Label Tags"];
     this.tabsTextList = [];
 }
 

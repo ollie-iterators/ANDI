@@ -4241,6 +4241,7 @@ var oldIE = false; //used to determine if old version of IE is being used.
                 // Build the column name
                 var columnName = "";
 
+                // TODO: Think about replacing with element.getAttributes();
                 var attributesToAdd = [];
                 for (var x = 0; x < 1; x += 1) {
                     if (moduleList.list[x].elementList[0].hasAttributes()) {
@@ -4567,6 +4568,7 @@ var oldIE = false; //used to determine if old version of IE is being used.
             });
         };
         //TODO: Think if the code below is necessary
+        //TODO: Also think about whether you should use initActiveActionButtons here
         this.addButton = function (buttonText) {
             var buttonId = buttonText.replaceAll(" ", "");
             buttonId = buttonId[0].toLowerCase() + buttonId.substring(1);

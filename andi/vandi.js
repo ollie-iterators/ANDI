@@ -239,7 +239,7 @@ var showStartUpSummaryText = "";
 vANDI.results = function(objectClass){
 
     //Update Results Summary text depending on the active table type (data or presentation)
-    andiBar.updateResultsSummary("Tables: "+tableCountTotal+" (data tables: "+dataTablesCount+", presentation tables: "+presentationTablesCount+")");
+    andiBar.updateResultsSummary("Data tables: "+dataTablesCount+")");
 
     if(tableCountTotal > 0){
         if(!vANDI.viewList_buttonAppended){

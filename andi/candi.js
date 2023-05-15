@@ -182,31 +182,6 @@ cANDI.results = function(objectClass){
         $("#cANDI508-playground-result").focus();
     });
 
-    //Add Module Mode Buttons
-    var moduleActionButtons = "";
-
-    //Does the browser support CSS filter:grayscale?
-    if((function(){var el = document.createElement("a"); el.style.cssText = (document.body.style.webkitFilter !== undefined ? '-webkit-' : '') + 'filter:grayscale(100%)'; return !!el.style.length && !oldIE; }()))
-        moduleActionButtons += "<button id='ANDI508-grayscale-button' aria-pressed='false'>grayscale</button>";
-
-    $("#ANDI508-module-actions").html(moduleActionButtons);
-
-    //Grayscale Button
-    $("#ANDI508-grayscale-button").click(function(){
-        if($(this).attr("aria-pressed") === "false"){
-            $(this).attr("aria-pressed","true").addClass("ANDI508-module-action-active");
-            $("#ANDI508-testPage").addClass("cANDI508-grayscale");
-            AndiModule.activeActionButtons.grayscale = true;
-        }
-        else{
-            $(this).attr("aria-pressed","false").removeClass("ANDI508-module-action-active");
-            $("#ANDI508-testPage").removeClass("cANDI508-grayscale");
-            AndiModule.activeActionButtons.grayscale = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
     if(!andiBar.focusIsOnInspectableElement()){
         andiBar.showElementControls();
         andiBar.showStartUpSummary(startUpSummaryText,true);
@@ -1002,7 +977,7 @@ function Contrasts() {
 function TableInfo() {
     this.tableMode = "Color Contrasts";
     this.cssProperties = [];
-    this.buttonTextList = [];
+    this.buttonTextList = ["Grayscale"];
     this.tabsTextList = []
 }
 

@@ -248,7 +248,7 @@ var showStartUpSummaryText = "Only <span class='ANDI508-module-name-t'>presentat
 uANDI.results = function(objectClass){
 
     //Update Results Summary text depending on the active table type (data or presentation)
-    andiBar.updateResultsSummary("Tables: "+tableCountTotal+" (presentation tables: "+presentationTablesCount+")");
+    andiBar.updateResultsSummary("Presentation tables: "+presentationTablesCount+")");
 
     if(tableCountTotal > 0){
         if(!uANDI.viewList_buttonAppended){
