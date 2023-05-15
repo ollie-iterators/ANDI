@@ -108,8 +108,6 @@ var startUpSummaryText = "Discover accessibility markup for focusable elements b
 //Inserts some counter totals, displays the accesskey list
 fANDI.results = function(objectClass){
 
-    andiBar.updateResultsSummary("Focusable Elements Found: "+testPageData.andiElementIndex);
-
     //Accesskeys List:
     if(fANDI.accesskeys.getListHtml()){
         $("#ANDI508-additionalPageResults").append("<p id='ANDI508-accesskeysFound'>AccessKeys: "+"{ "+fANDI.accesskeys.getListHtml()+"}</p>");
@@ -127,12 +125,6 @@ fANDI.results = function(objectClass){
     andiBar.showStartUpSummary(startUpSummaryText,true);
 
     andiAlerter.updateAlertList();
-
-    AndiModule.engageActiveActionButtons([
-        "tabOrder",
-        "titleAttributes",
-        "labelTags"
-    ]);
 
     $("#ANDI508").focus();
 };

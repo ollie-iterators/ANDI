@@ -80,6 +80,8 @@ hANDI.containsTestableContent = function(element){
 
 //This function will analyze the test page for elements hidden using CSS
 hANDI.analyze = function(objectClass){
+    objectClass = andiBar.createObjectValues(objectClass, 9);
+
     var isHidingContent, elementCss;
     $(TestPageData.allElements).not("area,base,basefont,datalist,link,meta,noembed,noframes,param,rp,script,noscript,source,style,template,track,title").each(function(){
         isHidingContent = false;
@@ -88,37 +90,41 @@ hANDI.analyze = function(objectClass){
         if(hANDI.containsTestableContent(this)){
             if($(this).css("display")=="none"){
                 //element display is none
-                objectClass.count++;
+                objectClass.elementNums[0] += 1;
+                objectClass.elementStrings[0] = "hidden elements";
                 isHidingContent = true;
-                if($(this).closest(".ANDI508-forceReveal-display").length === 0)
-                    objectClass.hiddenDisplay++; //increment count if not contained by another of same hiding technique
+                objectClass.elementNums[1] += 1;
+                objectClass.elementStrings[1] = "display:none"
                 $(this).addClass("ANDI508-forceReveal-display");
                 elementCss += "display:none; ";
             }
             if($(this).css("visibility")=="hidden"){
                 //element visibility is hidden
-                objectClass.count++;
+                objectClass.elementNums[0] += 1;
+                objectClass.elementStrings[0] = "hidden elements";
                 isHidingContent = true;
-                if($(this).closest(".ANDI508-forceReveal-visibility").length === 0)
-                    objectClass.hiddenVisibility++; //increment count if not contained by another of same hiding technique
+                objectClass.elementNums[2] += 1;
+                objectClass.elementStrings[2] = "visibility:hidden"
                 $(this).addClass("ANDI508-forceReveal-visibility");
                 elementCss += "visibility:hidden; ";
             }
             if($(this).css("position")=="absolute" && ($(this).offset().left < 0 || $(this).offset().top < 0)){
                 //element is positioned offscreen
-                objectClass.count++;
+                objectClass.elementNums[0] += 1;
+                objectClass.elementStrings[0] = "hidden elements";
                 isHidingContent = true;
-                if($(this).closest(".ANDI508-forceReveal-position").length === 0)
-                    objectClass.hiddenPosition++; //increment count if not contained by another of same hiding technique
+                objectClass.elementNums[3] += 1;
+                objectClass.elementStrings[3] = "position:absolute"
                 $(this).addClass("ANDI508-forceReveal-position");
                 elementCss += "position:absolute; ";
             }
             if($(this).css("opacity")=="0"){
                 //element opacity is zero
-                objectClass.count++;
+                objectClass.elementNums[0] += 1;
+                objectClass.elementStrings[0] = "hidden elements";
                 isHidingContent = true;
-                if($(this).closest(".ANDI508-forceReveal-opacity").length === 0)
-                    objectClass.hiddenOpacity++; //increment count if not contained by another of same hiding technique
+                objectClass.elementNums[4] += 1;
+                objectClass.elementStrings[4] = "opacity:0"
                 $(this).addClass("ANDI508-forceReveal-opacity");
                 elementCss += "opacity:0; ";
             }
@@ -128,35 +134,39 @@ hANDI.analyze = function(objectClass){
                     (parseInt($(this).css("height"))<=1 || parseInt($(this).css("width"))<=1))
                 {
                     //element has overflow hidden and a small height or width
-                    objectClass.count++;
+                    objectClass.elementNums[0] += 1;
+                    objectClass.elementStrings[0] = "hidden elements";
                     isHidingContent = true;
-                    if($(this).closest(".ANDI508-forceReveal-overflow").length === 0)
-                        objectClass.hiddenOverflow++; //increment count if not contained by another of same hiding technique
+                    objectClass.elementNums[5] += 1;
+                    objectClass.elementStrings[5] = "overflow:hidden"
                     $(this).addClass("ANDI508-forceReveal-overflow");
                     elementCss += "overflow:hidden; ";
                 }
                 if(parseInt($(this).css("font-size")) === 0){
                     //element font-size is 0
-                    objectClass.count++;
+                    objectClass.elementNums[0] += 1;
+                    objectClass.elementStrings[0] = "hidden elements";
                     isHidingContent = true;
-                    if($(this).closest(".ANDI508-forceReveal-fontSize").length === 0)
-                        objectClass.hiddenFontSize++; //increment count if not contained by another of same hiding technique
+                    objectClass.elementNums[6] += 1;
+                    objectClass.elementStrings[6] = "font-size:0"
                     $(this).addClass("ANDI508-forceReveal-fontSize");
                     elementCss += "font-size:0; ";
                 }
             }
             if(parseInt($(this).css("text-indent")) < -998){ //-998 chosen because a common technique is to position at -999 to make text offscreen
                 //element has a text-indent that makes it off screen
-                objectClass.count++;
+                objectClass.elementNums[0] += 1;
+                objectClass.elementStrings[0] = "hidden elements";
                 isHidingContent = true;
-                if($(this).closest(".ANDI508-forceReveal-textIndent").length === 0)
-                    objectClass.hiddenTextIndent++; //increment count if not contained by another of same hiding technique
+                objectClass.elementNums[7] += 1;
+                objectClass.elementStrings[7] = "text-indent"
                 $(this).addClass("ANDI508-forceReveal-textIndent");
                 elementCss += "text-indent:"+$(this).css("text-indent")+"; ";
             }
             if($(this).attr("hidden")){
                 //element has html5 hidden attribute
-                objectClass.count++;
+                objectClass.elementNums[0] += 1;
+                objectClass.elementStrings[0] = "hidden elements";
                 isHidingContent = true;
                 if($(this).closest(".ANDI508-forceReveal-html5Hidden").length === 0)
                     objectClass.hiddenHtml5Hidden++; //increment count if not contained by another of same hiding technique
@@ -218,7 +228,8 @@ hANDI.detectCssInjectedContent = function(objectClass){
         }
 
         if(hasHiddenCSSContent){
-            objectClass.elementsWithCSS++;
+            objectClass.elementNums[8] += 1;
+            objectClass.elementStrings[8] = "elements with CSS"
             $(TestPageData.allVisibleElements[x]).addClass("hANDI508-hasHiddenCssContent");
         }
     }
@@ -254,14 +265,14 @@ hANDI.results = function(objectClass){
     var moduleActionButtons = "";
     var revealButtons = "";
 
-    addForceRevealButton("display", objectClass.hiddenDisplay, "display:none");
-    addForceRevealButton("visibility", objectClass.hiddenVisibility, "visibility:hidden");
-    addForceRevealButton("position", objectClass.hiddenPosition, "position:absolute");
-    addForceRevealButton("overflow", objectClass.hiddenOverflow, "overflow:hidden");
-    addForceRevealButton("fontSize", objectClass.hiddenFontSize, "font-size:0");
-    addForceRevealButton("textIndent", objectClass.hiddenTextIndent, "text-indent");
+    addForceRevealButton("display", objectClass.elementNums[1], "display:none");
+    addForceRevealButton("visibility", objectClass.elementNums[2], "visibility:hidden");
+    addForceRevealButton("position", objectClass.elementNums[3], "position:absolute");
+    addForceRevealButton("overflow", objectClass.elementNums[5], "overflow:hidden");
+    addForceRevealButton("fontSize", objectClass.elementNums[6], "font-size:0");
+    addForceRevealButton("textIndent", objectClass.elementNums[7], "text-indent");
     addForceRevealButton("html5Hidden", objectClass.hiddenHtml5Hidden, "html5 hidden");
-    addForceRevealButton("opacity", objectClass.hiddenOpacity, "opacity:0");
+    addForceRevealButton("opacity", objectClass.elementNums[4], "opacity:0");
 
     function addForceRevealButton(technique, count, buttonText){
         revealButtons += "<button id='ANDI508-forceReveal_"+technique+"-button' class='hANDI-revealButton' aria-label='"+count+" "+buttonText+"' aria-pressed='false'>"+count+" "+buttonText+findIcon+"</button>";
@@ -270,7 +281,7 @@ hANDI.results = function(objectClass){
     moduleActionButtons = "<button id='ANDI508-forceRevealAll-button' aria-label='Reveal All' aria-pressed='false'>reveal all"+findIcon+"</button><span class='ANDI508-module-actions-spacer'>|</span> ";
     moduleActionButtons += "<div class='ANDI508-moduleActionGroup'><button class='ANDI508-moduleActionGroup-toggler'>css hiding techniques</button><div class='ANDI508-moduleActionGroup-options'>" + revealButtons + "</div></div>";
     moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span>&nbsp;";
-    moduleActionButtons += "<button id='ANDI508-highlightCssContent-button' aria-label='content ::before ::after "+objectClass.elementsWithCSS+" CSS Content' aria-pressed='false'>content ::before ::after "+objectClass.elementsWithCSS+findIcon+"</button>";
+    moduleActionButtons += "<button id='ANDI508-highlightCssContent-button' aria-label='content ::before ::after "+objectClass.elementNums[8]+" CSS Content' aria-pressed='false'>content ::before ::after "+objectClass.elementNums[8]+findIcon+"</button>";
 
     if(TestPageData.page_using_titleAttr)
         //Title Attributes Button
@@ -530,18 +541,12 @@ function HiddenElement(elementList, index, hidingTypes, rowClass) {
 
 //This object class is used to keep track of the hidden elements on the page
 function HiddenElements() {
-    this.list              = [];
-    this.hiddenDisplay     = 0; //elements with display:none
-    this.hiddenVisibility  = 0; //elements with visibility:hidden
-    this.hiddenPosition    = 0; //elements with position:absolute and offset().left < 0 and offset().top < 0
-    this.hiddenOpacity     = 0; //elements with opacity:0
-    this.hiddenOverflow    = 0; //elements with overflow:hidden and height <= 1px and width <= 1px
-    this.hiddenFontSize    = 0; //elements with font-size:0
-    this.hiddenTextIndent  = 0; //elements with text-indent < -998px
-    this.elementsWithCSS   = 0; //elements with CSS Injected Content
-    this.count             = 0;
-    this.index             = 1;
-    this.columnNames       = ["element", "index", "hidingTypes"];
+    this.list           = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
+    this.count          = 0;
+    this.index          = 1;
+    this.columnNames    = ["element", "index", "hidingTypes"];
 }
 
 // This object class is used to keep track of the table information

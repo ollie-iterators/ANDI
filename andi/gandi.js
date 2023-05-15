@@ -244,17 +244,6 @@ gANDI.results = function(objectClass){
 
     andiBar.updateResultsSummary("Images Found: "+imagesCount);
 
-    //Create Image contained by html (number of image links and image buttons)
-    var resultsDetails = "";
-
-    resultsDetails += objectClass.elementNums[1] + " inline images, ";
-    resultsDetails += objectClass.elementNums[5] + " image links, ";
-    resultsDetails += objectClass.elementNums[6] + " image buttons, ";
-    resultsDetails += objectClass.elementNums[4] + " font icons, ";
-    resultsDetails += objectClass.elementNums[2]+ " background-images";
-
-    $("#ANDI508-additionalPageResults").append("<p tabindex='0'>"+resultsDetails+"</p>");
-
     //Add Module Mode Buttons
     var moduleActionButtons = "";
 
@@ -446,7 +435,7 @@ function Images() {
 function TableInfo() {
     this.tableMode = "Images";
     this.cssProperties = [];
-    this.buttonTextList = [];
+    this.buttonTextList = ["Fade Inline Images", "Remove Backgroundn Images", "Highlight Background Images", "Highlight Decorative Images", "Highlight Font Icons"];
     this.tabsTextList = [];
 }
 

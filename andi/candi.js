@@ -12,8 +12,7 @@ var cANDIVersionNumber = "4.1.4";
 var cANDI = new AndiModule(cANDIVersionNumber,"c");
 
 AndiModule.initActiveActionButtons({
-    contrastPlayground:false,
-    grayscale:false
+    contrastPlayground:false
 });
 
 //This function will run tests on text containing elements
@@ -192,8 +191,7 @@ cANDI.results = function(objectClass){
     andiAlerter.updateAlertList();
 
     AndiModule.engageActiveActionButtons([
-        "contrastPlayground",
-        "grayscale"
+        "contrastPlayground"
     ]);
 
     $("#ANDI508").focus();

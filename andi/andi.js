@@ -4568,7 +4568,7 @@ var oldIE = false; //used to determine if old version of IE is being used.
             });
         };
         //TODO: Think if the code below is necessary
-        //TODO: Also think about whether you should use initActiveActionButtons here
+        // TODO: Also think about whether you should use initActiveActionButtons
         this.addButton = function (buttonText) {
             var buttonId = buttonText.replaceAll(" ", "");
             buttonId = buttonId[0].toLowerCase() + buttonId.substring(1);
