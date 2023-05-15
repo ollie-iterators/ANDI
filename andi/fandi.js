@@ -35,6 +35,16 @@ fANDI.analyze = function(objectClass){
             testPageData.firstLaunchedModulePrep(this);
             andiCheck.isThisElementDisabled(this);
         }
+
+        if ($(this).attr("title")) {
+            objectClass.elementNums[1] += 1;
+            objectClass.elementStrings[1] = "title attributes"
+        }
+        if ($(this).is("label")) {
+            objectClass.elementNums[2] += 1;
+            objectClass.elementStrings[2] = "label tags"
+        }
+
     });
 
     andiCheck.areLabelForValid();
@@ -233,13 +243,11 @@ function Focusable(elementList, index, rowClass) {
 
 //This object class is used to keep track of the focusable elements on the page
 function Focusables() {
-    this.list               = [];
-    this.elementNums        = [];
-    this.elementStrings     = [];
-    this.index              = 1;
-    this.numTitleAttributes = 0;
-    this.numLabelTag        = 0;
-    this.columnNames        = ["element", "index"];
+    this.list           = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
+    this.index          = 1;
+    this.columnNames    = ["element", "index"];
 }
 
 // This object class is used to keep track of the table information
