@@ -240,7 +240,7 @@ AndiOverlay.prototype.overlayReadingOrder = function(){
 
 //This object class is used to store data about each list. Object instances will be placed into an array.
 function List(elementList, index, rowClass) {
-    this.elementList  = elementList;;
+    this.elementList  = elementList;
     this.index        = index;
     this.columnValues = [elementList, index];
     this.rowClass     = rowClass;

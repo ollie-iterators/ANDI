@@ -974,7 +974,7 @@ function buildArrayOnIndex(value){
 
 //This object class is used to store data about each presentation table. Object instances will be placed into an array.
 function PresentationTable(elementList, index, role, name, rowClass) {
-    this.elementList  = elementList;;
+    this.elementList  = elementList;
     this.index        = index;
     this.role         = role;
     this.name         = name;
@@ -984,10 +984,12 @@ function PresentationTable(elementList, index, role, name, rowClass) {
 
 //This object class is used to keep track of the presentation tables on the page
 function PresentationTables() {
-    this.list        = []; //Stores all tables in an array
-    this.count       = 0;  //The total number of presentation tables
-    this.index       = 1;
-    this.columnNames = ["element", "index", "role", "name"];
+    this.list           = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
+    this.count          = 0;
+    this.index          = 1;
+    this.columnNames    = ["element", "index", "role", "name"];
 }
 
 // This object class is used to keep track of the table information

@@ -509,7 +509,7 @@ $("#ANDI508-button-nextElement").off("click").click(function(){
 
 //This object class is used to store data about each hidden element. Object instances will be placed into an array.
 function HiddenElement(elementList, index, hidingTypes, rowClass) {
-    this.elementList  = elementList;;
+    this.elementList  = elementList;
     this.index        = index;
     this.hidingTypes  = hidingTypes;
     this.columnValues = [elementList, index, hidingTypes];

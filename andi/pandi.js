@@ -350,11 +350,13 @@ function PossibleHeader(elementList, index, rowClass) {
 
 //This object class is used to keep track of the possible headers on the page
 function PossibleHeaders() {
-    this.list         = [];
-    this.count        = 0;
-    this.index        = 1;
-    this.columnNames  = ["element", "index"];
-    this.outlineReady = false;
+    this.list           = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
+    this.count          = 0;
+    this.index          = 1;
+    this.columnNames    = ["element", "index"];
+    this.outlineReady   = false;
 }
 
 // This object class is used to keep track of the table information

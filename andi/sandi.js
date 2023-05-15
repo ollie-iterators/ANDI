@@ -228,7 +228,7 @@ AndiOverlay.prototype.overlayReadingOrder = function(){
 
 //This object class is used to store data about each live region. Object instances will be placed into an array.
 function LiveRegion(elementList, index, rowClass) {
-    this.elementList  = elementList;;
+    this.elementList  = elementList;
     this.index        = index;
     this.columnValues = [elementList, index];
     this.rowClass     = rowClass;
@@ -236,10 +236,12 @@ function LiveRegion(elementList, index, rowClass) {
 
 //This object class is used to keep track of the live regions on the page
 function LiveRegions() {
-    this.list        = [];
-    this.count       = 0;
-    this.index       = 1;
-    this.columnNames = ["element", "index"];
+    this.list           = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
+    this.count          = 0;
+    this.index          = 1;
+    this.columnNames    = ["element", "index"];
 }
 
 // This object class is used to keep track of the table information

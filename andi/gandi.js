@@ -312,7 +312,7 @@ function altTextAnalysis(altText){
 // after this point in the original code.
 //This object class is used to store data about each graphic. Object instances will be placed into an array.
 function Image(elementList, index, rowClass) {
-    this.elementList  = elementList;;
+    this.elementList  = elementList;
     this.index        = index;
     this.columnValues = [elementList, index];
     this.rowClass     = rowClass;

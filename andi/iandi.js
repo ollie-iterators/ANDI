@@ -141,7 +141,7 @@ iANDI.openIframeInNewWindow = function(iframe){
 
 //This object class is used to store data about each hidden element. Object instances will be placed into an array.
 function iFrame(elementList, index, src, rowClass) {
-    this.elementList  = elementList;;
+    this.elementList  = elementList;
     this.index        = index;
     this.src          = src;
     this.columnValues = [elementList, index, src];
@@ -150,10 +150,12 @@ function iFrame(elementList, index, src, rowClass) {
 
 //This object class is used to keep track of the iFrames on the page
 function iFrames() {
-    this.list        = [];
-    this.count       = 0;
-    this.index       = 1;
-    this.columnNames = ["element", "index", "src"];
+    this.list           = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
+    this.count          = 0;
+    this.index          = 1;
+    this.columnNames    = ["element", "index", "src"];
 }
 
 // This object class is used to keep track of the table information
