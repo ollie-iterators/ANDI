@@ -707,36 +707,6 @@ tANDI.grab_headers = function(element, elementData, table){
     }
 };
 
-//This function returns true if any index match is found.
-//The colIndex/rowIndex could contain a space delimited array
-function index_match(a,b){
-    var match = false;
-    var	aX = buildArrayOnIndex(a);
-    var	bY = buildArrayOnIndex(b);
-
-    //compare
-    for(var x=0; x<aX.length; x++){
-        for(var y=0; y<bY.length; y++){
-            if(aX[x] == bY[y]){
-                match = true;
-                break;
-            }
-        }
-    }
-    return match;
-}
-
-//This function will build an array based on the value passed in.
-//If it is space delimited it returns an array greater than 1.
-//If it is not space delimited it returns an array of length 1.
-//This is mainly done to fix an IE7 bug with array handling.
-function buildArrayOnIndex(value){
-    if(value.toString().includes(" "))
-        return value.split(" ");
-    else
-        return [value];
-}
-
 //This object class is used to store data about each presentation table. Object instances will be placed into an array.
 function PresentationTable(elementList, index, role, name, rowClass) {
     this.elementList  = elementList;
