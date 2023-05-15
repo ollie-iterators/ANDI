@@ -59,6 +59,9 @@ gANDI.analyze = function(objectClass){
                     //Image is contained by <a> or <button>
                     andiData = new AndiData(closestWidgetParent[0]);
                     andiCheck.commonFocusableElementChecks(andiData, $(closestWidgetParent));
+                    objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
+                    objectClass.elementNums[0] += 1;
+                    objectClass.elementNums[0] = "images";
                     AndiData.attachDataToElement(closestWidgetParent);
                 }
             }
@@ -71,18 +74,27 @@ gANDI.analyze = function(objectClass){
                 objectClass.elementNums[1] += 1;
                 objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0171);
+                objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
+                objectClass.elementNums[0] += 1;
+                objectClass.elementNums[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             else if($(this).is("blink")){
                 objectClass.elementNums[1] += 1;
                 objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0172);
+                objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
+                objectClass.elementNums[0] += 1;
+                objectClass.elementNums[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             else if($(this).is("canvas")){
                 objectClass.elementNums[1] += 1;
                 objectClass.elementStrings[1] = "inline images";
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
+                objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
+                objectClass.elementNums[0] += 1;
+                objectClass.elementNums[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             else if($(this).is("input:image")){
@@ -90,6 +102,9 @@ gANDI.analyze = function(objectClass){
                 objectClass.elementStrings[1] = "inline images";
                 andiCheck.commonFocusableElementChecks(andiData, $(this));
                 altTextAnalysis($.trim($(this).attr("alt")));
+                objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
+                objectClass.elementNums[0] += 1;
+                objectClass.elementNums[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             //Check for server side image map
@@ -97,6 +112,9 @@ gANDI.analyze = function(objectClass){
                 objectClass.elementNums[1] += 1;
                 objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0173);
+                objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
+                objectClass.elementNums[0] += 1;
+                objectClass.elementNums[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             else if(!isImageContainedByInteractiveWidget && $(this).isSemantically(["img"],"img,svg")){ //an image used by an image map is handled by the <area>
@@ -119,6 +137,9 @@ gANDI.analyze = function(objectClass){
                     altTextAnalysis($.trim($(this).attr("alt")));
                 }
 
+                objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
+                objectClass.elementNums[0] += 1;
+                objectClass.elementNums[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             else if($(this).is("area")){
@@ -132,6 +153,9 @@ gANDI.analyze = function(objectClass){
                         //<map> references existing <img>
                         andiCheck.commonFocusableElementChecks(andiData, $(this));
                         altTextAnalysis($.trim($(this).attr("alt")));
+                        objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
+                        objectClass.elementNums[0] += 1;
+                        objectClass.elementNums[0] = "images";
                         AndiData.attachDataToElement(this);
                     }
                     else{//Image referenced by image map not found
@@ -146,6 +170,9 @@ gANDI.analyze = function(objectClass){
                 //objectClass.elementNums[1] += 1;
                 //objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0134);
+                objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
+                objectClass.elementNums[0] += 1;
+                objectClass.elementNums[0] = "images";
                 AndiData.attachDataToElement(this);
             }
         }
@@ -168,6 +195,9 @@ gANDI.analyze = function(objectClass){
         {
             if(!$(this).hasClass("ANDI508-element")){
                 andiData = new AndiData(this);
+                objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
+                objectClass.elementNums[0] += 1;
+                objectClass.elementNums[0] = "images";
                 AndiData.attachDataToElement(this);
             }
             objectClass.elementNums[4] += 1;
@@ -232,9 +262,7 @@ var showStartUpSummaryText = "";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 gANDI.results = function(objectClass){
 
-    var imagesCount = objectClass.elementNums[1] + objectClass.elementNums[2] + objectClass.elementNums[4];
-
-    andiBar.updateResultsSummary("Images Found: "+imagesCount);
+    andiBar.updateResultsSummary("Images Found: "+objectClass.elementNums[0]);
 
     andiBar.showElementControls();
     if(!andiBar.focusIsOnInspectableElement())
@@ -323,8 +351,6 @@ function Images() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.count          = 0;
-    this.index          = 1;
     this.columnNames    = ["element", "index"];
 }
 

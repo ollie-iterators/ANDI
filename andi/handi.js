@@ -182,6 +182,7 @@ hANDI.analyze = function(objectClass){
             }
 
             andiData = new AndiData(this, true);
+            objectClass.list.push(new HiddenElement([this], objectClass.list.length + 1, elementCss, ""));
             AndiData.attachDataToElement(this);
         }
     });
@@ -521,7 +522,6 @@ function HiddenElements() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.index          = 1;
     this.columnNames    = ["element", "index", "hidingTypes"];
 }
 

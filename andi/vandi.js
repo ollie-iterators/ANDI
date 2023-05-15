@@ -97,7 +97,9 @@ vANDI.analyze = function(objectClass){
         var activeElementFound = false;
         $(TestPageData.allElements).filter("table,[role=table],[role=grid],[role=treegrid]").each(function(){
             //Store this table in the array
-            tableArray.push($(this));
+            objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] += "presentation tables";
 
             if($(this).isSemantically(["table","grid","treegrid"],"table")){
                 //It's a data table
@@ -1630,8 +1632,6 @@ function DataTables() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.count          = 0;
-    this.index          = 1;
     this.columnNames    = ["element", "index", "role", "name"];
 }
 
