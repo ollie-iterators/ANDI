@@ -75,7 +75,9 @@ lANDI.analyze = function(objectClass){
                     if(isLinkKeyboardAccessible(href, this)){
                         if(nameDescription){
 
-                            ambiguousIndex = scanForAmbiguity(this, nameDescription, href);
+                            // TODO: Re-enable this when namedescription is added to the objects
+                            ambiguousIndex = ""
+                            //ambiguousIndex = scanForAmbiguity(this, nameDescription, href);
 
                             determineLinkPurpose(href, this);
 
@@ -713,6 +715,7 @@ function Links(){
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
+    this.columnNames    = ["elementList", "index"];
     this.ambiguousIndex = 0;
 }
 

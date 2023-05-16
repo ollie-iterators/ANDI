@@ -461,6 +461,7 @@ function Links(){
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
+    this.columnNames    = ["elementList", "index"];
     this.ambiguousIndex = 0;
 }
 

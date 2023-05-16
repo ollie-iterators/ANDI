@@ -68,8 +68,11 @@ nANDI.analyze = function(objectClass){
                     accesskey = "";
 
                 if(nameDescription){
+
+                    // TODO: Re enable when nameDescription is added to the object classes
+                    nonUniqueIndex = ""
                     //Seach through Buttons Array for same name
-                    nonUniqueIndex = scanForNonUniqueness(this, nameDescription);
+                    //nonUniqueIndex = scanForNonUniqueness(this, nameDescription);
 
                     //role=button
                     if(andiData.role==="button"){
@@ -479,6 +482,7 @@ function Buttons(){
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
+    this.columnNames    = ["elementList", "index"];
     this.nonUniqueIndex = 0;
 }
 
