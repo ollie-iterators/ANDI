@@ -4245,22 +4245,22 @@ var oldIE = false; //used to determine if old version of IE is being used.
                 for (var x = 0; x < 1; x += 1) {
                     if (moduleList.list[x].elementList[0].hasAttributes()) {
                         var attrs = moduleList.list[x].elementList[0].getAttributeNames();
+                        var attrsFixed = attrs;
                         for (var a = 0; a < attrs.length; a += 1) {
                             if (attrs[a].includes("data-andi508-")) {
-                                var attrsFixed = attrs[a].replace("data-andi508", "");
-                                if (attrsFixed != "-index") {
-                                    if (String(attrsFixed).charAt(0).includes("-")) {
-                                        if (!attributesToAdd.includes(String(attrsFixed))) {
+                                attrsFixed = attrs[a].replace("data-andi508", "");
+                            }
+                            if (attrsFixed != "-index") {
+                                if (String(attrsFixed).charAt(0).includes("-")) {
+                                    if (!attributesToAdd.includes(String(attrsFixed))) {
+                                        attributesToAdd.push(String(attrsFixed));
+                                    }
+                                } else {
+                                    if (!attributesToAdd.includes(String(attrsFixed))) {
+                                        if (!attributesToAdd.includes("-" + String(attrsFixed))) {
                                             attributesToAdd.push(String(attrsFixed));
                                         }
-                                    } else {
-                                        if (!attributesToAdd.includes(String(attrsFixed))) {
-                                            if (!attributesToAdd.includes("-" + String(attrsFixed))) {
-                                                attributesToAdd.push(String(attrsFixed));
-                                            }
-                                        }
                                     }
-
                                 }
                             }
                         }
