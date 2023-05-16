@@ -36,8 +36,7 @@ function init_module(){
     }
 
     AndiModule.initActiveActionButtons({
-        viewLinksList:false,
-        highlightAmbiguousLinks:false,
+        viewLinksList:false
     });
 
     mANDI.viewList_tableReady = false;
@@ -148,8 +147,7 @@ function init_module(){
         andiAlerter.updateAlertList();
 
         AndiModule.engageActiveActionButtons([
-            "viewLinksList",
-            "highlightAmbiguousLinks",
+            "viewLinksList"
         ]);
 
         $("#ANDI508").focus();

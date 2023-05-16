@@ -25,7 +25,7 @@ fANDI.analyze = function(objectClass){
             if(andiData.accesskey)
                 fANDI.accesskeys.push(this, andiData.accesskey, andiData.andiElementIndex);
             testPageData.firstLaunchedModulePrep(this, andiData);
-            objectClass.list.push(new Focusable([this], objectClass.list.length + 1,  ""));
+            objectClass.list.push(new Focusable([this], objectClass.list.length + 1, ""));
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "focusable elements"
             AndiData.attachDataToElement(this);

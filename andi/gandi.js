@@ -271,13 +271,6 @@ gANDI.results = function(objectClass){
     showStartUpSummaryText += "Ensure that every meaningful/non-decorative image has a text equivalent.";
     andiBar.showStartUpSummary(showStartUpSummaryText, true);
 
-    AndiModule.engageActiveActionButtons([
-        "removeBackgroundImages",
-        "highlightBackgroundImages",
-        "highlightDecorativeImages",
-        "highlightFontIcons"
-    ]);
-
     andiAlerter.updateAlertList();
 
     $("#ANDI508").focus();
