@@ -4169,6 +4169,16 @@ var oldIE = false; //used to determine if old version of IE is being used.
         $("#ANDI508").focus();
     };
 
+    //This function will highlight the text of the row.
+    andiBar.viewList_rowHighlight = function (index, buttonClass) {
+        $("#ANDI508-" + buttonClass + "-table tbody tr").each(function () {
+            $(this).removeClass("ANDI508-table-row-inspecting");
+            if ($(this).find("th").first().html() == index) {
+                $(this).addClass("ANDI508-table-row-inspecting");
+            }
+        });
+    };
+
     //This object handles the creating of the results table
     function AndiResults() {
         this.buildResultsDetails = function(moduleList) {
@@ -4512,7 +4522,7 @@ var oldIE = false; //used to determine if old version of IE is being used.
                 }
 
                 //Highlight the row in the list that associates with this element
-                andiResults.viewList_rowHighlight(focusGoesOnThisIndex);
+                andiBar.viewList_rowHighlight(focusGoesOnThisIndex);
                 $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function () {
                     this.scrollIntoView();
                 });
@@ -4549,21 +4559,12 @@ var oldIE = false; //used to determine if old version of IE is being used.
                 }
 
                 //Highlight the row in the list that associates with this element
-                andiResults.viewList_rowHighlight(focusGoesOnThisIndex);
+                andiBar.viewList_rowHighlight(focusGoesOnThisIndex);
                 $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function () {
                     this.scrollIntoView();
                 });
 
                 return false;
-            });
-        };
-        //This function will highlight the text of the row.
-        this.viewList_rowHighlight = function (index, buttonClass) {
-            $("#ANDI508-" + buttonClass + "-table tbody tr").each(function () {
-                $(this).removeClass("ANDI508-table-row-inspecting");
-                if ($(this).find("th").first().html() == index) {
-                    $(this).addClass("ANDI508-table-row-inspecting");
-                }
             });
         };
         //TODO: Think if the code below is necessary
