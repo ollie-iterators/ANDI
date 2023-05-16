@@ -4245,20 +4245,20 @@ var oldIE = false; //used to determine if old version of IE is being used.
                 for (var x = 0; x < 1; x += 1) {
                     if (moduleList.list[x].elementList[0].hasAttributes()) {
                         var attrs = moduleList.list[x].elementList[0].getAttributeNames();
-                        var attrsFixed = attrs;
                         for (var a = 0; a < attrs.length; a += 1) {
+                            var attributeFixed = attrs[a];
                             if (attrs[a].includes("data-andi508-")) {
-                                attrsFixed = attrs[a].replace("data-andi508", "");
+                                attributeFixed = attrs[a].replace("data-andi508", "");
                             }
-                            if (attrsFixed != "-index") {
-                                if (String(attrsFixed).charAt(0).includes("-")) {
-                                    if (!attributesToAdd.includes(String(attrsFixed))) {
-                                        attributesToAdd.push(String(attrsFixed));
+                            if (attributeFixed != "-index") {
+                                if (String(attributeFixed).charAt(0).includes("-")) {
+                                    if (!attributesToAdd.includes(String(attributeFixed))) {
+                                        attributesToAdd.push(String(attributeFixed));
                                     }
                                 } else {
-                                    if (!attributesToAdd.includes(String(attrsFixed))) {
-                                        if (!attributesToAdd.includes("-" + String(attrsFixed))) {
-                                            attributesToAdd.push(String(attrsFixed));
+                                    if (!attributesToAdd.includes(String(attributeFixed))) {
+                                        if (!attributesToAdd.includes("-" + String(attributeFixed))) {
+                                            attributesToAdd.push(String(attributeFixed));
                                         }
                                     }
                                 }
