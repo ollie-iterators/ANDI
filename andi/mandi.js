@@ -12,7 +12,7 @@ function init_module(){
     //This function removes markup in the test page that was added by this module
     AndiModule.cleanup = function(testPage, element){
         if(element)
-            $(element).removeClass("mANDI508-internalLink mANDI508-externalLink mANDI508-ambiguous mANDI508-anchorTarget");
+            $(element).removeClass("mANDI508-ambiguous mANDI508-anchorTarget");
     };
 
     //This object class is used to store data about each link. Object instances will be placed into an array.
@@ -29,12 +29,10 @@ function init_module(){
 
     //This object class is used to keep track of the links on the page
     function Links(){
-        this.list = [];
-        this.count = 0;
+        this.list           = [];
+        this.elementNums    = [];
+        this.elementStrings = [];
         this.ambiguousIndex = 0;
-        this.ambiguousCount = 0;
-        this.internalCount = 0;
-        this.externalCount = 0;
     }
 
     AndiModule.initActiveActionButtons({
@@ -46,6 +44,7 @@ function init_module(){
 
     //This function will analyze the test page for link related markup relating to accessibility
     mANDI.analyze = function(objectClass){
+        objectClass = andiBar.createObjectValues(objectClass, 1);
 
         mANDI.links = new Links();
 
@@ -59,6 +58,8 @@ function init_module(){
             else if($(this).is("a")){
                 andiData = new AndiData(this);
                 isLinkKeyboardAccessible(undefined, this);
+                objectClass.elementNums[0] += 1;
+                objectClass.elementStrings[0] = "possible links";
                 AndiData.attachDataToElement(this);
                 //Don't allow element to appear in next/prev flow or hover. Also remove highlight.
                 $(this).addClass("ANDI508-exclude-from-inspection").removeClass("ANDI508-highlight");
@@ -121,34 +122,7 @@ function init_module(){
     //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
     mANDI.results = function(objectClass){
 
-        andiBar.updateResultsSummary("Links Found: "+mANDI.links.count);
-
-        if(mANDI.links.ambiguousIndex > 0){
-            //highlightAmbiguousLinks button
-            $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightAmbiguousLinks-button' aria-label='Highlight "+mANDI.links.ambiguousCount+" Ambiguous Links' aria-pressed='false'>"+mANDI.links.ambiguousCount+" ambiguous links"+findIcon+"</button>");
-
-            //Ambiguous Links Button
-            $("#ANDI508-highlightAmbiguousLinks-button").click(function(){
-                var testPage = $("#ANDI508-testPage");
-                if(!$(testPage).hasClass("mANDI508-highlightAmbiguous")){
-                    //On
-                    $("#mANDI508-listLinks-tab-all").click();
-                    $("#ANDI508-testPage")
-                        //.removeClass("mANDI508-highlightInternal mANDI508-highlightExternal")
-                        .addClass("mANDI508-highlightAmbiguous");
-                    andiOverlay.overlayButton_on("find",$(this));
-                    AndiModule.activeActionButtons.highlightAmbiguousLinks = true;
-                }
-                else{
-                    //Off
-                    $("#ANDI508-testPage").removeClass("mANDI508-highlightAmbiguous");
-                    andiOverlay.overlayButton_off("find",$(this));
-                    AndiModule.activeActionButtons.highlightAmbiguousLinks = false;
-                }
-                andiResetter.resizeHeights();
-                return false;
-            });
-        }
+        andiBar.updateResultsSummary("Links Found: "+mANDI.links.elementNums[0]);
 
         $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewLinksList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view links list</button>");
 
@@ -210,7 +184,7 @@ function init_module(){
     //This function builds the table for the view list
     mANDI.viewList_buildTable = function(mode){
         var tableHTML = "";
-        var rowClasses, tabsHTML;
+        var rowClasses;
         var appendHTML = "<div id='mANDI508-viewList' class='ANDI508-viewOtherResults-expanded' style='display:none;'><div id='mANDI508-viewList-tabs'>";
         var nextPrevHTML = "<button id='mANDI508-viewList-button-prev' aria-label='Previous Item in the list' accesskey='"+andiHotkeyList.key_prev.key+"'><img src='"+icons_url+"prev.png' alt='' /></button>"+
             "<button id='mANDI508-viewList-button-next' aria-label='Next Item in the list'  accesskey='"+andiHotkeyList.key_next.key+"'><img src='"+icons_url+"next.png' alt='' /></button>"+
@@ -260,11 +234,7 @@ function init_module(){
                 "</tr>";
         }
 
-        tabsHTML = "<button id='mANDI508-listLinks-tab-all' aria-label='View All Links' aria-selected='true' class='ANDI508-tab-active' data-andi508-relatedclass='ANDI508-element'>all links ("+mANDI.links.list.length+")</button>";
-        tabsHTML += "<button id='mANDI508-listLinks-tab-internal' aria-label='View Skip Links' aria-selected='false' data-andi508-relatedclass='mANDI508-internalLink'>skip links ("+mANDI.links.internalCount+")</button>";
-        tabsHTML += "<button id='mANDI508-listLinks-tab-external' aria-label='View External Links' aria-selected='false' data-andi508-relatedclass='mANDI508-externalLink'>external links ("+mANDI.links.externalCount+")</button>";
-
-        appendHTML += tabsHTML + nextPrevHTML + "<th scope='col' style='width:5%'><a href='javascript:void(0)' aria-label='link number'>#<i aria-hidden='true'></i></a></th>"+
+        appendHTML += nextPrevHTML + "<th scope='col' style='width:5%'><a href='javascript:void(0)' aria-label='link number'>#<i aria-hidden='true'></i></a></th>"+
             "<th scope='col' style='width:10%'><a href='javascript:void(0)'>Alerts&nbsp;<i aria-hidden='true'></i></a></th>"+
             "<th scope='col' style='width:40%'><a href='javascript:void(0)'>Accessible&nbsp;Name&nbsp;&amp;&nbsp;Description&nbsp;<i aria-hidden='true'></i></a></th>"+
             "<th scope='col' style='width:45%'><a href='javascript:void(0)'>href <i aria-hidden='true'></i></a></th>";

@@ -28,9 +28,9 @@ function Button(nameDescription, index, alerts, accesskey, nonUniqueIndex, eleme
 //This object class is used to keep track of the buttons on the page
 function Buttons(){
     this.list = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
     this.nonUniqueIndex = 0;
-    this.count = 0;
-    this.nonUniqueCount = 0;
 }
 
 //Alert icons for the links list table
@@ -60,6 +60,7 @@ nANDI.viewList_tableReady = false;
 
 //This function will analyze the test page for link related markup relating to accessibility
 nANDI.analyze = function(objectClass){
+    objectClass = andiBar.createObjectValues(objectClass, 2);
     nANDI.buttons = new Buttons();
 
     //Variables used to build the links/buttons list array.
@@ -106,6 +107,8 @@ nANDI.analyze = function(objectClass){
                 }
 
                 andiCheck.commonFocusableElementChecks(andiData,$(this));
+                objectClass.elementNums[0] += 1;
+                objectClass.elementStrings[0] = "buttons";
                 AndiData.attachDataToElement(this);
 
                 //create Button object and add to array
@@ -139,11 +142,13 @@ nANDI.analyze = function(objectClass){
                 if(nANDI.buttons.list[y].nonUniqueIndex){
                     //Yes. Copy the nonUniqueIndex from the first instance
                     m = nANDI.buttons.list[y].nonUniqueIndex;
-                    nANDI.buttons.nonUniqueCount++;
+                    nANDI.buttons.elementNums[1] += 1;
+                    nANDI.buttons.elementStrings[1] = "non-unique buttons";
                 }
                 else{
                     //No. increment nonUniqueIndex and add it to the first instance.
-                    nANDI.buttons.nonUniqueCount = nANDI.buttons.nonUniqueCount + 2;
+                    nANDI.buttons.elementNums[1] = nANDI.buttons.elementNums[1] + 2;
+                    nANDI.buttons.elementStrings[1] = "non-unique buttons";
                     nANDI.buttons.nonUniqueIndex++;
                     m = nANDI.buttons.nonUniqueIndex;
                     nANDI.buttons.list[y].nonUniqueIndex = m;
@@ -188,11 +193,11 @@ nANDI.analyze = function(objectClass){
 var showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-l'>buttons</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every button.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 nANDI.results = function(objectClass){
-    andiBar.updateResultsSummary("Buttons Found: "+nANDI.buttons.count);
+    andiBar.updateResultsSummary("Buttons Found: "+nANDI.buttons.elementNums[0]);
 
-    if(nANDI.buttons.nonUniqueCount > 0){
+    if(nANDI.buttons.elementNums[1] > 0){
         //highlightNonUniqueButtons
-        $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightNonUniqueButtons-button' aria-label='Highlight "+nANDI.buttons.nonUniqueCount+" Non-Unique Buttons' aria-pressed='false'>"+nANDI.buttons.nonUniqueCount+" non-unique buttons"+findIcon+"</button>");
+        $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightNonUniqueButtons-button' aria-label='Highlight "+nANDI.buttons.elementNums[1]+" Non-Unique Buttons' aria-pressed='false'>"+nANDI.buttons.elementNums[1]+" non-unique buttons"+findIcon+"</button>");
 
         //highlightNonUniqueButtons Button
         $("#ANDI508-highlightNonUniqueButtons-button").click(function(){

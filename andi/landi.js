@@ -29,12 +29,10 @@ function Link(href, nameDescription, index, alerts, target, linkPurpose, ambiguo
 
 //This object class is used to keep track of the links on the page
 function Links(){
-    this.list = [];
-    this.count = 0;
+    this.list           = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
     this.ambiguousIndex = 0;
-    this.ambiguousCount = 0;
-    this.internalCount = 0;
-    this.externalCount = 0;
 }
 
 //Alert icons for the links list table
@@ -67,6 +65,8 @@ lANDI.viewList_tableReady = false;
 
 //This function will analyze the test page for link related markup relating to accessibility
 lANDI.analyze = function(objectClass){
+    objectClass = andiBar.createObjectValues(objectClass, 4);
+
     lANDI.links = new Links();
 
     //Variables used to build the links/buttons list array.
@@ -78,7 +78,8 @@ lANDI.analyze = function(objectClass){
         if($(this).isSemantically(["link"],"a[href],a[tabindex],area")){
             if(!andiCheck.isThisElementDisabled(this)){
 
-                lANDI.links.count++;
+                objectClass.elementNums[0] += 1;
+                objectClass.elementStrings[0] = "links";
 
                 andiData = new AndiData(this);
 
@@ -236,11 +237,13 @@ lANDI.analyze = function(objectClass){
                     if(lANDI.links.list[x].ambiguousIndex){
                         //Yes. Copy the ambiguousIndex from the first instance
                         i = lANDI.links.list[x].ambiguousIndex;
-                        lANDI.links.ambiguousCount++;
+                        lANDI.links.elementNums[3] += 1;
+                        lANDI.links.elementStrings[3] = "ambiguous links";
                     }
                     else{
                         //No. increment ambiguousIndex and add it to the first instance.
-                        lANDI.links.ambiguousCount = lANDI.links.ambiguousCount + 2;
+                        lANDI.links.elementNums[3] = lANDI.links.elementNums[3] + 2;
+                        lANDI.links.elementStrings[3] = "ambiguous links";
                         lANDI.links.ambiguousIndex++;
                         i = lANDI.links.ambiguousIndex;
                         lANDI.links.list[x].ambiguousIndex = i;
@@ -270,13 +273,15 @@ lANDI.analyze = function(objectClass){
                     }
                 }
                 else{//link is internal and anchor target found
-                    lANDI.links.internalCount++;
+                    objectClass.elementNums[1] += 1;
+                    objectClass.elementStrings[1] = "internal links";
                     linkPurpose = "i";
                     $(element).addClass("lANDI508-internalLink");
                 }
             }
             else if(href.charAt(0) !== "#" && !lANDI.isScriptedLink(href)){//this is an external link
-                lANDI.links.externalCount++;
+                objectClass.elementNums[2] += 1;
+                objectClass.elementStrings[2] = "external links";
                 linkPurpose = "e";
                 $(element).addClass("lANDI508-externalLink");
             }
@@ -336,11 +341,11 @@ var showStartUpSummaryText = "Discover accessibility markup for <span class='AND
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 lANDI.results = function(objectClass){
 
-    andiBar.updateResultsSummary("Links Found: "+lANDI.links.count);
+    andiBar.updateResultsSummary("Links Found: "+lANDI.links.elementNums[0]);
 
     if(lANDI.links.ambiguousIndex > 0){
         //highlightAmbiguousLinks button
-        $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightAmbiguousLinks-button' aria-label='Highlight "+lANDI.links.ambiguousCount+" Ambiguous Links' aria-pressed='false'>"+lANDI.links.ambiguousCount+" ambiguous links"+findIcon+"</button>");
+        $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightAmbiguousLinks-button' aria-label='Highlight "+lANDI.links.elementNums[3]+" Ambiguous Links' aria-pressed='false'>"+lANDI.links.elementNums[3]+" ambiguous links"+findIcon+"</button>");
 
         //Ambiguous Links Button
         $("#ANDI508-highlightAmbiguousLinks-button").click(function(){
@@ -477,8 +482,8 @@ lANDI.viewList_buildTable = function(mode){
     }
 
     tabsHTML = "<button id='lANDI508-listLinks-tab-all' aria-label='View All Links' aria-selected='true' class='ANDI508-tab-active' data-andi508-relatedclass='ANDI508-element'>all links ("+lANDI.links.list.length+")</button>";
-    tabsHTML += "<button id='lANDI508-listLinks-tab-internal' aria-label='View Skip Links' aria-selected='false' data-andi508-relatedclass='lANDI508-internalLink'>skip links ("+lANDI.links.internalCount+")</button>";
-    tabsHTML += "<button id='lANDI508-listLinks-tab-external' aria-label='View External Links' aria-selected='false' data-andi508-relatedclass='lANDI508-externalLink'>external links ("+lANDI.links.externalCount+")</button>";
+    tabsHTML += "<button id='lANDI508-listLinks-tab-internal' aria-label='View Skip Links' aria-selected='false' data-andi508-relatedclass='lANDI508-internalLink'>skip links ("+lANDI.links.elementNums[1]+")</button>";
+    tabsHTML += "<button id='lANDI508-listLinks-tab-external' aria-label='View External Links' aria-selected='false' data-andi508-relatedclass='lANDI508-externalLink'>external links ("+lANDI.links.elementNums[2]+")</button>";
 
     appendHTML += tabsHTML + nextPrevHTML + "<th scope='col' style='width:5%'><a href='javascript:void(0)' aria-label='link number'>#<i aria-hidden='true'></i></a></th>"+
         "<th scope='col' style='width:10%'><a href='javascript:void(0)'>Alerts&nbsp;<i aria-hidden='true'></i></a></th>"+
