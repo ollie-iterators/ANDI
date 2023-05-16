@@ -109,8 +109,8 @@ nANDI.analyze = function(objectClass){
                 }
 
                 andiCheck.commonFocusableElementChecks(andiData,$(this));
-                objectClass.elementNums[0] += 1;
-                objectClass.elementStrings[0] = "buttons";
+                nANDI.buttons.elementNums[0] += 1;
+                nANDI.buttons.elementStrings[0] = "buttons";
                 AndiData.attachDataToElement(this);
 
                 //create Button object and add to array

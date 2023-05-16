@@ -58,8 +58,8 @@ function init_module(){
             else if($(this).is("a")){
                 andiData = new AndiData(this);
                 isLinkKeyboardAccessible(undefined, this);
-                objectClass.elementNums[0] += 1;
-                objectClass.elementStrings[0] = "possible links";
+                mANDI.links.elementNums[0] += 1;
+                mANDI.links.elementStrings[0] = "possible links";
                 AndiData.attachDataToElement(this);
                 //Don't allow element to appear in next/prev flow or hover. Also remove highlight.
                 $(this).addClass("ANDI508-exclude-from-inspection").removeClass("ANDI508-highlight");

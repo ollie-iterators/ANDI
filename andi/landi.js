@@ -79,8 +79,8 @@ lANDI.analyze = function(objectClass){
         if($(this).isSemantically(["link"],"a[href],a[tabindex],area")){
             if(!andiCheck.isThisElementDisabled(this)){
 
-                objectClass.elementNums[0] += 1;
-                objectClass.elementStrings[0] = "links";
+                lANDI.links.elementNums[0] += 1;
+                lANDI.links.elementStrings[0] = "links";
 
                 andiData = new AndiData(this);
 
@@ -274,15 +274,15 @@ lANDI.analyze = function(objectClass){
                     }
                 }
                 else{//link is internal and anchor target found
-                    objectClass.elementNums[1] += 1;
-                    objectClass.elementStrings[1] = "internal links";
+                    lANDI.links.elementNums[1] += 1;
+                    lANDI.links.elementStrings[1] = "internal links";
                     linkPurpose = "i";
                     $(element).addClass("lANDI508-internalLink");
                 }
             }
             else if(href.charAt(0) !== "#" && !lANDI.isScriptedLink(href)){//this is an external link
-                objectClass.elementNums[2] += 1;
-                objectClass.elementStrings[2] = "external links";
+                lANDI.links.elementNums[2] += 1;
+                lANDI.links.elementStrings[2] = "external links";
                 linkPurpose = "e";
                 $(element).addClass("lANDI508-externalLink");
             }
