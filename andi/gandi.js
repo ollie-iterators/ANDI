@@ -258,7 +258,8 @@ gANDI.analyze = function(objectClass){
     }
 };
 
-var showStartUpSummaryText = "";
+var showStartUpSummaryText = "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. ";
+showStartUpSummaryText += "Ensure that every meaningful/non-decorative image has a text equivalent.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 gANDI.results = function(objectClass){
 
@@ -266,10 +267,7 @@ gANDI.results = function(objectClass){
 
     andiBar.showElementControls();
     if(!andiBar.focusIsOnInspectableElement())
-        showStartUpSummaryText += "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. ";
-
-    showStartUpSummaryText += "Ensure that every meaningful/non-decorative image has a text equivalent.";
-    andiBar.showStartUpSummary(showStartUpSummaryText, true);
+        andiBar.showStartUpSummary(showStartUpSummaryText, true);
 
     andiAlerter.updateAlertList();
 
@@ -350,7 +348,7 @@ function Images() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode = "Images";
-    this.cssProperties = [];
+    this.cssProperties = ["background-image"];
     this.buttonTextList = ["Fade Inline Images", "Hide Background Images", "Highlight Background Images", "Highlight Decorative Images", "Highlight Font Icons"];
     this.tabsTextList = [];
 }

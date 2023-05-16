@@ -139,8 +139,7 @@ cANDI.results = function(objectClass){
         else{
             //hide Contrast Playground, show alert list
             $("#cANDI508-contrastPlayground").slideUp(AndiSettings.andiAnimationSpeed);
-            if(testPageData.numberOfAccessibilityAlertsFound > 0)
-                $("#ANDI508-alerts-list").show();
+            $("#ANDI508-alerts-list").show();
             $(this)
                 .removeClass("ANDI508-viewOtherResults-button-expanded")
                 .html(listIcon+"show contrast playground ")

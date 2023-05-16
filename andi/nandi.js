@@ -27,7 +27,7 @@ function Button(nameDescription, index, alerts, accesskey, nonUniqueIndex, eleme
 
 //This object class is used to keep track of the buttons on the page
 function Buttons(){
-    this.list = [];
+    this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
     this.nonUniqueIndex = 0;
@@ -330,9 +330,7 @@ nANDI.viewList_toggle = function(mode, btn){
         //hide List, show alert list
         $("#nANDI508-viewList").slideUp(AndiSettings.andiAnimationSpeed);
         //$("#ANDI508-resultsSummary").show();
-        if(testPageData.numberOfAccessibilityAlertsFound > 0){
-            $("#ANDI508-alerts-list").show();
-        }
+        $("#ANDI508-alerts-list").show();
         $(btn)
             .removeClass("ANDI508-viewOtherResults-button-expanded")
             .html(listIcon+"view "+mode+" list")

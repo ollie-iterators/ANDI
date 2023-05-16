@@ -196,9 +196,7 @@ pANDI.results = function(objectClass){
         if($(this).attr("aria-expanded") === "true"){
             //hide Outline, show alert list
             $("#pANDI508-outline-container").slideUp(AndiSettings.andiAnimationSpeed);
-            if(testPageData.numberOfAccessibilityAlertsFound > 0){
-                $("#ANDI508-alerts-list").show();
-            }
+            $("#ANDI508-alerts-list").show();
             $(this)
                 .addClass("ANDI508-viewOtherResults-button-expanded")
                 .html(listIcon+"view headings list")

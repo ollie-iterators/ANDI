@@ -79,7 +79,7 @@ hANDI.containsTestableContent = function(element){
 
 //This function will analyze the test page for elements hidden using CSS
 hANDI.analyze = function(objectClass){
-    objectClass = andiBar.createObjectValues(objectClass, 9);
+    objectClass = andiBar.createObjectValues(objectClass, 10);
 
     var isHidingContent, elementCss;
     $(TestPageData.allElements).not("area,base,basefont,datalist,link,meta,noembed,noframes,param,rp,script,noscript,source,style,template,track,title").each(function(){
@@ -167,8 +167,8 @@ hANDI.analyze = function(objectClass){
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "hidden elements";
                 isHidingContent = true;
-                if($(this).closest(".ANDI508-forceReveal-html5Hidden").length === 0)
-                    objectClass.hiddenHtml5Hidden++; //increment count if not contained by another of same hiding technique
+                objectClass.elementNums[8] += 1;
+                objectClass.elementStrings[8] = "html5 hidden"
                 $(this).addClass("ANDI508-forceReveal-html5Hidden");
                 elementCss += "\/*html5 hidden*\/ ";
             }
@@ -228,8 +228,8 @@ hANDI.detectCssInjectedContent = function(objectClass){
         }
 
         if(hasHiddenCSSContent){
-            objectClass.elementNums[8] += 1;
-            objectClass.elementStrings[8] = "elements with CSS"
+            objectClass.elementNums[9] += 1;
+            objectClass.elementStrings[9] = "elements with CSS"
             $(TestPageData.allVisibleElements[x]).addClass("hANDI508-hasHiddenCssContent");
         }
     }
@@ -256,7 +256,9 @@ hANDI.detectCssInjectedContent = function(objectClass){
 };
 
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-var showStartUpSummaryText = "";
+var showStartUpSummaryText = "Discover <span class='ANDI508-module-name-h'>hidden content</span> that should be tested for accessibility using other ANDI modules. ";
+showStartUpSummaryText += "Use the style toggle buttons to force the hidden content to be revealed. The revealed content will not remain revealed after changing modules. ";
+showStartUpSummaryText += "Content injected with CSS may be invisible to a screen reader.";
 hANDI.results = function(objectClass){
 
     andiBar.updateResultsSummary("Hidden Elements: "+objectClass.elementNums[0]);
@@ -271,7 +273,7 @@ hANDI.results = function(objectClass){
     addForceRevealButton("overflow", objectClass.elementNums[5], "overflow:hidden");
     addForceRevealButton("fontSize", objectClass.elementNums[6], "font-size:0");
     addForceRevealButton("textIndent", objectClass.elementNums[7], "text-indent");
-    addForceRevealButton("html5Hidden", objectClass.hiddenHtml5Hidden, "html5 hidden");
+    addForceRevealButton("html5Hidden", objectClass.elementStrings[8], "html5 hidden");
     addForceRevealButton("opacity", objectClass.elementNums[4], "opacity:0");
 
     function addForceRevealButton(technique, count, buttonText){
@@ -281,7 +283,7 @@ hANDI.results = function(objectClass){
     moduleActionButtons = "<button id='ANDI508-forceRevealAll-button' aria-label='Reveal All' aria-pressed='false'>reveal all"+findIcon+"</button><span class='ANDI508-module-actions-spacer'>|</span> ";
     moduleActionButtons += "<div class='ANDI508-moduleActionGroup'><button class='ANDI508-moduleActionGroup-toggler'>css hiding techniques</button><div class='ANDI508-moduleActionGroup-options'>" + revealButtons + "</div></div>";
     moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span>&nbsp;";
-    moduleActionButtons += "<button id='ANDI508-highlightCssContent-button' aria-label='content ::before ::after "+objectClass.elementNums[8]+" CSS Content' aria-pressed='false'>content ::before ::after "+objectClass.elementNums[8]+findIcon+"</button>";
+    moduleActionButtons += "<button id='ANDI508-highlightCssContent-button' aria-label='content ::before ::after "+objectClass.elementNums[9]+" CSS Content' aria-pressed='false'>content ::before ::after "+objectClass.elementNums[9]+findIcon+"</button>";
 
     moduleActionButtons += "<button id='ANDI508-ariaHiddenScan-button' aria-label='aria-hidden scan' aria-pressed='false'>aria-hidden scan</button>";
 
@@ -378,11 +380,7 @@ hANDI.results = function(objectClass){
     });
 
     //=============================================
-    showStartUpSummaryText += "Discover <span class='ANDI508-module-name-h'>hidden content</span> that should be tested for accessibility using other ANDI modules. "+
-        "Use the style toggle buttons to force the hidden content to be revealed. "+
-        "The revealed content will not remain revealed after changing modules. ";
 
-    showStartUpSummaryText += "Content injected with CSS may be invisible to a screen reader.";
 
     andiBar.showStartUpSummary(showStartUpSummaryText, true);
 
