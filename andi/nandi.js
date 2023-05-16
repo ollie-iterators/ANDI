@@ -15,24 +15,6 @@ AndiModule.cleanup = function(testPage, element){
         $(element).removeClass("nANDI508-ambiguous");
 };
 
-//This object class is used to store data about each button. Object instances will be placed into an array.
-function Button(nameDescription, index, alerts, accesskey, nonUniqueIndex, element){
-    this.nameDescription = nameDescription;
-    this.index = index;
-    this.alerts = alerts;
-    this.accesskey = accesskey;
-    this.nonUniqueIndex = undefined;
-    this.element = element;
-}
-
-//This object class is used to keep track of the buttons on the page
-function Buttons(){
-    this.list           = [];
-    this.elementNums    = [];
-    this.elementStrings = [];
-    this.nonUniqueIndex = 0;
-}
-
 //Alert icons for the links list table
 //Ignore the jslint warning about the "new" declaration. It is needed.
 var alertIcons = new function(){//new is intentional
@@ -60,10 +42,6 @@ nANDI.viewList_tableReady = false;
 
 //This function will analyze the test page for link related markup relating to accessibility
 nANDI.analyze = function(objectClass){
-
-    nANDI.buttons = new Buttons();
-
-    nANDI.buttons = andiBar.createObjectValues(nANDI.buttons, 2);
 
     //Variables used to build the links/buttons list array.
     var href, nameDescription, alerts, target, linkPurpose, accesskey, alertIcon, alertObject, relatedElement, nonUniqueIndex, ambiguousIndex;
@@ -488,7 +466,39 @@ nANDI.viewList_selectTab = function(tab){
     $(tab).addClass("ANDI508-tab-active").attr("aria-selected","true");
 };
 
-nANDI.analyze();
-nANDI.results();
+//This object class is used to store data about each button. Object instances will be placed into an array.
+function Button(nameDescription, index, alerts, accesskey, nonUniqueIndex, element){
+    this.nameDescription = nameDescription;
+    this.index = index;
+    this.alerts = alerts;
+    this.accesskey = accesskey;
+    this.nonUniqueIndex = undefined;
+    this.element = element;
+}
+
+//This object class is used to keep track of the buttons on the page
+function Buttons(){
+    this.list           = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
+    this.nonUniqueIndex = 0;
+}
+
+// This object class is used to keep track of the table information
+function TableInfo() {
+    this.tableMode = "Buttons";
+    this.cssProperties = [];
+    this.buttonTextList = [];
+    this.tabsTextList = []
+}
+
+nANDI.buttons = new Buttons();
+nANDI.tableInfo = new TableInfo();
+
+nANDI.buttons = andiBar.createObjectValues(nANDI.buttons, 2);
+
+nANDI.analyze(nANDI.buttons);
+//nANDI.results(nANDI.buttons);
+andiBar.results(nANDI.buttons, nANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

@@ -15,26 +15,6 @@ AndiModule.cleanup = function(testPage, element){
         $(element).removeClass("lANDI508-internalLink lANDI508-externalLink lANDI508-ambiguous lANDI508-anchorTarget");
 };
 
-//This object class is used to store data about each link. Object instances will be placed into an array.
-function Link(href, nameDescription, index, alerts, target, linkPurpose, ambiguousIndex, element){
-    this.href = href;
-    this.nameDescription = nameDescription;
-    this.index = index;
-    this.alerts = alerts;
-    this.target = target;
-    this.linkPurpose = linkPurpose;
-    this.ambiguousIndex = undefined;
-    this.element = element;
-}
-
-//This object class is used to keep track of the links on the page
-function Links(){
-    this.list           = [];
-    this.elementNums    = [];
-    this.elementStrings = [];
-    this.ambiguousIndex = 0;
-}
-
 //Alert icons for the links list table
 //Ignore the jslint warning about the "new" declaration. It is needed.
 var alertIcons = new function(){//new is intentional
@@ -65,10 +45,6 @@ lANDI.viewList_tableReady = false;
 
 //This function will analyze the test page for link related markup relating to accessibility
 lANDI.analyze = function(objectClass){
-
-    lANDI.links = new Links();
-
-    lANDI.links = andiBar.createObjectValues(lANDI.links, 4);
 
     //Variables used to build the links/buttons list array.
     var href, nameDescription, alerts, target, linkPurpose, accesskey, alertIcon, alertObject, relatedElement, nonUniqueIndex, ambiguousIndex;
@@ -740,7 +716,41 @@ lANDI.isScriptedLink = function(href){
     return false;
 };
 
-lANDI.analyze();
-lANDI.results();
+//This object class is used to store data about each link. Object instances will be placed into an array.
+function Link(href, nameDescription, index, alerts, target, linkPurpose, ambiguousIndex, element){
+    this.href = href;
+    this.nameDescription = nameDescription;
+    this.index = index;
+    this.alerts = alerts;
+    this.target = target;
+    this.linkPurpose = linkPurpose;
+    this.ambiguousIndex = undefined;
+    this.element = element;
+}
+
+//This object class is used to keep track of the links on the page
+function Links(){
+    this.list           = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
+    this.ambiguousIndex = 0;
+}
+
+// This object class is used to keep track of the table information
+function TableInfo() {
+    this.tableMode = "Links";
+    this.cssProperties = [];
+    this.buttonTextList = [];
+    this.tabsTextList = []
+}
+
+lANDI.links = new Links();
+lANDI.tableInfo = new TableInfo();
+
+lANDI.links = andiBar.createObjectValues(lANDI.links, 4);
+
+lANDI.analyze(lANDI.links);
+//lANDI.results(lANDI.links);
+andiBar.results(lANDI.links, lANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init
