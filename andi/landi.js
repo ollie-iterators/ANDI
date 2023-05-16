@@ -91,27 +91,11 @@ lANDI.analyze = function(objectClass){
 
                         if(href){
                             //create Link object and add to array
-                            lANDI.links.list.push(
-                                new Link(href,
-                                    nameDescription,
-                                    andiData.andiElementIndex,
-                                    alerts,
-                                    target,
-                                    linkPurpose,
-                                    ambiguousIndex,
-                                    this));
+                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, ""));
                         }
                         else if(andiData.role === "link"){
                             //create Link object and add to array
-                            lANDI.links.list.push(
-                                new Link(href,
-                                    nameDescription,
-                                    andiData.andiElementIndex,
-                                    alerts,
-                                    target,
-                                    linkPurpose,
-                                    ambiguousIndex,
-                                    this));
+                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, ""));
 
                             isElementInTabOrder(this, "link");
                         }
@@ -717,15 +701,11 @@ lANDI.isScriptedLink = function(href){
 };
 
 //This object class is used to store data about each link. Object instances will be placed into an array.
-function Link(href, nameDescription, index, alerts, target, linkPurpose, ambiguousIndex, element){
-    this.href = href;
-    this.nameDescription = nameDescription;
-    this.index = index;
-    this.alerts = alerts;
-    this.target = target;
-    this.linkPurpose = linkPurpose;
-    this.ambiguousIndex = undefined;
-    this.element = element;
+function Link(elementList, index, rowClass){
+    this.elementList  = elementList;
+    this.index        = index
+    this.columnValues = [elementList, index];
+    this.rowClass     = rowClass;
 }
 
 //This object class is used to keep track of the links on the page
@@ -738,10 +718,10 @@ function Links(){
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode = "Links";
-    this.cssProperties = [];
+    this.tableMode      = "Links";
+    this.cssProperties  = [];
     this.buttonTextList = [];
-    this.tabsTextList = []
+    this.tabsTextList   = []
 }
 
 lANDI.links = new Links();

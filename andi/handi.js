@@ -524,10 +524,10 @@ function HiddenElements() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode = "Hidden Elements";
-    this.cssProperties = [];
+    this.tableMode      = "Hidden Elements";
+    this.cssProperties  = [];
     this.buttonTextList = ["Title Attributes"];
-    this.tabsTextList = [];
+    this.tabsTextList   = [];
 }
 
 hANDI.hiddenElements = new HiddenElements();

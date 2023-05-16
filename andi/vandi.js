@@ -1633,10 +1633,10 @@ function DataTables() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode = "Data Tables";
-    this.cssProperties = [];
+    this.tableMode      = "Data Tables";
+    this.cssProperties  = [];
     this.buttonTextList = [];
-    this.tabsTextList = [];
+    this.tabsTextList   = [];
 }
 
 vANDI.dataTables = new DataTables();

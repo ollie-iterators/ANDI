@@ -244,10 +244,10 @@ function LiveRegions() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode = "Live Regions";
-    this.cssProperties = [];
+    this.tableMode      = "Live Regions";
+    this.cssProperties  = [];
     this.buttonTextList = ["Reading Order", "Role Attributes", "Lang Attributes"];
-    this.tabsTextList = [];
+    this.tabsTextList   = [];
 }
 
 sANDI.liveRegions = new LiveRegions();

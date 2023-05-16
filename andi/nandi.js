@@ -92,7 +92,7 @@ nANDI.analyze = function(objectClass){
                 AndiData.attachDataToElement(this);
 
                 //create Button object and add to array
-                nANDI.buttons.list.push(new Button(nameDescription,andiData.andiElementIndex,alerts,accesskey,nonUniqueIndex,this));
+                nANDI.buttons.list.push(new Button([this], objectClass.list.length + 1, ""));
             }
         }
     });
@@ -467,13 +467,11 @@ nANDI.viewList_selectTab = function(tab){
 };
 
 //This object class is used to store data about each button. Object instances will be placed into an array.
-function Button(nameDescription, index, alerts, accesskey, nonUniqueIndex, element){
-    this.nameDescription = nameDescription;
+function Button(elementList, index, rowClass){
+    this.elementList = elementList;
     this.index = index;
-    this.alerts = alerts;
-    this.accesskey = accesskey;
-    this.nonUniqueIndex = undefined;
-    this.element = element;
+    this.columnValues = [elementList, index];
+    this.rowClass = rowClass;
 }
 
 //This object class is used to keep track of the buttons on the page
@@ -486,10 +484,10 @@ function Buttons(){
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode = "Buttons";
-    this.cssProperties = [];
+    this.tableMode      = "Buttons";
+    this.cssProperties  = [];
     this.buttonTextList = [];
-    this.tabsTextList = []
+    this.tabsTextList   = []
 }
 
 nANDI.buttons = new Buttons();
