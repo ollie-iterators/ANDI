@@ -43,9 +43,10 @@ function init_module(){
 
     //This function will analyze the test page for link related markup relating to accessibility
     mANDI.analyze = function(objectClass){
-        objectClass = andiBar.createObjectValues(objectClass, 1);
 
         mANDI.links = new Links();
+
+        mANDI.links = andiBar.createObjectValues(mANDI.links, 1);
 
         //Loop through every visible element and run tests
         $(TestPageData.allElements).each(function(){

@@ -60,8 +60,10 @@ nANDI.viewList_tableReady = false;
 
 //This function will analyze the test page for link related markup relating to accessibility
 nANDI.analyze = function(objectClass){
-    objectClass = andiBar.createObjectValues(objectClass, 2);
+
     nANDI.buttons = new Buttons();
+
+    nANDI.buttons = andiBar.createObjectValues(nANDI.buttons, 2);
 
     //Variables used to build the links/buttons list array.
     var href, nameDescription, alerts, target, linkPurpose, accesskey, alertIcon, alertObject, relatedElement, nonUniqueIndex, ambiguousIndex;

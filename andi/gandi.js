@@ -23,7 +23,7 @@ AndiModule.cleanup = function(testPage, element){
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 gANDI.analyze = function(objectClass){
-    objectClass = andiBar.createObjectValues(objectClass, 7);
+
 
     var isImageContainedByInteractiveWidget; //boolean if image is contained by link or button
 
@@ -355,6 +355,8 @@ function TableInfo() {
 
 gANDI.images = new Images();
 gANDI.tableInfo = new TableInfo();
+
+gANDI.images = andiBar.createObjectValues(gANDI.images, 7);
 
 gANDI.analyze(gANDI.images);
 //gANDI.results(gANDI.images);

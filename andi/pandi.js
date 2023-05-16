@@ -9,10 +9,6 @@ var pANDIVersionNumber = "4.3.0";
 //create pANDI instance
 var pANDI = new AndiModule(pANDIVersionNumber,"p");
 
-var headingsArray = [];
-var langAttributesCount = 0;
-var roleAttributesCount = 0;
-
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 pANDI.analyze = function(objectClass){
 
@@ -34,9 +30,11 @@ pANDI.analyze = function(objectClass){
 
         //For all elements on the page
         if($.trim($(this).attr("role")))
-            roleAttributesCount++;
+            objectClass.elementNums[2] += 1;
+            objectClass.elementStrings[2] = "elements with role attributes";
         if($.trim($(this).prop("lang")))
-            langAttributesCount++;
+            objectClass.elementNums[1] += 1;
+            objectClass.elementStrings[1] = "elements with lang attributes";
     });
 };
 
@@ -181,11 +179,11 @@ pANDI.results = function(objectClass){
         .attr("aria-selected","true")
         .addClass("ANDI508-module-action-active");
 
-    andiBar.updateResultsSummary("Headings: "+headingsArray.length);
+    andiBar.updateResultsSummary("Headings: "+objectClass.list.length);
 
     //Build Outline
-    for(var x=0; x<headingsArray.length; x++){
-        pANDI.outline += pANDI.getOutlineItem(headingsArray[x]);
+    for(var x=0; x<objectClass.list.length; x++){
+        pANDI.outline += pANDI.getOutlineItem(objectClass.list[x]);
     }
     pANDI.outline += "</div>";
 
@@ -368,6 +366,8 @@ function TableInfo() {
 
 pANDI.possibleHeaders = new PossibleHeaders();
 pANDI.tableInfo = new TableInfo();
+
+pANDI.possibleHeaders = andiBar.createObjectValues(pANDI.possibleHeaders, 3);
 
 pANDI.analyze(pANDI.possibleHeaders);
 //pANDI.results(pANDI.possibleHeaders);

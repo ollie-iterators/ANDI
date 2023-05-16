@@ -79,7 +79,6 @@ hANDI.containsTestableContent = function(element){
 
 //This function will analyze the test page for elements hidden using CSS
 hANDI.analyze = function(objectClass){
-    objectClass = andiBar.createObjectValues(objectClass, 10);
 
     var isHidingContent, elementCss;
     $(TestPageData.allElements).not("area,base,basefont,datalist,link,meta,noembed,noframes,param,rp,script,noscript,source,style,template,track,title").each(function(){
@@ -533,6 +532,8 @@ function TableInfo() {
 
 hANDI.hiddenElements = new HiddenElements();
 hANDI.tableInfo = new TableInfo();
+
+hANDI.hiddenElements = andiBar.createObjectValues(hANDI.hiddenElements, 10);
 
 hANDI.analyze(hANDI.hiddenElements);
 //hANDI.results(hANDI.hiddenElements);

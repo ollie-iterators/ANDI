@@ -17,7 +17,6 @@ AndiModule.initActiveActionButtons({
 
 //This function will run tests on text containing elements
 cANDI.analyze = function(objectClass){
-    objectClass = andiBar.createObjectValues(objectClass, 3);
 
     //Elements that are disabled or have aria-disabled="true" do not need to be tested
     $(TestPageData.allElements).filter("*:not(option)").each(function(){
@@ -978,6 +977,8 @@ function TableInfo() {
 
 cANDI.contrasts = new Contrasts();
 cANDI.tableInfo = new TableInfo();
+
+cANDI.contrasts = andiBar.createObjectValues(cANDI.contrasts, 3);
 
 cANDI.analyze(cANDI.contrasts);
 //cANDI.results(cANDI.contrasts);

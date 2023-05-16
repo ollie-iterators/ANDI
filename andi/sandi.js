@@ -9,9 +9,6 @@ var sANDIVersionNumber = "4.3.0";
 //create sANDI instance
 var sANDI = new AndiModule(sANDIVersionNumber,"s");
 
-var langAttributesCount = 0;
-var roleAttributesCount = 0;
-
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 sANDI.analyze = function(objectClass){
 
@@ -48,9 +45,11 @@ sANDI.analyze = function(objectClass){
 
         //For all elements on the page
         if($.trim($(this).attr("role")))
-            roleAttributesCount++;
+            objectClass.elementNums[2] += 1;
+            objectClass.elementStrings[2] = "elements with role attributes";
         if($.trim($(this).prop("lang")))
-            langAttributesCount++;
+            objectClass.elementNums[1] += 1;
+            objectClass.elementStrings[1] = "elements with lang attributes";
     });
 };
 
@@ -253,6 +252,8 @@ function TableInfo() {
 
 sANDI.liveRegions = new LiveRegions();
 sANDI.tableInfo = new TableInfo();
+
+sANDI.liveRegions = andiBar.createObjectValues(sANDI.liveRegions, 3);
 
 sANDI.analyze(sANDI.liveRegions);
 sANDI.results(sANDI.liveRegions);

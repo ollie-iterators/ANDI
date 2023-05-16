@@ -65,9 +65,10 @@ lANDI.viewList_tableReady = false;
 
 //This function will analyze the test page for link related markup relating to accessibility
 lANDI.analyze = function(objectClass){
-    objectClass = andiBar.createObjectValues(objectClass, 4);
 
     lANDI.links = new Links();
+
+    lANDI.links = andiBar.createObjectValues(lANDI.links, 4);
 
     //Variables used to build the links/buttons list array.
     var href, nameDescription, alerts, target, linkPurpose, accesskey, alertIcon, alertObject, relatedElement, nonUniqueIndex, ambiguousIndex;

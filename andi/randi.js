@@ -9,9 +9,6 @@ var rANDIVersionNumber = "4.3.0";
 //create rANDI instance
 var rANDI = new AndiModule(rANDIVersionNumber,"r");
 
-var langAttributesCount = 0;
-var roleAttributesCount = 0;
-
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 rANDI.analyze = function(objectClass){
 
@@ -31,9 +28,11 @@ rANDI.analyze = function(objectClass){
 
         //For all elements on the page
         if($.trim($(this).attr("role")))
-            roleAttributesCount++;
+            objectClass.elementNums[2] += 1;
+            objectClass.elementStrings[2] = "elements with role attributes";
         if($.trim($(this).prop("lang")))
-            langAttributesCount++;
+            objectClass.elementNums[1] += 1;
+            objectClass.elementStrings[1] = "elements with lang attributes";
     });
 };
 
@@ -197,6 +196,8 @@ function TableInfo() {
 
 rANDI.landmarks = new Landmarks();
 rANDI.tableInfo = new TableInfo();
+
+rANDI.landmarks = andiBar.createObjectValues(rANDI.landmarks, 3);
 
 rANDI.analyze(rANDI.landmarks);
 //rANDI.results(rANDI.landmarks);

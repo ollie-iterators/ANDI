@@ -9,15 +9,11 @@ var qANDIVersionNumber = "4.3.0";
 //create qANDI instance
 var qANDI = new AndiModule(qANDIVersionNumber,"r");
 
-var langAttributesCount = 0;
-var roleAttributesCount = 0;
-
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 qANDI.analyze = function(objectClass){
 
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
-        objectClass = andiBar.createObjectValues(objectClass, 10);
         if($(this).isSemantically(["listitem","list"],"ol,ul,li,dl,dd,dt")){
             //Add to the lists array
             objectClass.list.push(new List([this], objectClass.list.length + 1, ''));
@@ -84,9 +80,11 @@ qANDI.analyze = function(objectClass){
 
         //For all elements on the page
         if($.trim($(this).attr("role")))
-            roleAttributesCount++;
+            objectClass.elementNums[11] += 1;
+            objectClass.elementStrings[11] = "elements with role attributes";
         if($.trim($(this).prop("lang")))
-            langAttributesCount++;
+            objectClass.elementNums[10] += 1;
+            objectClass.elementStrings[10] = "elements with lang attributes";
     });
 };
 
@@ -263,6 +261,8 @@ function TableInfo() {
 
 qANDI.lists = new Lists();
 qANDI.tableInfo = new TableInfo();
+
+qANDI.lists = andiBar.createObjectValues(qANDI.lists, 12);
 
 qANDI.analyze(qANDI.lists);
 //qANDI.results(qANDI.lists);

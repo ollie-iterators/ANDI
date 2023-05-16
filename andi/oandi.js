@@ -9,9 +9,6 @@ var oANDIVersionNumber = "4.3.0";
 //create oANDI instance
 var oANDI = new AndiModule(oANDIVersionNumber,"o");
 
-var langAttributesCount = 0;
-var roleAttributesCount = 0;
-
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 oANDI.analyze = function(objectClass){
 
@@ -55,9 +52,11 @@ oANDI.analyze = function(objectClass){
 
         //For all elements on the page
         if($.trim($(this).attr("role")))
-            roleAttributesCount++;
+            objectClass.elementNums[2] += 1;
+            objectClass.elementStrings[2] = "elements with role attributes";
         if($.trim($(this).prop("lang")))
-            langAttributesCount++;
+            objectClass.elementNums[1] += 1;
+            objectClass.elementStrings[1] = "elements with lang attributes";
     });
 };
 
@@ -340,6 +339,8 @@ function TableInfo() {
 oANDI.certainHeaders = new CertainHeaders();
 
 oANDI.tableInfo = new TableInfo();
+
+oANDI.certainHeaders = andiBar.createObjectValues(oANDI.certainHeaders, 3);
 
 oANDI.analyze(oANDI.certainHeaders);
 //oANDI.results(oANDI.certainHeaders);
