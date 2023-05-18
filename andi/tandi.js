@@ -289,16 +289,7 @@ AndiModule.inspect = function(element){
 
     var elementData = $(element).data("andi508");
 
-    var addOnProps = AndiData.getAddOnProps(element, elementData,
-        [
-            ["id", element.id],
-            "colspan",
-            "rowspan",
-            "aria-colcount",
-            "aria-rowcount",
-            "aria-colindex",
-            "aria-rowindex"
-        ]);
+    var addOnProps = AndiData.getAddOnProps(element, elementData);
 
     andiBar.displayOutput(elementData, element, addOnProps);
     andiBar.displayTable(elementData, element, addOnProps);
@@ -365,25 +356,6 @@ function analyzeTable(table){
 
     rowCount = 0;
     colCount = 0;
-    var row, cell;
-    var colIndex, rowIndex, colspan, rowspan;
-    var rowIndexPlusRowspan, colIndexPlusColspan;
-    var indexValue;
-    var child;
-
-    //loop through the <table> and set data-* attributes
-    //Each cell in a row is given a rowIndex
-    //Each cell in a column is given a colIndex
-
-    //The way tANDI analyzes the table is that it begins looking at the cells first
-    //to determine if there is any existing scenarios that should trigger an alert.
-    //When each cell has been evaluated, it will then attach alerts to the table element.
-
-    //This array is used to keep track of the rowspan of the previous row
-    //They will be checked against before assigning the colIndex.
-    //This technique is only needed for setting colIndex
-    //since the rowIndex is handled more "automatically" by the <tr> tags
-    var rowspanArray = [];
 
     //Cache the visible elements (performance)
     var all_rows = $(table).find("tr").filter(":visible");

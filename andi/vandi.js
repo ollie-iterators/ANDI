@@ -1309,7 +1309,6 @@ vANDI.viewList_buildTable = function(){
     //Returns an array with the tableName and the namingMethodUsed
     function preCalculateTableName(table){
         var tableName, namingMethod;
-        var role = $(table).getValidRole();
 
         tableName = grabTextFromAriaLabelledbyReferences(table);
         namingMethod = "aria-labelledby";

@@ -371,16 +371,6 @@ function analyzeTable(table){
     rowCount = 0;
     colCount = 0;
 
-    //loop through the <table> and set data-* attributes
-    //Each cell in a row is given a rowIndex
-    //Each cell in a column is given a colIndex
-
-    //The way uANDI analyzes the table is that it begins looking at the cells first
-    //to determine if there is any existing scenarios that should trigger an alert.
-    //When each cell has been evaluated, it will then attach alerts to the table element.
-
-    //These variables keep track of properties of the table
-
     if($.trim(role) && role !== "table" && role !== "grid" && role !== "treegrid"){
         //==TABLE WITH NONTYPICAL ROLE==//
         andiData = new AndiData(table[0]);
