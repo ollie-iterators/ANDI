@@ -77,12 +77,6 @@ rANDI.results = function(objectClass){
     //Deselect all mode buttons
     $("#ANDI508-module-actions button.rANDI508-mode").attr("aria-selected","false");
 
-    //LANDMARKS
-    $("#ANDI508-landmarks-button")
-        .attr("aria-selected","true")
-        .addClass("ANDI508-module-action-active");
-    //No outline for landmarks mode
-
     andiBar.updateResultsSummary("Landmarks: "+objectClass.list.length);
 
     $("#ANDI508").focus();

@@ -162,7 +162,7 @@ function TableInfo() {
 iANDI.iFrames = new iFrames();
 iANDI.tableInfo = new TableInfo();
 
-iANDI.iFrames = andiBar.createObjectValues(hANDI.hiddenElements, 1);
+iANDI.iFrames = andiBar.createObjectValues(iANDI.iFrames, 1);
 
 iANDI.analyze(iANDI.iFrames);
 //iANDI.results(iANDI.iFrames);

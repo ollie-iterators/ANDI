@@ -94,11 +94,6 @@ sANDI.results = function(objectClass){
     //Deselect all mode buttons
     $("#ANDI508-module-actions button.sANDI508-mode").attr("aria-selected","false");
 
-    //LIVE REGIONS
-    $("#ANDI508-liveRegions-button")
-        .attr("aria-selected","true")
-        .addClass("ANDI508-module-action-active");
-    //No outline for liveRegions mode
     andiBar.updateResultsSummary("Live Regions: "+objectClass.list.length);
 
     $("#ANDI508").focus();
