@@ -137,12 +137,10 @@ var showStartUpSummaryText = "Heading structure found.<br />Determine if <span c
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 pANDI.results = function(objectClass){
 
-    var moduleActionButtons = "";
-
     var moreDetails = "<button id='ANDI508-pageTitle-button'>page title</button>"+
         "<button id='ANDI508-pageLanguage-button'>page language</button>";
 
-    moduleActionButtons += "<div class='ANDI508-moduleActionGroup'><button class='ANDI508-moduleActionGroup-toggler'>more details</button><div class='ANDI508-moduleActionGroup-options'>" + moreDetails + "</div></div>";
+    var moduleActionButtons = "<div class='ANDI508-moduleActionGroup'><button class='ANDI508-moduleActionGroup-toggler'>more details</button><div class='ANDI508-moduleActionGroup-options'>" + moreDetails + "</div></div>";
 
     $("#ANDI508-module-actions").html(moduleActionButtons);
 

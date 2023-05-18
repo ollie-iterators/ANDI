@@ -261,7 +261,6 @@ showStartUpSummaryText += "Content injected with CSS may be invisible to a scree
 hANDI.results = function(objectClass){
 
     //Add Module Mode Buttons
-    var moduleActionButtons = "";
     var revealButtons = "";
 
     addForceRevealButton("display", objectClass.elementNums[1], "display:none");
@@ -277,7 +276,7 @@ hANDI.results = function(objectClass){
         revealButtons += "<button id='ANDI508-forceReveal_"+technique+"-button' class='hANDI-revealButton' aria-label='"+count+" "+buttonText+"' aria-pressed='false'>"+count+" "+buttonText+findIcon+"</button>";
     }
 
-    moduleActionButtons = "<button id='ANDI508-forceRevealAll-button' aria-label='Reveal All' aria-pressed='false'>reveal all"+findIcon+"</button><span class='ANDI508-module-actions-spacer'>|</span> ";
+    var moduleActionButtons = "<button id='ANDI508-forceRevealAll-button' aria-label='Reveal All' aria-pressed='false'>reveal all"+findIcon+"</button><span class='ANDI508-module-actions-spacer'>|</span> ";
     moduleActionButtons += "<div class='ANDI508-moduleActionGroup'><button class='ANDI508-moduleActionGroup-toggler'>css hiding techniques</button><div class='ANDI508-moduleActionGroup-options'>" + revealButtons + "</div></div>";
     moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span>&nbsp;";
     moduleActionButtons += "<button id='ANDI508-highlightCssContent-button' aria-label='content ::before ::after "+objectClass.elementNums[9]+" CSS Content' aria-pressed='false'>content ::before ::after "+objectClass.elementNums[9]+findIcon+"</button>";
