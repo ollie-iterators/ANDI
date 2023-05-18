@@ -291,7 +291,6 @@ AndiModule.inspect = function(element){
 
     var addOnProps = AndiData.getAddOnProps(element, elementData,
         [
-            ["scope", $(element).attr("scope")],
             ["id", element.id],
             "colspan",
             "rowspan",
@@ -460,7 +459,7 @@ tANDI.viewList_buildTable = function(){
         if($(tableArray[x]).hasClass("ANDI508-element"))
             appendHTML += " class='ANDI508-table-row-inspecting' aria-selected='true'";
 
-        tableName = preCalculateTableName(tableArray[x]);
+        tableName = ["<span style='font-style:italic'>Presentation Table</span>", ""];
 
         appendHTML += "><th scope='role'>"+parseInt(x+1)+"</th><td>"+
             "<a href='javascript:void(0)' data-andi508-relatedtable='"+x+"'>"+
@@ -470,45 +469,6 @@ tANDI.viewList_buildTable = function(){
     //Insert into ANDI Bar
     appendHTML += "</tbody></table></div></div>";
     $("#ANDI508-additionalPageResults").append(appendHTML);
-
-    //This function precalculates the table name
-    //Returns an array with the tableName and the namingMethodUsed
-    function preCalculateTableName(table){
-        var tableName, namingMethod;
-
-        tableName = "<span style='font-style:italic'>Presentation Table</span>";
-        namingMethod = "";
-
-        return [tableName,namingMethod];
-
-        function cleanUp(text){
-            return andiUtility.formatForHtml($.trim(text));
-        }
-
-        //This function gets the text from the aria-labelledby references
-        //TODO: some code is being duplicated here. Difference here is that alerts aren't needed
-        function grabTextFromAriaLabelledbyReferences(element){
-            var ids = $.trim($(element).attr("aria-labelledby"));//get the ids to search for
-            var idsArray = ids.split(" "); //split the list on the spaces, store into array. So it can be parsed through one at a time.
-            var accumulatedText = "";//this variable is going to store what is found. And will be returned
-            var referencedElement, referencedElementText;
-            //Traverse through the array
-            for(var x=0; x<idsArray.length; x++){
-                //Can the aria list id be found somewhere on the page?
-                if(idsArray[x] !== ""){
-                    referencedElement = document.getElementById(idsArray[x]);
-                    referencedElementText = "";
-                    if($(referencedElement).attr("aria-label"))//Yes, this id was found and it has an aria-label
-                        referencedElementText += andiUtility.formatForHtml($(referencedElement).attr("aria-label"));
-                    else if($(referencedElement).html() !== undefined)//Yes, this id was found and the reference contains something
-                        referencedElementText += andiUtility.formatForHtml(andiUtility.getVisibleInnerText(referencedElement, true));
-                    //Add to accumulatedText
-                    accumulatedText += referencedElementText + " ";
-                }
-            }
-            return $.trim(accumulatedText);
-        }
-    }
 };
 
 //This function attaches the click,hover,focus events to the items in the view list

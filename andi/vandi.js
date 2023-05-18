@@ -1310,51 +1310,42 @@ vANDI.viewList_buildTable = function(){
     function preCalculateTableName(table){
         var tableName, namingMethod;
         var role = $(table).getValidRole();
-        if(role === "presentation" || role === "none"){
-            tableName = "<span style='font-style:italic'>Presentation Table</span>";
-            namingMethod = "";
-        }
-        else if(role && role !== "table" && role !== "grid" && role !== "treegrid"){
-            tableName = "<span style='font-style:italic'>Not Recognized as a Data Table</span>";
-            namingMethod = "";
-        }
-        else{
-            tableName = grabTextFromAriaLabelledbyReferences(table);
-            namingMethod = "aria-labelledby";
-            if(!tableName){
-                tableName = cleanUp($(table).attr("aria-label"));
-                namingMethod = "aria-label";
-            }
-            if(!tableName){
-                tableName = cleanUp($(table).find("caption").filter(":visible").first().text());
-                namingMethod = "&lt;caption&gt;";
-            }
-            if(!tableName){
-                tableName = cleanUp($(table).attr("summary"));
-                namingMethod = "summary";
-            }
-            if(!tableName){
-                tableName = cleanUp($(table).attr("title"));
-                namingMethod = "title";
-            }
 
-            //No Name, check if preceeded by heading
-            if(!tableName){
-                var prevElement = $(table).prev();
-                if($(prevElement).is("h1,h2,h3,h4,h5,h6")){
-                    tableName = "<span class='ANDI508-display-caution'><img alt='Caution: ' src='"+icons_url+"caution.png' /> "+
-                        "Data Table with No Name, but Preceded by Heading: </span>"+
-                        cleanUp($(prevElement).text());
-                    namingMethod = "&lt;"+$(prevElement).prop("tagName").toLowerCase()+"&gt;";
-                }
-            }
+        tableName = grabTextFromAriaLabelledbyReferences(table);
+        namingMethod = "aria-labelledby";
+        if(!tableName){
+            tableName = cleanUp($(table).attr("aria-label"));
+            namingMethod = "aria-label";
+        }
+        if(!tableName){
+            tableName = cleanUp($(table).find("caption").filter(":visible").first().text());
+            namingMethod = "&lt;caption&gt;";
+        }
+        if(!tableName){
+            tableName = cleanUp($(table).attr("summary"));
+            namingMethod = "summary";
+        }
+        if(!tableName){
+            tableName = cleanUp($(table).attr("title"));
+            namingMethod = "title";
+        }
 
-            //No Name
-            if(!tableName){
+        //No Name, check if preceeded by heading
+        if(!tableName){
+            var prevElement = $(table).prev();
+            if($(prevElement).is("h1,h2,h3,h4,h5,h6")){
                 tableName = "<span class='ANDI508-display-caution'><img alt='Caution: ' src='"+icons_url+"caution.png' /> "+
-                "Data Table with No Name</span>";
-                namingMethod = "<span class='ANDI508-display-caution'>None</span>";
+                    "Data Table with No Name, but Preceded by Heading: </span>"+
+                    cleanUp($(prevElement).text());
+                namingMethod = "&lt;"+$(prevElement).prop("tagName").toLowerCase()+"&gt;";
             }
+        }
+
+        //No Name
+        if(!tableName){
+            tableName = "<span class='ANDI508-display-caution'><img alt='Caution: ' src='"+icons_url+"caution.png' /> "+
+            "Data Table with No Name</span>";
+            namingMethod = "<span class='ANDI508-display-caution'>None</span>";
         }
         return [tableName,namingMethod];
 
