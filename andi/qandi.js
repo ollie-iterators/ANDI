@@ -150,13 +150,6 @@ qANDI.results = function(objectClass){
     listTypesUsed += delimiter + "[role=list]";
     $("#ANDI508-additionalPageResults").html(listCounts);
 
-    if(!andiBar.focusIsOnInspectableElement()){
-        andiBar.showElementControls();
-        andiBar.showStartUpSummary(showStartUpSummaryText,true);
-    }
-
-    andiAlerter.updateAlertList();
-
     $("#ANDI508").focus();
 
 };

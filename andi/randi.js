@@ -84,12 +84,6 @@ rANDI.results = function(objectClass){
     //No outline for landmarks mode
 
     andiBar.updateResultsSummary("Landmarks: "+objectClass.list.length);
-    if(!andiBar.focusIsOnInspectableElement()){
-        andiBar.showElementControls();
-        andiBar.showStartUpSummary(showStartUpSummaryText,true);
-    }
-
-    andiAlerter.updateAlertList();
 
     $("#ANDI508").focus();
 

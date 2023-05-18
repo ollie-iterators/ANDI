@@ -119,8 +119,6 @@ fANDI.results = function(objectClass){
     andiBar.showElementControls();
     andiBar.showStartUpSummary(showStartUpSummaryText,true);
 
-    andiAlerter.updateAlertList();
-
     $("#ANDI508").focus();
 };
 

@@ -272,8 +272,6 @@ gANDI.results = function(objectClass){
     if(!andiBar.focusIsOnInspectableElement())
         andiBar.showStartUpSummary(showStartUpSummaryText, true);
 
-    andiAlerter.updateAlertList();
-
     $("#ANDI508").focus();
 };
 

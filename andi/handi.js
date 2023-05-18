@@ -395,8 +395,6 @@ hANDI.results = function(objectClass){
         "highlightCssContent"
     ]);
 
-    andiAlerter.updateAlertList();
-
     $("#ANDI508").focus();
 };
 

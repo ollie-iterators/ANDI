@@ -4160,9 +4160,11 @@ var oldIE = false; //used to determine if old version of IE is being used.
 
         andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
 
-        andiBar.focusIsOnInspectableElement()
-        $("#ANDI508-elementControls button").css("display", "inline-block");
-        andiBar.showStartUpSummary(startUpSummaryText, true);
+        //Show Startup Summary
+        if(!andiBar.focusIsOnInspectableElement()){
+            andiBar.showElementControls();
+            andiBar.showStartUpSummary(startUpSummaryText,true);
+        }
 
         andiAlerter.updateAlertList();
 

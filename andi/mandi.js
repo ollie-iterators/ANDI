@@ -116,14 +116,6 @@ mANDI.results = function(objectClass){
         return false;
     });
 
-    //Show Startup Summary
-    if(!andiBar.focusIsOnInspectableElement()){
-        andiBar.showElementControls();
-        andiBar.showStartUpSummary(showStartUpSummaryText,true);
-    }
-
-    andiAlerter.updateAlertList();
-
     AndiModule.engageActiveActionButtons([
         "viewLinksList"
     ]);

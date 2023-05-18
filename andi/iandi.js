@@ -99,10 +99,6 @@ iANDI.results = function(objectClass){
         });
     });
 
-    andiBar.showStartUpSummary(showStartUpSummaryText, true);
-
-    andiAlerter.updateAlertList();
-
     $("#ANDI508").focus();
 };
 

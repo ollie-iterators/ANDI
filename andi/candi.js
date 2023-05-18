@@ -178,14 +178,8 @@ cANDI.results = function(objectClass){
         $("#cANDI508-playground-result").focus();
     });
 
-    if(!andiBar.focusIsOnInspectableElement()){
-        andiBar.showElementControls();
-        andiBar.showStartUpSummary(showStartUpSummaryText,true);
-    }
     if(testPageData.disabledElementsCount > 0)
         andiAlerter.throwAlert(alert_0251,[testPageData.disabledElementsCount],0);
-
-    andiAlerter.updateAlertList();
 
     AndiModule.engageActiveActionButtons([
         "contrastPlayground"

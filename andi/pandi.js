@@ -217,11 +217,6 @@ pANDI.results = function(objectClass){
         return false;
     });
 
-    if(!andiBar.focusIsOnInspectableElement()){
-        andiBar.showElementControls();
-        andiBar.showStartUpSummary(showStartUpSummaryText,true);
-    }
-
     $("#pANDI508-outline-container")
     .html(pANDI.outline)
     .find("a[data-andi508-relatedindex]").each(function(){
@@ -255,8 +250,6 @@ pANDI.results = function(objectClass){
             AndiModule.inspect(relatedElement[0]);
         });
     });
-
-    andiAlerter.updateAlertList();
 
     $("#ANDI508").focus();
 

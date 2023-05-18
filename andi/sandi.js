@@ -100,12 +100,6 @@ sANDI.results = function(objectClass){
         .addClass("ANDI508-module-action-active");
     //No outline for liveRegions mode
     andiBar.updateResultsSummary("Live Regions: "+objectClass.list.length);
-    if(!andiBar.focusIsOnInspectableElement()){
-        andiBar.showElementControls();
-        andiBar.showStartUpSummary(showStartUpSummaryText,true);
-    }
-
-    andiAlerter.updateAlertList();
 
     $("#ANDI508").focus();
 
