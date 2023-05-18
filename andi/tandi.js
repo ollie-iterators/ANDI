@@ -10,9 +10,6 @@ var tandiVersionNumber = "11.2.1";
 //create tANDI instance
 var tANDI = new AndiModule(tandiVersionNumber,"t");
 
-//Delimeter for the the header cells
-tANDI.associatedHeaderCellsDelimeter = " <span aria-hidden='true'>|</span> ";
-
 //This function updates the Active Element Inspector when mouseover is on a given to a highlighted element.
 //Holding the shift key will prevent inspection from changing.
 AndiModule.hoverability = function(event){
@@ -76,11 +73,6 @@ var tableCountTotal = 0;			//The total number of tables
 var presentationTablesCount = 0;	//The total number of presentation tables
 var tableArray = [];				//Stores all tables in an array
 var activeTableIndex = -1;			//The array index of the active table
-
-//These variables are for the current table being analyzed (the active table)
-var cellCount = 0;					//The total number of <th> and <td>
-var rowCount = 0;					//The total number of <tr>
-var colCount = 0;					//The total number of columns (maximum number of <th> or <td> in a <tr>)
 
 AndiModule.initActiveActionButtons({
     scopeMode:true, //default, false == headersIdMode
@@ -354,9 +346,6 @@ function analyzeTable(table){
             .css("display","none");
     });
 
-    rowCount = 0;
-    colCount = 0;
-
     //Cache the visible elements (performance)
     var all_rows = $(table).find("tr").filter(":visible");
     var all_th = $(all_rows).find("th").filter(":visible");
@@ -374,7 +363,7 @@ function analyzeTable(table){
     if($(all_th).first().length)
         presentationTablesShouldNotHave += "&lt;th&gt; cells, ";
 
-    cellCount = 0;
+    var cellCount = 0;
 
     var presTableWithScope = false;
     var presTableWithHeaders = false;

@@ -10,9 +10,6 @@ var uANDIVersionNumber = "11.2.1";
 //create uANDI instance
 var uANDI = new AndiModule(uANDIVersionNumber,"t");
 
-//Delimeter for the the header cells
-uANDI.associatedHeaderCellsDelimeter = " <span aria-hidden='true'>|</span> ";
-
 //This function updates the Active Element Inspector when mouseover is on a given to a highlighted element.
 //Holding the shift key will prevent inspection from changing.
 AndiModule.hoverability = function(event){
@@ -76,11 +73,6 @@ var tableCountTotal = 0;			//The total number of tables
 var presentationTablesCount = 0;	//The total number of presentation tables
 var tableArray = [];				//Stores all tables in an array
 var activeTableIndex = -1;			//The array index of the active table
-
-//These variables are for the current table being analyzed (the active table)
-var cellCount = 0;					//The total number of <th> and <td>
-var rowCount = 0;					//The total number of <tr>
-var colCount = 0;					//The total number of columns (maximum number of <th> or <td> in a <tr>)
 
 AndiModule.initActiveActionButtons({
     scopeMode:true, //default, false == headersIdMode
@@ -367,9 +359,6 @@ function analyzeTable(table){
             .attr("andi508-temporaryhide", $(this).css("display"))
             .css("display","none");
     });
-
-    rowCount = 0;
-    colCount = 0;
 
     if($.trim(role) && role !== "table" && role !== "grid" && role !== "treegrid"){
         //==TABLE WITH NONTYPICAL ROLE==//
