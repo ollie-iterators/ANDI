@@ -178,30 +178,28 @@ var showStartUpSummaryText = "Discover accessibility markup for <span class='AND
 nANDI.results = function(objectClass){
     andiBar.updateResultsSummary("Buttons Found: "+nANDI.buttons.elementNums[0]);
 
-    if(nANDI.buttons.elementNums[1] > 0){
-        //highlightNonUniqueButtons
-        $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightNonUniqueButtons-button' aria-label='Highlight "+nANDI.buttons.elementNums[1]+" Non-Unique Buttons' aria-pressed='false'>"+nANDI.buttons.elementNums[1]+" non-unique buttons"+findIcon+"</button>");
+    //highlightNonUniqueButtons
+    $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightNonUniqueButtons-button' aria-label='Highlight "+nANDI.buttons.elementNums[1]+" Non-Unique Buttons' aria-pressed='false'>"+nANDI.buttons.elementNums[1]+" non-unique buttons"+findIcon+"</button>");
 
-        //highlightNonUniqueButtons Button
-        $("#ANDI508-highlightNonUniqueButtons-button").click(function(){
-            var testPage = $("#ANDI508-testPage");
-            if(!$(testPage).hasClass("nANDI508-highlightAmbiguous")){
-                //On
-                $("#nANDI508-listButtons-tab-all").click();
-                $("#ANDI508-testPage").addClass("nANDI508-highlightAmbiguous");
-                andiOverlay.overlayButton_on("find",$(this));
-                AndiModule.activeActionButtons.highlightNonUniqueButtons = true;
-            }
-            else{
-                //Off
-                $("#ANDI508-testPage").removeClass("nANDI508-highlightAmbiguous");
-                andiOverlay.overlayButton_off("find",$(this));
-                AndiModule.activeActionButtons.highlightNonUniqueButtons = false;
-            }
-            andiResetter.resizeHeights();
-            return false;
-        });
-    }
+    //highlightNonUniqueButtons Button
+    $("#ANDI508-highlightNonUniqueButtons-button").click(function(){
+        var testPage = $("#ANDI508-testPage");
+        if(!$(testPage).hasClass("nANDI508-highlightAmbiguous")){
+            //On
+            $("#nANDI508-listButtons-tab-all").click();
+            $("#ANDI508-testPage").addClass("nANDI508-highlightAmbiguous");
+            andiOverlay.overlayButton_on("find",$(this));
+            AndiModule.activeActionButtons.highlightNonUniqueButtons = true;
+        }
+        else{
+            //Off
+            $("#ANDI508-testPage").removeClass("nANDI508-highlightAmbiguous");
+            andiOverlay.overlayButton_off("find",$(this));
+            AndiModule.activeActionButtons.highlightNonUniqueButtons = false;
+        }
+        andiResetter.resizeHeights();
+        return false;
+    });
 
     $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewButtonsList-button' class='ANDI508-viewOtherResults-button' aria-label='View Buttons List' aria-expanded='false'>"+listIcon+"view buttons list</button>");
 

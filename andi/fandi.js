@@ -115,19 +115,6 @@ var showStartUpSummaryText = "Discover accessibility markup for focusable elemen
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 //Inserts some counter totals, displays the accesskey list
 fANDI.results = function(objectClass){
-
-    //Accesskeys List:
-    if(fANDI.accesskeys.getListHtml()){
-        $("#ANDI508-additionalPageResults").append("<p id='ANDI508-accesskeysFound'>AccessKeys: "+"{ "+fANDI.accesskeys.getListHtml()+"}</p>");
-        $("#ANDI508-accesskeysFound").find("a").each(function(){
-            andiFocuser.addFocusClick($(this));
-            $(this).on("mouseover" 	,andiLaser.drawAlertLaser);
-            $(this).on("click"		,andiLaser.eraseLaser);
-            $(this).on("mouseleave"	,andiLaser.eraseLaser);
-        });
-        $("#ANDI508-accesskeysFound").show();
-    }
-
     andiBar.focusIsOnInspectableElement();
     andiBar.showElementControls();
     andiBar.showStartUpSummary(showStartUpSummaryText,true);
@@ -231,6 +218,21 @@ AndiModule.inspect = function(element){
     andiBar.displayTable(elementData, element, addOnProps);
 };
 
+// This is where the added code for the module goes
+fANDI.addAccessKeysList = function () {
+    //Accesskeys List:
+    if(fANDI.accesskeys.getListHtml()){
+        $("#ANDI508-additionalPageResults").append("<p id='ANDI508-accesskeysFound'>AccessKeys: "+"{ "+fANDI.accesskeys.getListHtml()+"}</p>");
+        $("#ANDI508-accesskeysFound").find("a").each(function(){
+            andiFocuser.addFocusClick($(this));
+            $(this).on("mouseover" 	,andiLaser.drawAlertLaser);
+            $(this).on("click"		,andiLaser.eraseLaser);
+            $(this).on("mouseleave"	,andiLaser.eraseLaser);
+        });
+        $("#ANDI508-accesskeysFound").show();
+    }
+}
+
 //This object class is used to store data about each focusable element. Object instances will be placed into an array.
 function Focusable(elementList, index, rowClass) {
     this.elementList  = elementList;
@@ -262,6 +264,7 @@ fANDI.focusables = andiBar.createObjectValues(fANDI.focusables, 3);
 
 fANDI.analyze(fANDI.focusables);
 //fANDI.results(fANDI.focusables);
+fANDI.addAccessKeysList();
 andiBar.results(fANDI.focusables, fANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

@@ -306,32 +306,30 @@ lANDI.results = function(objectClass){
 
     andiBar.updateResultsSummary("Links Found: "+lANDI.links.elementNums[0]);
 
-    if(lANDI.links.ambiguousIndex > 0){
-        //highlightAmbiguousLinks button
-        $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightAmbiguousLinks-button' aria-label='Highlight "+lANDI.links.elementNums[3]+" Ambiguous Links' aria-pressed='false'>"+lANDI.links.elementNums[3]+" ambiguous links"+findIcon+"</button>");
+    //highlightAmbiguousLinks button
+    $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightAmbiguousLinks-button' aria-label='Highlight "+lANDI.links.elementNums[3]+" Ambiguous Links' aria-pressed='false'>"+lANDI.links.elementNums[3]+" ambiguous links"+findIcon+"</button>");
 
-        //Ambiguous Links Button
-        $("#ANDI508-highlightAmbiguousLinks-button").click(function(){
-            var testPage = $("#ANDI508-testPage");
-            if(!$(testPage).hasClass("lANDI508-highlightAmbiguous")){
-                //On
-                $("#lANDI508-listLinks-tab-all").click();
-                $("#ANDI508-testPage")
-                    //.removeClass("lANDI508-highlightInternal lANDI508-highlightExternal")
-                    .addClass("lANDI508-highlightAmbiguous");
-                andiOverlay.overlayButton_on("find",$(this));
-                AndiModule.activeActionButtons.highlightAmbiguousLinks = true;
-            }
-            else{
-                //Off
-                $("#ANDI508-testPage").removeClass("lANDI508-highlightAmbiguous");
-                andiOverlay.overlayButton_off("find",$(this));
-                AndiModule.activeActionButtons.highlightAmbiguousLinks = false;
-            }
-            andiResetter.resizeHeights();
-            return false;
-        });
-    }
+    //Ambiguous Links Button
+    $("#ANDI508-highlightAmbiguousLinks-button").click(function(){
+        var testPage = $("#ANDI508-testPage");
+        if(!$(testPage).hasClass("lANDI508-highlightAmbiguous")){
+            //On
+            $("#lANDI508-listLinks-tab-all").click();
+            $("#ANDI508-testPage")
+                //.removeClass("lANDI508-highlightInternal lANDI508-highlightExternal")
+                .addClass("lANDI508-highlightAmbiguous");
+            andiOverlay.overlayButton_on("find",$(this));
+            AndiModule.activeActionButtons.highlightAmbiguousLinks = true;
+        }
+        else{
+            //Off
+            $("#ANDI508-testPage").removeClass("lANDI508-highlightAmbiguous");
+            andiOverlay.overlayButton_off("find",$(this));
+            AndiModule.activeActionButtons.highlightAmbiguousLinks = false;
+        }
+        andiResetter.resizeHeights();
+        return false;
+    });
 
     $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewLinksList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view links list</button>");
 
