@@ -129,7 +129,6 @@ qANDI.results = function(objectClass){
     //Deselect all mode buttons
     $("#ANDI508-module-actions button.qANDI508-mode").attr("aria-selected","false");
 
-    andiBar.updateResultsSummary("List Elements: "+objectClass.list.length);
     var listCounts = "";
     var delimiter = "";
     var listTypesUsed = "";

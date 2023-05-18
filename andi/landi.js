@@ -304,8 +304,6 @@ var showStartUpSummaryText = "Discover accessibility markup for <span class='AND
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 lANDI.results = function(objectClass){
 
-    andiBar.updateResultsSummary("Links Found: "+lANDI.links.elementNums[0]);
-
     //highlightAmbiguousLinks button
     $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightAmbiguousLinks-button' aria-label='Highlight "+lANDI.links.elementNums[3]+" Ambiguous Links' aria-pressed='false'>"+lANDI.links.elementNums[3]+" ambiguous links"+findIcon+"</button>");
 

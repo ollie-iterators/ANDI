@@ -149,8 +149,6 @@ oANDI.results = function(objectClass){
     //Deselect all mode buttons
     $("#ANDI508-module-actions button.oANDI508-mode").attr("aria-selected","false");
 
-    andiBar.updateResultsSummary("Headings: "+objectClass.list.length);
-
     //Build Outline
     for(var x=0; x<objectClass.list.length; x++){
         oANDI.outline += oANDI.getOutlineItem(objectClass.list[x]);

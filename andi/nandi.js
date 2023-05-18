@@ -176,8 +176,6 @@ nANDI.analyze = function(objectClass){
 var showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-l'>buttons</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every button.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 nANDI.results = function(objectClass){
-    andiBar.updateResultsSummary("Buttons Found: "+nANDI.buttons.elementNums[0]);
-
     //highlightNonUniqueButtons
     $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightNonUniqueButtons-button' aria-label='Highlight "+nANDI.buttons.elementNums[1]+" Non-Unique Buttons' aria-pressed='false'>"+nANDI.buttons.elementNums[1]+" non-unique buttons"+findIcon+"</button>");
 

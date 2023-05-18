@@ -77,8 +77,6 @@ rANDI.results = function(objectClass){
     //Deselect all mode buttons
     $("#ANDI508-module-actions button.rANDI508-mode").attr("aria-selected","false");
 
-    andiBar.updateResultsSummary("Landmarks: "+objectClass.list.length);
-
     $("#ANDI508").focus();
 
 };

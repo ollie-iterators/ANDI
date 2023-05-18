@@ -263,17 +263,6 @@ gANDI.analyze = function(objectClass){
 
 var showStartUpSummaryText = "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. ";
 showStartUpSummaryText += "Ensure that every meaningful/non-decorative image has a text equivalent.";
-//This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-gANDI.results = function(objectClass){
-
-    andiBar.updateResultsSummary("Images Found: "+objectClass.elementNums[0]);
-
-    andiBar.showElementControls();
-    if(!andiBar.focusIsOnInspectableElement())
-        andiBar.showStartUpSummary(showStartUpSummaryText, true);
-
-    $("#ANDI508").focus();
-};
 
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
@@ -360,7 +349,6 @@ gANDI.tableInfo = new TableInfo();
 gANDI.images = andiBar.createObjectValues(gANDI.images, 7);
 
 gANDI.analyze(gANDI.images);
-//gANDI.results(gANDI.images);
 andiBar.results(gANDI.images, gANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

@@ -260,8 +260,6 @@ showStartUpSummaryText += "Use the style toggle buttons to force the hidden cont
 showStartUpSummaryText += "Content injected with CSS may be invisible to a screen reader.";
 hANDI.results = function(objectClass){
 
-    andiBar.updateResultsSummary("Hidden Elements: "+objectClass.elementNums[0]);
-
     //Add Module Mode Buttons
     var moduleActionButtons = "";
     var revealButtons = "";

@@ -174,8 +174,6 @@ pANDI.results = function(objectClass){
     //Deselect all mode buttons
     $("#ANDI508-module-actions button.pANDI508-mode").attr("aria-selected","false");
 
-    andiBar.updateResultsSummary("Headings: "+objectClass.list.length);
-
     //Build Outline
     for(var x=0; x<objectClass.list.length; x++){
         pANDI.outline += pANDI.getOutlineItem(objectClass.list[x]);

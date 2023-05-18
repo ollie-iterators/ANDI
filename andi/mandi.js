@@ -99,8 +99,6 @@ var showStartUpSummaryText = "Discover accessibility markup for <span class='AND
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 mANDI.results = function(objectClass){
 
-    andiBar.updateResultsSummary("Links Found: "+mANDI.links.elementNums[0]);
-
     $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewLinksList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view links list</button>");
 
     //Links List Button
