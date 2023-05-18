@@ -15,7 +15,7 @@ iANDI.analyze = function(objectClass){
         if($(this).is("iframe")){
             andiData = new AndiData(this);
             andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
-            objectClass.list.push(new iFrame([this], objectClass.list.length + 1, src, ""))
+            objectClass.list.push(new iFrame([this], objectClass.list.length + 1, $(this).attr("src"), ""))
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "iframes";
             AndiData.attachDataToElement(this);
