@@ -705,7 +705,7 @@ lANDI.isScriptedLink = function(href){
 //This object class is used to store data about each link. Object instances will be placed into an array.
 function Link(elementList, index, rowClass){
     this.elementList  = elementList;
-    this.index        = index
+    this.index        = index;
     this.columnValues = [elementList, index];
     this.rowClass     = rowClass;
 }

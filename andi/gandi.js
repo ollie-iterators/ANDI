@@ -196,10 +196,10 @@ gANDI.analyze = function(objectClass){
             if(!$(this).hasClass("ANDI508-element")){
                 andiData = new AndiData(this);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, ""));
-                objectClass.elementNums[0] += 1;
-                objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
             }
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] = "images";
             objectClass.elementNums[4] += 1;
             objectClass.elementStrings[4] = "font icons";
             $(this).addClass("gANDI508-fontIcon");

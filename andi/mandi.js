@@ -453,7 +453,7 @@ function Link(elementList, index, rowClass){
     this.elementList  = elementList;
     this.index        = index;
     this.columnValues = [elementList, index];
-    this.rowClass = rowClass;
+    this.rowClass     = rowClass;
 }
 
 //This object class is used to keep track of the links on the page

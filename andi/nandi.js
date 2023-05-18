@@ -471,10 +471,10 @@ nANDI.viewList_selectTab = function(tab){
 
 //This object class is used to store data about each button. Object instances will be placed into an array.
 function Button(elementList, index, rowClass){
-    this.elementList = elementList;
-    this.index = index;
+    this.elementList  = elementList;
+    this.index        = index;
     this.columnValues = [elementList, index];
-    this.rowClass = rowClass;
+    this.rowClass     = rowClass;
 }
 
 //This object class is used to keep track of the buttons on the page
