@@ -112,15 +112,6 @@ function AndiAccesskeys(){
 }
 
 var showStartUpSummaryText = "Discover accessibility markup for focusable elements by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every focusable element.";
-//This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-//Inserts some counter totals, displays the accesskey list
-fANDI.results = function(objectClass){
-    andiBar.focusIsOnInspectableElement();
-    andiBar.showElementControls();
-    andiBar.showStartUpSummary(showStartUpSummaryText,true);
-
-    $("#ANDI508").focus();
-};
 
 //This function will overlay the tab order sequence.
 //It will take into account, tabindexes that are greater than zero and less than zero
@@ -260,9 +251,8 @@ fANDI.tableInfo = new TableInfo();
 
 fANDI.focusables = andiBar.createObjectValues(fANDI.focusables, 3);
 
-fANDI.analyze(fANDI.focusables);
-//fANDI.results(fANDI.focusables);
 fANDI.addAccessKeysList();
+fANDI.analyze(fANDI.focusables);
 andiBar.results(fANDI.focusables, fANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

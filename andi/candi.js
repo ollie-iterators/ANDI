@@ -55,6 +55,9 @@ cANDI.analyze = function(objectClass){
         }
     });
 
+    if(objectClass.elementNums[1] > 0)
+        andiAlerter.throwAlert(alert_0231,alert_0231.message,0);
+
     //This function checks for additional hiding techniques and returns true if it has one
     //Techniques such as font-size:0, large text-indent, overflow:hidden width small height and width
     function hasAdditionalHidingTechniques(element){
@@ -93,9 +96,6 @@ cANDI.analyze = function(objectClass){
 var showStartUpSummaryText = "Discover the <span class='ANDI508-module-name-c'>color contrast</span> for elements containing text.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 cANDI.results = function(objectClass){
-    if(objectClass.elementNums[1] > 0)
-        andiAlerter.throwAlert(alert_0231,alert_0231.message,0);
-
     //Contrast Playground HTML
     $("#ANDI508-additionalPageResults").append(
     "<button id='ANDI508-contrastPlayground-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"show contrast playground</button>"+
