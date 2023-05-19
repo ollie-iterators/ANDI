@@ -80,12 +80,12 @@ nANDI.analyze = function(objectClass){
                 }
 
                 andiCheck.commonFocusableElementChecks(andiData,$(this));
-                nANDI.buttons.elementNums[0] += 1;
-                nANDI.buttons.elementStrings[0] = "buttons";
                 AndiData.attachDataToElement(this);
 
                 //create Button object and add to array
-                nANDI.buttons.list.push(new Button([this], objectClass.list.length + 1, ""));
+                nANDI.buttons.list.push(new Button([this], objectClass.list.length + 1, "", "", ""));
+                nANDI.buttons.elementNums[0] += 1;
+                nANDI.buttons.elementStrings[0] = "buttons";
             }
         }
     });
@@ -420,11 +420,12 @@ nANDI.viewList_selectTab = function(tab){
 };
 
 //This object class is used to store data about each button. Object instances will be placed into an array.
-function Button(elementList, index, nameDescription, rowClass){
+function Button(elementList, index, nameDescription, alerts, rowClass){
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription;
-    this.columnValues    = [elementList, index, nameDescription];
+    this.alerts          = alerts;
+    this.columnValues    = [elementList, index, nameDescription, alerts];
     this.rowClass        = rowClass;
 }
 
@@ -433,7 +434,7 @@ function Buttons(){
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["elementList", "index", "nameDescription"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
     this.nonUniqueIndex = 0;
 }
 

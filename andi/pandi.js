@@ -22,7 +22,7 @@ pANDI.analyze = function(objectClass){
 
                 andiAlerter.throwAlert(alert_0190);
                 AndiData.attachDataToElement(this);
-                objectClass.list.push(new PossibleHeader([this], objectClass.list.length + 1, "", ""));
+                objectClass.list.push(new PossibleHeader([this], objectClass.list.length + 1, "", "", ""));
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "possible headings";
             }
@@ -307,11 +307,12 @@ AndiOverlay.prototype.overlayReadingOrder = function(){
 };
 
 //This object class is used to store data about each possible header. Object instances will be placed into an array.
-function PossibleHeader(elementList, index, nameDescription, rowClass) {
+function PossibleHeader(elementList, index, nameDescription, alert, rowClass) {
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription;
-    this.columnValues    = [elementList, index, this.nameDescription];
+    this.alert           = alert;
+    this.columnValues    = [elementList, index, nameDescription, alert];
     this.rowClass        = rowClass;
 }
 
@@ -320,7 +321,7 @@ function PossibleHeaders() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription"];
+    this.columnNames    = ["element", "index", "nameDescription", "alert"];
     this.outlineReady   = false;
 }
 

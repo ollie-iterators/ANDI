@@ -22,7 +22,7 @@ fANDI.analyze = function(objectClass){
             if(andiData.accesskey)
                 fANDI.accesskeys.push(this, andiData.accesskey, andiData.andiElementIndex);
             testPageData.firstLaunchedModulePrep(this, andiData);
-            objectClass.list.push(new Focusable([this], objectClass.list.length + 1, "", ""));
+            objectClass.list.push(new Focusable([this], objectClass.list.length + 1, "", "", ""));
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "focusable elements"
             AndiData.attachDataToElement(this);
@@ -221,11 +221,12 @@ fANDI.addAccessKeysList = function (objectClass) {
 }
 
 //This object class is used to store data about each focusable element. Object instances will be placed into an array.
-function Focusable(elementList, index, nameDescription, rowClass) {
+function Focusable(elementList, index, nameDescription, alerts, rowClass) {
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription;
-    this.columnValues    = [elementList, index, nameDescription];
+    this.alerts          = alerts;
+    this.columnValues    = [elementList, index, nameDescription, alerts];
     this.rowClass        = rowClass;
 }
 
@@ -234,7 +235,7 @@ function Focusables() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription"];
+    this.columnNames    = ["element", "index", "nameDescription", "alerts"];
 }
 
 // This object class is used to keep track of the table information

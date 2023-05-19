@@ -96,9 +96,9 @@ vANDI.analyze = function(objectClass){
     var activeElementFound = false;
     $(TestPageData.allElements).filter("table,[role=table],[role=grid],[role=treegrid]").each(function(){
         //Store this table in the array
-        objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+        objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", "", ""));
         objectClass.elementNums[0] += 1;
-        objectClass.elementStrings[0] += "presentation tables";
+        objectClass.elementStrings[0] += "data tables";
 
         if($(this).isSemantically(["table","grid","treegrid"],"table")){
             //It's a data table
@@ -1604,12 +1604,13 @@ function buildArrayOnIndex(value){
 }
 
 //This object class is used to store data about each presentation table. Object instances will be placed into an array.
-function DataTable(elementList, index, nameDescription, role, rowClass) {
+function DataTable(elementList, index, nameDescription, role, alerts, rowClass) {
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription;
     this.role            = role;
-    this.columnValues    = [elementList, index, nameDescription, role];
+    this.alerts          = alerts;
+    this.columnValues    = [elementList, index, nameDescription, role, alerts];
     this.rowClass        = rowClass;
 }
 
@@ -1618,7 +1619,7 @@ function DataTables() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription", "role"];
+    this.columnNames    = ["element", "index", "nameDescription", "role", "alerts"];
 }
 
 // This object class is used to keep track of the table information

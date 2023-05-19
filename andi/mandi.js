@@ -34,7 +34,7 @@ mANDI.analyze = function(objectClass){
         else if($(this).is("a")){
             andiData = new AndiData(this);
             isLinkKeyboardAccessible(undefined, this);
-            objectClass.list.push(new Link([this], objectClass.list.length + 1, "", ""));
+            objectClass.list.push(new Link([this], objectClass.list.length + 1, "", "", ""));
             mANDI.links.elementNums[0] += 1;
             mANDI.links.elementStrings[0] = "possible links";
             AndiData.attachDataToElement(this);
@@ -411,11 +411,12 @@ mANDI.isScriptedLink = function(href){
 };
 
 //This object class is used to store data about each link. Object instances will be placed into an array.
-function Link(elementList, index, nameDescription, rowClass){
+function Link(elementList, index, nameDescription, alerts, rowClass){
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription;
-    this.columnValues    = [elementList, index, nameDescription];
+    this.alerts          = alerts;
+    this.columnValues    = [elementList, index, nameDescription, alerts];
     this.rowClass        = rowClass;
 }
 
@@ -424,7 +425,7 @@ function Links(){
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["elementList", "index", "nameDescription"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
     this.ambiguousIndex = 0;
 }
 

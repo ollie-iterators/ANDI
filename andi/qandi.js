@@ -16,7 +16,7 @@ qANDI.analyze = function(objectClass){
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["listitem","list"],"ol,ul,li,dl,dd,dt")){
             //Add to the lists array
-            objectClass.list.push(new List([this], objectClass.list.length + 1, "", ""));
+            objectClass.list.push(new List([this], objectClass.list.length + 1, "", "", ""));
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "list elements";
 
@@ -203,11 +203,12 @@ AndiOverlay.prototype.overlayReadingOrder = function(){
 };
 
 //This object class is used to store data about each list. Object instances will be placed into an array.
-function List(elementList, index, nameDescription, rowClass) {
+function List(elementList, index, nameDescription, alerts, rowClass) {
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription;
-    this.columnValues    = [elementList, index, nameDescription];
+    this.alerts          = alerts;
+    this.columnValues    = [elementList, index, nameDescription, alerts];
     this.rowClass        = rowClass;
 }
 
@@ -216,7 +217,7 @@ function Lists() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription"];
+    this.columnNames    = ["element", "index", "nameDescription", "alerts"];
 }
 
 // This object class is used to keep track of the table information

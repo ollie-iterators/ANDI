@@ -16,7 +16,7 @@ rANDI.analyze = function(objectClass){
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["banner","complementary","contentinfo","form","main","navigation","search","region"],"main,header,footer,nav,form,aside")){
             //Add to the landmarks array
-            objectClass.list.push(new Landmark([this], objectClass.list.length + 1, "", ""));
+            objectClass.list.push(new Landmark([this], objectClass.list.length + 1, "", "", ""));
 
             andiData = new AndiData(this);
 
@@ -154,11 +154,12 @@ AndiOverlay.prototype.overlayReadingOrder = function(){
 };
 
 //This object class is used to store data about each landmark. Object instances will be placed into an array.
-function Landmark(elementList, index, nameDescription, rowClass) {
+function Landmark(elementList, index, nameDescription, alert, rowClass) {
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription;
-    this.columnValues    = [elementList, index, nameDescription];
+    this.alert           = alert;
+    this.columnValues    = [elementList, index, nameDescription, alert];
     this.rowClass        = rowClass;
 }
 
