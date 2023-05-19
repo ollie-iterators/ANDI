@@ -1,0 +1,10 @@
+/*==tableANDI==*/
+    #ANDI508 #tableANDI508-viewList-button-prev,
+    #ANDI508 #tableANDI508-viewList-button-next
+        {border:1px solid black !important; margin:1px 1px 2px 0.6em !important; padding:0 !important; border-radius:3px !important;}
+    #ANDI508 #tableANDI508-viewList-button-prev:hover,
+    #ANDI508 #tableANDI508-viewList-button-next:hover
+        {border:1px solid lemonchiffon !important;}
+    #ANDI508 #tableANDI508-viewList-button-prev img,
+    #ANDI508 #tableANDI508-viewList-button-next img
+        {width:22px}
