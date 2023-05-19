@@ -183,7 +183,6 @@ rANDI.tableInfo = new TableInfo();
 rANDI.landmarks = andiBar.createObjectValues(rANDI.landmarks, 3);
 
 rANDI.analyze(rANDI.landmarks);
-//rANDI.results(rANDI.landmarks);
 andiBar.results(rANDI.landmarks, rANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

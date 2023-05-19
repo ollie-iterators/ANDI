@@ -441,7 +441,6 @@ mANDI.tableInfo = new TableInfo();
 mANDI.links = andiBar.createObjectValues(mANDI.links, 1);
 
 mANDI.analyze(mANDI.links);
-//mANDI.results(mANDI.links);
 andiBar.results(mANDI.links, mANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

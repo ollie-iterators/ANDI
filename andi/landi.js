@@ -692,7 +692,6 @@ lANDI.tableInfo = new TableInfo();
 lANDI.links = andiBar.createObjectValues(lANDI.links, 4);
 
 lANDI.analyze(lANDI.links);
-//lANDI.results(lANDI.links);
 andiBar.results(lANDI.links, lANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

@@ -454,7 +454,6 @@ nANDI.tableInfo = new TableInfo();
 nANDI.buttons = andiBar.createObjectValues(nANDI.buttons, 2);
 
 nANDI.analyze(nANDI.buttons);
-//nANDI.results(nANDI.buttons);
 andiBar.results(nANDI.buttons, nANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

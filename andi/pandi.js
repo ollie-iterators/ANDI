@@ -337,7 +337,6 @@ pANDI.tableInfo = new TableInfo();
 pANDI.possibleHeaders = andiBar.createObjectValues(pANDI.possibleHeaders, 3);
 
 pANDI.analyze(pANDI.possibleHeaders);
-//pANDI.results(pANDI.possibleHeaders);
 andiBar.results(pANDI.possibleHeaders, pANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

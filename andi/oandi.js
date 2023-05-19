@@ -310,7 +310,6 @@ oANDI.tableInfo = new TableInfo();
 oANDI.certainHeaders = andiBar.createObjectValues(oANDI.certainHeaders, 3);
 
 oANDI.analyze(oANDI.certainHeaders);
-//oANDI.results(oANDI.certainHeaders);
 andiBar.results(oANDI.certainHeaders, oANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

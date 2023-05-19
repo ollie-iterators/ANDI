@@ -531,7 +531,6 @@ hANDI.tableInfo = new TableInfo();
 hANDI.hiddenElements = andiBar.createObjectValues(hANDI.hiddenElements, 10);
 
 hANDI.analyze(hANDI.hiddenElements);
-//hANDI.results(hANDI.hiddenElements);
 andiBar.results(hANDI.hiddenElements, hANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

@@ -163,7 +163,6 @@ iANDI.tableInfo = new TableInfo();
 iANDI.iFrames = andiBar.createObjectValues(iANDI.iFrames, 1);
 
 iANDI.analyze(iANDI.iFrames);
-//iANDI.results(iANDI.iFrames);
 andiBar.results(iANDI.iFrames, iANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

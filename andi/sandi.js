@@ -241,7 +241,6 @@ sANDI.tableInfo = new TableInfo();
 sANDI.liveRegions = andiBar.createObjectValues(sANDI.liveRegions, 3);
 
 sANDI.analyze(sANDI.liveRegions);
-//sANDI.results(sANDI.liveRegions);
 andiBar.results(sANDI.liveRegions, sANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init
