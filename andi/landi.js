@@ -74,10 +74,7 @@ lANDI.analyze = function(objectClass){
 
                     if(isLinkKeyboardAccessible(href, this)){
                         if(nameDescription){
-
-                            // TODO: Re-enable this when namedescription is added to the objects
-                            ambiguousIndex = ""
-                            //ambiguousIndex = scanForAmbiguity(this, nameDescription, href);
+                            ambiguousIndex = scanForAmbiguity(this, nameDescription, href);
 
                             determineLinkPurpose(href, this);
 
@@ -93,11 +90,11 @@ lANDI.analyze = function(objectClass){
 
                         if(href){
                             //create Link object and add to array
-                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, ""));
+                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, nameDescription, ""));
                         }
                         else if(andiData.role === "link"){
                             //create Link object and add to array
-                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, ""));
+                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, nameDescription, ""));
 
                             isElementInTabOrder(this, "link");
                         }
@@ -662,11 +659,12 @@ lANDI.isScriptedLink = function(href){
 };
 
 //This object class is used to store data about each link. Object instances will be placed into an array.
-function Link(elementList, index, rowClass){
-    this.elementList  = elementList;
-    this.index        = index;
-    this.columnValues = [elementList, index];
-    this.rowClass     = rowClass;
+function Link(elementList, index, nameDescription, rowClass){
+    this.elementList     = elementList;
+    this.index           = index;
+    this.nameDescription = nameDescription
+    this.columnValues    = [elementList, index, nameDescription];
+    this.rowClass        = rowClass;
 }
 
 //This object class is used to keep track of the links on the page
@@ -674,7 +672,7 @@ function Links(){
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["elementList", "index"];
+    this.columnNames    = ["elementList", "index", "nameDescription"];
     this.ambiguousIndex = 0;
 }
 

@@ -603,13 +603,13 @@ uANDI.grab_headers = function(element, elementData, table){
 };
 
 //This object class is used to store data about each presentation table. Object instances will be placed into an array.
-function PresentationTable(elementList, index, role, name, rowClass) {
-    this.elementList  = elementList;
-    this.index        = index;
-    this.role         = role;
-    this.name         = name;
-    this.columnValues = [elementList, index, role, name];
-    this.rowClass     = rowClass;
+function PresentationTable(elementList, index, nameDescription, role, rowClass) {
+    this.elementList     = elementList;
+    this.index           = index;
+    this.nameDescription = nameDescription;
+    this.role            = role;
+    this.columnValues    = [elementList, index, nameDescription, role];
+    this.rowClass        = rowClass;
 }
 
 //This object class is used to keep track of the presentation tables on the page
@@ -617,7 +617,7 @@ function PresentationTables() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "role", "name"];
+    this.columnNames    = ["element", "index", "nameDescription", "role"];
 }
 
 // This object class is used to keep track of the table information

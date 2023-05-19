@@ -62,11 +62,7 @@ nANDI.analyze = function(objectClass){
                     accesskey = "";
 
                 if(nameDescription){
-
-                    // TODO: Re enable when nameDescription is added to the object classes
-                    nonUniqueIndex = ""
-                    //Seach through Buttons Array for same name
-                    //nonUniqueIndex = scanForNonUniqueness(this, nameDescription);
+                    nonUniqueIndex = scanForNonUniqueness(this, nameDescription);
 
                     //role=button
                     if(andiData.role==="button"){
@@ -424,11 +420,12 @@ nANDI.viewList_selectTab = function(tab){
 };
 
 //This object class is used to store data about each button. Object instances will be placed into an array.
-function Button(elementList, index, rowClass){
-    this.elementList  = elementList;
-    this.index        = index;
-    this.columnValues = [elementList, index];
-    this.rowClass     = rowClass;
+function Button(elementList, index, nameDescription, rowClass){
+    this.elementList     = elementList;
+    this.index           = index;
+    this.nameDescription = nameDescription;
+    this.columnValues    = [elementList, index, nameDescription];
+    this.rowClass        = rowClass;
 }
 
 //This object class is used to keep track of the buttons on the page
@@ -436,7 +433,7 @@ function Buttons(){
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["elementList", "index"];
+    this.columnNames    = ["elementList", "index", "nameDescription"];
     this.nonUniqueIndex = 0;
 }
 

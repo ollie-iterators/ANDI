@@ -16,7 +16,7 @@ sANDI.analyze = function(objectClass){
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["alert","status","log","marquee","timer"],"[aria-live=polite],[aria-live=assertive]")){
             //Add to the live regions array
-            objectClass.list.push(new LiveRegion([this], objectClass.list.length + 1, ''));
+            objectClass.list.push(new LiveRegion([this], objectClass.list.length + 1, "", ""));
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "live regions";
 
@@ -212,11 +212,12 @@ AndiOverlay.prototype.overlayReadingOrder = function(){
 };
 
 //This object class is used to store data about each live region. Object instances will be placed into an array.
-function LiveRegion(elementList, index, rowClass) {
-    this.elementList  = elementList;
-    this.index        = index;
-    this.columnValues = [elementList, index];
-    this.rowClass     = rowClass;
+function LiveRegion(elementList, index, nameDescription, rowClass) {
+    this.elementList     = elementList;
+    this.index           = index;
+    this.nameDescription = nameDescription;
+    this.columnValues    = [elementList, index, nameDescription];
+    this.rowClass        = rowClass;
 }
 
 //This object class is used to keep track of the live regions on the page
@@ -224,7 +225,7 @@ function LiveRegions() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index"];
+    this.columnNames    = ["element", "index", "nameDescription"];
 }
 
 // This object class is used to keep track of the table information

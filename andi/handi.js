@@ -181,7 +181,7 @@ hANDI.analyze = function(objectClass){
             }
 
             andiData = new AndiData(this, true);
-            objectClass.list.push(new HiddenElement([this], objectClass.list.length + 1, elementCss, ""));
+            objectClass.list.push(new HiddenElement([this], objectClass.list.length + 1, "", elementCss, ""));
             AndiData.attachDataToElement(this);
         }
     });
@@ -501,12 +501,13 @@ $("#ANDI508-button-nextElement").off("click").click(function(){
 });
 
 //This object class is used to store data about each hidden element. Object instances will be placed into an array.
-function HiddenElement(elementList, index, hidingTypes, rowClass) {
-    this.elementList  = elementList;
-    this.index        = index;
-    this.hidingTypes  = hidingTypes;
-    this.columnValues = [elementList, index, hidingTypes];
-    this.rowClass     = rowClass;
+function HiddenElement(elementList, index, nameDescription, hidingTypes, rowClass) {
+    this.elementList     = elementList;
+    this.index           = index;
+    this.nameDescription = nameDescription;
+    this.hidingTypes     = hidingTypes;
+    this.columnValues    = [elementList, index, nameDescription, hidingTypes];
+    this.rowClass        = rowClass;
 }
 
 //This object class is used to keep track of the hidden elements on the page
@@ -514,7 +515,7 @@ function HiddenElements() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "hidingTypes"];
+    this.columnNames    = ["element", "index", "nameDescription", "hidingTypes"];
 }
 
 // This object class is used to keep track of the table information
