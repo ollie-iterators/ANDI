@@ -90,11 +90,11 @@ lANDI.analyze = function(objectClass){
 
                         if(href){
                             //create Link object and add to array
-                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, nameDescription, ""));
+                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, nameDescription, $(this).attr("href"), ""));
                         }
                         else if(andiData.role === "link"){
                             //create Link object and add to array
-                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, nameDescription, ""));
+                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, nameDescription, $(this).attr("href"), ""));
 
                             isElementInTabOrder(this, "link");
                         }
@@ -659,11 +659,12 @@ lANDI.isScriptedLink = function(href){
 };
 
 //This object class is used to store data about each link. Object instances will be placed into an array.
-function Link(elementList, index, nameDescription, rowClass){
+function Link(elementList, index, nameDescription, href, rowClass){
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription
-    this.columnValues    = [elementList, index, nameDescription];
+    this.href            = href;
+    this.columnValues    = [elementList, index, nameDescription, href];
     this.rowClass        = rowClass;
 }
 
@@ -672,7 +673,7 @@ function Links(){
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["elementList", "index", "nameDescription"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "href"];
     this.ambiguousIndex = 0;
 }
 
