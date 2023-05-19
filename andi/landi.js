@@ -339,7 +339,6 @@ lANDI.results = function(objectClass){
             lANDI.viewList_attachEvents_links();
             lANDI.viewList_tableReady = true;
         }
-        lANDI.viewList_toggle("links", this);
         andiResetter.resizeHeights();
         return false;
     });
@@ -443,34 +442,6 @@ lANDI.viewList_buildTable = function(mode){
 
     $("#ANDI508-additionalPageResults").append(appendHTML+"</tr></thead><tbody>"+tableHTML+"</tbody></table></div></div>");
 
-};
-
-//This function hide/shows the view list
-lANDI.viewList_toggle = function(mode, btn){
-    if($(btn).attr("aria-expanded") === "false"){
-        //show List, hide alert list
-        $("#ANDI508-alerts-list").hide();
-        andiSettings.minimode(false);
-        $(btn)
-            .addClass("ANDI508-viewOtherResults-button-expanded")
-            .html(listIcon+"hide "+mode+" list")
-            .attr("aria-expanded","true")
-            .find("img").attr("src",icons_url+"list-on.png");
-        $("#lANDI508-viewList").slideDown(AndiSettings.andiAnimationSpeed).focus();
-
-        AndiModule.activeActionButtons.viewLinksList = true;
-    }
-    else{
-        //hide List, show alert list
-        $("#lANDI508-viewList").slideUp(AndiSettings.andiAnimationSpeed);
-        //$("#ANDI508-resultsSummary").show();
-        $("#ANDI508-alerts-list").show();
-        $(btn)
-            .removeClass("ANDI508-viewOtherResults-button-expanded")
-            .html(listIcon+"view "+mode+" list")
-            .attr("aria-expanded","false");
-        AndiModule.activeActionButtons.viewLinksList = false;
-    }
 };
 
 //This function attaches the click,hover,focus events to the items in the view list

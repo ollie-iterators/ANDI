@@ -90,7 +90,7 @@ qANDI.analyze = function(objectClass){
 
 var showStartUpSummaryText = "List structure found.<br />Determine if the <span class='ANDI508-module-name-s'>list</span> container types used (ol, ul, li, dl, dd, dt, role=list, role=listitem) are appropriately applied.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-qANDI.results = function(objectClass){
+qANDI.results = function(){
 
     var moreDetails = "<button id='ANDI508-pageTitle-button'>page title</button>"+
         "<button id='ANDI508-pageLanguage-button'>page language</button>";
@@ -127,23 +127,7 @@ qANDI.results = function(objectClass){
     //Deselect all mode buttons
     $("#ANDI508-module-actions button.qANDI508-mode").attr("aria-selected","false");
 
-    var listCounts = "";
-    var delimiter = "";
-    var listTypesUsed = "";
-
-    listCounts += objectClass.elementNums[1] + " ordered list (ol)";
-    listTypesUsed += "ol";
-    delimiter = ", ";
-    listCounts += delimiter + objectClass.elementNums[2] + " unordered list (ul)";
-    listTypesUsed += delimiter + "ul";
-    listCounts += delimiter + objectClass.elementNums[4] + " description list (dl)";
-    listTypesUsed += delimiter + "dl";
-    listCounts += delimiter + objectClass.elementNums[7] + " role=list";
-    listTypesUsed += delimiter + "[role=list]";
-    $("#ANDI508-additionalPageResults").html(listCounts);
-
     $("#ANDI508").focus();
-
 };
 
 //This function will update the info in the Active Element Inspection.

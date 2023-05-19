@@ -97,7 +97,7 @@ mANDI.analyze = function(objectClass){
 
 var showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-l'>links</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every link.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-mANDI.results = function(objectClass){
+mANDI.results = function(){
 
     $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewLinksList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view links list</button>");
 
@@ -109,7 +109,6 @@ mANDI.results = function(objectClass){
             mANDI.viewList_attachEvents_links();
             mANDI.viewList_tableReady = true;
         }
-        mANDI.viewList_toggle("links", this);
         andiResetter.resizeHeights();
         return false;
     });
@@ -207,33 +206,6 @@ mANDI.viewList_buildTable = function(mode){
 
     $("#ANDI508-additionalPageResults").append(appendHTML+"</tr></thead><tbody>"+tableHTML+"</tbody></table></div></div>");
 
-};
-
-//This function hide/shows the view list
-mANDI.viewList_toggle = function(mode, btn){
-    if($(btn).attr("aria-expanded") === "false"){
-        //show List, hide alert list
-        $("#ANDI508-alerts-list").hide();
-        andiSettings.minimode(false);
-        $(btn)
-            .addClass("ANDI508-viewOtherResults-button-expanded")
-            .html(listIcon+"hide "+mode+" list")
-            .attr("aria-expanded","true")
-            .find("img").attr("src",icons_url+"list-on.png");
-        $("#mANDI508-viewList").slideDown(AndiSettings.andiAnimationSpeed).focus();
-        AndiModule.activeActionButtons.viewLinksList = true;
-    }
-    else{
-        //hide List, show alert list
-        $("#mANDI508-viewList").slideUp(AndiSettings.andiAnimationSpeed);
-        //$("#ANDI508-resultsSummary").show();
-        $("#ANDI508-alerts-list").show();
-        $(btn)
-            .removeClass("ANDI508-viewOtherResults-button-expanded")
-            .html(listIcon+"view "+mode+" list")
-            .attr("aria-expanded","false");
-        AndiModule.activeActionButtons.viewLinksList = false;
-    }
 };
 
 //This function attaches the click,hover,focus events to the items in the view list

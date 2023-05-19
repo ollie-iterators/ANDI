@@ -38,7 +38,7 @@ rANDI.analyze = function(objectClass){
 
 var showStartUpSummaryText = "Landmark structure found.<br />Ensure that each <span class='ANDI508-module-name-s'>landmark</span> is applied appropriately to the corresponding section of the page.";
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-rANDI.results = function(objectClass){
+rANDI.results = function(){
 
     var moreDetails = "<button id='ANDI508-pageTitle-button'>page title</button>"+
         "<button id='ANDI508-pageLanguage-button'>page language</button>";
