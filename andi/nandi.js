@@ -9,12 +9,6 @@ var nANDIVersionNumber = "8.2.1";
 //create nANDI instance
 var nANDI = new AndiModule(nANDIVersionNumber,"n");
 
-//This function removes markup in the test page that was added by this module
-AndiModule.cleanup = function(testPage, element){
-    if(element)
-        $(element).removeClass("nANDI508-ambiguous");
-};
-
 //Alert icons for the links list table
 //Ignore the jslint warning about the "new" declaration. It is needed.
 var alertIcons = new function(){//new is intentional

@@ -12,7 +12,7 @@ var mANDI = new AndiModule(mANDIVersionNumber,"m");
 //This function removes markup in the test page that was added by this module
 AndiModule.cleanup = function(testPage, element){
     if(element)
-        $(element).removeClass("mANDI508-ambiguous mANDI508-anchorTarget");
+        $(element).removeClass("mANDI508-ambiguous");
 };
 
 AndiModule.initActiveActionButtons({

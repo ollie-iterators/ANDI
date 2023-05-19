@@ -47,15 +47,3 @@
 		@keyframes pulse_mANDI{
 			50% {outline-color:#015f8f !important;}
 		}
-
-	#ANDI508-testPage.mANDI508-testPage .mANDI508-anchorTarget
-		{padding-right:1px !important; /*to make anchor targets with no innertext show up*/}
-
-	#ANDI508-testPage.mANDI508-testPage.mANDI508-highlightAmbiguous .mANDI508-ambiguous
-		{border:2.5px solid #6565e4 !important; box-shadow:0 0 25px 1px #6565e4 !important}
-
-	#ANDI508-testPage.mANDI508-testPage.mANDI508-highlightInternal a.ANDI508-element.mANDI508-internalLink
-		{border:2.5px solid #8787fe !important; box-shadow:0 0 25px 1px #8787fe !important}
-
-	#ANDI508-testPage.mANDI508-testPage.mANDI508-highlightExternal a.ANDI508-element.mANDI508-externalLink
-		{border:2.5px solid #4d9dc8 !important; box-shadow:0 0 25px 1px #4d9dc8 !important}
