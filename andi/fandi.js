@@ -12,8 +12,6 @@ var fANDI = new AndiModule(fandiVersionNumber,"f");
 //This function will analyze the test page for focusable element related markup relating to accessibility
 fANDI.analyze = function(objectClass){
 
-    fANDI.accesskeys = new AndiAccesskeys();
-
     //Loop through every visible element and run tests
     $(TestPageData.allElements).each(function(){
         if($(this).is(":focusable,canvas")){//If element is focusable, search for accessibility components.
@@ -208,10 +206,10 @@ AndiModule.inspect = function(element){
 };
 
 // This is where the added code for the module goes
-fANDI.addAccessKeysList = function () {
+fANDI.addAccessKeysList = function (objectClass) {
     //Accesskeys List:
-    if(fANDI.accesskeys.getListHtml()){
-        $("#ANDI508-additionalPageResults").append("<p id='ANDI508-accesskeysFound'>AccessKeys: "+"{ "+fANDI.accesskeys.getListHtml()+"}</p>");
+    if(objectClass.getListHtml()){
+        $("#ANDI508-additionalPageResults").append("<p id='ANDI508-accesskeysFound'>AccessKeys: "+"{ "+objectClass.getListHtml()+"}</p>");
         $("#ANDI508-accesskeysFound").find("a").each(function(){
             andiFocuser.addFocusClick($(this));
             $(this).on("mouseover" 	,andiLaser.drawAlertLaser);
@@ -248,10 +246,11 @@ function TableInfo() {
 
 fANDI.focusables = new Focusables();
 fANDI.tableInfo = new TableInfo();
+fANDI.accesskeys = new AndiAccesskeys();
 
 fANDI.focusables = andiBar.createObjectValues(fANDI.focusables, 3);
 
-fANDI.addAccessKeysList();
+fANDI.addAccessKeysList(fANDI.accesskeys);
 fANDI.analyze(fANDI.focusables);
 andiBar.results(fANDI.focusables, fANDI.tableInfo, [], showStartUpSummaryText);
 

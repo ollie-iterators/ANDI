@@ -40,8 +40,6 @@ qANDI.analyze = function(objectClass){
 
             andiData = new AndiData(this);
 
-            $("#ANDI508-additionalPageResults").append(andiData.accName.toString());
-
             //Is the listitem contained by an appropriate list container?
             if($(this).is("[role=listitem]")){
                 objectClass.elementNums[8] += 1;
