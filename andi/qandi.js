@@ -30,9 +30,7 @@ qANDI.analyze = function(objectClass){
                 } else if ($(this).is("dl")) {
                     objectClass.elementNums[4] += 1;
                     objectClass.elementNums[4] = "dl elements";
-                }
-
-                else {
+                } else {
                     objectClass.elementNums[7] += 1;
                     objectClass.elementNums[7] = "list role elements";
                 }
@@ -41,6 +39,8 @@ qANDI.analyze = function(objectClass){
             }
 
             andiData = new AndiData(this);
+
+            $("#ANDI508-additionalPageResults").append(andiData.accName.toString());
 
             //Is the listitem contained by an appropriate list container?
             if($(this).is("[role=listitem]")){
@@ -234,7 +234,6 @@ qANDI.tableInfo = new TableInfo();
 qANDI.lists = andiBar.createObjectValues(qANDI.lists, 12);
 
 qANDI.analyze(qANDI.lists);
-//qANDI.results(qANDI.lists);
 andiBar.results(qANDI.lists, qANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init
