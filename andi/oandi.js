@@ -200,23 +200,6 @@ oANDI.results = function(objectClass){
         });
     });
 
-    $("#oANDI508-outline-container")
-    .html(oANDI.outline)
-    .find("a[data-andi508-relatedindex]").each(function(){
-        andiFocuser.addFocusClick($(this));
-        var relatedIndex = $(this).attr("data-andi508-relatedindex");
-        var relatedElement = $("#ANDI508-testPage [data-andi508-index="+relatedIndex+"]").first();
-        andiLaser.createLaserTrigger($(this),$(relatedElement));
-        $(this)
-        .hover(function(){
-            if(!event.shiftKey)
-                AndiModule.inspect(relatedElement[0]);
-        })
-        .focus(function(){
-            AndiModule.inspect(relatedElement[0]);
-        });
-    });
-
     $("#ANDI508").focus();
 
 };
