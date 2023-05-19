@@ -44,7 +44,7 @@ nANDI.viewList_tableReady = false;
 nANDI.analyze = function(objectClass){
 
     //Variables used to build the links/buttons list array.
-    var href, nameDescription, alerts, target, linkPurpose, accesskey, alertIcon, alertObject, relatedElement, nonUniqueIndex, ambiguousIndex;
+    var nameDescription, alerts, accesskey, alertIcon, alertObject, relatedElement, nonUniqueIndex;
 
     //Loop through every visible element and run tests
     $(TestPageData.allElements).each(function(){
