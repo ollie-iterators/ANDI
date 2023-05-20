@@ -4147,11 +4147,11 @@ var oldIE = false; //used to determine if old version of IE is being used.
 
     //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 
-    andiBar.getAttributes = function(objectClass, element) {
-        if (element.hasAttributes()) {
-            var attrs = element.getAttributeNames();
+    andiBar.getAttributes = function(objectClass, index) {
+        if (objectClass.list[index].elementList[0].hasAttributes()) {
+            var attrs = objectClass.list[index].elementList[0].getAttributeNames();
             for (var a = 0; a < attrs.length; a += 1) {
-                element[attrs[a]] = element.getAttribute(attrs[a]);
+                objectClass.list[index].elementList[0][attrs[a]] = objectClass.list[index].elementList[0].getAttribute(attrs[a]);
                 if (!objectClass.columnNames.includes(attrs[a])) {
                     objectClass.columnNames.push(attrs[a]);
                 }
