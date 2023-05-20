@@ -17,7 +17,6 @@ AndiModule.cleanup = function(testPage, element){
 
 //This function will analyze the test page for link related markup relating to accessibility
 mANDI.analyze = function(objectClass){
-
     //Loop through every visible element and run tests
     $(TestPageData.allElements).each(function(){
         //ANALYZE LINKS

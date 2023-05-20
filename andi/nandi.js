@@ -33,7 +33,6 @@ AndiModule.initActiveActionButtons({
 
 //This function will analyze the test page for link related markup relating to accessibility
 nANDI.analyze = function(objectClass){
-
     //Variables used to build the links/buttons list array.
     var nameDescription, alerts, accesskey, alertIcon, alertObject, relatedElement, nonUniqueIndex;
 

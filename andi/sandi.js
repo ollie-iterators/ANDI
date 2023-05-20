@@ -11,7 +11,6 @@ var sANDI = new AndiModule(sANDIVersionNumber,"s");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 sANDI.analyze = function(objectClass){
-
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["alert","status","log","marquee","timer"],"[aria-live=polite],[aria-live=assertive]")){

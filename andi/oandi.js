@@ -11,7 +11,6 @@ var oANDI = new AndiModule(oANDIVersionNumber,"o");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 oANDI.analyze = function(objectClass){
-
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["heading"],"h1,h2,h3,h4,h5,h6")){

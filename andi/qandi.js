@@ -11,7 +11,6 @@ var qANDI = new AndiModule(qANDIVersionNumber,"r");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 qANDI.analyze = function(objectClass){
-
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["listitem","list"],"ol,ul,li,dl,dd,dt")){

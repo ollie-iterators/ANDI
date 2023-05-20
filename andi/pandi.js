@@ -11,7 +11,6 @@ var pANDI = new AndiModule(pANDIVersionNumber,"p");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 pANDI.analyze = function(objectClass){
-
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).is("p,div,span,strong,em")){

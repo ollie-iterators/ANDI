@@ -11,7 +11,6 @@ var fANDI = new AndiModule(fandiVersionNumber,"f");
 
 //This function will analyze the test page for focusable element related markup relating to accessibility
 fANDI.analyze = function(objectClass){
-
     //Loop through every visible element and run tests
     $(TestPageData.allElements).each(function(){
         if($(this).is(":focusable,canvas")){//If element is focusable, search for accessibility components.

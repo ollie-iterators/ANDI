@@ -11,7 +11,6 @@ var rANDI = new AndiModule(rANDIVersionNumber,"r");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 rANDI.analyze = function(objectClass){
-
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["banner","complementary","contentinfo","form","main","navigation","search","region"],"main,header,footer,nav,form,aside")){

@@ -79,7 +79,6 @@ hANDI.containsTestableContent = function(element){
 
 //This function will analyze the test page for elements hidden using CSS
 hANDI.analyze = function(objectClass){
-
     var isHidingContent, elementCss;
     $(TestPageData.allElements).not("area,base,basefont,datalist,link,meta,noembed,noframes,param,rp,script,noscript,source,style,template,track,title").each(function(){
         isHidingContent = false;

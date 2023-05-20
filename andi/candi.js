@@ -17,7 +17,6 @@ AndiModule.initActiveActionButtons({
 
 //This function will run tests on text containing elements
 cANDI.analyze = function(objectClass){
-
     //Elements that are disabled or have aria-disabled="true" do not need to be tested
     $(TestPageData.allElements).filter("*:not(option)").each(function(){
 
