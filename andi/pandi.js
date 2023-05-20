@@ -224,9 +224,6 @@ pANDI.results = function(objectClass){
             AndiModule.inspect(relatedElement[0]);
         });
     });
-
-    $("#ANDI508").focus();
-
 };
 
 //This function will update the info in the Active Element Inspection.

@@ -124,8 +124,6 @@ qANDI.results = function(){
 
     //Deselect all mode buttons
     $("#ANDI508-module-actions button.qANDI508-mode").attr("aria-selected","false");
-
-    $("#ANDI508").focus();
 };
 
 //This function will update the info in the Active Element Inspection.

@@ -189,8 +189,6 @@ nANDI.results = function(){
     AndiModule.engageActiveActionButtons([
         "highlightNonUniqueButtons"
     ]);
-
-    $("#ANDI508").focus();
 };
 
 //This function will update the info in the Active Element Inspection.

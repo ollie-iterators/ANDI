@@ -391,8 +391,6 @@ hANDI.results = function(objectClass){
         "forceReveal_html5Hidden",
         "highlightCssContent"
     ]);
-
-    $("#ANDI508").focus();
 };
 
 //This function will toggle the state of the reveal all button depending on the state of the other buttons

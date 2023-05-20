@@ -326,8 +326,6 @@ lANDI.results = function(objectClass){
     AndiModule.engageActiveActionButtons([
         "highlightAmbiguousLinks"
     ]);
-
-    $("#ANDI508").focus();
 };
 
 //This function will update the info in the Active Element Inspection.

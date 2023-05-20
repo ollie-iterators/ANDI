@@ -183,8 +183,6 @@ cANDI.results = function(objectClass){
         "contrastPlayground"
     ]);
 
-    $("#ANDI508").focus();
-
     //This function will allow the color selection widget to work
     function enableColorWidget(fgbg){
         $("#cANDI508-playground-colorSelector-"+fgbg)
