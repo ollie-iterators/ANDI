@@ -23,19 +23,6 @@
 		@keyframes pulse_pANDI{
 			50% {border-color:#604f94 !important;}
 		}
-	#ANDI508-testPage.pANDI508-testPage ul.ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.pANDI508-testPage ol.ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.pANDI508-testPage dl.ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.pANDI508-testPage [role=list].ANDI508-element.ANDI508-highlight
-		{border:2.5px dashed #e161e1 !important; outline:0 !important; animation:pulse_pANDI_list 3s linear infinite !important;}
-		@keyframes pulse_pANDI_list{
-			50% {border-color:#9b1b9b !important;}
-		}
-	#ANDI508-testPage.pANDI508-testPage li.ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.pANDI508-testPage dt.ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.pANDI508-testPage dd.ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.pANDI508-testPage [role=listitem].ANDI508-element.ANDI508-highlight
-		{border:1px dashed #9786ec !important; outline:0 !important; animation:pulse_pANDI 3s linear infinite !important;}
 	#ANDI508-testPage.pANDI508-testPage .ANDI508-element.ANDI508-highlight.ANDI508-element-active
 		{outline:4px solid deeppink !important;}
 

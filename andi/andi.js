@@ -4146,6 +4146,16 @@ var oldIE = false; //used to determine if old version of IE is being used.
     var andiResults = new AndiResults();
 
     //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
+
+    andiBar.getAttributes = function(element) {
+        if (element.hasAttributes()) {
+            var attrs = element.getAttributeNames();
+            for (var a = 0; a < attrs.length; a += 1) {
+                element[attrs[a]] = element.getAttribute(attrs[a]);
+            }
+        }
+    }
+
     //Inserts some counter totals, displays the accesskey list
     andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
         $("#ANDI508-resultsSummary-heading").html(tableModule.tableMode + " Found: " + moduleList.elementNums[0]);
@@ -4254,30 +4264,30 @@ var oldIE = false; //used to determine if old version of IE is being used.
                 var columnName = "";
 
                 var attributesToAdd = [];
-                for (var x = 0; x < 1; x += 1) {
-                    if (moduleList.list[x].elementList[0].hasAttributes()) {
-                        var attrs = moduleList.list[x].elementList[0].getAttributeNames();
-                        for (var a = 0; a < attrs.length; a += 1) {
-                            var attributeFixed = attrs[a];
-                            if (attrs[a].includes("data-andi508-")) {
-                                attributeFixed = attrs[a].replace("data-andi508", "");
-                            }
-                            if (attributeFixed != "-index") {
-                                if (String(attributeFixed).charAt(0).includes("-")) {
-                                    if (!attributesToAdd.includes(String(attributeFixed))) {
-                                        attributesToAdd.push(String(attributeFixed));
-                                    }
-                                } else {
-                                    if (!attributesToAdd.includes(String(attributeFixed))) {
-                                        if (!attributesToAdd.includes("-" + String(attributeFixed))) {
-                                            attributesToAdd.push(String(attributeFixed));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                // for (var x = 0; x < 1; x += 1) {
+                //     if (moduleList.list[x].elementList[0].hasAttributes()) {
+                //         var attrs = moduleList.list[x].elementList[0].getAttributeNames();
+                //         for (var a = 0; a < attrs.length; a += 1) {
+                //             var attributeFixed = attrs[a];
+                //             if (attrs[a].includes("data-andi508-")) {
+                //                 attributeFixed = attrs[a].replace("data-andi508", "");
+                //             }
+                //             if (attributeFixed != "-index") {
+                //                 if (String(attributeFixed).charAt(0).includes("-")) {
+                //                     if (!attributesToAdd.includes(String(attributeFixed))) {
+                //                         attributesToAdd.push(String(attributeFixed));
+                //                     }
+                //                 } else {
+                //                     if (!attributesToAdd.includes(String(attributeFixed))) {
+                //                         if (!attributesToAdd.includes("-" + String(attributeFixed))) {
+                //                             attributesToAdd.push(String(attributeFixed));
+                //                         }
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
 
                 for (var a = 0; a < attributesAdded.length; a += 1) {
                     if (!attributesToAdd.includes(attributesAdded[a])) {
