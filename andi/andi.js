@@ -63,8 +63,7 @@ var andiData;									//Element Data Storage/Analysis, instatiated within module
 
 var browserSupports = {
     //Does the browser support SVG?
-    svg: typeof SVGRect !== "undefined",
-    isIE: /MSIE|Trident/.test(window.navigator.userAgent)
+    svg: typeof SVGRect !== "undefined"
 };
 
 //Define the overlay and find icons (not using background-image because of ie7 issues with sizing)
@@ -502,7 +501,6 @@ function andiReady(){
 
     andiResetter.hardReset();
     dependencies();
-    appendLegacyCss();
     insertAndiBarHtml();
     defineControls();
 
@@ -543,7 +541,7 @@ function andiReady(){
             //sANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-s' aria-label='live regions'>live regions</button>"+
             //cANDI
-            ((!oldIE) ? "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-c' aria-label='color contrast'>color contrast</button>" : "")+
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-c' aria-label='color contrast'>color contrast</button>"+
             //hANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-h' aria-label='hidden content'>hidden content</button>"+
             //iANDI
@@ -612,14 +610,6 @@ function andiReady(){
             .wrapInner("<div id='ANDI508-testPage' style='"+body_padding+body_margin+"' ></div>") //Add an outer container to the test page
             .prepend(andiBar); //insert ANDI display into body
 
-    }
-
-    //This function appends css shims to the head of the page which are needed for old IE versions
-    function appendLegacyCss(){
-        if(oldIE){
-            $("head").append("<!--[if lte IE 7]><link href='"+host_url+"ie7.css' rel='stylesheet' /><![endif]-->"+
-                "<!--[if lt IE 9]><link href='"+host_url+"ie8.css' rel='stylesheet' /><![endif]-->");
-        }
     }
 
     //This function defines what the ANDI controls/settings do.
@@ -1583,7 +1573,7 @@ function AndiFocuser(){
         if(!element.length){
             alert("Element removed from DOM. Refresh ANDI.");
         }
-        else if(!$(element).attr("tabindex") && ((browserSupports.isIE && $(element).is("summary")) || !$(element).is(":focusable"))){
+        else if(!$(element).attr("tabindex") && ($(element).is("summary") || !$(element).is(":focusable"))){
             //"Flash" the tabindex
 
             //img with usemap cannot be given focus (browser moves focus to the <area>)
@@ -1794,7 +1784,7 @@ function AndiUtility(){
     //This function checks for pseudo element content
     //Return: Array [displayText, contentLiteral]
     this.getPseudoContent = function(pseudo, element){
-        if(!oldIE && window.getComputedStyle(element, ":"+pseudo).display !== "none"){
+        if(window.getComputedStyle(element, ":"+pseudo).display !== "none"){
             //pseudo element is not display:none
             var contentLiteral = window.getComputedStyle(element, ":"+pseudo).content;
 
@@ -2985,7 +2975,7 @@ AndiData.getAddOnProps = function(element, elementData, extraProps){
 
     //expanded/collapsed
     var expandedInOutput = false;
-    if(!browserSupports.isIE && $(element).is("summary")){
+    if($(element).is("summary")){
         if($(element).closest("details").attr("open"))
             prop = {name:"open", val:"open", out:"expanded"};
         else
@@ -4100,10 +4090,7 @@ TestPageData.page_using_caption = false;
 var jqueryPreferredVersion = "3.6.0"; //The preferred (latest) version of jQuery we want
 var jqueryMinimumVersion = "1.9.1"; //The minimum version of jQuery we allow ANDI to use
 var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //where we are downloading jquery from
-var oldIE = false; //used to determine if old version of IE is being used.
 (function(){
-    //Determine if old IE compatability mode
-    if(navigator.userAgent.toLowerCase().indexOf("msie") != -1){if(parseInt(navigator.userAgent.toLowerCase().split("msie")[1]) < 9){oldIE = true;}}
     //Determine if Jquery exists
     var j = (window.jQuery !== undefined) ? window.jQuery.fn.jquery.split(".") : undefined;
     var m = jqueryMinimumVersion.split(".");
@@ -4122,8 +4109,7 @@ var oldIE = false; //used to determine if old version of IE is being used.
     if(needJquery){
         var script = document.createElement("script"); var done=false;
         //Which version is needed?
-        if(!oldIE){script.src = jqueryDownloadSource + jqueryPreferredVersion + "/jquery.min.js";}//IE 9 or later is being used, download preferred jquery version.
-        else{script.src = jqueryDownloadSource + jqueryMinimumVersion + "/jquery.min.js";}//Download minimum jquery version.
+        script.src = jqueryDownloadSource + jqueryPreferredVersion + "/jquery.min.js";
         //Waits until jQuery is ready before running ANDI
         script.onload = script.onreadystatechange = function(){if(!done && (!this.readyState || this.readyState=="loaded" || this.readyState=="complete")){done=true; launchAndi();}};
         document.getElementsByTagName("head")[0].appendChild(script);
@@ -4152,6 +4138,7 @@ var oldIE = false; //used to determine if old version of IE is being used.
             var attrs = objectClass.list[index].elementList[0].getAttributeNames();
             for (var a = 0; a < attrs.length; a += 1) {
                 var attribute = objectClass.list[index].elementList[0].getAttribute(attrs[a]);
+                objectClass.list[index][attrs[a]] = attribute;
                 objectClass.list[index].columnValues.push(attribute);
                 if (!objectClass.columnNames.includes(attrs[a])) {
                     objectClass.columnNames.push(attrs[a]);
