@@ -28,11 +28,8 @@ var alertIcons = new function(){//new is intentional
 };
 
 AndiModule.initActiveActionButtons({
-    viewButtonsList:false,
     highlightNonUniqueButtons:false
 });
-
-nANDI.viewList_tableReady = false;
 
 //This function will analyze the test page for link related markup relating to accessibility
 nANDI.analyze = function(objectClass){
@@ -184,20 +181,6 @@ nANDI.results = function(){
             $("#ANDI508-testPage").removeClass("nANDI508-highlightAmbiguous");
             andiOverlay.overlayButton_off("find",$(this));
             AndiModule.activeActionButtons.highlightNonUniqueButtons = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewButtonsList-button' class='ANDI508-viewOtherResults-button' aria-label='View Buttons List' aria-expanded='false'>"+listIcon+"view buttons list</button>");
-
-    //View Button List Button
-    $("#ANDI508-viewButtonsList-button").click(function(){
-        if(!nANDI.viewList_tableReady){
-            nANDI.viewList_buildTable("buttons");
-            nANDI.viewList_attachEvents();
-            nANDI.viewList_attachEvents_buttons();
-            nANDI.viewList_tableReady = true;
         }
         andiResetter.resizeHeights();
         return false;

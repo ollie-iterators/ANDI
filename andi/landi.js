@@ -37,11 +37,8 @@ var alertIcons = new function(){//new is intentional
 };
 
 AndiModule.initActiveActionButtons({
-    viewLinksList:false,
     highlightAmbiguousLinks:false,
 });
-
-lANDI.viewList_tableReady = false;
 
 //This function will analyze the test page for link related markup relating to accessibility
 lANDI.analyze = function(objectClass){
@@ -326,22 +323,7 @@ lANDI.results = function(objectClass){
         return false;
     });
 
-    $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewLinksList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view links list</button>");
-
-    //Links List Button
-    $("#ANDI508-viewLinksList-button").click(function(){
-        if(!lANDI.viewList_tableReady){
-            lANDI.viewList_buildTable("links");
-            lANDI.viewList_attachEvents();
-            lANDI.viewList_attachEvents_links();
-            lANDI.viewList_tableReady = true;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
     AndiModule.engageActiveActionButtons([
-        "viewLinksList",
         "highlightAmbiguousLinks"
     ]);
 

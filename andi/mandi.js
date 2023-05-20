@@ -15,12 +15,6 @@ AndiModule.cleanup = function(testPage, element){
         $(element).removeClass("mANDI508-ambiguous");
 };
 
-AndiModule.initActiveActionButtons({
-    viewLinksList:false
-});
-
-mANDI.viewList_tableReady = false;
-
 //This function will analyze the test page for link related markup relating to accessibility
 mANDI.analyze = function(objectClass){
 
@@ -96,29 +90,6 @@ mANDI.analyze = function(objectClass){
 };
 
 var showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-l'>links</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every link.";
-//This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-mANDI.results = function(){
-
-    $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewLinksList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view links list</button>");
-
-    //Links List Button
-    $("#ANDI508-viewLinksList-button").click(function(){
-        if(!mANDI.viewList_tableReady){
-            mANDI.viewList_buildTable("links");
-            mANDI.viewList_attachEvents();
-            mANDI.viewList_attachEvents_links();
-            mANDI.viewList_tableReady = true;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    AndiModule.engageActiveActionButtons([
-        "viewLinksList"
-    ]);
-
-    $("#ANDI508").focus();
-};
 
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
