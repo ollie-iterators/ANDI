@@ -4151,7 +4151,8 @@ var oldIE = false; //used to determine if old version of IE is being used.
         if (objectClass.list[index].elementList[0].hasAttributes()) {
             var attrs = objectClass.list[index].elementList[0].getAttributeNames();
             for (var a = 0; a < attrs.length; a += 1) {
-                objectClass.list[index].elementList[0].attrs[a] = objectClass.list[index].elementList[0].getAttribute(attrs[a]);
+                var attribute = objectClass.list[index].elementList[0].getAttribute(attrs[a]);
+                objectClass.list[index].columnValues.push(attribute);
                 if (!objectClass.columnNames.includes(attrs[a])) {
                     objectClass.columnNames.push(attrs[a]);
                 }
