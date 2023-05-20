@@ -44,7 +44,7 @@ cANDI.analyze = function(objectClass){
                         //Throw alerts if necessary
                         cANDI.processResult($(this));
                         objectClass.list.push(new Contrast([this], objectClass.list.length + 1, "", "", ""));
-                        andiBar.getAttributes(objectClass.list[objectClass.list.length - 1]);
+                        andiBar.getAttributes(objectClass.list[objectClass.list.length - 1].elementList[0]);
                         objectClass.elementNums[0] += 1;
                         objectClass.elementStrings[0] = "color contrast elements"
                         AndiData.attachDataToElement(this);
