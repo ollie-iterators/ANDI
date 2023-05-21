@@ -4645,7 +4645,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     tabsHTML += '>' + tableModule.tabsTextList[x] + ' ' + buttonMode + "</button>";
                 } else {
                     tabsHTML += ' aria-selected = "false" class = "ANDI508-' + tableModule.tabsTextList[x];
-                    tabsHTML += tableMode + '">' + tableModule.tabsTextList[x] + ' ' + buttonMode + "</button>";
+                    tabsHTML += buttonMode + '">' + tableModule.tabsTextList[x] + ' ' + buttonMode + "</button>";
                 }
             }
             return tabsHTML;
