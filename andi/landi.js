@@ -662,7 +662,7 @@ function TableInfo() {
     this.tableMode      = "Links";
     this.cssProperties  = [];
     this.buttonTextList = [];
-    this.tabsTextList   = []
+    this.tabsTextList   = ["All", "Internal", "External"];
 }
 
 lANDI.links = new Links();
