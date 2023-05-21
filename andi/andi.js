@@ -4464,6 +4464,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 } else {
                     removeClasses += " ANDI508-" + action + classesToRemove[x];
                 }
+            }
             if (classToAdd != "") {
                 $("#ANDI508-testPage").removeClass(removeClasses).addClass(classToAdd);
             } else {
@@ -4684,6 +4685,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 andiResults.viewList_selectTab(this, buttonClass);
                 andiResults.alterTable(module, buttonClass, buttonType, buttonText);
                 //Alter which classes are still on the page
+                //TODO: This is not working right now
                 andiResults.alterClasses(module, "highlight", buttonText);
                 //Turn Off Ambiguous Button
                 if (module == "hANDI") {// TODO: Change to a different test
