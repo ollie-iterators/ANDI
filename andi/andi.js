@@ -4446,6 +4446,31 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 }
             });
         }
+
+        //$("#ANDI508-testPage").removeClass("lANDI508-highlightInternal lANDI508-highlightExternal lANDI508-highlightAmbiguous");
+        //$("#ANDI508-testPage").removeClass("lANDI508-highlightExternal lANDI508-highlightAmbiguous").addClass("lANDI508-highlightInternal");
+        //$("#ANDI508-testPage").removeClass("lANDI508-highlightInternal lANDI508-highlightAmbiguous").addClass("lANDI508-highlightExternal");
+        this.alterClasses = function (module, action, buttonText) {
+            classesToRemove = ["Internal", "External", "Ambiguous"];
+            var classToAdd = "";
+            if (classesToRemove.includes(buttonText)) {
+                classesToRemove.splice(classesToRemove.indexOf(buttonText), 1);
+                classToAdd = "ANDI508-" + action + buttonText;
+            }
+            var removeClasses = "";
+            for (var x = 0; x < classesToRemove.length; x += 1) {
+                if (removeClasses == "") {
+                    removeClasses += "ANDI508-" + action + classesToRemove[x];
+                } else {
+                    removeClasses += " ANDI508-" + action + classesToRemove[x];
+                }
+            if (classToAdd != "") {
+                $("#ANDI508-testPage").removeClass(removeClasses).addClass(classToAdd);
+            } else {
+                $("#ANDI508-testPage").removeClass(removeClasses);
+            }
+
+        }
         //This function attaches the hover and focus events to the items in the view list
         this.viewList_attachFocusEvents = function (eventClass = "#ANDI508-viewList-table td") {
             //Add focus click to each output in the table
@@ -4659,7 +4684,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 andiResults.viewList_selectTab(this, buttonClass);
                 andiResults.alterTable(module, buttonClass, buttonType, buttonText);
                 //Alter which classes are still on the page
-                andiBar.alterClasses(module, "highlight", buttonText);
+                andiResults.alterClasses(module, "highlight", buttonText);
                 //Turn Off Ambiguous Button
                 if (module == "hANDI") {// TODO: Change to a different test
                     andiBar.alterElements(technique);
