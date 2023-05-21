@@ -4637,14 +4637,14 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             var tabsHTML = "";
             var buttonMode = tableModule.tableMode;
             for (var x = 0; x < tableModule.tabsTextList.length; x += 1) {
-                tabsHTML += "<button id='ANDI508-list" + buttonMode + "-tab-" + tableModule.tabsTextList[x].toLowerCase();
-                tabsHTML += ' aria-label="View ' + tableModule.tabsTextList[x] + ' ' + buttonMode + 's"';
+                tabsHTML += '<button id="ANDI508-list' + buttonMode + "-tab-" + tableModule.tabsTextList[x].toLowerCase();
+                tabsHTML += '" aria-label="View ' + tableModule.tabsTextList[x] + ' ' + buttonMode;
                 if (tableModule.tabsTextList[x] == "All") {
-                    tabsHTML += ' aria-selected = "true" class = "ANDI508-tab-active"';
+                    tabsHTML += '" aria-selected = "true" class = "ANDI508-tab-active"';
                     tabsHTML += ' data-andi508-relatedclass = "ANDI508-element"';
                     tabsHTML += '>' + tableModule.tabsTextList[x] + ' ' + buttonMode + "</button>";
                 } else {
-                    tabsHTML += ' aria-selected = "false" class = "ANDI508-' + tableModule.tabsTextList[x];
+                    tabsHTML += '" aria-selected = "false" class = "ANDI508-' + tableModule.tabsTextList[x];
                     tabsHTML += buttonMode + '">' + tableModule.tabsTextList[x] + ' ' + buttonMode + "</button>";
                 }
             }
