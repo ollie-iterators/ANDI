@@ -307,47 +307,6 @@ mANDI.viewList_attachEvents = function(){
 
 //This function attaches click events to the items specific to the Links view list
 mANDI.viewList_attachEvents_links = function(){
-    $("#mANDI508-listLinks-tab-all").click(function(){
-        mANDI.viewList_selectTab(this);
-        $("#ANDI508-viewList-table tbody tr").show();
-        //Remove All (glowing) Highlights
-        $("#ANDI508-testPage").removeClass("mANDI508-highlightInternal mANDI508-highlightExternal mANDI508-highlightAmbiguous");
-        //Turn Off Ambiguous Button
-        andiOverlay.overlayButton_off("find",$("#ANDI508-highlightAmbiguousLinks-button"));
-        andiResetter.resizeHeights();
-        return false;
-    });
-    $("#mANDI508-listLinks-tab-internal").click(function(){
-        mANDI.viewList_selectTab(this);
-        $("#ANDI508-viewList-table tbody tr").each(function(){
-            if($(this).hasClass("mANDI508-listLinks-internal"))
-                $(this).show();
-            else
-                $(this).hide();
-        });
-        //Add (glowing) Highlight for Internal Links
-        $("#ANDI508-testPage").removeClass("mANDI508-highlightExternal mANDI508-highlightAmbiguous").addClass("mANDI508-highlightInternal");
-        //Turn Off Ambiguous Button
-        andiOverlay.overlayButton_off("find",$("#ANDI508-highlightAmbiguousLinks-button"));
-        andiResetter.resizeHeights();
-        return false;
-    });
-    $("#mANDI508-listLinks-tab-external").click(function(){
-        mANDI.viewList_selectTab(this);
-        $("#ANDI508-viewList-table tbody tr").each(function(){
-            if($(this).hasClass("mANDI508-listLinks-external"))
-                $(this).show();
-            else
-                $(this).hide();
-        });
-        //Add (glowing) Highlight for External Links
-        $("#ANDI508-testPage").removeClass("mANDI508-highlightInternal mANDI508-highlightAmbiguous").addClass("mANDI508-highlightExternal");
-        //Turn Off Ambiguous Button
-        andiOverlay.overlayButton_off("find",$("#ANDI508-highlightAmbiguousLinks-button"));
-        andiResetter.resizeHeights();
-        return false;
-    });
-
     //Define next tab button
     $("#ANDI508-viewList-table button.mANDI508-nextTab").each(function(){
         $(this).click(function(){

@@ -361,7 +361,7 @@ AndiModule.inspect = function(element){
 //This function builds the table for the view list
 lANDI.viewList_buildTable = function(mode){
     var tableHTML = "";
-    var rowClasses, tabsHTML;
+    var rowClasses;
     var appendHTML = "<div id='lANDI508-viewList' class='ANDI508-viewOtherResults-expanded' style='display:none;'><div id='lANDI508-viewList-tabs'>";
     var nextPrevHTML = "<button id='lANDI508-viewList-button-prev' aria-label='Previous Item in the list' accesskey='"+andiHotkeyList.key_prev.key+"'><img src='"+icons_url+"prev.png' alt='' /></button>"+
         "<button id='lANDI508-viewList-button-next' aria-label='Next Item in the list'  accesskey='"+andiHotkeyList.key_next.key+"'><img src='"+icons_url+"next.png' alt='' /></button>"+
@@ -392,7 +392,6 @@ lANDI.viewList_buildTable = function(mode){
             rowClasses += "ANDI508-table-row-alert ";
 
         if(lANDI.links.list[x].linkPurpose == "i"){
-            rowClasses += "lANDI508-listLinks-internal ";
             var id = lANDI.links.list[x].href;
             if(id.charAt(0) === "#")
                 id = id.substring(1, id.length);
@@ -400,8 +399,6 @@ lANDI.viewList_buildTable = function(mode){
                 id+"' title='focus on the element after id="+
                 id+"'>next tab</button>";
         }
-        else if(lANDI.links.list[x].linkPurpose == "e")
-            rowClasses += "lANDI508-listLinks-external ";
 
         tableHTML += "<tr class='" + $.trim(rowClasses) + "'>"+
             "<th scope='row'>"+lANDI.links.list[x].index+"</th>"+
@@ -411,11 +408,7 @@ lANDI.viewList_buildTable = function(mode){
             "</tr>";
     }
 
-    tabsHTML = "<button id='lANDI508-listLinks-tab-all' aria-label='View All Links' aria-selected='true' class='ANDI508-tab-active' data-andi508-relatedclass='ANDI508-element'>all links ("+lANDI.links.list.length+")</button>";
-    tabsHTML += "<button id='lANDI508-listLinks-tab-internal' aria-label='View Skip Links' aria-selected='false' data-andi508-relatedclass='lANDI508-internalLink'>skip links ("+lANDI.links.elementNums[1]+")</button>";
-    tabsHTML += "<button id='lANDI508-listLinks-tab-external' aria-label='View External Links' aria-selected='false' data-andi508-relatedclass='lANDI508-externalLink'>external links ("+lANDI.links.elementNums[2]+")</button>";
-
-    appendHTML += tabsHTML + nextPrevHTML + "<th scope='col' style='width:5%'><a href='javascript:void(0)' aria-label='link number'>#<i aria-hidden='true'></i></a></th>"+
+    appendHTML += nextPrevHTML + "<th scope='col' style='width:5%'><a href='javascript:void(0)' aria-label='link number'>#<i aria-hidden='true'></i></a></th>"+
         "<th scope='col' style='width:10%'><a href='javascript:void(0)'>Alerts&nbsp;<i aria-hidden='true'></i></a></th>"+
         "<th scope='col' style='width:40%'><a href='javascript:void(0)'>Accessible&nbsp;Name&nbsp;&amp;&nbsp;Description&nbsp;<i aria-hidden='true'></i></a></th>"+
         "<th scope='col' style='width:45%'><a href='javascript:void(0)'>href <i aria-hidden='true'></i></a></th>";
@@ -553,47 +546,6 @@ lANDI.viewList_attachEvents = function(){
 
 //This function attaches click events to the items specific to the Links view list
 lANDI.viewList_attachEvents_links = function(){
-    $("#lANDI508-listLinks-tab-all").click(function(){
-        lANDI.viewList_selectTab(this);
-        $("#ANDI508-viewList-table tbody tr").show();
-        //Remove All (glowing) Highlights
-        $("#ANDI508-testPage").removeClass("lANDI508-highlightInternal lANDI508-highlightExternal lANDI508-highlightAmbiguous");
-        //Turn Off Ambiguous Button
-        andiOverlay.overlayButton_off("find",$("#ANDI508-highlightAmbiguousLinks-button"));
-        andiResetter.resizeHeights();
-        return false;
-    });
-    $("#lANDI508-listLinks-tab-internal").click(function(){
-        lANDI.viewList_selectTab(this);
-        $("#ANDI508-viewList-table tbody tr").each(function(){
-            if($(this).hasClass("lANDI508-listLinks-internal"))
-                $(this).show();
-            else
-                $(this).hide();
-        });
-        //Add (glowing) Highlight for Internal Links
-        $("#ANDI508-testPage").removeClass("lANDI508-highlightExternal lANDI508-highlightAmbiguous").addClass("lANDI508-highlightInternal");
-        //Turn Off Ambiguous Button
-        andiOverlay.overlayButton_off("find",$("#ANDI508-highlightAmbiguousLinks-button"));
-        andiResetter.resizeHeights();
-        return false;
-    });
-    $("#lANDI508-listLinks-tab-external").click(function(){
-        lANDI.viewList_selectTab(this);
-        $("#ANDI508-viewList-table tbody tr").each(function(){
-            if($(this).hasClass("lANDI508-listLinks-external"))
-                $(this).show();
-            else
-                $(this).hide();
-        });
-        //Add (glowing) Highlight for External Links
-        $("#ANDI508-testPage").removeClass("lANDI508-highlightInternal lANDI508-highlightAmbiguous").addClass("lANDI508-highlightExternal");
-        //Turn Off Ambiguous Button
-        andiOverlay.overlayButton_off("find",$("#ANDI508-highlightAmbiguousLinks-button"));
-        andiResetter.resizeHeights();
-        return false;
-    });
-
     //Define next tab button
     $("#ANDI508-viewList-table button.lANDI508-nextTab").each(function(){
         $(this).click(function(){
