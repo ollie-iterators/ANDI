@@ -336,10 +336,11 @@ function Images() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode      = "Images";
-    this.cssProperties  = ["background-image"];
-    this.buttonTextList = ["Fade Inline Images", "Hide Background Images", "Highlight Background Images", "Highlight Decorative Images", "Highlight Font Icons"];
-    this.tabsTextList   = [];
+    this.tableModuleName = "gANDI";
+    this.tableMode       = "Images";
+    this.cssProperties   = ["background-image"];
+    this.buttonTextList  = ["Fade Inline Images", "Hide Background Images", "Highlight Background Images", "Highlight Decorative Images", "Highlight Font Icons"];
+    this.tabsTextList    = [];
 }
 
 gANDI.images = new Images();

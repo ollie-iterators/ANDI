@@ -323,10 +323,11 @@ function PossibleHeaders() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode      = "Possible Headers";
-    this.cssProperties  = [];
-    this.buttonTextList = ["Reading Order", "Role Attributes", "Lang Attributes"];
-    this.tabsTextList   = [];
+    this.tableModuleName = "pANDI";
+    this.tableMode       = "Possible Headers";
+    this.cssProperties   = [];
+    this.buttonTextList  = ["Reading Order", "Role Attributes", "Lang Attributes"];
+    this.tabsTextList    = [];
 }
 
 pANDI.possibleHeaders = new PossibleHeaders();

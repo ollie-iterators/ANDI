@@ -659,10 +659,11 @@ function Links(){
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode      = "Links";
-    this.cssProperties  = [];
-    this.buttonTextList = [];
-    this.tabsTextList   = ["All", "Internal", "External"];
+    this.tableModuleName = "lANDI";
+    this.tableMode       = "Links";
+    this.cssProperties   = [];
+    this.buttonTextList  = [];
+    this.tabsTextList    = ["All", "Internal", "External"];
 }
 
 lANDI.links = new Links();

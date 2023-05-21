@@ -401,10 +401,11 @@ function Links(){
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode      = "Links";
-    this.cssProperties  = [];
-    this.buttonTextList = [];
-    this.tabsTextList   = []
+    this.tableModuleName = "mANDI";
+    this.tableMode       = "Links";
+    this.cssProperties   = [];
+    this.buttonTextList  = [];
+    this.tabsTextList    = [];
 }
 
 mANDI.links = new Links();
