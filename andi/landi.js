@@ -72,7 +72,7 @@ lANDI.analyze = function(objectClass){
                         if(nameDescription){
                             ambiguousIndex = scanForAmbiguity(this, nameDescription, href);
 
-                            determineLinkPurpose(href, this);
+                            var rowClass = determineLinkPurpose(href, this);
 
                             testForVagueLinkText(nameDescription);
 
@@ -86,11 +86,11 @@ lANDI.analyze = function(objectClass){
 
                         if(href){
                             //create Link object and add to array
-                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, nameDescription, $(this).attr("href"), "", ""));
+                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, nameDescription, $(this).attr("href"), "", rowClass));
                         }
                         else if(andiData.role === "link"){
                             //create Link object and add to array
-                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, nameDescription, $(this).attr("href"), "", ""));
+                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, nameDescription, $(this).attr("href"), "", rowClass));
 
                             isElementInTabOrder(this, "link");
                         }
@@ -218,6 +218,7 @@ lANDI.analyze = function(objectClass){
 
     //This function searches for anchor target if href is internal and greater than 1 character e.g. href="#x"
     function determineLinkPurpose(href, element){
+        var rowClass = "";
         if(typeof href !== "undefined"){
             if(href.charAt(0) === "#" && href.length > 1){
                 var idRef = href.slice(1); //do not convert to lowercase
@@ -232,6 +233,7 @@ lANDI.analyze = function(objectClass){
                     lANDI.links.elementNums[1] += 1;
                     lANDI.links.elementStrings[1] = "internal links";
                     linkPurpose = "i";
+                    rowClass = "lANDI508-listLinks-internal";
                     $(element).addClass("lANDI508-internalLink");
                 }
             }
@@ -239,9 +241,11 @@ lANDI.analyze = function(objectClass){
                 lANDI.links.elementNums[2] += 1;
                 lANDI.links.elementStrings[2] = "external links";
                 linkPurpose = "e";
+                rowClass = "lANDI508-listLinks-external";
                 $(element).addClass("lANDI508-externalLink");
             }
         }
+        return rowClass;
 
         //This function searches allIds list to check if anchor target exists. return true if found.
         function isAnchorTargetFound(idRef){

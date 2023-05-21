@@ -4438,7 +4438,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     $(this).show();
                 } else {
                     classToCheckFor = module + "508-" + tabsClassCondition;
-                    $("#ANDI508-additionalPageResults").append(classToCheckFor);
                     if ($(this).hasClass(classToCheckFor)) {
                         $(this).show();
                     } else {
