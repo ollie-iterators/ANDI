@@ -4656,7 +4656,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             var buttonType = buttonMode.replace(" ", "");
             var fullButtonClass = "#ANDI508-list" + buttonType + "-tab-" + buttonId;
             $(fullButtonClass).click(function () {
-                andiBar.viewList_selectTab(this, buttonClass);
+                andiResults.viewList_selectTab(this, buttonClass);
                 andiResults.alterTable(module, buttonClass, buttonType, buttonText);
                 //Alter which classes are still on the page
                 andiBar.alterClasses(module, "highlight", buttonText);
