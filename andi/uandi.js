@@ -241,24 +241,22 @@ uANDI.results = function(objectClass){
     //Update Results Summary text depending on the active table type (data or presentation)
     andiBar.updateResultsSummary("Presentation Tables: "+presentationTablesCount);
 
-    if(tableCountTotal > 0){
-        if(!uANDI.viewList_buttonAppended){
-            $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewTableList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view table list</button>");
+    if(!uANDI.viewList_buttonAppended){
+        $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewTableList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view table list</button>");
 
-            //viewTableList Button
-            $("#ANDI508-viewTableList-button").click(function(){
-                if(!uANDI.viewList_tableReady){
-                    uANDI.viewList_buildTable();
-                    uANDI.viewList_attachEvents();
-                    uANDI.viewList_tableReady = true;
-                }
-                uANDI.viewList_toggle(this);
-                andiResetter.resizeHeights();
-                return false;
-            });
+        //viewTableList Button
+        $("#ANDI508-viewTableList-button").click(function(){
+            if(!uANDI.viewList_tableReady){
+                uANDI.viewList_buildTable();
+                uANDI.viewList_attachEvents();
+                uANDI.viewList_tableReady = true;
+            }
+            uANDI.viewList_toggle(this);
+            andiResetter.resizeHeights();
+            return false;
+        });
 
-            uANDI.viewList_buttonAppended = true;
-        }
+        uANDI.viewList_buttonAppended = true;
     }
 
     andiBar.showElementControls();
