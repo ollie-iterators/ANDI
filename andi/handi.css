@@ -31,8 +31,8 @@
 	#ANDI508-testPage .ANDI508-element.ANDI508-highlight
 		{outline:0 !important;}
 
-	#ANDI508-testPage.hANDI508-highlightCssContent .hANDI508-hasHiddenCssContent:before,
-	#ANDI508-testPage.hANDI508-highlightCssContent .hANDI508-hasHiddenCssContent:after
+	#ANDI508-testPage.ANDI508-highlightCSSContent .hANDI508-hasHiddenCssContent:before,
+	#ANDI508-testPage.ANDI508-highlightCSSContent .hANDI508-hasHiddenCssContent:after
 		{outline:1px solid #ef0000 !important; box-shadow:0 0 20px 1px #ef0000 !important}
 
 	#ANDI508-testPage.hANDI508-highlightCssContent .hANDI508-hasHiddenCssContent:before,
