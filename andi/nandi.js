@@ -73,7 +73,7 @@ nANDI.analyze = function(objectClass){
                 }
 
                 andiCheck.commonFocusableElementChecks(andiData,$(this));
-                nANDI.buttons.list.push(new Button([this], objectClass.list.length + 1, "", "", ""));
+                nANDI.buttons.list.push(new Button([this], objectClass.list.length + 1, nameDescription, "", ""));
                 nANDI.buttons.elementNums[0] += 1;
                 nANDI.buttons.elementStrings[0] = "buttons";
                 AndiData.attachDataToElement(this);
