@@ -417,7 +417,7 @@ function Buttons(){
 function TableInfo() {
     this.tableMode      = "Buttons";
     this.cssProperties  = [];
-    this.buttonTextList = [];
+    this.buttonTextList = ["Highlight Non Unique Buttons"];
     this.tabsTextList   = [];
 }
 

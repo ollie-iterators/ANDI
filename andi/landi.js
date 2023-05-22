@@ -617,7 +617,7 @@ function Links(){
 function TableInfo() {
     this.tableMode      = "Links";
     this.cssProperties  = [];
-    this.buttonTextList = [];
+    this.buttonTextList = ["Highlight Ambiguous Links"];
     this.tabsTextList   = ["All", "Internal", "External"];
 }
 
