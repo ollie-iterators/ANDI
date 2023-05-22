@@ -36,10 +36,6 @@ var alertIcons = new function(){//new is intentional
     }
 };
 
-AndiModule.initActiveActionButtons({
-    highlightAmbiguousLinks:false,
-});
-
 //This function will analyze the test page for link related markup relating to accessibility
 lANDI.analyze = function(objectClass){
     //Variables used to build the links/buttons list array.
@@ -298,38 +294,6 @@ lANDI.analyze = function(objectClass){
 };
 
 var showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-l'>links</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every link.";
-//This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-lANDI.results = function(objectClass){
-
-    //highlightAmbiguousLinks button
-    $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightAmbiguousLinks-button' aria-label='Highlight "+lANDI.links.elementNums[3]+" Ambiguous Links' aria-pressed='false'>"+lANDI.links.elementNums[3]+" ambiguous links"+findIcon+"</button>");
-
-    //Ambiguous Links Button
-    $("#ANDI508-highlightAmbiguousLinks-button").click(function(){
-        var testPage = $("#ANDI508-testPage");
-        if(!$(testPage).hasClass("lANDI508-highlightAmbiguous")){
-            //On
-            $("#lANDI508-listLinks-tab-all").click();
-            $("#ANDI508-testPage")
-                //.removeClass("lANDI508-highlightInternal lANDI508-highlightExternal")
-                .addClass("lANDI508-highlightAmbiguous");
-            andiOverlay.overlayButton_on("find",$(this));
-            AndiModule.activeActionButtons.highlightAmbiguousLinks = true;
-        }
-        else{
-            //Off
-            $("#ANDI508-testPage").removeClass("lANDI508-highlightAmbiguous");
-            andiOverlay.overlayButton_off("find",$(this));
-            AndiModule.activeActionButtons.highlightAmbiguousLinks = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    AndiModule.engageActiveActionButtons([
-        "highlightAmbiguousLinks"
-    ]);
-};
 
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.

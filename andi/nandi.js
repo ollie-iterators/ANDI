@@ -27,10 +27,6 @@ var alertIcons = new function(){//new is intentional
     }
 };
 
-AndiModule.initActiveActionButtons({
-    highlightNonUniqueButtons:false
-});
-
 //This function will analyze the test page for link related markup relating to accessibility
 nANDI.analyze = function(objectClass){
     //Variables used to build the links/buttons list array.
@@ -155,35 +151,6 @@ nANDI.analyze = function(objectClass){
 };
 
 var showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-l'>buttons</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every button.";
-//This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-nANDI.results = function(){
-    //highlightNonUniqueButtons
-    $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightNonUniqueButtons-button' aria-label='Highlight "+nANDI.buttons.elementNums[1]+" Non-Unique Buttons' aria-pressed='false'>"+nANDI.buttons.elementNums[1]+" non-unique buttons"+findIcon+"</button>");
-
-    //highlightNonUniqueButtons Button
-    $("#ANDI508-highlightNonUniqueButtons-button").click(function(){
-        var testPage = $("#ANDI508-testPage");
-        if(!$(testPage).hasClass("nANDI508-highlightAmbiguous")){
-            //On
-            $("#nANDI508-listButtons-tab-all").click();
-            $("#ANDI508-testPage").addClass("nANDI508-highlightAmbiguous");
-            andiOverlay.overlayButton_on("find",$(this));
-            AndiModule.activeActionButtons.highlightNonUniqueButtons = true;
-        }
-        else{
-            //Off
-            $("#ANDI508-testPage").removeClass("nANDI508-highlightAmbiguous");
-            andiOverlay.overlayButton_off("find",$(this));
-            AndiModule.activeActionButtons.highlightNonUniqueButtons = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    AndiModule.engageActiveActionButtons([
-        "highlightNonUniqueButtons"
-    ]);
-};
 
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
