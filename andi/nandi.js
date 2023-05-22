@@ -40,10 +40,7 @@ nANDI.analyze = function(objectClass){
     $(TestPageData.allElements).each(function(){
         //ANALYZE BUTTONS
         if($(this).isSemantically(["button"],"button,:button,:submit,:reset,:image")){
-
             if(!andiCheck.isThisElementDisabled(this)){
-                nANDI.buttons.count++;
-
                 andiData = new AndiData(this);
 
                 nameDescription = getNameDescription(andiData.accName, andiData.accDesc);
@@ -76,12 +73,10 @@ nANDI.analyze = function(objectClass){
                 }
 
                 andiCheck.commonFocusableElementChecks(andiData,$(this));
-                AndiData.attachDataToElement(this);
-
-                //create Button object and add to array
                 nANDI.buttons.list.push(new Button([this], objectClass.list.length + 1, "", "", ""));
                 nANDI.buttons.elementNums[0] += 1;
                 nANDI.buttons.elementStrings[0] = "buttons";
+                AndiData.attachDataToElement(this);
             }
         }
     });
