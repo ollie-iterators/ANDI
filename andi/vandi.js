@@ -73,7 +73,6 @@ $("#ANDI508-button-nextElement").off("click").click(function(){
 
 //These variables are for the page
 var tableCountTotal = 0;			//The total number of tables
-var presentationTablesCount = 0;	//The total number of presentation tables
 var dataTablesCount = 0;			//The total number of data tables (tables that aren't presentation tables)
 var tableArray = [];				//Stores all tables in an array
 var activeTableIndex = -1;			//The array index of the active table

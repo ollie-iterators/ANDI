@@ -14,11 +14,6 @@ sANDI.analyze = function(objectClass){
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["alert","status","log","marquee","timer"],"[aria-live=polite],[aria-live=assertive]")){
-            //Add to the live regions array
-            objectClass.list.push(new LiveRegion([this], objectClass.list.length + 1, "", "", ""));
-            objectClass.elementNums[0] += 1;
-            objectClass.elementStrings[0] = "live regions";
-
             andiData = new AndiData(this);
 
             if($(this).isContainerElement()){
@@ -39,6 +34,10 @@ sANDI.analyze = function(objectClass){
                 andiAlerter.throwAlert(alert_0184);
             if($(this).find("textarea,input:not(:hidden,[type=submit],[type=button],[type=image],[type=reset]),select").length)
                 andiAlerter.throwAlert(alert_0182);
+
+            objectClass.list.push(new LiveRegion([this], objectClass.list.length + 1, andiData.accName, "", ""));
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] = "live regions";
             AndiData.attachDataToElement(this);
         }
 

@@ -14,15 +14,13 @@ rANDI.analyze = function(objectClass){
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["banner","complementary","contentinfo","form","main","navigation","search","region"],"main,header,footer,nav,form,aside")){
-            //Add to the landmarks array
-            objectClass.list.push(new Landmark([this], objectClass.list.length + 1, "", "", ""));
-
             andiData = new AndiData(this);
 
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
-            AndiData.attachDataToElement(this);
+            objectClass.list.push(new Landmark([this], objectClass.list.length + 1, "", "", ""));
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "landmarks";
+            AndiData.attachDataToElement(this);
         }
 
         //For all elements on the page

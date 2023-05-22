@@ -14,17 +14,12 @@ oANDI.analyze = function(objectClass){
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["heading"],"h1,h2,h3,h4,h5,h6")){
-
-            objectClass.elementNums[0] += 1;
-            objectClass.elementStrings[0] = "certain headings";
-
             andiData = new AndiData(this);
-
-            //Add to the headings array
 
             if(andiData.isAriaHidden != true)
                 objectClass.list.push(new CertainHeader([this], objectClass.list.length + 1, "", "", ""));
-
+                objectClass.elementNums[0] += 1;
+                objectClass.elementStrings[0] = "certain headings";
             if(andiData.role === "heading"){
 
                 var ariaLevel = $(this).attr("aria-level");

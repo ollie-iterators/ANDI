@@ -14,10 +14,7 @@ qANDI.analyze = function(objectClass){
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["listitem","list"],"ol,ul,li,dl,dd,dt")){
-            //Add to the lists array
-            objectClass.list.push(new List([this], objectClass.list.length + 1, "", "", ""));
-            objectClass.elementNums[0] += 1;
-            objectClass.elementStrings[0] += "list elements";
+            andiData = new AndiData(this);
 
             if($(this).isSemantically(["list"],"ol,ul,dl")){
                 if ($(this).is("ul")) {
@@ -36,8 +33,6 @@ qANDI.analyze = function(objectClass){
                 objectClass.elementNums[9] += 1;
                 objectClass.elementNums[9] = "lists found";
             }
-
-            andiData = new AndiData(this);
 
             //Is the listitem contained by an appropriate list container?
             if($(this).is("[role=listitem]")){
@@ -72,6 +67,9 @@ qANDI.analyze = function(objectClass){
             }
 
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
+            objectClass.list.push(new List([this], objectClass.list.length + 1, "", "", ""));
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] += "list elements";
             AndiData.attachDataToElement(this);
         }
 
