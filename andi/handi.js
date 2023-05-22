@@ -518,7 +518,7 @@ function HiddenElements() {
 function TableInfo() {
     this.tableMode      = "Hidden Elements";
     this.cssProperties  = [];
-    this.buttonTextList = ["Title Attributes"];
+    this.buttonTextList = ["Title Attributes", "Highlight CSS Content"];
     this.tabsTextList   = [];
 }
 
