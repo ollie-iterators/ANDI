@@ -47,8 +47,7 @@ AndiModule.initActiveActionButtons({
     forceReveal_overflow:false,
     forceReveal_fontSize:false,
     forceReveal_textIndent:false,
-    forceReveal_html5Hidden:false,
-    highlightCssContent:false
+    forceReveal_html5Hidden:false
 });
 
 if(!prevNextBtnsVisible){
@@ -275,9 +274,6 @@ hANDI.results = function(objectClass){
 
     var moduleActionButtons = "<button id='ANDI508-forceRevealAll-button' aria-label='Reveal All' aria-pressed='false'>reveal all"+findIcon+"</button><span class='ANDI508-module-actions-spacer'>|</span> ";
     moduleActionButtons += "<div class='ANDI508-moduleActionGroup'><button class='ANDI508-moduleActionGroup-toggler'>css hiding techniques</button><div class='ANDI508-moduleActionGroup-options'>" + revealButtons + "</div></div>";
-    moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span>&nbsp;";
-    moduleActionButtons += "<button id='ANDI508-highlightCssContent-button' aria-label='content ::before ::after "+objectClass.elementNums[9]+" CSS Content' aria-pressed='false'>content ::before ::after "+objectClass.elementNums[9]+findIcon+"</button>";
-
     moduleActionButtons += "<button id='ANDI508-ariaHiddenScan-button' aria-label='aria-hidden scan' aria-pressed='false'>aria-hidden scan</button>";
 
     $("#ANDI508-module-actions").html(moduleActionButtons);
@@ -339,23 +335,6 @@ hANDI.results = function(objectClass){
         });
     }
 
-    //=============================================
-    //Define highlightCssContent button
-    $("#ANDI508-highlightCssContent-button").click(function(){
-        if($(this).attr("aria-pressed") === "false"){
-            andiOverlay.overlayButton_on("find",$(this));
-            $("#ANDI508-testPage").addClass("hANDI508-highlightCssContent");
-            AndiModule.activeActionButtons.highlightCssContent = true;
-        }
-        else{
-            $("#ANDI508-testPage").removeClass("hANDI508-highlightCssContent");
-            andiOverlay.overlayButton_off("find",$(this));
-            AndiModule.activeActionButtons.highlightCssContent = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
     $("#ANDI508-ariaHiddenScan-button").click(function(){
         if($(this).attr("aria-pressed") === "false"){
             alert('aria-hidden="true" was found on ' + $("#ANDI508-testPage [aria-hidden]").length + ' elements');
@@ -385,8 +364,7 @@ hANDI.results = function(objectClass){
         "forceReveal_overflow",
         "forceReveal_fontSize",
         "forceReveal_textIndent",
-        "forceReveal_html5Hidden",
-        "highlightCssContent"
+        "forceReveal_html5Hidden"
     ]);
 };
 
