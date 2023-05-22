@@ -241,7 +241,7 @@ gANDI.analyze = function(objectClass){
         return ( hasPrivateUseUnicode("before") || hasPrivateUseUnicode("after") );
 
         function hasPrivateUseUnicode(psuedo){
-            var content = (oldIE) ? "" : window.getComputedStyle(element, ":"+psuedo).content;
+            var content = window.getComputedStyle(element, ":"+psuedo).content;
             if(content !== "none" && content !== "normal" && content !== "counter" && content !== "\"\""){//content is not none or empty string
                 var unicode;
                 //starts at 1 and end at length-1 to ignore the starting and ending double quotes

@@ -185,12 +185,10 @@ hANDI.analyze = function(objectClass){
         }
     });
 
-    if(!oldIE){
-        hANDI.detectCssInjectedContent(objectClass);
+    hANDI.detectCssInjectedContent(objectClass);
 
-        if($("#ANDI508-testPage .hANDI508-hasHiddenCssContent").first().length)
-            andiAlerter.throwAlert(alert_0220,alert_0220.message, 0);
-    }
+    if($("#ANDI508-testPage .hANDI508-hasHiddenCssContent").first().length)
+        andiAlerter.throwAlert(alert_0220,alert_0220.message, 0);
 };
 
 //This function will detect content hidden using css :before :after content.
