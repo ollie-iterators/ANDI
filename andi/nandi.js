@@ -420,11 +420,10 @@ function Buttons(){
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableModuleName = "nANDI";
-    this.tableMode       = "Buttons";
-    this.cssProperties   = [];
-    this.buttonTextList  = [];
-    this.tabsTextList    = [];
+    this.tableMode      = "Buttons";
+    this.cssProperties  = [];
+    this.buttonTextList = [];
+    this.tabsTextList   = [];
 }
 
 nANDI.buttons = new Buttons();

@@ -960,11 +960,10 @@ function Contrasts() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableModuleName = "cANDI";
-    this.tableMode       = "Color Contrasts";
-    this.cssProperties   = [];
-    this.buttonTextList  = ["Grayscale"];
-    this.tabsTextList    = []
+    this.tableMode      = "Color Contrasts";
+    this.cssProperties  = [];
+    this.buttonTextList = ["Grayscale"];
+    this.tabsTextList   = []
 }
 
 cANDI.contrasts = new Contrasts();

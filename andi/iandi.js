@@ -151,11 +151,10 @@ function iFrames() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableModuleName = "iANDI";
-    this.tableMode       = "iFrames";
-    this.cssProperties   = [];
-    this.buttonTextList  = [];
-    this.tabsTextList    = [];
+    this.tableMode      = "iFrames";
+    this.cssProperties  = [];
+    this.buttonTextList = [];
+    this.tabsTextList   = [];
 }
 
 iANDI.iFrames = new iFrames();

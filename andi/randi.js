@@ -169,11 +169,10 @@ function Landmarks() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableModuleName = "rANDI";
-    this.tableMode       = "Landmarks";
-    this.cssProperties   = [];
-    this.buttonTextList  = ["Reading Order", "Role Attributes", "Lang Attributes"];
-    this.tabsTextList    = [];
+    this.tableMode      = "Landmarks";
+    this.cssProperties  = [];
+    this.buttonTextList = ["Reading Order", "Role Attributes", "Lang Attributes"];
+    this.tabsTextList   = [];
 }
 
 rANDI.landmarks = new Landmarks();

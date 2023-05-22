@@ -4358,7 +4358,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 $("#ANDI508-additionalPageResults").append(appendHTML + "</tr></thead><tbody>" + tableHTML + "</tbody></table></div></div>");
 
                 for (var x = 0; x < tableModule.tabsTextList.length; x += 1) {
-                    andiResults.addTabsButtonLogic(tableModule.tableModuleName, tableModule.tabsTextList[x], tableModule.tableMode, "viewList", tableModule.tabsTextList[x])
+                    andiResults.addTabsButtonLogic(AndiModule.module + "ANDI", tableModule.tabsTextList[x], tableModule.tableMode, "viewList", tableModule.tabsTextList[x])
                 }
 
                 andiResults.addNextTabButtonLogic();

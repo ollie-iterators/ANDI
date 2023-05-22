@@ -219,11 +219,10 @@ function Lists() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableModuleName = "qANDI";
-    this.tableMode       = "Lists";
-    this.cssProperties   = [];
-    this.buttonTextList  = ["Reading Order", "Role Attributes", "Lang Attributes"];
-    this.tabsTextList    = [];
+    this.tableMode      = "Lists";
+    this.cssProperties  = [];
+    this.buttonTextList = ["Reading Order", "Role Attributes", "Lang Attributes"];
+    this.tabsTextList   = [];
 }
 
 qANDI.lists = new Lists();

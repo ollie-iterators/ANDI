@@ -295,11 +295,10 @@ function CertainHeaders() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableModuleName = "oANDI";
-    this.tableMode       = "Certain Headers";
-    this.cssProperties   = [];
-    this.buttonTextList  = ["Reading Order", "Role Attributes", "Lang Attributes"];
-    this.tabsTextList    = [];
+    this.tableMode      = "Certain Headers";
+    this.cssProperties  = [];
+    this.buttonTextList = ["Reading Order", "Role Attributes", "Lang Attributes"];
+    this.tabsTextList   = [];
 }
 
 oANDI.certainHeaders = new CertainHeaders();

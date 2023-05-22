@@ -240,11 +240,10 @@ function Focusables() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableModuleName = "fANDI";
-    this.tableMode       = "Focusable Elements";
-    this.cssProperties   = [];
-    this.buttonTextList  = ["Tab Sequence", "Title Attributes", "Label Tags"];
-    this.tabsTextList    = [];
+    this.tableMode      = "Focusable Elements";
+    this.cssProperties  = [];
+    this.buttonTextList = ["Tab Sequence", "Title Attributes", "Label Tags"];
+    this.tabsTextList   = [];
 }
 
 fANDI.focusables = new Focusables();
