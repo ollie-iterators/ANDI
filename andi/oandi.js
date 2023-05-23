@@ -18,6 +18,7 @@ oANDI.analyze = function(objectClass){
 
             if(andiData.isAriaHidden != true)
                 objectClass.list.push(new CertainHeader([this], objectClass.list.length + 1, "", "", ""));
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "certain headings";
             if(andiData.role === "heading"){

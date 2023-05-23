@@ -68,6 +68,7 @@ qANDI.analyze = function(objectClass){
 
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
             objectClass.list.push(new List([this], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "list elements";
             AndiData.attachDataToElement(this);

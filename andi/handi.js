@@ -180,6 +180,7 @@ hANDI.analyze = function(objectClass){
 
             andiData = new AndiData(this, true);
             objectClass.list.push(new HiddenElement([this], objectClass.list.length + 1, "", elementCss, "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             AndiData.attachDataToElement(this);
         }
     });
