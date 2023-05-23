@@ -73,7 +73,6 @@ $("#ANDI508-button-nextElement").off("click").click(function(){
 
 //These variables are for the page
 var tableCountTotal = 0;			//The total number of tables
-var dataTablesCount = 0;			//The total number of data tables (tables that aren't presentation tables)
 var tableArray = [];				//Stores all tables in an array
 var activeTableIndex = -1;			//The array index of the active table
 
@@ -95,14 +94,13 @@ vANDI.analyze = function(objectClass){
     var activeElementFound = false;
     $(TestPageData.allElements).filter("table,[role=table],[role=grid],[role=treegrid]").each(function(){
         //Store this table in the array
-        objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-        andiBar.getAttributes(objectClass, objectClass.list.length - 1);
-        objectClass.elementNums[0] += 1;
-        objectClass.elementStrings[0] += "data tables";
+
 
         if($(this).isSemantically(["table","grid","treegrid"],"table")){
-            //It's a data table
-            dataTablesCount++;
+            objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] += "data tables";
         }
 
         //Determine if this is a refresh of vANDI (there is an active element)
@@ -239,10 +237,6 @@ showStartUpSummaryText += "Determine if the ANDI Output conveys a complete and m
 showStartUpSummaryText += "Tables should be tested one at a time - Press the next table button <img src='"+icons_url+"next-table.png' style='width:12px' alt='' /> to cycle through the tables.";
 //This function updates the results in the ANDI Bar
 vANDI.results = function(objectClass){
-
-    //Update Results Summary text depending on the active table type (data or presentation)
-    andiBar.updateResultsSummary("Data Tables: "+dataTablesCount);
-
     if(!vANDI.viewList_buttonAppended){
         $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewTableList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view table list</button>");
 
@@ -1628,6 +1622,8 @@ function TableInfo() {
 
 vANDI.dataTables = new DataTables();
 vANDI.tableInfo = new TableInfo();
+
+vANDI.dataTables = andiBar.createObjectValues(vANDI.dataTables, 1);
 
 //analyze tables
 vANDI.analyze(vANDI.dataTables);

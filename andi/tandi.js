@@ -70,7 +70,6 @@ $("#ANDI508-button-nextElement").off("click").click(function(){
 
 //These variables are for the page
 var tableCountTotal = 0;			//The total number of tables
-var presentationTablesCount = 0;	//The total number of presentation tables
 var tableArray = [];				//Stores all tables in an array
 var activeTableIndex = -1;			//The array index of the active table
 
@@ -85,21 +84,12 @@ AndiModule.initActiveActionButtons({
 tANDI.analyze = function(objectClass){
     //Loop through each visible table
     var activeElementFound = false;
-    $(TestPageData.allElements).filter("table,[role=table],[role=grid],[role=treegrid]").each(function(){
-        //Store this table in the array
-        objectClass.list.push(new PresentationTable([this], objectClass.list.length + 1, "", "", ""));
-        andiBar.getAttributes(objectClass, objectClass.list.length - 1);
-        objectClass.elementNums[0] += 1;
-        objectClass.elementStrings[0] += "presentation tables";
-
-        //Is this a presentation table?
+    $(TestPageData.allElements).filter("[role=presentation],[role=none]").each(function(){
         if($(this).isSemantically(["presentation","none"])){
-            //It's a presentation table
-            presentationTablesCount++;
-        }
-        else if(!$(this).isSemantically(["table","grid","treegrid"],"table")){
-            //It table with a non-typical role
-            presentationTablesCount++;
+            objectClass.list.push(new PresentationTable([this], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] += "presentation tables";
         }
 
         //Determine if this is a refresh of tANDI (there is an active element)
@@ -234,10 +224,6 @@ tANDI.analyze = function(objectClass){
 var showStartUpSummaryText = "Only <span class='ANDI508-module-name-t'>presentation tables</span> were found on this page, no data tables.";
 //This function updates the results in the ANDI Bar
 tANDI.results = function(objectClass){
-
-    //Update Results Summary text depending on the active table type (data or presentation)
-    andiBar.updateResultsSummary("Presentation Tables: "+presentationTablesCount);
-
     if(!tANDI.viewList_buttonAppended){
         $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewTableList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view table list</button>");
 
@@ -654,6 +640,8 @@ function TableInfo() {
 
 tANDI.presentationTables = new PresentationTables();
 tANDI.tableInfo = new TableInfo();
+
+tANDI.presentationTables = andiBar.createObjectValues(tANDI.presentationTables, 1);
 
 //analyze tables
 tANDI.analyze(tANDI.presentationTables);
