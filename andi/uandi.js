@@ -97,11 +97,7 @@ uANDI.analyze = function(objectClass){
             //It's a presentation table
             presentationTablesCount++;
         }
-        if($(this).isSemantically(["table","grid","treegrid"],"table")){
-            //It's a data table
-            dataTablesCount++;
-        }
-        else{
+        else if (!$(this).isSemantically(["table","grid","treegrid"],"table")) {
             //It table with a non-typical role
             presentationTablesCount++;
         }
