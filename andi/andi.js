@@ -4140,9 +4140,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 var attribute = objectClass.list[index].elementList[0].getAttribute(attrs[a]);
                 objectClass.list[index][attrs[a]] = attribute;
                 //objectClass.list[index].columnValues.push(attribute);
-                if (!objectClass.columnNames.includes(attrs[a])) {
-                    objectClass.columnNames.push(attrs[a]);
-                }
+                // if (!objectClass.columnNames.includes(attrs[a])) {
+                //     objectClass.columnNames.push(attrs[a]);
+                // }
             }
         }
     }
