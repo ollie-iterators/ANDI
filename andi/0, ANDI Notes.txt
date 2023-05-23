@@ -1,0 +1,5 @@
+# ANDI Notes:
+
+1. The html5Hidden attribute does nothing and is just display:none.
+   This is because if display is not none, the element with the hidden
+   attribute will be visible
