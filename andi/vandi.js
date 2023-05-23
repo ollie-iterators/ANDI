@@ -95,7 +95,8 @@ vANDI.analyze = function(objectClass){
     var activeElementFound = false;
     $(TestPageData.allElements).filter("table,[role=table],[role=grid],[role=treegrid]").each(function(){
         //Store this table in the array
-        objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", "", ""));
+        objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+        andiBar.getAttributes(objectClass, objectClass.list.length - 1);
         objectClass.elementNums[0] += 1;
         objectClass.elementStrings[0] += "data tables";
 
@@ -1600,13 +1601,12 @@ function buildArrayOnIndex(value){
 }
 
 //This object class is used to store data about each presentation table. Object instances will be placed into an array.
-function DataTable(elementList, index, nameDescription, role, alerts, rowClass) {
+function DataTable(elementList, index, nameDescription, alerts, rowClass) {
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription;
-    this.role            = role;
     this.alerts          = alerts;
-    this.columnValues    = [elementList, index, nameDescription, role, alerts];
+    this.columnValues    = [elementList, index, nameDescription, alerts];
     this.rowClass        = rowClass;
 }
 
@@ -1615,7 +1615,7 @@ function DataTables() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription", "role", "alerts"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
 }
 
 // This object class is used to keep track of the table information

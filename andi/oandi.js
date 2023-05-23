@@ -284,7 +284,7 @@ function CertainHeaders() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription", "alerts"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
     this.outlineReady   = false;
 }
 

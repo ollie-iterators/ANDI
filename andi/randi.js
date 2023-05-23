@@ -148,12 +148,12 @@ AndiOverlay.prototype.overlayReadingOrder = function(){
 };
 
 //This object class is used to store data about each landmark. Object instances will be placed into an array.
-function Landmark(elementList, index, nameDescription, alert, rowClass) {
+function Landmark(elementList, index, nameDescription, alerts, rowClass) {
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription;
-    this.alert           = alert;
-    this.columnValues    = [elementList, index, nameDescription, alert];
+    this.alerts          = alerts;
+    this.columnValues    = [elementList, index, nameDescription, alerts];
     this.rowClass        = rowClass;
 }
 
@@ -162,7 +162,7 @@ function Landmarks() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
 }
 
 // This object class is used to keep track of the table information

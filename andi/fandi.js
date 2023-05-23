@@ -235,7 +235,7 @@ function Focusables() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription", "alerts"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
 }
 
 // This object class is used to keep track of the table information

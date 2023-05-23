@@ -489,7 +489,7 @@ function HiddenElements() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription", "hidingTypes", "alerts"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "hidingTypes", "alerts"];
 }
 
 // This object class is used to keep track of the table information
