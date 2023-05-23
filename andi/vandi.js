@@ -1631,7 +1631,8 @@ vANDI.tableInfo = new TableInfo();
 
 //analyze tables
 vANDI.analyze(vANDI.dataTables);
-vANDI.results(vANDI.dataTables);
+//vANDI.results(vANDI.dataTables);
+andiBar.results(vANDI.dataTables, vANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
     "viewTableList",

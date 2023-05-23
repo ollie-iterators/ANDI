@@ -632,7 +632,8 @@ uANDI.tableInfo = new TableInfo();
 
 //analyze tables
 uANDI.analyze(uANDI.presentationTables);
-uANDI.results(uANDI.presentationTables);
+//uANDI.results(uANDI.presentationTables);
+andiBar.results(uANDI.presentationTables, uANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
     "viewTableList",
