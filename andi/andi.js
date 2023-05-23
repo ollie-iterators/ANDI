@@ -4302,6 +4302,14 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     columnName += ", [" + valueToAdd + "]";
                 }
 
+                for (var c = 0; c < tableModule.cssProperties.length; c += 1) {
+                    var valueToAdd;
+                    if (String(tableModule.cssProperties[c]).length > 0) {
+                        valueToAdd = String(tableModule.cssProperties[c]);
+                    }
+                    columnName += ", [" + valueToAdd + "]";
+                }
+
                 columnName = columnName.slice(2);
 
                 // Build the table
