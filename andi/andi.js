@@ -4139,7 +4139,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             for (var a = 0; a < attrs.length; a += 1) {
                 var attribute = objectClass.list[index].elementList[0].getAttribute(attrs[a]);
                 objectClass.list[index][attrs[a]] = attribute;
-                objectClass.list[index].columnValues.push(attribute);
+                //objectClass.list[index].columnValues.push(attribute);
                 if (!objectClass.columnNames.includes(attrs[a])) {
                     objectClass.columnNames.push(attrs[a]);
                 }
