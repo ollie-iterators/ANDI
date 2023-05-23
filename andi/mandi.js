@@ -19,20 +19,19 @@ AndiModule.cleanup = function(testPage, element){
 mANDI.analyze = function(objectClass){
     //Loop through every visible element and run tests
     $(TestPageData.allElements).each(function(){
-        //ANALYZE LINKS
-        if($(this).isSemantically(["link"],"a[href],a[tabindex],area")){
-            // Combine this with the later else if statement
-        }
         //Analyze elements that might be links
-        else if($(this).is("a")){
-            andiData = new AndiData(this);
-            isLinkKeyboardAccessible(undefined, this);
-            objectClass.list.push(new Link([this], objectClass.list.length + 1, "", "", ""));
-            mANDI.links.elementNums[0] += 1;
-            mANDI.links.elementStrings[0] = "possible links";
-            AndiData.attachDataToElement(this);
-            //Don't allow element to appear in next/prev flow or hover. Also remove highlight.
-            $(this).addClass("ANDI508-exclude-from-inspection").removeClass("ANDI508-highlight");
+        if ($(this).is("a")) {
+            if (!$(this).is("a[href],a[tabindex],area")) {
+                andiData = new AndiData(this);
+                isLinkKeyboardAccessible(undefined, this);
+                objectClass.list.push(new Link([this], objectClass.list.length + 1, "", "", ""));
+                mANDI.links.elementNums[0] += 1;
+                mANDI.links.elementStrings[0] = "possible links";
+                AndiData.attachDataToElement(this);
+                //Don't allow element to appear in next/prev flow or hover. Also remove highlight.
+                $(this).addClass("ANDI508-exclude-from-inspection").removeClass("ANDI508-highlight");
+            }
+
         }
     });
 
