@@ -115,68 +115,6 @@ AndiModule.inspect = function(element){
     }
 };
 
-//This function builds the table for the view list
-mANDI.viewList_buildTable = function(mode){
-    var tableHTML = "";
-    var rowClasses;
-    var appendHTML = "<div id='mANDI508-viewList' class='ANDI508-viewOtherResults-expanded' style='display:none;'><div id='mANDI508-viewList-tabs'>";
-    var nextPrevHTML = "<button id='mANDI508-viewList-button-prev' aria-label='Previous Item in the list' accesskey='"+andiHotkeyList.key_prev.key+"'><img src='"+icons_url+"prev.png' alt='' /></button>"+
-        "<button id='mANDI508-viewList-button-next' aria-label='Next Item in the list'  accesskey='"+andiHotkeyList.key_next.key+"'><img src='"+icons_url+"next.png' alt='' /></button>"+
-        "</div>"+
-        "<div class='ANDI508-scrollable'><table id='ANDI508-viewList-table' aria-label='"+mode+" List' tabindex='-1'><thead><tr>";
-
-    //BUILD LINKS LIST TABLE
-    var displayHref, targetText;
-    for(var x=0; x<mANDI.links.list.length; x++){
-        //get target text if internal link
-        displayHref = "";
-        targetText = "";
-        if(mANDI.links.list[x].href){//if has an href
-            if(!mANDI.isScriptedLink(mANDI.links.list[x])){
-                    if(mANDI.links.list[x].href.charAt(0) !== "#") //href doesn't start with # (points externally)
-                        targetText = "target='_mandi'";
-                    displayHref = "<a href='"+mANDI.links.list[x].href+"' "+targetText+">"+mANDI.links.list[x].href+"</a>";
-            }
-            else{ //href contains javascript
-                displayHref = mANDI.links.list[x].href;
-            }
-        }
-
-        //determine if there is an alert
-        rowClasses = "";
-        var nextTabButton = "";
-        if(mANDI.links.list[x].alerts.includes("Alert"))
-            rowClasses += "ANDI508-table-row-alert ";
-
-        if(mANDI.links.list[x].linkPurpose == "i"){
-            rowClasses += "mANDI508-listLinks-internal ";
-            var id = mANDI.links.list[x].href;
-            if(id.charAt(0) === "#")
-                id = id.substring(1, id.length);
-            nextTabButton = " <button class='mANDI508-nextTab' data-andi508-relatedid='"+
-                id+"' title='focus on the element after id="+
-                id+"'>next tab</button>";
-        }
-        else if(mANDI.links.list[x].linkPurpose == "e")
-            rowClasses += "mANDI508-listLinks-external ";
-
-        tableHTML += "<tr class='" + $.trim(rowClasses) + "'>"+
-            "<th scope='row'>"+mANDI.links.list[x].index+"</th>"+
-            "<td class='ANDI508-alert-column'>"+mANDI.links.list[x].alerts+"</td>"+
-            "<td><a href='javascript:void(0)' data-andi508-relatedindex='"+mANDI.links.list[x].index+"'>"+mANDI.links.list[x].nameDescription+"</a></td>"+
-            "<td class='ANDI508-code'>"+displayHref+nextTabButton+"</td>"+
-            "</tr>";
-    }
-
-    appendHTML += nextPrevHTML + "<th scope='col' style='width:5%'><a href='javascript:void(0)' aria-label='link number'>#<i aria-hidden='true'></i></a></th>"+
-        "<th scope='col' style='width:10%'><a href='javascript:void(0)'>Alerts&nbsp;<i aria-hidden='true'></i></a></th>"+
-        "<th scope='col' style='width:40%'><a href='javascript:void(0)'>Accessible&nbsp;Name&nbsp;&amp;&nbsp;Description&nbsp;<i aria-hidden='true'></i></a></th>"+
-        "<th scope='col' style='width:45%'><a href='javascript:void(0)'>href <i aria-hidden='true'></i></a></th>";
-
-    $("#ANDI508-additionalPageResults").append(appendHTML+"</tr></thead><tbody>"+tableHTML+"</tbody></table></div></div>");
-
-};
-
 //This function attaches the click,hover,focus events to the items in the view list
 mANDI.viewList_attachEvents = function(){
     //Add focus click to each link (output) in the table
