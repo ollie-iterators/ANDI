@@ -4371,7 +4371,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
                 andiResults.addNextTabButtonLogic();
 
-                andiBar.initializeModuleActionGroups("ANDI508-additionalPageResults");
+                andiBar.initializeModuleActionGroups();
+                // NOTE: initializeModuleActionGroups used to be:
+                // andiBar.initializeModuleActionGroups("ANDI508-additionalPageResults");
             }
         }
         //This function builds the table HTML

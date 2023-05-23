@@ -279,8 +279,6 @@ hANDI.results = function(objectClass){
 
     $("#ANDI508-module-actions").html(moduleActionButtons);
 
-    andiBar.initializeModuleActionGroups();
-
     //Define forceRevealAll button
     $("#ANDI508-forceRevealAll-button").click(function(){
         if($(this).attr("aria-pressed") === "false"){

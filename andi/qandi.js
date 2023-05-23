@@ -95,8 +95,6 @@ qANDI.results = function(){
 
     $("#ANDI508-module-actions").html(moduleActionButtons);
 
-    andiBar.initializeModuleActionGroups();
-
     //Define the page title button
     $("#ANDI508-pageTitle-button").click(function(){
         andiOverlay.overlayButton_on("overlay",$(this));
