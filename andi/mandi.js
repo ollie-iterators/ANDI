@@ -21,7 +21,8 @@ mANDI.analyze = function(objectClass){
     $(TestPageData.allElements).each(function(){
         //Analyze elements that might be links
         if ($(this).is("a")) {
-            if (!$(this).is("a[href],a[tabindex],area")) {
+            var href = $(this).attr("href");
+            if(typeof href === "undefined" && !$(this).attr("tabindex")) {
                 andiData = new AndiData(this);
                 isLinkKeyboardAccessible(undefined, this);
                 objectClass.list.push(new Link([this], objectClass.list.length + 1, "", "", ""));
@@ -31,7 +32,6 @@ mANDI.analyze = function(objectClass){
                 //Don't allow element to appear in next/prev flow or hover. Also remove highlight.
                 $(this).addClass("ANDI508-exclude-from-inspection").removeClass("ANDI508-highlight");
             }
-
         }
     });
 
