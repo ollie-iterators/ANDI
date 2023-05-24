@@ -4352,8 +4352,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                                 "<a href='javascript:void(0)' data-andi508-relatedindex='" + moduleList.list[x].index + "'>" + rowValues + "</a></td></tr>";
                 }
 
-                var tabsHTML = "";
-                // TODO: make addTabsButtons function
                 var tabsHTML = andiResults.addTabsButtons(tableModule);
 
                 if (tabsHTML != "") {
