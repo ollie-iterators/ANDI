@@ -4692,9 +4692,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 //TODO: This is not working right now
                 andiResults.alterClasses(module, "highlight", buttonText);
                 //Turn Off Ambiguous Button
-                if (module == "hANDI") {// TODO: Change to a different test
-                    andiBar.alterElements(technique);
-                }
+                // TODO: Think about how to make code for hANDI buttons (they work differently than the buttons for the
+                //       other modules)
                 andiOverlay.overlayButton_off("find", $("#ANDI508-highlightAmbiguous" + buttonType + "-button"));
                 andiResetter.resizeHeights();
                 return false;
