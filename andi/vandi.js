@@ -129,7 +129,7 @@ vANDI.analyze = function(objectClass){
 
         if(!activeElementFound)
             activeTableIndex = 0;//Analyze first table
-        analyzeTable(objectClass.list[activeTableIndex]);
+        analyzeTable(objectClass.list[activeTableIndex].elementList[0]);
 
         //If there are more than one table and prevTable/nextTable buttons haven't yet been added
         if(objectClass.elementNums[0] > 1 && $("#ANDI508-prevTable-button").length === 0){
@@ -187,7 +187,7 @@ vANDI.analyze = function(objectClass){
             else
                 activeTableIndex--;
             vANDI.reset();
-            analyzeTable(objectClass.list[activeTableIndex]);
+            analyzeTable(objectClass.list[activeTableIndex].elementList[0]);
             vANDI.results();
             andiFocuser.focusByIndex(1);
             vANDI.redoMarkup();
@@ -211,7 +211,7 @@ vANDI.analyze = function(objectClass){
                 activeTableIndex++;
 
             vANDI.reset();
-            analyzeTable(objectClass.list[activeTableIndex]);
+            analyzeTable(objectClass.list[activeTableIndex].elementList[0]);
             vANDI.results();
             andiFocuser.focusByIndex(1);
             vANDI.redoMarkup();
@@ -1278,10 +1278,10 @@ vANDI.viewList_buildTable = function(){
     for(var x=0; x<vANDI.dataTables.list.length; x++){
         appendHTML += "<tr";
         //Highlight the select table
-        if($(vANDI.dataTables.list[x]).hasClass("ANDI508-element"))
+        if($(vANDI.dataTables.list[x].elementList[0]).hasClass("ANDI508-element"))
             appendHTML += " class='ANDI508-table-row-inspecting' aria-selected='true'";
 
-        tableName = preCalculateTableName(vANDI.dataTables.list[x]);
+        tableName = preCalculateTableName(vANDI.dataTables.list[x].elementList[0]);
 
         appendHTML += "><th scope='role'>"+parseInt(x+1)+"</th><td>"+
             "<a href='javascript:void(0)' data-andi508-relatedtable='"+x+"'>"+
@@ -1369,13 +1369,13 @@ vANDI.viewList_buildTable = function(){
 vANDI.viewList_attachEvents = function(){
     //Add focus click to each link (output) in the table
     $("#ANDI508-viewList-table td a").each(function(){
-        andiLaser.createLaserTrigger($(this),$(vANDI.dataTables.list[$(this).attr("data-andi508-relatedtable")]));
+        andiLaser.createLaserTrigger($(this),$(vANDI.dataTables.list[$(this).attr("data-andi508-relatedtable")].elementList[0]));
     })
     .click(function(){//Jump to this table
         //Make this link appear selected
         vANDI.reset();
         activeTableIndex = $(this).attr("data-andi508-relatedtable");
-        analyzeTable(vANDI.dataTables.list[activeTableIndex]);
+        analyzeTable(vANDI.dataTables.list[activeTableIndex].elementList[0]);
         vANDI.results();
         andiFocuser.focusByIndex(1);
         vANDI.redoMarkup();
