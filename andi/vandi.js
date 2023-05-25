@@ -8,7 +8,7 @@ function init_module(){
 var vANDIVersionNumber = "11.2.1";
 
 //create vANDI instance
-var vANDI = new AndiModule(vANDIVersionNumber,"t");
+var vANDI = new AndiModule(vANDIVersionNumber,"v");
 
 //Delimeter for the the header cells
 vANDI.associatedHeaderCellsDelimeter = " <span aria-hidden='true'>|</span> ";
@@ -122,9 +122,6 @@ vANDI.analyze = function(objectClass){
         moduleActionButtons += (!AndiModule.activeActionButtons.scopeMode)? "true' class='ANDI508-module-action-active'" : "false'";
         moduleActionButtons += ">headers/id mode</button>";
 
-        //Markup Overlay Button
-        moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-markup-button' aria-label='Markup Overlay' aria-pressed='false'>markup"+overlayIcon+"</button>";
-
         $("#ANDI508-module-actions").html(moduleActionButtons);
 
         if(!activeElementFound)
@@ -145,7 +142,7 @@ vANDI.analyze = function(objectClass){
             andiResetter.softReset($("#ANDI508-testPage"));
             AndiModule.activeActionButtons.scopeMode = true;
             AndiModule.activeActionButtons.modeButtonsVisible = true;
-            AndiModule.launchModule("t");
+            AndiModule.launchModule("v");
             andiResetter.resizeHeights();
             return false;
         });
@@ -155,23 +152,7 @@ vANDI.analyze = function(objectClass){
             andiResetter.softReset($("#ANDI508-testPage"));
             AndiModule.activeActionButtons.scopeMode = false;
             AndiModule.activeActionButtons.modeButtonsVisible = true;
-            AndiModule.launchModule("t");
-            andiResetter.resizeHeights();
-            return false;
-        });
-
-        //Define markup button functionality
-        $("#ANDI508-markup-button").click(function(){
-            if($(this).attr("aria-pressed")=="false"){
-                andiOverlay.overlayButton_on("overlay",$(this));
-                andiOverlay.overlayTableMarkup();
-                AndiModule.activeActionButtons.markup = true;
-            }
-            else{
-                andiOverlay.overlayButton_off("overlay",$(this));
-                andiOverlay.removeOverlay("ANDI508-overlay-tableMarkup");
-                AndiModule.activeActionButtons.markup = false;
-            }
+            AndiModule.launchModule("v");
             andiResetter.resizeHeights();
             return false;
         });

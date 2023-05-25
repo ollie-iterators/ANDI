@@ -8,7 +8,7 @@ function init_module(){
 var uANDIVersionNumber = "11.2.1";
 
 //create uANDI instance
-var uANDI = new AndiModule(uANDIVersionNumber,"t");
+var uANDI = new AndiModule(uANDIVersionNumber,"u");
 
 //This function updates the Active Element Inspector when mouseover is on a given to a highlighted element.
 //Holding the shift key will prevent inspection from changing.
@@ -136,7 +136,7 @@ uANDI.analyze = function(objectClass){
             andiResetter.softReset($("#ANDI508-testPage"));
             AndiModule.activeActionButtons.scopeMode = true;
             AndiModule.activeActionButtons.modeButtonsVisible = true;
-            AndiModule.launchModule("t");
+            AndiModule.launchModule("u");
             andiResetter.resizeHeights();
             return false;
         });
@@ -146,7 +146,7 @@ uANDI.analyze = function(objectClass){
             andiResetter.softReset($("#ANDI508-testPage"));
             AndiModule.activeActionButtons.scopeMode = false;
             AndiModule.activeActionButtons.modeButtonsVisible = true;
-            AndiModule.launchModule("t");
+            AndiModule.launchModule("u");
             andiResetter.resizeHeights();
             return false;
         });
