@@ -1413,11 +1413,9 @@ AndiOverlay.prototype.overlayTableMarkup = function(){
 
 //This function will detect if markup button should be re-pressed
 vANDI.redoMarkup = function(){
-    if(AndiModule.activeActionButtons.markup){
-        andiOverlay.overlayButton_off("overlay",$("#ANDI508-markup-button"));
-        andiOverlay.removeOverlay("ANDI508-overlay-tableMarkup");
-        $("#ANDI508-markup-button").click();
-    }
+    andiOverlay.overlayButton_off("overlay",$("#ANDI508-markup-button"));
+    andiOverlay.removeOverlay("ANDI508-overlay-tableMarkup");
+    $("#ANDI508-markup-button").click();
 };
 
 vANDI.grab_headers = function(element, elementData, table){
@@ -1579,7 +1577,6 @@ vANDI.dataTables = andiBar.createObjectValues(vANDI.dataTables, 1);
 
 //analyze tables
 vANDI.analyze(vANDI.dataTables);
-//vANDI.results(vANDI.dataTables);
 andiBar.results(vANDI.dataTables, vANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([

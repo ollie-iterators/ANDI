@@ -454,11 +454,9 @@ AndiOverlay.prototype.overlayTableMarkup = function(){
 
 //This function will detect if markup button should be re-pressed
 uANDI.redoMarkup = function(){
-    if(AndiModule.activeActionButtons.markup){
-        andiOverlay.overlayButton_off("overlay",$("#ANDI508-markup-button"));
-        andiOverlay.removeOverlay("ANDI508-overlay-tableMarkup");
-        $("#ANDI508-markup-button").click();
-    }
+    andiOverlay.overlayButton_off("overlay",$("#ANDI508-markup-button"));
+    andiOverlay.removeOverlay("ANDI508-overlay-tableMarkup");
+    $("#ANDI508-markup-button").click();
 };
 
 uANDI.grab_headers = function(element, elementData, table){
@@ -590,7 +588,6 @@ uANDI.presentationTables = andiBar.createObjectValues(uANDI.presentationTables, 
 
 //analyze tables
 uANDI.analyze(uANDI.presentationTables);
-//uANDI.results(uANDI.presentationTables);
 andiBar.results(uANDI.presentationTables, uANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
