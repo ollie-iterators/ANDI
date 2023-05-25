@@ -591,7 +591,6 @@ uANDI.analyze(uANDI.presentationTables);
 andiBar.results(uANDI.presentationTables, uANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
-    "viewTableList",
     "markup"
 ]);
 
