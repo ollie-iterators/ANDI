@@ -4688,12 +4688,12 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             $(fullButtonClass).click(function () {
                 andiResults.viewList_selectTab(this, buttonClass);
                 andiResults.alterTable(module, buttonClass, buttonType, buttonText);
+
                 //Alter which classes are still on the page
-                //TODO: This is not working right now
                 andiResults.alterClasses(module, "highlight", buttonText);
-                //Turn Off Ambiguous Button
                 // TODO: Think about how to make code for hANDI buttons (they work differently than the buttons for the
                 //       other modules)
+                //Turn Off Ambiguous Button
                 andiOverlay.overlayButton_off("find", $("#ANDI508-highlightAmbiguous" + buttonType + "-button"));
                 andiResetter.resizeHeights();
                 return false;
