@@ -607,7 +607,7 @@ function PresentationTables() {
 function TableInfo() {
     this.tableMode      = "Presentation Tables";
     this.cssProperties  = [];
-    this.buttonTextList = [];
+    this.buttonTextList = ["Table Markup"];
     this.tabsTextList   = [];
 }
 

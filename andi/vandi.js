@@ -1616,7 +1616,7 @@ function DataTables() {
 function TableInfo() {
     this.tableMode      = "Data Tables";
     this.cssProperties  = [];
-    this.buttonTextList = [];
+    this.buttonTextList = ["Table Markup"];
     this.tabsTextList   = [];
 }
 
