@@ -4244,7 +4244,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 tableHeader = tableHeaderValue;
             }
 
-            var appendHTML = andiResults.viewList_buildTableHTML("", moduleClass);
+            var appendHTML = andiResults.viewList_buildTableHTML(tableHeader, moduleClass);
             var nextPrevHTML = "<button id='tableANDI508-" + moduleClass + "-button-prev' aria-label='Previous Item in the list' accesskey='" + andiHotkeyList.key_prev.key + "'><img src='" + icons_url + "prev.png' alt='' /></button>" +
                             "<button id='tableANDI508-" + moduleClass + "-button-next' aria-label='Next Item in the list'  accesskey='" + andiHotkeyList.key_next.key + "'><img src='" + icons_url + "next.png' alt='' /></button>" +
                             "</div>" +
