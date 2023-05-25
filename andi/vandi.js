@@ -40,7 +40,7 @@ $("#ANDI508-button-prevElement").off("click").click(function(){
         andiFocuser.focusByIndex(testPageData.andiElementIndex); //first element
     }
     else if(index == 1){
-        if(tableCountTotal <= 1)
+        if(vANDI.dataTables.list.length <= 1)
             //If there is only 1 table, loop back to last cell
             andiFocuser.focusByIndex(testPageData.andiElementIndex);
         else{
@@ -59,7 +59,7 @@ $("#ANDI508-button-prevElement").off("click").click(function(){
 $("#ANDI508-button-nextElement").off("click").click(function(){
     var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
     if(index == testPageData.andiElementIndex || isNaN(index)){
-        if(tableCountTotal <= 1)
+        if(vANDI.dataTables.list.length <= 1)
             //If there is only 1 table, loop back to first cell
             andiFocuser.focusByIndex(1);
         else
@@ -72,8 +72,6 @@ $("#ANDI508-button-nextElement").off("click").click(function(){
 });
 
 //These variables are for the page
-var tableCountTotal = 0;			//The total number of tables
-var tableArray = [];				//Stores all tables in an array
 var activeTableIndex = -1;			//The array index of the active table
 
 //These variables are for the current table being analyzed (the active table)
@@ -107,15 +105,13 @@ vANDI.analyze = function(objectClass){
         if(!activeElementFound &&
             ($(this).hasClass("ANDI508-element-active") || $(this).find("th.ANDI508-element-active,td.ANDI508-element-active").first().length ))
         {
-            activeTableIndex = tableCountTotal;//set this index to this table
+            activeTableIndex = objectClass.elementNums[0];//set this index to this table
             activeElementFound = true;
         }
-
-        tableCountTotal++;
     });
 
     //If the page has tables
-    if(tableCountTotal > 0){
+    if(objectClass.elementNums[0] > 0){
 
         var moduleActionButtons = "";
 
@@ -133,10 +129,10 @@ vANDI.analyze = function(objectClass){
 
         if(!activeElementFound)
             activeTableIndex = 0;//Analyze first table
-        analyzeTable(tableArray[activeTableIndex]);
+        analyzeTable(objectClass.list[activeTableIndex]);
 
         //If there are more than one table and prevTable/nextTable buttons haven't yet been added
-        if(tableCountTotal > 1 && $("#ANDI508-prevTable-button").length === 0){
+        if(objectClass.elementNums[0] > 1 && $("#ANDI508-prevTable-button").length === 0){
             //Add "prev table" and "next table" buttons
             $("#ANDI508-elementControls").append(
                 "<button id='ANDI508-prevTable-button' aria-label='Previous Table' title='Analyze Previous Table'><img src='"+icons_url+"prev-table.png' alt='' /></button> "+
@@ -187,11 +183,11 @@ vANDI.analyze = function(objectClass){
                 //focus on first table
                 activeTableIndex = 0;
             else if(activeTableIndex === 0)
-                activeTableIndex = tableArray.length-1;
+                activeTableIndex = objectClass.list.length-1;
             else
                 activeTableIndex--;
             vANDI.reset();
-            analyzeTable(tableArray[activeTableIndex]);
+            analyzeTable(objectClass.list[activeTableIndex]);
             vANDI.results();
             andiFocuser.focusByIndex(1);
             vANDI.redoMarkup();
@@ -209,13 +205,13 @@ vANDI.analyze = function(objectClass){
         //Define nextTable button functionality
         $("#ANDI508-nextTable-button")
         .click(function(){
-            if(activeTableIndex == tableArray.length-1)
+            if(activeTableIndex == objectClass.list.length-1)
                 activeTableIndex = 0;
             else
                 activeTableIndex++;
 
             vANDI.reset();
-            analyzeTable(tableArray[activeTableIndex]);
+            analyzeTable(objectClass.list[activeTableIndex]);
             vANDI.results();
             andiFocuser.focusByIndex(1);
             vANDI.redoMarkup();
@@ -1279,13 +1275,13 @@ vANDI.viewList_buildTable = function(){
 
     //Build table body
     var tableName;
-    for(var x=0; x<tableArray.length; x++){
+    for(var x=0; x<vANDI.dataTables.list.length; x++){
         appendHTML += "<tr";
         //Highlight the select table
-        if($(tableArray[x]).hasClass("ANDI508-element"))
+        if($(vANDI.dataTables.list[x]).hasClass("ANDI508-element"))
             appendHTML += " class='ANDI508-table-row-inspecting' aria-selected='true'";
 
-        tableName = preCalculateTableName(tableArray[x]);
+        tableName = preCalculateTableName(vANDI.dataTables.list[x]);
 
         appendHTML += "><th scope='role'>"+parseInt(x+1)+"</th><td>"+
             "<a href='javascript:void(0)' data-andi508-relatedtable='"+x+"'>"+
@@ -1373,13 +1369,13 @@ vANDI.viewList_buildTable = function(){
 vANDI.viewList_attachEvents = function(){
     //Add focus click to each link (output) in the table
     $("#ANDI508-viewList-table td a").each(function(){
-        andiLaser.createLaserTrigger($(this),$(tableArray[$(this).attr("data-andi508-relatedtable")]));
+        andiLaser.createLaserTrigger($(this),$(vANDI.dataTables.list[$(this).attr("data-andi508-relatedtable")]));
     })
     .click(function(){//Jump to this table
         //Make this link appear selected
         vANDI.reset();
         activeTableIndex = $(this).attr("data-andi508-relatedtable");
-        analyzeTable(tableArray[activeTableIndex]);
+        analyzeTable(vANDI.dataTables.list[activeTableIndex]);
         vANDI.results();
         andiFocuser.focusByIndex(1);
         vANDI.redoMarkup();
