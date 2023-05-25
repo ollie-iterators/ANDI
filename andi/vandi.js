@@ -933,7 +933,7 @@ function analyzeTable(table){
         //This is a little hack to force the table to go first in the index
         var lastIndex = testPageData.andiElementIndex; //remember the last index
         testPageData.andiElementIndex = 0; //setting this to 0 allows the element to be created at index 1, which places it before the cells
-        andiData = new AndiData(table[0]); //create the AndiData object
+        andiData = new AndiData(table); //create the AndiData object
 
         andiCheck.commonNonFocusableElementChecks(andiData, $(table));
         //andiCheck.detectDeprecatedHTML($(table));
@@ -1208,7 +1208,7 @@ function analyzeTable(table){
         //This is a little hack to force the table to go first in the index
         var lastIndex = testPageData.andiElementIndex; //remember the last index
         testPageData.andiElementIndex = 0; //setting this to 0 allows the element to be created at index 1, which places it before the cells
-        andiData = new AndiData(table[0]); //create the AndiData object
+        andiData = new AndiData(table); //create the AndiData object
 
         andiCheck.commonNonFocusableElementChecks(andiData, $(table));
 
