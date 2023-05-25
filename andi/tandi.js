@@ -333,7 +333,7 @@ function analyzeTable(table){
     var all_cells = $(all_rows).find("th,td").filter(":visible");
 
     //==PRESENTATION TABLE==//
-    andiData = new AndiData(table[0]);
+    andiData = new AndiData(table);
     andiCheck.commonNonFocusableElementChecks(andiData, $(table));
 
     var presentationTablesShouldNotHave = "";

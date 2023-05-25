@@ -341,7 +341,7 @@ function analyzeTable(table){
 
     if($.trim(role) && role !== "table" && role !== "grid" && role !== "treegrid"){
         //==TABLE WITH NONTYPICAL ROLE==//
-        andiData = new AndiData(table[0]);
+        andiData = new AndiData(table);
         andiAlerter.throwAlert(alert_004I,[role]);
         AndiData.attachDataToElement(table);
     }
