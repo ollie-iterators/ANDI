@@ -74,7 +74,6 @@ var activeTableIndex = -1;			//The array index of the active table
 AndiModule.initActiveActionButtons({
     scopeMode:true, //default, false == headersIdMode
     markup:false,
-    viewTableList:false,
     modeButtonsVisible:false
 });
 
@@ -220,35 +219,14 @@ tANDI.analyze = function(objectClass){
 var showStartUpSummaryText = "Only <span class='ANDI508-module-name-t'>presentation tables</span> were found on this page, no data tables.";
 //This function updates the results in the ANDI Bar
 tANDI.results = function(objectClass){
-    if(!tANDI.viewList_buttonAppended){
-        $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewTableList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view table list</button>");
-
-        //viewTableList Button
-        $("#ANDI508-viewTableList-button").click(function(){
-            if(!tANDI.viewList_tableReady){
-                tANDI.viewList_buildTable();
-                tANDI.viewList_attachEvents();
-                tANDI.viewList_tableReady = true;
-            }
-            tANDI.viewList_toggle(this);
-            andiResetter.resizeHeights();
-            return false;
-        });
-
-        tANDI.viewList_buttonAppended = true;
-    }
-
     andiBar.showElementControls();
-    if(!andiBar.focusIsOnInspectableElement())
+    if(!andiBar.focusIsOnInspectableElement()){
         andiBar.showStartUpSummary(showStartUpSummaryText,true);
+    }
     else
         $("#ANDI508-pageAnalysis").show();
 
     andiAlerter.updateAlertList();
-    if(!AndiModule.activeActionButtons.viewTableList && testPageData.numberOfAccessibilityAlertsFound > 0)
-        $("#ANDI508-alerts-list").show();
-    else
-        $("#ANDI508-alerts-list").hide();
 };
 
 //This function will inspect a table or table cell
@@ -464,7 +442,6 @@ tANDI.viewList_toggle = function(btn){
             .attr("aria-expanded","true")
             .find("img").attr("src",icons_url+"list-on.png");
         $("#tANDI508-viewList").slideDown(AndiSettings.andiAnimationSpeed).focus();
-        AndiModule.activeActionButtons.viewTableList = true;
     }
     else{
         //hide List, show alert list
@@ -475,7 +452,6 @@ tANDI.viewList_toggle = function(btn){
             .removeClass("ANDI508-viewOtherResults-button-expanded")
             .html(listIcon+"view table list")
             .attr("aria-expanded","false");
-        AndiModule.activeActionButtons.viewTableList = false;
     }
 };
 
@@ -645,7 +621,6 @@ tANDI.analyze(tANDI.presentationTables);
 andiBar.results(tANDI.presentationTables, tANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
-    "viewTableList",
     "markup"
 ]);
 

@@ -82,7 +82,6 @@ var colCount = 0;					//The total number of columns (maximum number of <th> or <
 AndiModule.initActiveActionButtons({
     scopeMode:true, //default, false == headersIdMode
     markup:false,
-    viewTableList:false,
     modeButtonsVisible:false
 });
 
@@ -214,24 +213,6 @@ showStartUpSummaryText += "Determine if the ANDI Output conveys a complete and m
 showStartUpSummaryText += "Tables should be tested one at a time - Press the next table button <img src='"+icons_url+"next-table.png' style='width:12px' alt='' /> to cycle through the tables.";
 //This function updates the results in the ANDI Bar
 vANDI.results = function(objectClass){
-    if(!vANDI.viewList_buttonAppended){
-        $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewTableList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view table list</button>");
-
-        //viewTableList Button
-        $("#ANDI508-viewTableList-button").click(function(){
-            if(!vANDI.viewList_tableReady){
-                vANDI.viewList_buildTable();
-                vANDI.viewList_attachEvents();
-                vANDI.viewList_tableReady = true;
-            }
-            vANDI.viewList_toggle(this);
-            andiResetter.resizeHeights();
-            return false;
-        });
-
-        vANDI.viewList_buttonAppended = true;
-    }
-
     andiBar.showElementControls();
     if(!andiBar.focusIsOnInspectableElement()){
         andiBar.showStartUpSummary(showStartUpSummaryText,true);
@@ -240,10 +221,6 @@ vANDI.results = function(objectClass){
         $("#ANDI508-pageAnalysis").show();
 
     andiAlerter.updateAlertList();
-    if(!AndiModule.activeActionButtons.viewTableList && testPageData.numberOfAccessibilityAlertsFound > 0)
-        $("#ANDI508-alerts-list").show();
-    else
-        $("#ANDI508-alerts-list").hide();
 };
 
 //This function will inspect a table or table cell
@@ -1397,7 +1374,6 @@ vANDI.viewList_toggle = function(btn){
             .attr("aria-expanded","true")
             .find("img").attr("src",icons_url+"list-on.png");
         $("#vANDI508-viewList").slideDown(AndiSettings.andiAnimationSpeed).focus();
-        AndiModule.activeActionButtons.viewTableList = true;
     }
     else{
         //hide List, show alert list
@@ -1408,7 +1384,6 @@ vANDI.viewList_toggle = function(btn){
             .removeClass("ANDI508-viewOtherResults-button-expanded")
             .html(listIcon+"view table list")
             .attr("aria-expanded","false");
-        AndiModule.activeActionButtons.viewTableList = false;
     }
 };
 
@@ -1608,7 +1583,6 @@ vANDI.analyze(vANDI.dataTables);
 andiBar.results(vANDI.dataTables, vANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
-    "viewTableList",
     "markup"
 ]);
 
