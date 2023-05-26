@@ -1,14 +1,14 @@
 /*==nANDI==*/
 	/*==ANDI Bar==*/
-	#ANDI508 #nANDI508-viewList-tabs
+	#ANDI508 #ANDI508-viewList-tabs
 		{margin-left:10px;}
-	#ANDI508 #nANDI508-viewList-tabs button
+	#ANDI508 #ANDI508-viewList-tabs button
 		{border:1px solid black; border-right:1px solid gray;
 		padding:3px 1em 3px 1em; position:relative; display:inline-block;}
-	#ANDI508 #nANDI508-viewList-tabs button:hover,
-	#ANDI508 #nANDI508-viewList-tabs button:focus
+	#ANDI508 #ANDI508-viewList-tabs button:hover,
+	#ANDI508 #ANDI508-viewList-tabs button:focus
 		{border:1px solid lemonchiffon;}
-	#ANDI508 #nANDI508-viewList-tabs button.ANDI508-tab-active
+	#ANDI508 #ANDI508-viewList-tabs button.ANDI508-tab-active
 		{color:#a4e8ff !important; text-decoration:underline !important; top:1px}
 
 	#ANDI508 #ANDI508-viewList-table td i

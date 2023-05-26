@@ -175,7 +175,7 @@ AndiModule.inspect = function(element){
 nANDI.viewList_buildTable = function(mode){
     var tableHTML = "";
     var rowClasses, tabsHTML;
-    var appendHTML = "<div id='nANDI508-viewList' class='ANDI508-viewOtherResults-expanded' style='display:none;'><div id='nANDI508-viewList-tabs'>";
+    var appendHTML = "<div id='nANDI508-viewList' class='ANDI508-viewOtherResults-expanded' style='display:none;'><div id='ANDI508-viewList-tabs'>";
     var nextPrevHTML = "<button id='nANDI508-viewList-button-prev' aria-label='Previous Item in the list' accesskey='"+andiHotkeyList.key_prev.key+"'><img src='"+icons_url+"prev.png' alt='' /></button>"+
         "<button id='nANDI508-viewList-button-next' aria-label='Next Item in the list'  accesskey='"+andiHotkeyList.key_next.key+"'><img src='"+icons_url+"next.png' alt='' /></button>"+
         "</div>"+
@@ -223,7 +223,7 @@ nANDI.viewList_attachEvents_buttons = function(){
 
 //This function handles the selection of a tab.
 nANDI.viewList_selectTab = function(tab){
-    $("#nANDI508-viewList-tabs button").removeClass().attr("aria-selected","false");
+    $("#ANDI508-viewList-tabs button").removeClass().attr("aria-selected","false");
     $(tab).addClass("ANDI508-tab-active").attr("aria-selected","true");
 };
 
