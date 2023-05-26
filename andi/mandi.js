@@ -135,21 +135,6 @@ mANDI.viewList_attachEvents_links = function(){
     });
 };
 
-//This function handles the selection of a tab.
-mANDI.viewList_selectTab = function(tab){
-    $("#mANDI508-viewList-tabs button").removeClass().attr("aria-selected","false");
-    $(tab).addClass("ANDI508-tab-active").attr("aria-selected","true");
-};
-
-//This function returns true if the href is a link that fires a script
-mANDI.isScriptedLink = function(href){
-    if(typeof href == "string"){
-        //broken up into three substrings so its not flagged in jslint
-        return(href.toLowerCase().substring(0, 3) === "jav" && href.toLowerCase().substring(3, 5) === "ascri" && href.toLowerCase().substring(8, 3) === "pt:");
-    }//else
-    return false;
-};
-
 //This object class is used to store data about each link. Object instances will be placed into an array.
 function Link(elementList, index, nameDescription, alerts, rowClass){
     this.elementList     = elementList;

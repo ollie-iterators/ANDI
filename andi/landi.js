@@ -402,12 +402,6 @@ lANDI.viewList_attachEvents_links = function(){
     });
 };
 
-//This function handles the selection of a tab.
-lANDI.viewList_selectTab = function(tab){
-    $("#lANDI508-viewList-tabs button").removeClass().attr("aria-selected","false");
-    $(tab).addClass("ANDI508-tab-active").attr("aria-selected","true");
-};
-
 //This function gets the href
 //if href length is greater than 1 and last char is a slash
 //This elimates false positives during comparisons since with or without slash is essentially the same
