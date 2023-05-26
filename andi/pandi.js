@@ -232,10 +232,7 @@ AndiModule.inspect = function(element){
 
         var elementData = $(element).data("andi508");
 
-        var addOnProps = AndiData.getAddOnProps(element, elementData,
-            [
-                "aria-level"
-            ]);
+        var addOnProps = AndiData.getAddOnProps(element, elementData, ["aria-level"]);
 
         andiBar.displayOutput(elementData, element, addOnProps);
         andiBar.displayTable(elementData, element, addOnProps);

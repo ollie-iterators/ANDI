@@ -101,15 +101,7 @@ AndiModule.inspect = function(element){
         andiBar.prepareActiveElementInspection(element);
 
         var elementData = $(element).data("andi508");
-        var addOnProps = AndiData.getAddOnProps(element, elementData,
-            [
-                "rel",
-                "download",
-                "media",
-                "target",
-                "type"
-            ]
-        );
+        var addOnProps = AndiData.getAddOnProps(element, elementData, ["type"]);
 
         andiBar.displayOutput(elementData, element, addOnProps);
         andiBar.displayTable(elementData, element, addOnProps);

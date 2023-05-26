@@ -1,0 +1,62 @@
+## Notes on attributes in ANDI ##
+
+
+# Attributes from Inspect #
+
+- Has no attributes from Inspect:
+  - cANDI (Color Contrast)
+  - fANDI (Focusable Elements)
+  - hANDI (Hidden Elements)
+
+- gANDI Attributes (Graphics/Images):
+  - longdesc: specifies a hyperlink to a detailed description of an image (Deprecated)
+  - ismap: specifies that the image is part of a server-side image map
+  - usemap: specifies an image (or an object) as an image map
+
+- gANDI CSS Properties (Graphics/Images):
+  - background-image: sets one or more background images for an element
+
+- iANDI Attributes (iFrames):
+  - src: specifies the location of the external resource
+
+- lANDI Attributes (Certain links):
+  - href: specifies the URL of the page the link goes to
+  - rel: specifies the relationship between the current document and the linked document
+  - download: specifies that the target will be downloaded when a user clicks on the hyperlink
+  - media: specifies what media/device the linked document is optimized for
+  - target: specifies where to open the linked document
+  - type: specifies the MIME type of the linked document
+
+- nANDI Attributes (Buttons):
+  - type: specifies the type of button
+
+- pANDI Attributes: (Certain Headers):
+  - aria-level: specifies the level of the heading
+
+- sANDI Attributes: (Live Regions):
+  - aria-live: indicates that an element will be updated, and describes the types of updates
+    the user agents, assistive technologies, and user can expect from the live region
+  - aria-atomic: indicates whether assistive technologies will present all, or only parts of,
+    the changed region based on the change notifications defined by the aria-relevant attribute
+  - aria-busy: indicates an element is being modified and that assistive technologies may want
+    to wait until the changes are complete before informing the user about the update
+  - aria-relevant: indicates what types of notifications the user agent will trigger when the
+    accessibility tree within a live region is modified
+
+- Table attributes (tANDI: Presentation Tables, uANDI: Strange Tables, vANDI: Data Tables):
+  - scope: specifies whether a header cell is a header for a column, row, or group of columns
+    or rows
+  - id: specifies a unique id for an HTML element
+  - colspan: defines the number of columns a table cell should span
+  - rowspan: defines the number of rows a cell should span
+  - aria-colcount: defines the total number of columns in a table, grid, or treegrid when not
+    all columns are present in the DOM
+  - aria-rowcount: defines the total number of rows in a table, grid, or treegrid
+  - aria-colindex: defines an element's column index or position with respect to the total
+    number of columns within a table, grid, or treegrid
+  - aria-rowindex: defines an element's position with respect to the total number of rows
+    within a table, grid, or treegrid
+  - aria-colspan: defines the number of columns spanned by a cell or gridcell within a table,
+    grid, or treegrid
+  - aria-rowspan: defines the number of rows spanned by a cell or gridcell within a table,
+    grid, or treegrid
