@@ -4144,11 +4144,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 //     objectClass.columnNames.push(attrs[a]);
                 // }
             }
-            var cssAttributes = getComputedStyle(objectClass.list[index].elementList[0]);
-            for (var c = 0; c < cssAttributes.length; c += 1) {
-                var attribute = cssAttributes[cssAttributes[c]];
-                objectClass.list[index][cssAttributes[c]] = attribute;
-            }
+        }
+        var cssAttributes = getComputedStyle(objectClass.list[index].elementList[0]);
+        for (var c = 0; c < cssAttributes.length; c += 1) {
+            var attribute = cssAttributes[cssAttributes[c]];
+            objectClass.list[index][cssAttributes[c]] = attribute;
         }
     }
 
