@@ -271,7 +271,6 @@ gANDI.analyze = function(objectClass){
 
 var showStartUpSummaryText = "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. ";
 showStartUpSummaryText += "Ensure that every meaningful/non-decorative image has a text equivalent.";
-
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
 AndiModule.inspect = function(element){

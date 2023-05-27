@@ -89,7 +89,6 @@ mANDI.analyze = function(objectClass){
 };
 
 var showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-l'>links</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every link.";
-
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
 AndiModule.inspect = function(element){

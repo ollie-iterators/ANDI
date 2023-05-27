@@ -212,7 +212,7 @@ var showStartUpSummaryText = "Discover accessibility markup for <span class='AND
 showStartUpSummaryText += "Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every data table cell. ";
 showStartUpSummaryText += "Tables should be tested one at a time - Press the next table button <img src='"+icons_url+"next-table.png' style='width:12px' alt='' /> to cycle through the tables.";
 //This function updates the results in the ANDI Bar
-vANDI.results = function(objectClass){
+vANDI.results = function(){
     andiBar.showElementControls();
     if(!andiBar.focusIsOnInspectableElement()){
         andiBar.showStartUpSummary(showStartUpSummaryText,true);

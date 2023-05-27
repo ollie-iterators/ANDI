@@ -220,7 +220,7 @@ uANDI.analyze = function(objectClass){
 
 var showStartUpSummaryText = "Only <span class='ANDI508-module-name-t'>presentation tables</span> were found on this page, no data tables.";
 //This function updates the results in the ANDI Bar
-uANDI.results = function(objectClass){
+uANDI.results = function(){
     andiBar.showElementControls();
     if(!andiBar.focusIsOnInspectableElement()){
         andiBar.showStartUpSummary(showStartUpSummaryText,true);

@@ -218,7 +218,7 @@ tANDI.analyze = function(objectClass){
 
 var showStartUpSummaryText = "Only <span class='ANDI508-module-name-t'>presentation tables</span> were found on this page, no data tables.";
 //This function updates the results in the ANDI Bar
-tANDI.results = function(objectClass){
+tANDI.results = function(){
     andiBar.showElementControls();
     if(!andiBar.focusIsOnInspectableElement()){
         andiBar.showStartUpSummary(showStartUpSummaryText,true);

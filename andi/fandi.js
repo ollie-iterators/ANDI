@@ -110,7 +110,6 @@ function AndiAccesskeys(){
 }
 
 var showStartUpSummaryText = "Discover accessibility markup for focusable elements by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every focusable element.";
-
 //This function will overlay the tab order sequence.
 //It will take into account, tabindexes that are greater than zero and less than zero
 AndiOverlay.prototype.overlayTabOrder = function(){

@@ -238,10 +238,10 @@ hANDI.detectCssInjectedContent = function(objectClass){
     }
 };
 
-//This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 var showStartUpSummaryText = "Discover <span class='ANDI508-module-name-h'>hidden content</span> that should be tested for accessibility using other ANDI modules. ";
 showStartUpSummaryText += "Use the style toggle buttons to force the hidden content to be revealed. The revealed content will not remain revealed after changing modules. ";
 showStartUpSummaryText += "Content injected with CSS may be invisible to a screen reader.";
+//This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 hANDI.results = function(objectClass){
 
     //Add Module Mode Buttons
