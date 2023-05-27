@@ -4251,9 +4251,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                             "<div class='ANDI508-scrollable'><table id='ANDI508-" + moduleClass + "-table' aria-label='" + mode + " List' tabindex='-1'><thead><tr>";
 
             if (moduleList.list.length > 0) {
-                // Build the column name
-                var columnName = "";
-
                 var attributesToAdd = [];
                 for (var x = 0; x < moduleList.list.length; x += 1) {
                     if (moduleList.list[x].elementList[0].hasAttributes()) {
@@ -4288,29 +4285,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     }
                 }
 
-                for (var x = 0; x < moduleList.columnNames.length; x += 1) {
-                    columnName += ", [" + moduleList.columnNames[x] + "]";
-                }
-
-                for (var x = 0; x < attributesToAdd.length; x += 1) {
-                    var valueToAdd;
-                    if (String(attributesToAdd[x]).charAt(0) == "-") {
-                        valueToAdd = String(attributesToAdd[x]).substring(1);
-                    } else {
-                        valueToAdd = String(attributesToAdd[x]);
-                    }
-                    columnName += ", [" + valueToAdd + "]";
-                }
-
-                for (var c = 0; c < tableModule.cssProperties.length; c += 1) {
-                    var valueToAdd;
-                    if (String(tableModule.cssProperties[c]).length > 0) {
-                        valueToAdd = String(tableModule.cssProperties[c]);
-                    }
-                    columnName += ", [" + valueToAdd + "]";
-                }
-
-                columnName = columnName.slice(2);
+                // Build the column name
+                var columnName = andiResults.createColumnName(moduleList, tableModule, attributesToAdd);
 
                 // Build the table
                 for (var x = 0; x < moduleList.list.length; x += 1) {
@@ -4374,6 +4350,36 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 // andiBar.initializeModuleActionGroups("ANDI508-additionalPageResults");
             }
         }
+        //This function will build the column name for the table
+        this.createColumnName = function (moduleList, tableModule, attributesToAdd) {
+            var columnName = "";
+            for (var x = 0; x < moduleList.columnNames.length; x += 1) {
+                columnName += ", [" + moduleList.columnNames[x] + "]";
+            }
+
+            for (var x = 0; x < attributesToAdd.length; x += 1) {
+                var valueToAdd;
+                if (String(attributesToAdd[x]).charAt(0) == "-") {
+                    valueToAdd = String(attributesToAdd[x]).substring(1);
+                } else {
+                    valueToAdd = String(attributesToAdd[x]);
+                }
+                columnName += ", [" + valueToAdd + "]";
+            }
+
+            for (var c = 0; c < tableModule.cssProperties.length; c += 1) {
+                var valueToAdd;
+                if (String(tableModule.cssProperties[c]).length > 0) {
+                    valueToAdd = String(tableModule.cssProperties[c]);
+                }
+                columnName += ", [" + valueToAdd + "]";
+            }
+
+            columnName = columnName.slice(2);
+
+            return columnName;
+        }
+
         //This function builds the table HTML
         this.viewList_buildTableHTML = function (tableHeader = "", moduleClass = "viewList", isFirst = false) {
             var appendHTML = "<div id='ANDI508-" + moduleClass + "' class='ANDI508-viewOtherResults-expanded'"
