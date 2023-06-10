@@ -11,7 +11,6 @@ var fANDI = new AndiModule(fandiVersionNumber,"f");
 
 //This function will analyze the test page for focusable element related markup relating to accessibility
 fANDI.analyze = function(objectClass){
-
     //Loop through every visible element and run tests
     $(TestPageData.allElements).each(function(){
         if($(this).is(":focusable,canvas")){//If element is focusable, search for accessibility components.
@@ -33,14 +32,6 @@ fANDI.analyze = function(objectClass){
             andiCheck.isThisElementDisabled(this);
         }
 
-        if ($(this).attr("title")) {
-            objectClass.elementNums[1] += 1;
-            objectClass.elementStrings[1] = "title attributes"
-        }
-        if ($(this).is("label")) {
-            objectClass.elementNums[2] += 1;
-            objectClass.elementStrings[2] = "label tags"
-        }
 
     });
 
@@ -111,7 +102,6 @@ function AndiAccesskeys(){
 }
 
 var showStartUpSummaryText = "Discover accessibility markup for focusable elements by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every focusable element.";
-
 //This function will overlay the tab order sequence.
 //It will take into account, tabindexes that are greater than zero and less than zero
 AndiOverlay.prototype.overlayTabOrder = function(){
@@ -197,13 +187,19 @@ AndiOverlay.prototype.overlayLabelTags = function(){
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
 AndiModule.inspect = function(element){
-    andiBar.prepareActiveElementInspection(element);
+    if ($(element).hasClass("ANDI508-element")) {
 
-    var elementData = $(element).data("andi508");
-    var addOnProps = AndiData.getAddOnProps(element, elementData);
+        //Highlight the row in the list that associates with this element
+        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
 
-    andiBar.displayOutput(elementData, element, addOnProps);
-    andiBar.displayTable(elementData, element, addOnProps);
+        andiBar.prepareActiveElementInspection(element);
+
+        var elementData = $(element).data("andi508");
+        var addOnProps = AndiData.getAddOnProps(element, elementData);
+
+        andiBar.displayOutput(elementData, element, addOnProps);
+        andiBar.displayTable(elementData, element, addOnProps);
+    }
 };
 
 // This is where the added code for the module goes
@@ -236,14 +232,14 @@ function Focusables() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription", "alerts"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
 }
 
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Focusable Elements";
     this.cssProperties  = [];
-    this.buttonTextList = ["Tab Sequence", "Title Attributes", "Label Tags"];
+    this.buttonTextList = ["Tab Sequence"];
     this.tabsTextList   = [];
 }
 

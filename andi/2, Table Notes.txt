@@ -1,0 +1,11 @@
+## Table Notes ##
+
+# Buttons
+  - The scope mode / headers mode buttons only appear when ANDI detects that the
+    table is using the html headers attribute. Otherwise, ANDI defaults to scope
+    mode and doesn't display the toggle buttons.
+    - NOTE: This means that these buttons should not be used with presentation
+            tables (tANDI), and strange tables (uANDI).
+ - Also, the markup button should not be used with presentation tables (tANDI)
+   and strange tables (uANDI).
+    - This is because it does not have any areas to be examined by it.

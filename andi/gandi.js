@@ -23,13 +23,9 @@ AndiModule.cleanup = function(testPage, element){
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 gANDI.analyze = function(objectClass){
-
-
     var isImageContainedByInteractiveWidget; //boolean if image is contained by link or button
-
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
-
         var closestWidgetParent;
         //Determine if the image is contained by an interactive widget (link, button)
         isImageContainedByInteractiveWidget = false; //reset boolean
@@ -60,6 +56,7 @@ gANDI.analyze = function(objectClass){
                     andiData = new AndiData(closestWidgetParent[0]);
                     andiCheck.commonFocusableElementChecks(andiData, $(closestWidgetParent));
                     objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
+                    andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                     objectClass.elementNums[0] += 1;
                     objectClass.elementStrings[0] = "images";
                     AndiData.attachDataToElement(closestWidgetParent);
@@ -75,6 +72,7 @@ gANDI.analyze = function(objectClass){
                 objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0171);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -84,6 +82,7 @@ gANDI.analyze = function(objectClass){
                 objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0172);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -93,6 +92,7 @@ gANDI.analyze = function(objectClass){
                 objectClass.elementStrings[1] = "inline images";
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -103,6 +103,7 @@ gANDI.analyze = function(objectClass){
                 andiCheck.commonFocusableElementChecks(andiData, $(this));
                 altTextAnalysis($.trim($(this).attr("alt")));
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -113,6 +114,7 @@ gANDI.analyze = function(objectClass){
                 objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0173);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -138,6 +140,7 @@ gANDI.analyze = function(objectClass){
                 }
 
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -154,6 +157,7 @@ gANDI.analyze = function(objectClass){
                         andiCheck.commonFocusableElementChecks(andiData, $(this));
                         altTextAnalysis($.trim($(this).attr("alt")));
                         objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
+                        andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                         objectClass.elementNums[0] += 1;
                         objectClass.elementStrings[0] = "images";
                         AndiData.attachDataToElement(this);
@@ -171,6 +175,7 @@ gANDI.analyze = function(objectClass){
                 //objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0134);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -181,6 +186,7 @@ gANDI.analyze = function(objectClass){
             objectClass.elementStrings[2] = "background images";
             $(this).addClass("gANDI508-background");
             objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "images";
         }
@@ -199,10 +205,11 @@ gANDI.analyze = function(objectClass){
             if(!$(this).hasClass("ANDI508-element")){
                 andiData = new AndiData(this);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+                objectClass.elementNums[0] += 1;
+                objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
             }
-            objectClass.elementNums[0] += 1;
-            objectClass.elementStrings[0] = "images";
             objectClass.elementNums[4] += 1;
             objectClass.elementStrings[4] = "font icons";
             $(this).addClass("gANDI508-fontIcon");
@@ -244,7 +251,7 @@ gANDI.analyze = function(objectClass){
         return ( hasPrivateUseUnicode("before") || hasPrivateUseUnicode("after") );
 
         function hasPrivateUseUnicode(psuedo){
-            var content = (oldIE) ? "" : window.getComputedStyle(element, ":"+psuedo).content;
+            var content = window.getComputedStyle(element, ":"+psuedo).content;
             if(content !== "none" && content !== "normal" && content !== "counter" && content !== "\"\""){//content is not none or empty string
                 var unicode;
                 //starts at 1 and end at length-1 to ignore the starting and ending double quotes
@@ -261,13 +268,15 @@ gANDI.analyze = function(objectClass){
     }
 };
 
-var showStartUpSummaryText = "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. ";
-showStartUpSummaryText += "Ensure that every meaningful/non-decorative image has a text equivalent.";
-
+var showStartUpSummaryText = "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Ensure that every meaningful/non-decorative image has a text equivalent.";
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
 AndiModule.inspect = function(element){
-    if($(element).hasClass("ANDI508-element")){
+    if ($(element).hasClass("ANDI508-element")) {
+
+        //Highlight the row in the list that associates with this element
+        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
+
         andiBar.prepareActiveElementInspection(element);
 
         //format background-image
@@ -334,7 +343,7 @@ function Images() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription", "alerts"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
 }
 
 // This object class is used to keep track of the table information

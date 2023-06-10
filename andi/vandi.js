@@ -8,7 +8,7 @@ function init_module(){
 var vANDIVersionNumber = "11.2.1";
 
 //create vANDI instance
-var vANDI = new AndiModule(vANDIVersionNumber,"t");
+var vANDI = new AndiModule(vANDIVersionNumber,"v");
 
 //Delimeter for the the header cells
 vANDI.associatedHeaderCellsDelimeter = " <span aria-hidden='true'>|</span> ";
@@ -40,7 +40,7 @@ $("#ANDI508-button-prevElement").off("click").click(function(){
         andiFocuser.focusByIndex(testPageData.andiElementIndex); //first element
     }
     else if(index == 1){
-        if(tableCountTotal <= 1)
+        if(vANDI.dataTables.list.length <= 1)
             //If there is only 1 table, loop back to last cell
             andiFocuser.focusByIndex(testPageData.andiElementIndex);
         else{
@@ -59,7 +59,7 @@ $("#ANDI508-button-prevElement").off("click").click(function(){
 $("#ANDI508-button-nextElement").off("click").click(function(){
     var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
     if(index == testPageData.andiElementIndex || isNaN(index)){
-        if(tableCountTotal <= 1)
+        if(vANDI.dataTables.list.length <= 1)
             //If there is only 1 table, loop back to first cell
             andiFocuser.focusByIndex(1);
         else
@@ -72,10 +72,6 @@ $("#ANDI508-button-nextElement").off("click").click(function(){
 });
 
 //These variables are for the page
-var tableCountTotal = 0;			//The total number of tables
-var presentationTablesCount = 0;	//The total number of presentation tables
-var dataTablesCount = 0;			//The total number of data tables (tables that aren't presentation tables)
-var tableArray = [];				//Stores all tables in an array
 var activeTableIndex = -1;			//The array index of the active table
 
 //These variables are for the current table being analyzed (the active table)
@@ -86,7 +82,6 @@ var colCount = 0;					//The total number of columns (maximum number of <th> or <
 AndiModule.initActiveActionButtons({
     scopeMode:true, //default, false == headersIdMode
     markup:false,
-    viewTableList:false,
     modeButtonsVisible:false
 });
 
@@ -96,28 +91,26 @@ vANDI.analyze = function(objectClass){
     var activeElementFound = false;
     $(TestPageData.allElements).filter("table,[role=table],[role=grid],[role=treegrid]").each(function(){
         //Store this table in the array
-        objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", "", ""));
-        objectClass.elementNums[0] += 1;
-        objectClass.elementStrings[0] += "data tables";
+
 
         if($(this).isSemantically(["table","grid","treegrid"],"table")){
-            //It's a data table
-            dataTablesCount++;
+            objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] += "data tables";
         }
 
         //Determine if this is a refresh of vANDI (there is an active element)
         if(!activeElementFound &&
             ($(this).hasClass("ANDI508-element-active") || $(this).find("th.ANDI508-element-active,td.ANDI508-element-active").first().length ))
         {
-            activeTableIndex = tableCountTotal;//set this index to this table
+            activeTableIndex = objectClass.elementNums[0];//set this index to this table
             activeElementFound = true;
         }
-
-        tableCountTotal++;
     });
 
     //If the page has tables
-    if(tableCountTotal > 0){
+    if(objectClass.elementNums[0] > 0){
 
         var moduleActionButtons = "";
 
@@ -128,17 +121,14 @@ vANDI.analyze = function(objectClass){
         moduleActionButtons += (!AndiModule.activeActionButtons.scopeMode)? "true' class='ANDI508-module-action-active'" : "false'";
         moduleActionButtons += ">headers/id mode</button>";
 
-        //Markup Overlay Button
-        moduleActionButtons += "<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-markup-button' aria-label='Markup Overlay' aria-pressed='false'>markup"+overlayIcon+"</button>";
-
         $("#ANDI508-module-actions").html(moduleActionButtons);
 
         if(!activeElementFound)
             activeTableIndex = 0;//Analyze first table
-        analyzeTable(tableArray[activeTableIndex]);
+        analyzeTable(objectClass.list[activeTableIndex].elementList[0]);
 
         //If there are more than one table and prevTable/nextTable buttons haven't yet been added
-        if(tableCountTotal > 1 && $("#ANDI508-prevTable-button").length === 0){
+        if(objectClass.elementNums[0] > 1 && $("#ANDI508-prevTable-button").length === 0){
             //Add "prev table" and "next table" buttons
             $("#ANDI508-elementControls").append(
                 "<button id='ANDI508-prevTable-button' aria-label='Previous Table' title='Analyze Previous Table'><img src='"+icons_url+"prev-table.png' alt='' /></button> "+
@@ -151,7 +141,7 @@ vANDI.analyze = function(objectClass){
             andiResetter.softReset($("#ANDI508-testPage"));
             AndiModule.activeActionButtons.scopeMode = true;
             AndiModule.activeActionButtons.modeButtonsVisible = true;
-            AndiModule.launchModule("t");
+            AndiModule.launchModule("v");
             andiResetter.resizeHeights();
             return false;
         });
@@ -161,23 +151,7 @@ vANDI.analyze = function(objectClass){
             andiResetter.softReset($("#ANDI508-testPage"));
             AndiModule.activeActionButtons.scopeMode = false;
             AndiModule.activeActionButtons.modeButtonsVisible = true;
-            AndiModule.launchModule("t");
-            andiResetter.resizeHeights();
-            return false;
-        });
-
-        //Define markup button functionality
-        $("#ANDI508-markup-button").click(function(){
-            if($(this).attr("aria-pressed")=="false"){
-                andiOverlay.overlayButton_on("overlay",$(this));
-                andiOverlay.overlayTableMarkup();
-                AndiModule.activeActionButtons.markup = true;
-            }
-            else{
-                andiOverlay.overlayButton_off("overlay",$(this));
-                andiOverlay.removeOverlay("ANDI508-overlay-tableMarkup");
-                AndiModule.activeActionButtons.markup = false;
-            }
+            AndiModule.launchModule("v");
             andiResetter.resizeHeights();
             return false;
         });
@@ -189,12 +163,11 @@ vANDI.analyze = function(objectClass){
                 //focus on first table
                 activeTableIndex = 0;
             else if(activeTableIndex === 0)
-                activeTableIndex = tableArray.length-1;
+                activeTableIndex = objectClass.list.length-1;
             else
                 activeTableIndex--;
             vANDI.reset();
-            analyzeTable(tableArray[activeTableIndex]);
-            vANDI.results();
+            analyzeTable(objectClass.list[activeTableIndex].elementList[0]);
             andiFocuser.focusByIndex(1);
             vANDI.redoMarkup();
             vANDI.viewList_highlightSelectedTable(activeTableIndex, true);
@@ -211,14 +184,13 @@ vANDI.analyze = function(objectClass){
         //Define nextTable button functionality
         $("#ANDI508-nextTable-button")
         .click(function(){
-            if(activeTableIndex == tableArray.length-1)
+            if(activeTableIndex == objectClass.list.length-1)
                 activeTableIndex = 0;
             else
                 activeTableIndex++;
 
             vANDI.reset();
-            analyzeTable(tableArray[activeTableIndex]);
-            vANDI.results();
+            analyzeTable(objectClass.list[activeTableIndex].elementList[0]);
             andiFocuser.focusByIndex(1);
             vANDI.redoMarkup();
             vANDI.viewList_highlightSelectedTable(activeTableIndex, true);
@@ -237,88 +209,53 @@ vANDI.analyze = function(objectClass){
 var showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-t'>tables</span> by tabbing to or hovering over the table cells. " ;
 showStartUpSummaryText += "Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every data table cell. ";
 showStartUpSummaryText += "Tables should be tested one at a time - Press the next table button <img src='"+icons_url+"next-table.png' style='width:12px' alt='' /> to cycle through the tables.";
-//This function updates the results in the ANDI Bar
-vANDI.results = function(objectClass){
-
-    //Update Results Summary text depending on the active table type (data or presentation)
-    andiBar.updateResultsSummary("Data Tables: "+dataTablesCount);
-
-    if(tableCountTotal > 0){
-        if(!vANDI.viewList_buttonAppended){
-            $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewTableList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view table list</button>");
-
-            //viewTableList Button
-            $("#ANDI508-viewTableList-button").click(function(){
-                if(!vANDI.viewList_tableReady){
-                    vANDI.viewList_buildTable();
-                    vANDI.viewList_attachEvents();
-                    vANDI.viewList_tableReady = true;
-                }
-                vANDI.viewList_toggle(this);
-                andiResetter.resizeHeights();
-                return false;
-            });
-
-            vANDI.viewList_buttonAppended = true;
-        }
-    }
-
-
-    andiBar.showElementControls();
-    if(!andiBar.focusIsOnInspectableElement()){
-        andiBar.showStartUpSummary(showStartUpSummaryText,true);
-    }
-    else
-        $("#ANDI508-pageAnalysis").show();
-
-    andiAlerter.updateAlertList();
-    if(!AndiModule.activeActionButtons.viewTableList && testPageData.numberOfAccessibilityAlertsFound > 0)
-        $("#ANDI508-alerts-list").show();
-    else
-        $("#ANDI508-alerts-list").hide();
-};
-
 //This function will inspect a table or table cell
 AndiModule.inspect = function(element){
-    andiBar.prepareActiveElementInspection(element);
+    if ($(element).hasClass("ANDI508-element")) {
 
-    //Remove other vANDI highlights
-    $("#ANDI508-testPage .vANDI508-highlight").removeClass("vANDI508-highlight");
-    //Highlight This Element
-    $(element).addClass("vANDI508-highlight");
+        //Highlight the row in the list that associates with this element
+        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
 
-    var associatedHeaderCellsText = (!$(element).is("table,[role=table],[role=grid],[role=treegrid]")) ? grabHeadersAndHighlightRelatedCells(element) : "";
+        andiBar.prepareActiveElementInspection(element);
 
-    var elementData = $(element).data("andi508");
+        //Remove other vANDI highlights
+        $("#ANDI508-testPage .vANDI508-highlight").removeClass("vANDI508-highlight");
+        //Highlight This Element
+        $(element).addClass("vANDI508-highlight");
 
-    if(associatedHeaderCellsText){
-        associatedHeaderCellsText = "<span class='ANDI508-display-headerText'>" + associatedHeaderCellsText + "</span>";
-        elementData.components.headerText = associatedHeaderCellsText;
+        var associatedHeaderCellsText = (!$(element).is("table,[role=table],[role=grid],[role=treegrid]")) ? grabHeadersAndHighlightRelatedCells(element) : "";
+
+        var elementData = $(element).data("andi508");
+
+        if(associatedHeaderCellsText){
+            associatedHeaderCellsText = "<span class='ANDI508-display-headerText'>" + associatedHeaderCellsText + "</span>";
+            elementData.components.headerText = associatedHeaderCellsText;
+        }
+
+        var addOnProps = AndiData.getAddOnProps(element, elementData,
+            [
+                ["scope", $(element).attr("scope")],
+                ["id", element.id],
+                "colspan",
+                "rowspan",
+                "aria-colcount",
+                "aria-rowcount",
+                "aria-colindex",
+                "aria-rowindex",
+                "aria-colspan",
+                "aria-rowspan"
+            ]);
+
+        andiBar.displayOutput(elementData, element, addOnProps);
+
+        //insert the associatedHeaderCellsText into the output if there are no danger alerts
+        if(associatedHeaderCellsText && elementData.dangers.length === 0){
+            var outputText = document.getElementById("ANDI508-outputText");
+            $(outputText).html(associatedHeaderCellsText + " " + $(outputText).html());
+        }
+
+        andiBar.displayTable(elementData, element, addOnProps);
     }
-
-    var addOnProps = AndiData.getAddOnProps(element, elementData,
-        [
-            ["scope", $(element).attr("scope")],
-            ["id", element.id],
-            "colspan",
-            "rowspan",
-            "aria-colcount",
-            "aria-rowcount",
-            "aria-colindex",
-            "aria-rowindex",
-            "aria-colspan",
-            "aria-rowspan"
-        ]);
-
-    andiBar.displayOutput(elementData, element, addOnProps);
-
-    //insert the associatedHeaderCellsText into the output if there are no danger alerts
-    if(associatedHeaderCellsText && elementData.dangers.length === 0){
-        var outputText = document.getElementById("ANDI508-outputText");
-        $(outputText).html(associatedHeaderCellsText + " " + $(outputText).html());
-    }
-
-    andiBar.displayTable(elementData, element, addOnProps);
 
     //This function will grab associated header cells and add highlights
     function grabHeadersAndHighlightRelatedCells(element){
@@ -946,7 +883,7 @@ function analyzeTable(table){
         //This is a little hack to force the table to go first in the index
         var lastIndex = testPageData.andiElementIndex; //remember the last index
         testPageData.andiElementIndex = 0; //setting this to 0 allows the element to be created at index 1, which places it before the cells
-        andiData = new AndiData(table[0]); //create the AndiData object
+        andiData = new AndiData(table); //create the AndiData object
 
         andiCheck.commonNonFocusableElementChecks(andiData, $(table));
         //andiCheck.detectDeprecatedHTML($(table));
@@ -1221,7 +1158,7 @@ function analyzeTable(table){
         //This is a little hack to force the table to go first in the index
         var lastIndex = testPageData.andiElementIndex; //remember the last index
         testPageData.andiElementIndex = 0; //setting this to 0 allows the element to be created at index 1, which places it before the cells
-        andiData = new AndiData(table[0]); //create the AndiData object
+        andiData = new AndiData(table); //create the AndiData object
 
         andiCheck.commonNonFocusableElementChecks(andiData, $(table));
 
@@ -1272,9 +1209,6 @@ function analyzeTable(table){
     }
 }
 
-vANDI.viewList_tableReady = false;
-vANDI.viewList_buttonAppended = false;
-
 //This function will build the Table List html and inject into the ANDI Bar
 vANDI.viewList_buildTable = function(){
 
@@ -1288,13 +1222,13 @@ vANDI.viewList_buildTable = function(){
 
     //Build table body
     var tableName;
-    for(var x=0; x<tableArray.length; x++){
+    for(var x=0; x<vANDI.dataTables.list.length; x++){
         appendHTML += "<tr";
         //Highlight the select table
-        if($(tableArray[x]).hasClass("ANDI508-element"))
+        if($(vANDI.dataTables.list[x].elementList[0]).hasClass("ANDI508-element"))
             appendHTML += " class='ANDI508-table-row-inspecting' aria-selected='true'";
 
-        tableName = preCalculateTableName(tableArray[x]);
+        tableName = preCalculateTableName(vANDI.dataTables.list[x].elementList[0]);
 
         appendHTML += "><th scope='role'>"+parseInt(x+1)+"</th><td>"+
             "<a href='javascript:void(0)' data-andi508-relatedtable='"+x+"'>"+
@@ -1382,14 +1316,13 @@ vANDI.viewList_buildTable = function(){
 vANDI.viewList_attachEvents = function(){
     //Add focus click to each link (output) in the table
     $("#ANDI508-viewList-table td a").each(function(){
-        andiLaser.createLaserTrigger($(this),$(tableArray[$(this).attr("data-andi508-relatedtable")]));
+        andiLaser.createLaserTrigger($(this),$(vANDI.dataTables.list[$(this).attr("data-andi508-relatedtable")].elementList[0]));
     })
     .click(function(){//Jump to this table
         //Make this link appear selected
         vANDI.reset();
         activeTableIndex = $(this).attr("data-andi508-relatedtable");
-        analyzeTable(tableArray[activeTableIndex]);
-        vANDI.results();
+        analyzeTable(vANDI.dataTables.list[activeTableIndex].elementList[0]);
         andiFocuser.focusByIndex(1);
         vANDI.redoMarkup();
         vANDI.viewList_highlightSelectedTable(activeTableIndex, false);
@@ -1401,80 +1334,44 @@ vANDI.viewList_attachEvents = function(){
 //This function highlights the active table in the table list
 //index: refers to the index of the table in the tableArray
 vANDI.viewList_highlightSelectedTable = function(index, scrollIntoView){
-    if(vANDI.viewList_tableReady){
-        var activeTableFound = false;
-        $("#ANDI508-viewList-table td a").each(function(){
-            if(!activeTableFound && $(this).attr("data-andi508-relatedtable") == index){
-                //this is the active table
-                $(this).attr("aria-selected","true").closest("tr").addClass("ANDI508-table-row-inspecting");
-                if(scrollIntoView)
-                    this.scrollIntoView();
-                activeTableFound = true;
-            }
-            else//not the active table
-                $(this).removeAttr("aria-selected").closest("tr").removeClass();
-        });
-    }
-};
-
-//This function hide/shows the view list
-vANDI.viewList_toggle = function(btn){
-    if($(btn).attr("aria-expanded") === "false"){
-        //show List, hide alert list
-        $("#ANDI508-alerts-list").hide();
-        andiSettings.minimode(false);
-        $(btn)
-            .addClass("ANDI508-viewOtherResults-button-expanded")
-            .html(listIcon+"hide table list")
-            .attr("aria-expanded","true")
-            .find("img").attr("src",icons_url+"list-on.png");
-        $("#vANDI508-viewList").slideDown(AndiSettings.andiAnimationSpeed).focus();
-        AndiModule.activeActionButtons.viewTableList = true;
-    }
-    else{
-        //hide List, show alert list
-        $("#vANDI508-viewList").slideUp(AndiSettings.andiAnimationSpeed);
-        //$("#ANDI508-resultsSummary").show();
-        $("#ANDI508-alerts-list").show();
-        $(btn)
-            .removeClass("ANDI508-viewOtherResults-button-expanded")
-            .html(listIcon+"view table list")
-            .attr("aria-expanded","false");
-        AndiModule.activeActionButtons.viewTableList = false;
-    }
+    var activeTableFound = false;
+    $("#ANDI508-viewList-table td a").each(function(){
+        if(!activeTableFound && $(this).attr("data-andi508-relatedtable") == index){
+            //this is the active table
+            $(this).attr("aria-selected","true").closest("tr").addClass("ANDI508-table-row-inspecting");
+            if(scrollIntoView)
+                this.scrollIntoView();
+            activeTableFound = true;
+        }
+        else//not the active table
+            $(this).removeAttr("aria-selected").closest("tr").removeClass();
+    });
 };
 
 //This function will overlay the table markup.
 AndiOverlay.prototype.overlayTableMarkup = function(){
-    var scope, headers, id, role, markupOverlay;
+    var markupOverlay;
     $("#ANDI508-testPage [data-vANDI508-colindex]").each(function(){
-        scope = $(this).attr("scope");
-        headers = $(this).attr("headers");
-        id = this.id;
-        role = $(this).attr("role");
+        var attributesToGet = ["scope", "headers", "id", "role"];
 
         markupOverlay = $(this).prop("tagName").toLowerCase();
 
-        if(role)
-            markupOverlay += " role=" + role;
-        if(id)
-            markupOverlay += " id=" + id;
-        if(headers)
-            markupOverlay += " headers=" + headers;
-        if(scope)
-            markupOverlay += " scope=" + scope;
-
-        $(this).prepend(andiOverlay.createOverlay("ANDI508-overlay-tableMarkup", markupOverlay));
+        for (var a = 0; a < attributesToGet.length; a++) {
+            var attributeValue = $(this).attr(attributesToGet[a]);
+            if (attributeValue) {
+                markupOverlay += " " + attributesToGet[a] + "=" + attributeValue;
+            }
+        }
+        overlayObject = andiOverlay.createOverlay("ANDI508-overlay-tableMarkup", markupOverlay);
+        andiOverlay.insertAssociatedOverlay(this, overlayObject);
     });
 };
 
 //This function will detect if markup button should be re-pressed
 vANDI.redoMarkup = function(){
-    if(AndiModule.activeActionButtons.markup){
-        andiOverlay.overlayButton_off("overlay",$("#ANDI508-markup-button"));
-        andiOverlay.removeOverlay("ANDI508-overlay-tableMarkup");
-        $("#ANDI508-markup-button").click();
-    }
+    andiOverlay.overlayButton_off("overlay",$("#ANDI508-markup-button"));
+    andiOverlay.removeOverlay("ANDI508-overlay-tableMarkup");
+    $("#ANDI508-markup-button").click();
 };
 
 vANDI.grab_headers = function(element, elementData, table){
@@ -1604,13 +1501,12 @@ function buildArrayOnIndex(value){
 }
 
 //This object class is used to store data about each presentation table. Object instances will be placed into an array.
-function DataTable(elementList, index, nameDescription, role, alerts, rowClass) {
+function DataTable(elementList, index, nameDescription, alerts, rowClass) {
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription;
-    this.role            = role;
     this.alerts          = alerts;
-    this.columnValues    = [elementList, index, nameDescription, role, alerts];
+    this.columnValues    = [elementList, index, nameDescription, alerts];
     this.rowClass        = rowClass;
 }
 
@@ -1619,26 +1515,27 @@ function DataTables() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription", "role", "alerts"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
 }
 
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Data Tables";
     this.cssProperties  = [];
-    this.buttonTextList = [];
+    this.buttonTextList = ["Table Markup"];
     this.tabsTextList   = [];
 }
 
 vANDI.dataTables = new DataTables();
 vANDI.tableInfo = new TableInfo();
 
+vANDI.dataTables = andiBar.createObjectValues(vANDI.dataTables, 1);
+
 //analyze tables
 vANDI.analyze(vANDI.dataTables);
-vANDI.results(vANDI.dataTables);
+andiBar.results(vANDI.dataTables, vANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
-    "viewTableList",
     "markup"
 ]);
 

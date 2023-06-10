@@ -1,29 +1,29 @@
-/*==sANDI==*/
+/*==oANDI==*/
 	/*==ANDI Bar==*/
-	#ANDI508 #sANDI508-outline-container #sANDI508-outline-heading
+	#ANDI508 #ANDI508-outline-container #oANDI508-outline-heading
 		{display:inline-block; margin-bottom:2px;}
-	#ANDI508 #sANDI508-outline-container
+	#ANDI508 #ANDI508-outline-container
 		{display:none;}
-	#ANDI508 #sANDI508-outline-container .ANDI508-scrollable
+	#ANDI508 #ANDI508-outline-container .ANDI508-scrollable
 		{font-family:monospace; padding:5px 0px 1px 1em;}
-	#ANDI508 #sANDI508-outline-container .ANDI508-scrollable br
+	#ANDI508 #ANDI508-outline-container .ANDI508-scrollable br
 		{font-size:11pt;}
-	#ANDI508 #sANDI508-outline-container .ANDI508-scrollable a:hover,
-	#ANDI508 #sANDI508-outline-container .ANDI508-scrollable a:focus
+	#ANDI508 #ANDI508-outline-container .ANDI508-scrollable a:hover,
+	#ANDI508 #ANDI508-outline-container .ANDI508-scrollable a:focus
 		{text-decoration:underline !important; color:#f160b1 !important;}
 
 	/*=Test Page=*/
-	#ANDI508-testPage.sANDI508-testPage .ANDI508-element.ANDI508-highlight.ANDI508-element-danger
-		{border:3px dashed #dd2f2f !important; outline:0 !important; animation:pulse_sANDI_danger 3s linear infinite !important;}
-		@keyframes pulse_sANDI_danger{
+	#ANDI508-testPage.oANDI508-testPage .ANDI508-element.ANDI508-highlight.ANDI508-element-danger
+		{border:3px dashed #dd2f2f !important; outline:0 !important; animation:pulse_oANDI_danger 3s linear infinite !important;}
+		@keyframes pulse_oANDI_danger{
 			50% {border-color:#ef7200 !important;}
 		}
-	#ANDI508-testPage.sANDI508-testPage .ANDI508-element.ANDI508-highlight
-		{border:1.5px dashed #9b8acf !important; outline:0 !important; animation:pulse_sANDI 3s linear infinite !important;}
-		@keyframes pulse_sANDI{
+	#ANDI508-testPage.oANDI508-testPage .ANDI508-element.ANDI508-highlight
+		{border:1.5px dashed #9b8acf !important; outline:0 !important; animation:pulse_oANDI 3s linear infinite !important;}
+		@keyframes pulse_oANDI{
 			50% {border-color:#604f94 !important;}
 		}
-	#ANDI508-testPage.sANDI508-testPage .ANDI508-element.ANDI508-highlight.ANDI508-element-active
+	#ANDI508-testPage.oANDI508-testPage .ANDI508-element.ANDI508-highlight.ANDI508-element-active
 		{outline:4px solid deeppink !important;}
 
 	#ANDI508-testPage span.ANDI508-overlay.ANDI508-overlay-readingOrder

@@ -11,8 +11,7 @@
 	/*=Test Page=*/
 	#ANDI508-testPage.vANDI508-testPage th.ANDI508-element.ANDI508-highlight,
 	#ANDI508-testPage.vANDI508-testPage [role=columnheader].ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.vANDI508-testPage [role=rowheader].ANDI508-element.ANDI508-highlight,
-	#ANDI508-testPage.vANDI508-testPage table[role="presentation"].ANDI508-element.ANDI508-highlight
+	#ANDI508-testPage.vANDI508-testPage [role=rowheader].ANDI508-element.ANDI508-highlight
 		{border:1.5px dashed #a02178 !important; outline:0 !important; animation:pulse_vANDI_header 3s infinite;}
 		@keyframes pulse_vANDI_header{
 			50% {border-color:#b03188 !important;}

@@ -17,10 +17,8 @@ AndiModule.initActiveActionButtons({
 
 //This function will run tests on text containing elements
 cANDI.analyze = function(objectClass){
-
     //Elements that are disabled or have aria-disabled="true" do not need to be tested
     $(TestPageData.allElements).filter("*:not(option)").each(function(){
-
         if($(this).is("img[src],input:image[src],svg,canvas")){
             objectClass.elementNums[1] += 1;
             objectClass.elementStrings[1] = "images";
@@ -183,8 +181,6 @@ cANDI.results = function(objectClass){
         "contrastPlayground"
     ]);
 
-    $("#ANDI508").focus();
-
     //This function will allow the color selection widget to work
     function enableColorWidget(fgbg){
         $("#cANDI508-playground-colorSelector-"+fgbg)
@@ -208,11 +204,15 @@ cANDI.results = function(objectClass){
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
 AndiModule.inspect = function(element){
+    if ($(element).hasClass("ANDI508-element")) {
 
-    andiBar.prepareActiveElementInspection(element);
-    var elementData = $(element).data("andi508");
+        //Highlight the row in the list that associates with this element
+        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
 
-    if($(element).hasClass("ANDI508-element")){
+        andiBar.prepareActiveElementInspection(element);
+
+        var elementData = $(element).data("andi508");
+        var addOnProps = AndiData.getAddOnProps(element, elementData);
 
         $("#ANDI508-additionalElementDetails").html(
             "<div tabindex='0' style='margin-bottom:1px' accesskey='"+andiHotkeyList.key_output.key+"'>"+
@@ -229,7 +229,8 @@ AndiModule.inspect = function(element){
 
         cANDI.contrastDisplay(element);
 
-        andiBar.displayOutput(elementData, element); //just to display any alerts
+        andiBar.displayOutput(elementData, element, addOnProps); //just to display any alerts
+        andiBar.displayTable(elementData, element, addOnProps);
 
         //Grab the alert text from the outputText
         var alertHtml = $("#ANDI508-outputText").html();
@@ -958,7 +959,7 @@ function Contrasts() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription", "alerts"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
 }
 
 // This object class is used to keep track of the table information

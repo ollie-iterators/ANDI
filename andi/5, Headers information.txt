@@ -1,0 +1,9 @@
+## Information about Headers ##
+
+| Tag Name |   Display   |   Font-Size   |   Font-Weight   |  Margin-Top  |  Margin-Bottom  |
+|    h1    |    block    |      2em      |      bold       |     0.67em   |      0.67em     |
+|    h2    |    block    |      1.5em    |      bold       |     0.83em   |      0.83em     |
+|    h3    |    block    |      1.17em   |      bold       |     1em      |      1em        |
+|    h4    |    block    |      1.33em   |      bold       |     1.33em   |      1.33em     |
+|    h5    |    block    |      0.83em   |      bold       |     1.67em   |      1.67em     |
+|    h6    |    block    |      0.67em   |      bold       |     2.33em   |      2.33em     |

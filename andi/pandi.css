@@ -1,15 +1,15 @@
 /*==pANDI==*/
 	/*==ANDI Bar==*/
-	#ANDI508 #pANDI508-outline-container #pANDI508-outline-heading
+	#ANDI508 #ANDI508-outline-container #pANDI508-outline-heading
 		{display:inline-block; margin-bottom:2px;}
-	#ANDI508 #pANDI508-outline-container
+	#ANDI508 #ANDI508-outline-container
 		{display:none;}
-	#ANDI508 #pANDI508-outline-container .ANDI508-scrollable
+	#ANDI508 #ANDI508-outline-container .ANDI508-scrollable
 		{font-family:monospace; padding:5px 0px 1px 1em;}
-	#ANDI508 #pANDI508-outline-container .ANDI508-scrollable br
+	#ANDI508 #ANDI508-outline-container .ANDI508-scrollable br
 		{font-size:11pt;}
-	#ANDI508 #pANDI508-outline-container .ANDI508-scrollable a:hover,
-	#ANDI508 #pANDI508-outline-container .ANDI508-scrollable a:focus
+	#ANDI508 #ANDI508-outline-container .ANDI508-scrollable a:hover,
+	#ANDI508 #ANDI508-outline-container .ANDI508-scrollable a:focus
 		{text-decoration:underline !important; color:#f160b1 !important;}
 
 	/*=Test Page=*/

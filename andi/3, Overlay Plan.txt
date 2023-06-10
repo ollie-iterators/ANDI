@@ -1,0 +1,59 @@
+## Work on changing how overlay works ##
+
+
+
+1. Search:
+2. filter:
+3. not:
+4. attributes:
+5. andiOverlay
+6. Resets:
+
+# Overlay Title Attributes
+
+1. Search: #ANDI508-testPage *
+2. filter: :visible
+3. not: .ANDI508-overlay
+4. attributes: [title]
+5. andiOverlay: titleOverlayText = "title=" + title;
+                andiOverlay.insertAssociatedOverlay(this, andiOverlay.createOverlay("ANDI508-overlay-titleAttributes", titleOverlayText));
+6. Resets: true
+
+# Overlay Label Tags:
+
+1. Search: #ANDI508-testPage label
+2. filter: :visible
+3. not: ""
+4. attributes: [for]
+5. andiOverlay: overlayObject = andiOverlay.createOverlay(overlayClasses, labelText, titleText, 0);
+                andiOverlay.insertAssociatedOverlay(this, overlayObject, true);
+                $(this).after(andiOverlay.createOverlay(overlayClasses, "&lt;/label&gt;", "", 0));
+6. Resets:
+
+# Overlay Lang Attributes:
+
+1. Search: #ANDI508-testPage [lang]
+2. filter: :visible
+3. not: ""
+4. attributes: [lang]
+5. andiOverlay: langOverlayText = $(this).prop("tagName").toLowerCase()+" lang="+lang;
+                overlayObject = andiOverlay.createOverlay("ANDI508-overlay-langAttributes", langOverlayText);
+6. Resets: false
+
+# Overlay Role Attributes:
+
+1. Search: #ANDI508-testPage [role]
+2. filter: :visible
+3. not: .ANDI508-overlay
+4. attributes: [role]
+5. andiOverlay: langOverlayText = $(this).prop("tagName").toLowerCase()+" role="+role;
+                overlayObject = andiOverlay.createOverlay("ANDI508-overlay-roleAttributes", langOverlayText);
+6. Resets: false
+
+# Overlay Table Attributes:
+1. Search: #ANDI508-testPage [data-vANDI508-colindex]
+2. filter: ""
+3. not: ""
+4. attributes: [scope, headers, id, role]
+5. andiOverlay: $(this).prepend(andiOverlay.createOverlay("ANDI508-overlay-tableMarkup", markupOverlay));
+6. Resets:

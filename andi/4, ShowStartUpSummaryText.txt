@@ -1,0 +1,51 @@
+# Show Start Up Summary Text for modules:
+
+# cANDI: (Color Contrast)
+  - "Discover the <span class='ANDI508-module-name-c'>color contrast</span> for elements containing text."
+
+# fANDI: (Focusable Elements)
+  - "Discover accessibility markup for focusable elements by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every focusable element."
+
+# gANDI: (Graphics / Images)
+  - "Discover accessibility markup for inline <span class='ANDI508-module-name-g'>graphics/images</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Ensure that every meaningful/non-decorative image has a text equivalent."
+
+# hANDI: (Hidden Elements)
+  - "Discover <span class='ANDI508-module-name-h'>hidden content</span> that should be tested for accessibility using other ANDI modules. Use the style toggle buttons to force the hidden content to be revealed. The revealed content will not remain revealed after changing modules. ";
+    "Content injected with CSS may be invisible to a screen reader."
+
+# iANDI: (iFrames)
+  - "To test the contents of <span class='ANDI508-module-name-i'>iframes</span>, each must be viewed independently.<br />Inspect an iframe, press the \"test in new tab\" button, then launch ANDI."
+
+# lANDI: (Certain Links)
+  - "Discover accessibility markup for <span class='ANDI508-module-name-l'>links</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every link."
+
+# mANDI: (Possible Links)
+  - "Discover accessibility markup for <span class='ANDI508-module-name-l'>links</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every link."
+
+# nANDI: (Buttons):
+  - "Discover accessibility markup for <span class='ANDI508-module-name-l'>buttons</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every button."
+
+# oANDI: (Certain Headers)
+  - "Heading structure found.<br />Determine if <span class='ANDI508-module-name-s'>headings</span> are appropriately applied."
+
+# pANDI: (Possible Headers)
+  - "Heading structure found.<br />Determine if <span class='ANDI508-module-name-s'>headings</span> are appropriately applied."
+
+# qANDI: (Lists)
+  - "List structure found.<br />Determine if the <span class='ANDI508-module-name-s'>list</span> container types used (ol, ul, li, dl, dd, dt, role=list, role=listitem) are appropriately applied."
+
+# rANDI: (Landmarks)
+  - "Landmark structure found.<br />Ensure that each <span class='ANDI508-module-name-s'>landmark</span> is applied appropriately to the corresponding section of the page."
+
+# sANDI: (Live Regions)
+  - "<span class='ANDI508-module-name-s'>Live regions</span> found.<br />Discover the Output of the <span class='ANDI508-module-name-s'>live regions</span> by hovering over the highlighted areas or using the next/previous buttons. For updated Output, refresh ANDI whenever the Live Region changes."
+
+# tANDI: (Presentation Tables)
+  - "Only <span class='ANDI508-module-name-t'>presentation tables</span> were found on this page, no data tables."
+
+# uANDI: (Strange Tables)
+  - "Only <span class='ANDI508-module-name-t'>presentation tables</span> were found on this page, no data tables."
+
+# vANDI: (Data Tables)
+  - "Discover accessibility markup for <span class='ANDI508-module-name-t'>tables</span> by tabbing to or hovering over the table cells. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every data table cell. "
+    "Tables should be tested one at a time - Press the next table button <img src='"+icons_url+"next-table.png' style='width:12px' alt='' /> to cycle through the tables."

@@ -4,22 +4,16 @@
 //==========================================//
 function init_module(){
 
-var sANDIVersionNumber = "4.3.0";
+var sANDIVersionNumber = "4.3.1";
 
 //create sANDI instance
 var sANDI = new AndiModule(sANDIVersionNumber,"s");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 sANDI.analyze = function(objectClass){
-
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["alert","status","log","marquee","timer"],"[aria-live=polite],[aria-live=assertive]")){
-            //Add to the live regions array
-            objectClass.list.push(new LiveRegion([this], objectClass.list.length + 1, "", "", ""));
-            objectClass.elementNums[0] += 1;
-            objectClass.elementStrings[0] = "live regions";
-
             andiData = new AndiData(this);
 
             if($(this).isContainerElement()){
@@ -40,70 +34,28 @@ sANDI.analyze = function(objectClass){
                 andiAlerter.throwAlert(alert_0184);
             if($(this).find("textarea,input:not(:hidden,[type=submit],[type=button],[type=image],[type=reset]),select").length)
                 andiAlerter.throwAlert(alert_0182);
+
+            objectClass.list.push(new LiveRegion([this], objectClass.list.length + 1, andiData.accName, "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] = "live regions";
             AndiData.attachDataToElement(this);
         }
-
-        //For all elements on the page
-        if($.trim($(this).attr("role")))
-            objectClass.elementNums[2] += 1;
-            objectClass.elementStrings[2] = "elements with role attributes";
-        if($.trim($(this).prop("lang")))
-            objectClass.elementNums[1] += 1;
-            objectClass.elementStrings[1] = "elements with lang attributes";
     });
 };
 
 var showStartUpSummaryText = "<span class='ANDI508-module-name-s'>Live regions</span> found.<br />Discover the Output of the <span class='ANDI508-module-name-s'>live regions</span> by hovering over the highlighted areas or using the next/previous buttons. For updated Output, refresh ANDI whenever the Live Region changes.";
-//This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-sANDI.results = function(){
-
-    var moreDetails = "<button id='ANDI508-pageTitle-button'>page title</button>"+
-        "<button id='ANDI508-pageLanguage-button'>page language</button>";
-
-    var moduleActionButtons = "<div class='ANDI508-moduleActionGroup'><button class='ANDI508-moduleActionGroup-toggler'>more details</button><div class='ANDI508-moduleActionGroup-options'>" + moreDetails + "</div></div>";
-
-    $("#ANDI508-module-actions").html(moduleActionButtons);
-
-    andiBar.initializeModuleActionGroups();
-
-    //Define the page title button
-    $("#ANDI508-pageTitle-button").click(function(){
-        andiOverlay.overlayButton_on("overlay",$(this));
-        if(document.title)
-            alert("The page title is: "+document.title);
-        else
-            alert("There is no page title.");
-        andiOverlay.overlayButton_off("overlay",$(this));
-    });
-
-    //Define the page language button
-    $("#ANDI508-pageLanguage-button").click(function(){
-        andiOverlay.overlayButton_on("overlay",$(this));
-        //get the lang attribute from the HTML element
-        var htmlLangAttribute = $.trim($("html").first().prop("lang"));
-        //pop up the lang value of the HTML element
-        if(htmlLangAttribute)
-            alert("The <html> element has a lang attribute value of: "+htmlLangAttribute+".");
-        else
-            alert("The <html> element does not have a lang attribute.");
-        andiOverlay.overlayButton_off("overlay",$(this));
-    });
-
-    //Deselect all mode buttons
-    $("#ANDI508-module-actions button.sANDI508-mode").attr("aria-selected","false");
-
-    $("#ANDI508").focus();
-
-};
-
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
 AndiModule.inspect = function(element){
-    if($(element).hasClass("ANDI508-element")){
+    if ($(element).hasClass("ANDI508-element")) {
+
+        //Highlight the row in the list that associates with this element
+        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
+
         andiBar.prepareActiveElementInspection(element);
 
         var elementData = $(element).data("andi508");
-
         var addOnProps = AndiData.getAddOnProps(element, elementData,
             [
                 getDefault_ariaLive(element, elementData),
@@ -226,14 +178,14 @@ function LiveRegions() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription", "alerts"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
 }
 
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Live Regions";
     this.cssProperties  = [];
-    this.buttonTextList = ["Reading Order", "Role Attributes", "Lang Attributes"];
+    this.buttonTextList = ["Reading Order"];
     this.tabsTextList   = [];
 }
 

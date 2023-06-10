@@ -1,17 +1,4 @@
 /*==sANDI==*/
-	/*==ANDI Bar==*/
-	#ANDI508 #sANDI508-outline-container #sANDI508-outline-heading
-		{display:inline-block; margin-bottom:2px;}
-	#ANDI508 #sANDI508-outline-container
-		{display:none;}
-	#ANDI508 #sANDI508-outline-container .ANDI508-scrollable
-		{font-family:monospace; padding:5px 0px 1px 1em;}
-	#ANDI508 #sANDI508-outline-container .ANDI508-scrollable br
-		{font-size:11pt;}
-	#ANDI508 #sANDI508-outline-container .ANDI508-scrollable a:hover,
-	#ANDI508 #sANDI508-outline-container .ANDI508-scrollable a:focus
-		{text-decoration:underline !important; color:#f160b1 !important;}
-
 	/*=Test Page=*/
 	#ANDI508-testPage.sANDI508-testPage .ANDI508-element.ANDI508-highlight.ANDI508-element-danger
 		{border:3px dashed #dd2f2f !important; outline:0 !important; animation:pulse_sANDI_danger 3s linear infinite !important;}

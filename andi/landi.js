@@ -36,18 +36,10 @@ var alertIcons = new function(){//new is intentional
     }
 };
 
-AndiModule.initActiveActionButtons({
-    viewLinksList:false,
-    highlightAmbiguousLinks:false,
-});
-
-lANDI.viewList_tableReady = false;
-
 //This function will analyze the test page for link related markup relating to accessibility
 lANDI.analyze = function(objectClass){
-
     //Variables used to build the links/buttons list array.
-    var href, nameDescription, alerts, target, linkPurpose, accesskey, alertIcon, alertObject, relatedElement, nonUniqueIndex, ambiguousIndex;
+    var href, nameDescription, alerts, target, linkPurpose, alertIcon, alertObject, relatedElement, ambiguousIndex;
 
     //Loop through every visible element and run tests
     $(TestPageData.allElements).each(function(){
@@ -76,7 +68,7 @@ lANDI.analyze = function(objectClass){
                         if(nameDescription){
                             ambiguousIndex = scanForAmbiguity(this, nameDescription, href);
 
-                            determineLinkPurpose(href, this);
+                            var rowClass = determineLinkPurpose(href, this);
 
                             testForVagueLinkText(nameDescription);
 
@@ -90,11 +82,13 @@ lANDI.analyze = function(objectClass){
 
                         if(href){
                             //create Link object and add to array
-                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, nameDescription, $(this).attr("href"), "", ""));
+                            lANDI.links.list.push(new CertainLink([this], objectClass.list.length + 1, nameDescription, "", rowClass));
+                            andiBar.getAttributes(lANDI.links, lANDI.links.list.length - 1);
                         }
                         else if(andiData.role === "link"){
                             //create Link object and add to array
-                            lANDI.links.list.push(new Link([this], objectClass.list.length + 1, nameDescription, $(this).attr("href"), "", ""));
+                            lANDI.links.list.push(new CertainLink([this], objectClass.list.length + 1, nameDescription, "", rowClass));
+                            andiBar.getAttributes(lANDI.links, lANDI.links.list.length - 1);
 
                             isElementInTabOrder(this, "link");
                         }
@@ -222,6 +216,7 @@ lANDI.analyze = function(objectClass){
 
     //This function searches for anchor target if href is internal and greater than 1 character e.g. href="#x"
     function determineLinkPurpose(href, element){
+        var rowClass = "";
         if(typeof href !== "undefined"){
             if(href.charAt(0) === "#" && href.length > 1){
                 var idRef = href.slice(1); //do not convert to lowercase
@@ -236,6 +231,7 @@ lANDI.analyze = function(objectClass){
                     lANDI.links.elementNums[1] += 1;
                     lANDI.links.elementStrings[1] = "internal links";
                     linkPurpose = "i";
+                    rowClass = "lANDI508-listLinks-internal";
                     $(element).addClass("lANDI508-internalLink");
                 }
             }
@@ -243,9 +239,11 @@ lANDI.analyze = function(objectClass){
                 lANDI.links.elementNums[2] += 1;
                 lANDI.links.elementStrings[2] = "external links";
                 linkPurpose = "e";
+                rowClass = "lANDI508-listLinks-external";
                 $(element).addClass("lANDI508-externalLink");
             }
         }
+        return rowClass;
 
         //This function searches allIds list to check if anchor target exists. return true if found.
         function isAnchorTargetFound(idRef){
@@ -298,62 +296,12 @@ lANDI.analyze = function(objectClass){
 };
 
 var showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-l'>links</span> by hovering over the highlighted elements or pressing the next/previous element buttons. Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every link.";
-//This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-lANDI.results = function(objectClass){
-
-    //highlightAmbiguousLinks button
-    $("#ANDI508-module-actions").append("<span class='ANDI508-module-actions-spacer'>|</span> <button id='ANDI508-highlightAmbiguousLinks-button' aria-label='Highlight "+lANDI.links.elementNums[3]+" Ambiguous Links' aria-pressed='false'>"+lANDI.links.elementNums[3]+" ambiguous links"+findIcon+"</button>");
-
-    //Ambiguous Links Button
-    $("#ANDI508-highlightAmbiguousLinks-button").click(function(){
-        var testPage = $("#ANDI508-testPage");
-        if(!$(testPage).hasClass("lANDI508-highlightAmbiguous")){
-            //On
-            $("#lANDI508-listLinks-tab-all").click();
-            $("#ANDI508-testPage")
-                //.removeClass("lANDI508-highlightInternal lANDI508-highlightExternal")
-                .addClass("lANDI508-highlightAmbiguous");
-            andiOverlay.overlayButton_on("find",$(this));
-            AndiModule.activeActionButtons.highlightAmbiguousLinks = true;
-        }
-        else{
-            //Off
-            $("#ANDI508-testPage").removeClass("lANDI508-highlightAmbiguous");
-            andiOverlay.overlayButton_off("find",$(this));
-            AndiModule.activeActionButtons.highlightAmbiguousLinks = false;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    $("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewLinksList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view links list</button>");
-
-    //Links List Button
-    $("#ANDI508-viewLinksList-button").click(function(){
-        if(!lANDI.viewList_tableReady){
-            lANDI.viewList_buildTable("links");
-            lANDI.viewList_attachEvents();
-            lANDI.viewList_attachEvents_links();
-            lANDI.viewList_tableReady = true;
-        }
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    AndiModule.engageActiveActionButtons([
-        "viewLinksList",
-        "highlightAmbiguousLinks"
-    ]);
-
-    $("#ANDI508").focus();
-};
-
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
 AndiModule.inspect = function(element){
-    if($(element).hasClass("ANDI508-element")){
+    if ($(element).hasClass("ANDI508-element")) {
 
-        //Highlight the row in the links list that associates with this element
+        //Highlight the row in the list that associates with this element
         andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
 
         andiBar.prepareActiveElementInspection(element);
@@ -378,8 +326,8 @@ AndiModule.inspect = function(element){
 //This function builds the table for the view list
 lANDI.viewList_buildTable = function(mode){
     var tableHTML = "";
-    var rowClasses, tabsHTML;
-    var appendHTML = "<div id='lANDI508-viewList' class='ANDI508-viewOtherResults-expanded' style='display:none;'><div id='lANDI508-viewList-tabs'>";
+    var rowClasses;
+    var appendHTML = "<div id='lANDI508-viewList' class='ANDI508-viewOtherResults-expanded' style='display:none;'><div id='ANDI508-viewList-tabs'>";
     var nextPrevHTML = "<button id='lANDI508-viewList-button-prev' aria-label='Previous Item in the list' accesskey='"+andiHotkeyList.key_prev.key+"'><img src='"+icons_url+"prev.png' alt='' /></button>"+
         "<button id='lANDI508-viewList-button-next' aria-label='Next Item in the list'  accesskey='"+andiHotkeyList.key_next.key+"'><img src='"+icons_url+"next.png' alt='' /></button>"+
         "</div>"+
@@ -409,7 +357,6 @@ lANDI.viewList_buildTable = function(mode){
             rowClasses += "ANDI508-table-row-alert ";
 
         if(lANDI.links.list[x].linkPurpose == "i"){
-            rowClasses += "lANDI508-listLinks-internal ";
             var id = lANDI.links.list[x].href;
             if(id.charAt(0) === "#")
                 id = id.substring(1, id.length);
@@ -417,8 +364,6 @@ lANDI.viewList_buildTable = function(mode){
                 id+"' title='focus on the element after id="+
                 id+"'>next tab</button>";
         }
-        else if(lANDI.links.list[x].linkPurpose == "e")
-            rowClasses += "lANDI508-listLinks-external ";
 
         tableHTML += "<tr class='" + $.trim(rowClasses) + "'>"+
             "<th scope='row'>"+lANDI.links.list[x].index+"</th>"+
@@ -428,210 +373,12 @@ lANDI.viewList_buildTable = function(mode){
             "</tr>";
     }
 
-    tabsHTML = "<button id='lANDI508-listLinks-tab-all' aria-label='View All Links' aria-selected='true' class='ANDI508-tab-active' data-andi508-relatedclass='ANDI508-element'>all links ("+lANDI.links.list.length+")</button>";
-    tabsHTML += "<button id='lANDI508-listLinks-tab-internal' aria-label='View Skip Links' aria-selected='false' data-andi508-relatedclass='lANDI508-internalLink'>skip links ("+lANDI.links.elementNums[1]+")</button>";
-    tabsHTML += "<button id='lANDI508-listLinks-tab-external' aria-label='View External Links' aria-selected='false' data-andi508-relatedclass='lANDI508-externalLink'>external links ("+lANDI.links.elementNums[2]+")</button>";
-
-    appendHTML += tabsHTML + nextPrevHTML + "<th scope='col' style='width:5%'><a href='javascript:void(0)' aria-label='link number'>#<i aria-hidden='true'></i></a></th>"+
+    appendHTML += nextPrevHTML + "<th scope='col' style='width:5%'><a href='javascript:void(0)' aria-label='link number'>#<i aria-hidden='true'></i></a></th>"+
         "<th scope='col' style='width:10%'><a href='javascript:void(0)'>Alerts&nbsp;<i aria-hidden='true'></i></a></th>"+
         "<th scope='col' style='width:40%'><a href='javascript:void(0)'>Accessible&nbsp;Name&nbsp;&amp;&nbsp;Description&nbsp;<i aria-hidden='true'></i></a></th>"+
         "<th scope='col' style='width:45%'><a href='javascript:void(0)'>href <i aria-hidden='true'></i></a></th>";
 
     $("#ANDI508-additionalPageResults").append(appendHTML+"</tr></thead><tbody>"+tableHTML+"</tbody></table></div></div>");
-
-};
-
-//This function attaches the click,hover,focus events to the items in the view list
-lANDI.viewList_attachEvents = function(){
-    //Add focus click to each link (output) in the table
-    $("#ANDI508-viewList-table td a[data-andi508-relatedindex]").each(function(){
-        andiFocuser.addFocusClick($(this));
-        var relatedElement = $("#ANDI508-testPage [data-andi508-index=" + $(this).attr("data-andi508-relatedindex") + "]").first();
-        andiLaser.createLaserTrigger($(this),$(relatedElement));
-        $(this)
-        .hover(function(){
-            if(!event.shiftKey)
-                AndiModule.inspect(relatedElement[0]);
-        })
-        .focus(function(){
-            AndiModule.inspect(relatedElement[0]);
-        });
-    });
-
-    //This will define the click logic for the table sorting.
-    //Table sorting does not use aria-sort because .removeAttr("aria-sort") crashes in old IE
-    $("#ANDI508-viewList-table th a").click(function(){
-        var table = $(this).closest("table");
-        $(table).find("th").find("i").html("")
-            .end().find("a"); //remove all arrow
-
-        var rows = $(table).find("tr:gt(0)").toArray().sort(sortCompare($(this).parent().index()));
-        this.asc = !this.asc;
-        if(!this.asc){
-            rows = rows.reverse();
-            $(this).attr("title","descending")
-                .parent().find("i").html("&#9650;"); //up arrow
-        }
-        else{
-            $(this).attr("title","ascending")
-                .parent().find("i").html("&#9660;"); //down arrow
-        }
-        for(var i=0; i<rows.length; i++){
-            $(table).append(rows[i]);
-        }
-
-        //Table Sort Functionality
-        function sortCompare(index){
-            return function(a, b){
-                var valA = getCellValue(a, index);
-                var valB = getCellValue(b, index);
-                return !isNaN(valA) && !isNaN(valB) ? valA - valB : valA.localeCompare(valB);
-            };
-            function getCellValue(row, index){
-                return $(row).children("td,th").eq(index).text();
-            }
-        }
-    });
-
-    //Define listLinks next button
-    $("#lANDI508-viewList-button-next").click(function(){
-        //Get class name based on selected tab
-        var selectedTabClass = $("#lANDI508-viewList-tabs button[aria-selected='true']").attr("data-andi508-relatedclass");
-        var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
-        var focusGoesOnThisIndex;
-
-        if(index == testPageData.andiElementIndex || isNaN(index)){
-            //No link being inspected yet, get first element according to selected tab
-            focusGoesOnThisIndex = $("#ANDI508-testPage ."+selectedTabClass).first().attr("data-andi508-index");
-            andiFocuser.focusByIndex(focusGoesOnThisIndex); //loop back to first
-        }
-        else{
-            //Find the next element with class from selected tab and data-andi508-index
-            //This will skip over elements that may have been removed from the DOM
-            for(var x=index; x<testPageData.andiElementIndex; x++){
-                //Get next element within set of selected tab type
-                if($("#ANDI508-testPage ."+selectedTabClass+"[data-andi508-index='"+(x + 1)+"']").length){
-                    focusGoesOnThisIndex = x + 1;
-                    andiFocuser.focusByIndex(focusGoesOnThisIndex);
-                    break;
-                }
-            }
-        }
-
-        //Highlight the row in the links list that associates with this element
-        andiBar.viewList_rowHighlight(focusGoesOnThisIndex);
-        $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function(){
-            this.scrollIntoView();
-        });
-
-        return false;
-    });
-
-    //Define listLinks prev button
-    $("#lANDI508-viewList-button-prev").click(function(){
-        //Get class name based on selected tab
-        var selectedTabClass = $("#lANDI508-viewList-tabs button[aria-selected='true']").attr("data-andi508-relatedclass");
-        var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
-        var firstElementInListIndex = $("#ANDI508-testPage ."+selectedTabClass).first().attr("data-andi508-index");
-        var focusGoesOnThisIndex;
-
-        if(isNaN(index)){ //no active element yet
-            //get first element according to selected tab
-            andiFocuser.focusByIndex(firstElementInListIndex); //loop back to first
-            focusGoesOnThisIndex = firstElementInListIndex;
-        }
-        else if(index == firstElementInListIndex){
-            //Loop to last element in list
-            focusGoesOnThisIndex = $("#ANDI508-testPage ."+selectedTabClass).last().attr("data-andi508-index");
-            andiFocuser.focusByIndex(focusGoesOnThisIndex); //loop back to last
-        }
-        else{
-            //Find the previous element with class from selected tab and data-andi508-index
-            //This will skip over elements that may have been removed from the DOM
-            for(var x=index; x>0; x--){
-                //Get next element within set of selected tab type
-                if($("#ANDI508-testPage ."+selectedTabClass+"[data-andi508-index='"+(x - 1)+"']").length){
-                    focusGoesOnThisIndex = x - 1;
-                    andiFocuser.focusByIndex(focusGoesOnThisIndex);
-                    break;
-                }
-            }
-        }
-
-        //Highlight the row in the links list that associates with this element
-        andiBar.viewList_rowHighlight(focusGoesOnThisIndex);
-        $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function(){
-            this.scrollIntoView();
-        });
-
-        return false;
-    });
-};
-
-//This function attaches click events to the items specific to the Links view list
-lANDI.viewList_attachEvents_links = function(){
-    $("#lANDI508-listLinks-tab-all").click(function(){
-        lANDI.viewList_selectTab(this);
-        $("#ANDI508-viewList-table tbody tr").show();
-        //Remove All (glowing) Highlights
-        $("#ANDI508-testPage").removeClass("lANDI508-highlightInternal lANDI508-highlightExternal lANDI508-highlightAmbiguous");
-        //Turn Off Ambiguous Button
-        andiOverlay.overlayButton_off("find",$("#ANDI508-highlightAmbiguousLinks-button"));
-        andiResetter.resizeHeights();
-        return false;
-    });
-    $("#lANDI508-listLinks-tab-internal").click(function(){
-        lANDI.viewList_selectTab(this);
-        $("#ANDI508-viewList-table tbody tr").each(function(){
-            if($(this).hasClass("lANDI508-listLinks-internal"))
-                $(this).show();
-            else
-                $(this).hide();
-        });
-        //Add (glowing) Highlight for Internal Links
-        $("#ANDI508-testPage").removeClass("lANDI508-highlightExternal lANDI508-highlightAmbiguous").addClass("lANDI508-highlightInternal");
-        //Turn Off Ambiguous Button
-        andiOverlay.overlayButton_off("find",$("#ANDI508-highlightAmbiguousLinks-button"));
-        andiResetter.resizeHeights();
-        return false;
-    });
-    $("#lANDI508-listLinks-tab-external").click(function(){
-        lANDI.viewList_selectTab(this);
-        $("#ANDI508-viewList-table tbody tr").each(function(){
-            if($(this).hasClass("lANDI508-listLinks-external"))
-                $(this).show();
-            else
-                $(this).hide();
-        });
-        //Add (glowing) Highlight for External Links
-        $("#ANDI508-testPage").removeClass("lANDI508-highlightInternal lANDI508-highlightAmbiguous").addClass("lANDI508-highlightExternal");
-        //Turn Off Ambiguous Button
-        andiOverlay.overlayButton_off("find",$("#ANDI508-highlightAmbiguousLinks-button"));
-        andiResetter.resizeHeights();
-        return false;
-    });
-
-    //Define next tab button
-    $("#ANDI508-viewList-table button.lANDI508-nextTab").each(function(){
-        $(this).click(function(){
-            var allElementsInTestPage = $("#ANDI508-testPage *");
-            var idRef = $(this).attr("data-andi508-relatedid");
-            var anchorTargetElement = document.getElementById(idRef) || document.getElementsByName(idRef)[0];
-            var anchorTargetElementIndex = parseInt($(allElementsInTestPage).index($(anchorTargetElement)), 10);
-            for(var x=anchorTargetElementIndex; x<allElementsInTestPage.length; x++){
-                if($(allElementsInTestPage).eq(x).is(":tabbable")){
-                    $(allElementsInTestPage).eq(x).focus();
-                    break;
-                }
-            }
-        });
-    });
-};
-
-//This function handles the selection of a tab.
-lANDI.viewList_selectTab = function(tab){
-    $("#lANDI508-viewList-tabs button").removeClass().attr("aria-selected","false");
-    $(tab).addClass("ANDI508-tab-active").attr("aria-selected","true");
 };
 
 //This function gets the href
@@ -659,22 +406,21 @@ lANDI.isScriptedLink = function(href){
 };
 
 //This object class is used to store data about each link. Object instances will be placed into an array.
-function Link(elementList, index, nameDescription, href, alerts, rowClass){
+function CertainLink(elementList, index, nameDescription, alerts, rowClass){
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription
-    this.href            = href;
     this.alerts          = alerts;
-    this.columnValues    = [elementList, index, nameDescription, href, alerts];
+    this.columnValues    = [elementList, index, nameDescription, alerts];
     this.rowClass        = rowClass;
 }
 
 //This object class is used to keep track of the links on the page
-function Links(){
+function CertainLinks(){
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["elementList", "index", "nameDescription", "href", "alerts"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
     this.ambiguousIndex = 0;
 }
 
@@ -682,11 +428,11 @@ function Links(){
 function TableInfo() {
     this.tableMode      = "Links";
     this.cssProperties  = [];
-    this.buttonTextList = [];
-    this.tabsTextList   = []
+    this.buttonTextList = ["Highlight Ambiguous Links"];
+    this.tabsTextList   = ["All", "Internal", "External"];
 }
 
-lANDI.links = new Links();
+lANDI.links = new CertainLinks();
 lANDI.tableInfo = new TableInfo();
 
 lANDI.links = andiBar.createObjectValues(lANDI.links, 4);

@@ -1,0 +1,22 @@
+# Possible buttons
+
+- details tag: specifies additional details that the user can open and close
+               on demand
+- An input element whose type attribute is in one of the Submit Button,
+  Reset Button, Image Button, Button, Radio Button, or Checkbox states
+  defines a command.
+- An option element with an ancestor select element and either no value
+  attribute or a value attribute that is not the empty string defines a command.
+- A label element that has an assigned access key and a labeled control and whose
+  labeled control defines a command, itself defines a command.
+- A legend element that has an assigned access key and is a child of a fieldset
+  element that has a descendant that is not a descendant of the legend element
+  and is neither a label element nor a legend element but that defines a command,
+  itself defines a command.
+- An element that has an assigned access key defines a command.
+
+
+- Removed components:
+  - command: represents a command that a user can evoke
+  - menu: defines a list/menu of commands
+

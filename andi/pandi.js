@@ -4,37 +4,27 @@
 //==========================================//
 function init_module(){
 
-var pANDIVersionNumber = "4.3.0";
+var pANDIVersionNumber = "4.3.1";
 
 //create pANDI instance
 var pANDI = new AndiModule(pANDIVersionNumber,"p");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 pANDI.analyze = function(objectClass){
-
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).is("p,div,span,strong,em")){
-            //Since pANDI has not found a heading yet, check if this element is a fake heading
-
             if(pANDI.isFakeHeading(this)){
                 andiData = new AndiData(this);
 
                 andiAlerter.throwAlert(alert_0190);
                 AndiData.attachDataToElement(this);
                 objectClass.list.push(new PossibleHeader([this], objectClass.list.length + 1, "", "", ""));
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "possible headings";
             }
         }
-
-        //For all elements on the page
-        if($.trim($(this).attr("role")))
-            objectClass.elementNums[2] += 1;
-            objectClass.elementStrings[2] = "elements with role attributes";
-        if($.trim($(this).prop("lang")))
-            objectClass.elementNums[1] += 1;
-            objectClass.elementStrings[1] = "elements with lang attributes";
     });
 };
 
@@ -137,78 +127,25 @@ var showStartUpSummaryText = "Heading structure found.<br />Determine if <span c
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 pANDI.results = function(objectClass){
 
-    var moreDetails = "<button id='ANDI508-pageTitle-button'>page title</button>"+
-        "<button id='ANDI508-pageLanguage-button'>page language</button>";
-
-    var moduleActionButtons = "<div class='ANDI508-moduleActionGroup'><button class='ANDI508-moduleActionGroup-toggler'>more details</button><div class='ANDI508-moduleActionGroup-options'>" + moreDetails + "</div></div>";
-
-    $("#ANDI508-module-actions").html(moduleActionButtons);
-
-    andiBar.initializeModuleActionGroups();
-
-    //Define the page title button
-    $("#ANDI508-pageTitle-button").click(function(){
-        andiOverlay.overlayButton_on("overlay",$(this));
-        if(document.title)
-            alert("The page title is: "+document.title);
-        else
-            alert("There is no page title.");
-        andiOverlay.overlayButton_off("overlay",$(this));
-    });
-
-    //Define the page language button
-    $("#ANDI508-pageLanguage-button").click(function(){
-        andiOverlay.overlayButton_on("overlay",$(this));
-        //get the lang attribute from the HTML element
-        var htmlLangAttribute = $.trim($("html").first().prop("lang"));
-        //pop up the lang value of the HTML element
-        if(htmlLangAttribute)
-            alert("The <html> element has a lang attribute value of: "+htmlLangAttribute+".");
-        else
-            alert("The <html> element does not have a lang attribute.");
-        andiOverlay.overlayButton_off("overlay",$(this));
-    });
-
-    //Deselect all mode buttons
-    $("#ANDI508-module-actions button.pANDI508-mode").attr("aria-selected","false");
-
     //Build Outline
     for(var x=0; x<objectClass.list.length; x++){
-        pANDI.outline += pANDI.getOutlineItem(objectClass.list[x]);
+        pANDI.outline += pANDI.getOutlineItem(objectClass.list[x].elementList[0]);
     }
     pANDI.outline += "</div>";
 
-    $("#ANDI508-additionalPageResults").html("<button id='ANDI508-viewOutline-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view headings list</button><div id='pANDI508-outline-container' class='ANDI508-viewOtherResults-expanded' tabindex='0'></div>");
+    $("#ANDI508-additionalPageResults").html("<button id='ANDI508-viewOutline-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"View Ordered Possible Headers List</button><div id='ANDI508-outline-container' class='ANDI508-viewOtherResults-expanded' tabindex='0'></div>");
 
     //Define outline button
     $("#ANDI508-viewOutline-button").click(function(){
-        if($(this).attr("aria-expanded") === "true"){
-            //hide Outline, show alert list
-            $("#pANDI508-outline-container").slideUp(AndiSettings.andiAnimationSpeed);
-            $("#ANDI508-alerts-list").show();
-            $(this)
-                .addClass("ANDI508-viewOtherResults-button-expanded")
-                .html(listIcon+"view headings list")
-                .attr("aria-expanded","false")
-                .removeClass("ANDI508-viewOtherResults-button-expanded ANDI508-module-action-active");
-        }
-        else{
-            //show Outline, hide alert list
-            $("#ANDI508-alerts-list").hide();
+        if ($(this).attr("aria-expanded") === "false") {
 
-            andiSettings.minimode(false);
-            $(this)
-                .html(listIcon+"hide headings list")
-                .attr("aria-expanded","true")
-                .addClass("ANDI508-viewOtherResults-button-expanded ANDI508-module-action-active")
-                .find("img").attr("src",icons_url+"list-on.png");
-            $("#pANDI508-outline-container").slideDown(AndiSettings.andiAnimationSpeed).focus();
         }
+        andiBar.viewList_toggle("Ordered Possible Headers", this, "outline-container");
         andiResetter.resizeHeights();
         return false;
     });
 
-    $("#pANDI508-outline-container")
+    $("#ANDI508-outline-container")
     .html(pANDI.outline)
     .find("a[data-andi508-relatedindex]").each(function(){
         andiFocuser.addFocusClick($(this));
@@ -224,23 +161,20 @@ pANDI.results = function(objectClass){
             AndiModule.inspect(relatedElement[0]);
         });
     });
-
-    $("#ANDI508").focus();
-
 };
 
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
 AndiModule.inspect = function(element){
-    if($(element).hasClass("ANDI508-element")){
+    if ($(element).hasClass("ANDI508-element")) {
+
+        //Highlight the row in the list that associates with this element
+        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
+
         andiBar.prepareActiveElementInspection(element);
 
         var elementData = $(element).data("andi508");
-
-        var addOnProps = AndiData.getAddOnProps(element, elementData,
-            [
-                "aria-level"
-            ]);
+        var addOnProps = AndiData.getAddOnProps(element, elementData, ["aria-level"]);
 
         andiBar.displayOutput(elementData, element, addOnProps);
         andiBar.displayTable(elementData, element, addOnProps);
@@ -307,12 +241,12 @@ AndiOverlay.prototype.overlayReadingOrder = function(){
 };
 
 //This object class is used to store data about each possible header. Object instances will be placed into an array.
-function PossibleHeader(elementList, index, nameDescription, alert, rowClass) {
+function PossibleHeader(elementList, index, nameDescription, alerts, rowClass) {
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription;
-    this.alert           = alert;
-    this.columnValues    = [elementList, index, nameDescription, alert];
+    this.alerts          = alerts;
+    this.columnValues    = [elementList, index, nameDescription, alerts];
     this.rowClass        = rowClass;
 }
 
@@ -321,7 +255,7 @@ function PossibleHeaders() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription", "alert"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
     this.outlineReady   = false;
 }
 
@@ -329,7 +263,7 @@ function PossibleHeaders() {
 function TableInfo() {
     this.tableMode      = "Possible Headers";
     this.cssProperties  = [];
-    this.buttonTextList = ["Reading Order", "Role Attributes", "Lang Attributes"];
+    this.buttonTextList = ["Reading Order"];
     this.tabsTextList   = [];
 }
 
@@ -339,6 +273,7 @@ pANDI.tableInfo = new TableInfo();
 pANDI.possibleHeaders = andiBar.createObjectValues(pANDI.possibleHeaders, 3);
 
 pANDI.analyze(pANDI.possibleHeaders);
+pANDI.results(pANDI.possibleHeaders);
 andiBar.results(pANDI.possibleHeaders, pANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

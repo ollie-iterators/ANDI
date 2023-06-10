@@ -295,6 +295,12 @@ body.ANDI508-testPage
 /*fANDI*/
 #ANDI508.ANDI508-module-f #ANDI508-module-actions button.ANDI508-module-action-active
 	{color:lemonchiffon !important;}
+/*bANDI*/
+#ANDI508 .ANDI508-module-name-b,
+#ANDI508 #ANDI508-moduleMenu-button-b,
+#ANDI508.ANDI508-module-b #ANDI508-module-name,
+#ANDI508.ANDI508-module-b #ANDI508-module-actions button.ANDI508-module-action-active
+    {color:#ff000f !important;}
 /*tANDI*/
 #ANDI508 .ANDI508-module-name-t,
 #ANDI508 #ANDI508-moduleMenu-button-t,
@@ -649,3 +655,14 @@ body.ANDI508-testPage
 
 	#ANDI508-testPage .ANDI508-overlay-tabSequence-greaterThanZero
 		{background:#ffb03a !important;}
+
+/*==tableANDI==*/
+#ANDI508 #tableANDI508-viewList-button-prev,
+#ANDI508 #tableANDI508-viewList-button-next
+    {border:1px solid black !important; margin:1px 1px 2px 0.6em !important; padding:0 !important; border-radius:3px !important;}
+#ANDI508 #tableANDI508-viewList-button-prev:hover,
+#ANDI508 #tableANDI508-viewList-button-next:hover
+    {border:1px solid lemonchiffon !important;}
+#ANDI508 #tableANDI508-viewList-button-prev img,
+#ANDI508 #tableANDI508-viewList-button-next img
+    {width:22px}

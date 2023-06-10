@@ -1,31 +1,26 @@
 //==========================================//
-//oANDI: headers ANDI                       //
+//oANDI: certain headers ANDI               //
 //Created By Social Security Administration //
 //==========================================//
 function init_module(){
 
-var oANDIVersionNumber = "4.3.0";
+var oANDIVersionNumber = "4.3.1";
 
 //create oANDI instance
 var oANDI = new AndiModule(oANDIVersionNumber,"o");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 oANDI.analyze = function(objectClass){
-
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["heading"],"h1,h2,h3,h4,h5,h6")){
-
-            objectClass.elementNums[0] += 1;
-            objectClass.elementStrings[0] = "certain headings";
-
             andiData = new AndiData(this);
-
-            //Add to the headings array
 
             if(andiData.isAriaHidden != true)
                 objectClass.list.push(new CertainHeader([this], objectClass.list.length + 1, "", "", ""));
-
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+                objectClass.elementNums[0] += 1;
+                objectClass.elementStrings[0] = "certain headings";
             if(andiData.role === "heading"){
 
                 var ariaLevel = $(this).attr("aria-level");
@@ -49,14 +44,6 @@ oANDI.analyze = function(objectClass){
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
             AndiData.attachDataToElement(this);
         }
-
-        //For all elements on the page
-        if($.trim($(this).attr("role")))
-            objectClass.elementNums[2] += 1;
-            objectClass.elementStrings[2] = "elements with role attributes";
-        if($.trim($(this).prop("lang")))
-            objectClass.elementNums[1] += 1;
-            objectClass.elementStrings[1] = "elements with lang attributes";
     });
 };
 
@@ -112,78 +99,25 @@ var showStartUpSummaryText = "Heading structure found.<br />Determine if <span c
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 oANDI.results = function(objectClass){
 
-    var moreDetails = "<button id='ANDI508-pageTitle-button'>page title</button>"+
-        "<button id='ANDI508-pageLanguage-button'>page language</button>";
-
-    var moduleActionButtons = "<div class='ANDI508-moduleActionGroup'><button class='ANDI508-moduleActionGroup-toggler'>more details</button><div class='ANDI508-moduleActionGroup-options'>" + moreDetails + "</div></div>";
-
-    $("#ANDI508-module-actions").html(moduleActionButtons);
-
-    andiBar.initializeModuleActionGroups();
-
-    //Define the page title button
-    $("#ANDI508-pageTitle-button").click(function(){
-        andiOverlay.overlayButton_on("overlay",$(this));
-        if(document.title)
-            alert("The page title is: "+document.title);
-        else
-            alert("There is no page title.");
-        andiOverlay.overlayButton_off("overlay",$(this));
-    });
-
-    //Define the page language button
-    $("#ANDI508-pageLanguage-button").click(function(){
-        andiOverlay.overlayButton_on("overlay",$(this));
-        //get the lang attribute from the HTML element
-        var htmlLangAttribute = $.trim($("html").first().prop("lang"));
-        //pop up the lang value of the HTML element
-        if(htmlLangAttribute)
-            alert("The <html> element has a lang attribute value of: "+htmlLangAttribute+".");
-        else
-            alert("The <html> element does not have a lang attribute.");
-        andiOverlay.overlayButton_off("overlay",$(this));
-    });
-
-    //Deselect all mode buttons
-    $("#ANDI508-module-actions button.oANDI508-mode").attr("aria-selected","false");
-
     //Build Outline
     for(var x=0; x<objectClass.list.length; x++){
-        oANDI.outline += oANDI.getOutlineItem(objectClass.list[x]);
+        oANDI.outline += oANDI.getOutlineItem(objectClass.list[x].elementList[0]);
     }
     oANDI.outline += "</div>";
 
-    $("#ANDI508-additionalPageResults").html("<button id='ANDI508-viewOutline-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view headings list</button><div id='oANDI508-outline-container' class='ANDI508-viewOtherResults-expanded' tabindex='0'></div>");
+    $("#ANDI508-additionalPageResults").html("<button id='ANDI508-viewOutline-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"View Ordered Certain Headers List</button><div id='ANDI508-outline-container' class='ANDI508-viewOtherResults-expanded' tabindex='0'></div>");
 
     //Define outline button
     $("#ANDI508-viewOutline-button").click(function(){
-        if($(this).attr("aria-expanded") === "true"){
-            //hide Outline, show alert list
-            $("#oANDI508-outline-container").slideUp(AndiSettings.andiAnimationSpeed);
-            $("#ANDI508-alerts-list").show();
-            $(this)
-                .addClass("ANDI508-viewOtherResults-button-expanded")
-                .html(listIcon+"view headings list")
-                .attr("aria-expanded","false")
-                .removeClass("ANDI508-viewOtherResults-button-expanded ANDI508-module-action-active");
-        }
-        else{
-            //show Outline, hide alert list
-            $("#ANDI508-alerts-list").hide();
+        if ($(this).attr("aria-expanded") === "false") {
 
-            andiSettings.minimode(false);
-            $(this)
-                .html(listIcon+"hide headings list")
-                .attr("aria-expanded","true")
-                .addClass("ANDI508-viewOtherResults-button-expanded ANDI508-module-action-active")
-                .find("img").attr("src",icons_url+"list-on.png");
-            $("#oANDI508-outline-container").slideDown(AndiSettings.andiAnimationSpeed).focus();
         }
+        andiBar.viewList_toggle("Ordered Certain Headers", this, "outline-container");
         andiResetter.resizeHeights();
         return false;
     });
 
-    $("#oANDI508-outline-container")
+    $("#ANDI508-outline-container")
     .html(oANDI.outline)
     .find("a[data-andi508-relatedindex]").each(function(){
         andiFocuser.addFocusClick($(this));
@@ -199,19 +133,19 @@ oANDI.results = function(objectClass){
             AndiModule.inspect(relatedElement[0]);
         });
     });
-
-    $("#ANDI508").focus();
-
 };
 
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
 AndiModule.inspect = function(element){
-    if($(element).hasClass("ANDI508-element")){
+    if ($(element).hasClass("ANDI508-element")) {
+
+        //Highlight the row in the list that associates with this element
+        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
+
         andiBar.prepareActiveElementInspection(element);
 
         var elementData = $(element).data("andi508");
-
         var addOnProps = AndiData.getAddOnProps(element, elementData, ["aria-level"]);
 
         andiBar.displayOutput(elementData, element, addOnProps);
@@ -293,7 +227,7 @@ function CertainHeaders() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
-    this.columnNames    = ["element", "index", "nameDescription", "alerts"];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
     this.outlineReady   = false;
 }
 
@@ -301,7 +235,7 @@ function CertainHeaders() {
 function TableInfo() {
     this.tableMode      = "Certain Headers";
     this.cssProperties  = [];
-    this.buttonTextList = ["Reading Order", "Role Attributes", "Lang Attributes"];
+    this.buttonTextList = ["Reading Order"];
     this.tabsTextList   = [];
 }
 
@@ -312,6 +246,7 @@ oANDI.tableInfo = new TableInfo();
 oANDI.certainHeaders = andiBar.createObjectValues(oANDI.certainHeaders, 3);
 
 oANDI.analyze(oANDI.certainHeaders);
+oANDI.results(oANDI.certainHeaders);
 andiBar.results(oANDI.certainHeaders, oANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

@@ -1,32 +1,48 @@
 //==========================================//
-//rANDI: landmarks ANDI                     //
+//bANDI: lists ANDI                         //
 //Created By Social Security Administration //
 //==========================================//
 function init_module(){
 
-var rANDIVersionNumber = "4.3.1";
+var bANDIVersionNumber = "4.3.1";
 
-//create rANDI instance
-var rANDI = new AndiModule(rANDIVersionNumber,"r");
+//create bANDI instance
+var bANDI = new AndiModule(bANDIVersionNumber,"b");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
-rANDI.analyze = function(objectClass){
+bANDI.analyze = function(objectClass){
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
-        if($(this).isSemantically(["banner","complementary","contentinfo","form","main","navigation","search","region"],"main,header,footer,nav,form,aside")){
+        if($(this).is(":focusable,canvas")){
             andiData = new AndiData(this);
 
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
-            objectClass.list.push(new Landmark([this], objectClass.list.length + 1, "", "", ""));
+            objectClass.list.push(new Attribute([this], objectClass.list.length + 1, "", "", ""));
             andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
-            objectClass.elementStrings[0] = "landmarks";
+            objectClass.elementStrings[0] += "list elements";
             AndiData.attachDataToElement(this);
+        }
+
+        //For all elements on the page
+
+        if ($(this).is("label")) {
+            objectClass.elementNums[2] += 1;
+            objectClass.elementStrings[2] = "label tags"
+        }
+
+        attributesToFind = ["title", "role", "lang"];
+        for (var a = 0; a < attributesToFind.length; a++) {
+            var attributeValue = $.trim($(this).attr(attributesToFind[a]));
+            if (attributeValue) {
+                objectClass.elementNums[a] += q
+                objectClass.elementStrings[a] = "elements with " + attributesToFind[a] + "attributes";
+            }
         }
     });
 };
 
-var showStartUpSummaryText = "Landmark structure found.<br />Ensure that each <span class='ANDI508-module-name-s'>landmark</span> is applied appropriately to the corresponding section of the page.";
+var showStartUpSummaryText = "List structure found.<br />Determine if the <span class='ANDI508-module-name-s'>list</span> container types used (ol, ul, li, dl, dd, dt, role=list, role=listitem) are appropriately applied.";
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
 AndiModule.inspect = function(element){
@@ -104,8 +120,44 @@ AndiOverlay.prototype.overlayReadingOrder = function(){
     }
 };
 
-//This object class is used to store data about each landmark. Object instances will be placed into an array.
-function Landmark(elementList, index, nameDescription, alerts, rowClass) {
+bANDI.results = function(){
+
+    var moreDetails = "<button id='ANDI508-pageTitle-button'>page title</button>"+
+        "<button id='ANDI508-pageLanguage-button'>page language</button>";
+
+    var moduleActionButtons = "<div class='ANDI508-moduleActionGroup'><button class='ANDI508-moduleActionGroup-toggler'>more details</button><div class='ANDI508-moduleActionGroup-options'>" + moreDetails + "</div></div>";
+
+    $("#ANDI508-module-actions").html(moduleActionButtons);
+
+    //Define the page title button
+    $("#ANDI508-pageTitle-button").click(function(){
+        andiOverlay.overlayButton_on("overlay",$(this));
+        if(document.title)
+            alert("The page title is: "+document.title);
+        else
+            alert("There is no page title.");
+        andiOverlay.overlayButton_off("overlay",$(this));
+    });
+
+    //Define the page language button
+    $("#ANDI508-pageLanguage-button").click(function(){
+        andiOverlay.overlayButton_on("overlay",$(this));
+        //get the lang attribute from the HTML element
+        var htmlLangAttribute = $.trim($("html").first().prop("lang"));
+        //pop up the lang value of the HTML element
+        if(htmlLangAttribute)
+            alert("The <html> element has a lang attribute value of: "+htmlLangAttribute+".");
+        else
+            alert("The <html> element does not have a lang attribute.");
+        andiOverlay.overlayButton_off("overlay",$(this));
+    });
+
+    //Deselect all mode buttons
+    $("#ANDI508-module-actions button.bANDI508-mode").attr("aria-selected","false");
+};
+
+//This object class is used to store data about each list. Object instances will be placed into an array.
+function Attribute(elementList, index, nameDescription, alerts, rowClass) {
     this.elementList     = elementList;
     this.index           = index;
     this.nameDescription = nameDescription;
@@ -114,8 +166,8 @@ function Landmark(elementList, index, nameDescription, alerts, rowClass) {
     this.rowClass        = rowClass;
 }
 
-//This object class is used to keep track of the landmarks on the page
-function Landmarks() {
+//This object class is used to keep track of the certain headers on the page
+function Attributes() {
     this.list           = [];
     this.elementNums    = [];
     this.elementStrings = [];
@@ -124,18 +176,19 @@ function Landmarks() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode      = "Landmarks";
+    this.tableMode      = "Attributes";
     this.cssProperties  = [];
-    this.buttonTextList = ["Reading Order"];
+    this.buttonTextList = ["Reading Order", "Label Tags", "Title Attributes", "Role Attributes", "Lang Attributes"];
     this.tabsTextList   = [];
 }
 
-rANDI.landmarks = new Landmarks();
-rANDI.tableInfo = new TableInfo();
+bANDI.attributes = new Attributes();
+bANDI.tableInfo = new TableInfo();
 
-rANDI.landmarks = andiBar.createObjectValues(rANDI.landmarks, 3);
+bANDI.attributes = andiBar.createObjectValues(bANDI.attributes, 2);
 
-rANDI.analyze(rANDI.landmarks);
-andiBar.results(rANDI.landmarks, rANDI.tableInfo, [], showStartUpSummaryText);
+bANDI.analyze(bANDI.attributes);
+bANDI.results(); // TODO: Make the "Reading Order", "Role Attributes" and "Lang Attributes" buttons work
+andiBar.results(bANDI.attributes, bANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init
