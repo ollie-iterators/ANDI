@@ -9,9 +9,9 @@ var pANDIVersionNumber = "4.3.1";
 //create pANDI instance
 var pANDI = new AndiModule(pANDIVersionNumber,"p");
 
+var attributesToAdd = [];
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 pANDI.analyze = function(objectClass){
-    var attributesToAdd = [];
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).is("p,div,span,strong,em")){

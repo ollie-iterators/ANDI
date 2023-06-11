@@ -85,9 +85,9 @@ AndiModule.initActiveActionButtons({
     modeButtonsVisible:false
 });
 
+var attributesToAdd = [];
 //This function will analyze the test page for table related markup relating to accessibility
 vANDI.analyze = function(objectClass){
-    var attributesToAdd = [];
     //Loop through each visible table
     var activeElementFound = false;
     $(TestPageData.allElements).filter("table,[role=table],[role=grid],[role=treegrid]").each(function(){

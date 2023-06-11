@@ -21,9 +21,9 @@ AndiModule.hoverability = function(event){
 //These variables are for the page
 var activeTableIndex = -1;          //The array index of the active table
 
+var attributesToAdd = [];
 //This function will analyze the test page for table related markup relating to accessibility
 tANDI.analyze = function(objectClass){
-    var attributesToAdd = [];
     //Loop through each visible table
     var activeElementFound = false;
     $(TestPageData.allElements).filter("[role=presentation],[role=none]").each(function(){

@@ -15,9 +15,9 @@ AndiModule.cleanup = function(testPage, element){
         $(element).removeClass("mANDI508-ambiguous");
 };
 
+var attributesToAdd = [];
 //This function will analyze the test page for link related markup relating to accessibility
 mANDI.analyze = function(objectClass){
-    var attributesToAdd = [];
     //Loop through every visible element and run tests
     $(TestPageData.allElements).each(function(){
         //Analyze elements that might be links

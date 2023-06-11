@@ -21,9 +21,9 @@ AndiModule.cleanup = function(testPage, element){
     $(testPage).find(".gANDI508-background").removeClass("gANDI508-background");
 };
 
+var attributesToAdd = [];
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 gANDI.analyze = function(objectClass){
-    var attributesToAdd = [];
     var isImageContainedByInteractiveWidget; //boolean if image is contained by link or button
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){

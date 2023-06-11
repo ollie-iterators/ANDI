@@ -9,9 +9,9 @@ var oANDIVersionNumber = "4.3.1";
 //create oANDI instance
 var oANDI = new AndiModule(oANDIVersionNumber,"o");
 
+var attributesToAdd = [];
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 oANDI.analyze = function(objectClass){
-    var attributesToAdd = [];
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["heading"],"h1,h2,h3,h4,h5,h6")){

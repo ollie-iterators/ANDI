@@ -9,9 +9,9 @@ var bANDIVersionNumber = "4.3.1";
 //create bANDI instance
 var bANDI = new AndiModule(bANDIVersionNumber,"b");
 
+var attributesToAdd = [];
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 bANDI.analyze = function(objectClass){
-    var attributesToAdd = [];
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).is(":focusable,canvas")){

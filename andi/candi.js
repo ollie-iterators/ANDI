@@ -15,9 +15,9 @@ AndiModule.initActiveActionButtons({
     contrastPlayground:false
 });
 
+var attributesToAdd = [];
 //This function will run tests on text containing elements
 cANDI.analyze = function(objectClass){
-    var attributesToAdd = [];
     //Elements that are disabled or have aria-disabled="true" do not need to be tested
     $(TestPageData.allElements).filter("*:not(option)").each(function(){
         if($(this).is("img[src],input:image[src],svg,canvas")){

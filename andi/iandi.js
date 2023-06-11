@@ -9,9 +9,9 @@ var iandiVersionNumber = "3.0.2";
 //create iANDI instance
 var iANDI = new AndiModule(iandiVersionNumber,"i");
 
+var attributesToAdd = [];
 //This function will analyze the test page for iframes
 iANDI.analyze = function(objectClass){
-    var attributesToAdd = [];
     $(TestPageData.allElements).each(function(){
         if($(this).is("iframe")){
             andiData = new AndiData(this);
@@ -104,7 +104,7 @@ iANDI.tableInfo = new TableInfo();
 iANDI.iFrames = andiBar.createObjectValues(iANDI.iFrames, 1);
 
 iANDI.analyze(iANDI.iFrames);
-andiBar.results(iANDI.iFrames, iANDI.tableInfo, attributesToAdd, showStartUpSummaryText);SummaryText);
+andiBar.results(iANDI.iFrames, iANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 iANDI.iFrameOpen();
 
 }//end init

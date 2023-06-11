@@ -36,9 +36,9 @@ var alertIcons = new function(){//new is intentional
     }
 };
 
+var attributesToAdd = [];
 //This function will analyze the test page for link related markup relating to accessibility
 lANDI.analyze = function(objectClass){
-    var attributesToAdd = [];
     //Variables used to build the links/buttons list array.
     var href, nameDescription, alerts, target, linkPurpose, alertIcon, alertObject, relatedElement, ambiguousIndex;
 

@@ -28,7 +28,6 @@ AndiModule.cleanup = function(testPage, element){
 };
 
 AndiModule.inspect = function(element){
-    var attributesToAdd = [];
     if ($(element).hasClass("ANDI508-element")) {
 
         //Highlight the row in the list that associates with this element
@@ -77,6 +76,7 @@ hANDI.containsTestableContent = function(element){
     return needsTesting;
 };
 
+var attributesToAdd = [];
 //This function will analyze the test page for elements hidden using CSS
 hANDI.analyze = function(objectClass){
     var elementCss;
