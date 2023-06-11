@@ -11,6 +11,7 @@ var rANDI = new AndiModule(rANDIVersionNumber,"r");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 rANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["banner","complementary","contentinfo","form","main","navigation","search","region"],"main,header,footer,nav,form,aside")){
@@ -18,7 +19,7 @@ rANDI.analyze = function(objectClass){
 
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
             objectClass.list.push(new Landmark([this], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "landmarks";
             AndiData.attachDataToElement(this);
@@ -136,6 +137,6 @@ rANDI.tableInfo = new TableInfo();
 rANDI.landmarks = andiBar.createObjectValues(rANDI.landmarks, 3);
 
 rANDI.analyze(rANDI.landmarks);
-andiBar.results(rANDI.landmarks, rANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(rANDI.landmarks, rANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 }//end init

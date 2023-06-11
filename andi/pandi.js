@@ -11,6 +11,7 @@ var pANDI = new AndiModule(pANDIVersionNumber,"p");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 pANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).is("p,div,span,strong,em")){
@@ -20,7 +21,7 @@ pANDI.analyze = function(objectClass){
                 andiAlerter.throwAlert(alert_0190);
                 AndiData.attachDataToElement(this);
                 objectClass.list.push(new PossibleHeader([this], objectClass.list.length + 1, "", "", ""));
-                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "possible headings";
             }
@@ -274,6 +275,6 @@ pANDI.possibleHeaders = andiBar.createObjectValues(pANDI.possibleHeaders, 3);
 
 pANDI.analyze(pANDI.possibleHeaders);
 pANDI.results(pANDI.possibleHeaders);
-andiBar.results(pANDI.possibleHeaders, pANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(pANDI.possibleHeaders, pANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 }//end init

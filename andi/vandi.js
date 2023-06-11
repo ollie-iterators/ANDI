@@ -87,6 +87,7 @@ AndiModule.initActiveActionButtons({
 
 //This function will analyze the test page for table related markup relating to accessibility
 vANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Loop through each visible table
     var activeElementFound = false;
     $(TestPageData.allElements).filter("table,[role=table],[role=grid],[role=treegrid]").each(function(){
@@ -95,7 +96,7 @@ vANDI.analyze = function(objectClass){
 
         if($(this).isSemantically(["table","grid","treegrid"],"table")){
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "data tables";
         }
@@ -1533,7 +1534,7 @@ vANDI.dataTables = andiBar.createObjectValues(vANDI.dataTables, 1);
 
 //analyze tables
 vANDI.analyze(vANDI.dataTables);
-andiBar.results(vANDI.dataTables, vANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(vANDI.dataTables, vANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
     "markup"

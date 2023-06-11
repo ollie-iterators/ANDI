@@ -17,6 +17,7 @@ AndiModule.initActiveActionButtons({
 
 //This function will run tests on text containing elements
 cANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Elements that are disabled or have aria-disabled="true" do not need to be tested
     $(TestPageData.allElements).filter("*:not(option)").each(function(){
         if($(this).is("img[src],input:image[src],svg,canvas")){
@@ -42,7 +43,7 @@ cANDI.analyze = function(objectClass){
                         //Throw alerts if necessary
                         cANDI.processResult($(this));
                         objectClass.list.push(new Contrast([this], objectClass.list.length + 1, "", "", ""));
-                        andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+                        attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                         objectClass.elementNums[0] += 1;
                         objectClass.elementStrings[0] = "color contrast elements"
                         AndiData.attachDataToElement(this);
@@ -976,6 +977,6 @@ cANDI.tableInfo = new TableInfo();
 cANDI.contrasts = andiBar.createObjectValues(cANDI.contrasts, 3);
 
 cANDI.analyze(cANDI.contrasts);
-andiBar.results(cANDI.contrasts, cANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(cANDI.contrasts, cANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 }//end init

@@ -38,6 +38,7 @@ var alertIcons = new function(){//new is intentional
 
 //This function will analyze the test page for link related markup relating to accessibility
 lANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Variables used to build the links/buttons list array.
     var href, nameDescription, alerts, target, linkPurpose, alertIcon, alertObject, relatedElement, ambiguousIndex;
 
@@ -438,6 +439,6 @@ lANDI.tableInfo = new TableInfo();
 lANDI.links = andiBar.createObjectValues(lANDI.links, 4);
 
 lANDI.analyze(lANDI.links);
-andiBar.results(lANDI.links, lANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(lANDI.links, lANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 }//end init

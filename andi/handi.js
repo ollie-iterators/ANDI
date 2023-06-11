@@ -28,6 +28,7 @@ AndiModule.cleanup = function(testPage, element){
 };
 
 AndiModule.inspect = function(element){
+    var attributesToAdd = [];
     if ($(element).hasClass("ANDI508-element")) {
 
         //Highlight the row in the list that associates with this element
@@ -150,7 +151,7 @@ hANDI.analyze = function(objectClass){
             objectClass.list.push(new HiddenElement([this], objectClass.list.length + 1, "", "", ""));
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "hidden elements";
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             AndiData.attachDataToElement(this);
         }
     });
@@ -320,7 +321,7 @@ hANDI.tableInfo = new TableInfo();
 hANDI.hiddenElements = andiBar.createObjectValues(hANDI.hiddenElements, 9);
 
 hANDI.analyze(hANDI.hiddenElements);
-andiBar.results(hANDI.hiddenElements, hANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(hANDI.hiddenElements, hANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 hANDI.buildNewButton();
 
 }//end init

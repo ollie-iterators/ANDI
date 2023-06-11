@@ -11,6 +11,7 @@ var sANDI = new AndiModule(sANDIVersionNumber,"s");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 sANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["alert","status","log","marquee","timer"],"[aria-live=polite],[aria-live=assertive]")){
@@ -36,7 +37,7 @@ sANDI.analyze = function(objectClass){
                 andiAlerter.throwAlert(alert_0182);
 
             objectClass.list.push(new LiveRegion([this], objectClass.list.length + 1, andiData.accName, "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "live regions";
             AndiData.attachDataToElement(this);
@@ -195,6 +196,6 @@ sANDI.tableInfo = new TableInfo();
 sANDI.liveRegions = andiBar.createObjectValues(sANDI.liveRegions, 3);
 
 sANDI.analyze(sANDI.liveRegions);
-andiBar.results(sANDI.liveRegions, sANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(sANDI.liveRegions, sANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 }//end init

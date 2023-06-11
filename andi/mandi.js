@@ -17,6 +17,7 @@ AndiModule.cleanup = function(testPage, element){
 
 //This function will analyze the test page for link related markup relating to accessibility
 mANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Loop through every visible element and run tests
     $(TestPageData.allElements).each(function(){
         //Analyze elements that might be links
@@ -26,7 +27,7 @@ mANDI.analyze = function(objectClass){
                 andiData = new AndiData(this);
                 isLinkKeyboardAccessible(undefined, this);
                 objectClass.list.push(new PossibleLink([this], objectClass.list.length + 1, "", "", ""));
-                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "possible links";
                 AndiData.attachDataToElement(this);
@@ -140,6 +141,6 @@ mANDI.tableInfo = new TableInfo();
 mANDI.links = andiBar.createObjectValues(mANDI.links, 1);
 
 mANDI.analyze(mANDI.links);
-andiBar.results(mANDI.links, mANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(mANDI.links, mANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 }//end init

@@ -4134,8 +4134,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     var andiResults = new AndiResults();
 
     //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-
-    andiBar.getAttributes = function(objectClass, index) {
+    // TODO: Make it so that the function returns attributesToAdd (a list that contains
+    //       a list of the attributes that the various elements have)
+    andiBar.getAttributes = function(objectClass, index, attributesToAdd) {
         if (objectClass.list[index].elementList[0].hasAttributes()) {
             var attrs = objectClass.list[index].elementList[0].getAttributeNames();
             for (var a = 0; a < attrs.length; a += 1) {
@@ -4149,12 +4150,12 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 if (!attrs.includes(attributeName)) {
                     $(objectClass.list[index].elementList[0]).attr(attributeName, attribute);
                 }
-                //objectClass.list[index].columnValues.push(attribute);
-                // if (!objectClass.columnNames.includes(attrs[a])) {
-                //     objectClass.columnNames.push(attrs[a]);
-                // }
+                if (!attributesToAdd.includes(attributeName)) {
+                    attributesToAdd.push(attributeName);
+                }
             }
         }
+        return attributesToAdd;
     }
 
     //Inserts some counter totals, displays the accesskey list

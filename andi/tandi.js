@@ -23,12 +23,13 @@ var activeTableIndex = -1;          //The array index of the active table
 
 //This function will analyze the test page for table related markup relating to accessibility
 tANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Loop through each visible table
     var activeElementFound = false;
     $(TestPageData.allElements).filter("[role=presentation],[role=none]").each(function(){
         if($(this).isSemantically(["presentation","none"])){
             objectClass.list.push(new PresentationTable([this], objectClass.list.length + 1, "<span style='font-style:italic'>Presentation Table</span>", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "presentation tables";
 
@@ -229,6 +230,6 @@ tANDI.presentationTables = andiBar.createObjectValues(tANDI.presentationTables, 
 
 //analyze tables
 tANDI.analyze(tANDI.presentationTables);
-andiBar.results(tANDI.presentationTables, tANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(tANDI.presentationTables, tANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 }//end init

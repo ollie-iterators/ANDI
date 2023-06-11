@@ -11,6 +11,7 @@ var fANDI = new AndiModule(fandiVersionNumber,"f");
 
 //This function will analyze the test page for focusable element related markup relating to accessibility
 fANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Loop through every visible element and run tests
     $(TestPageData.allElements).each(function(){
         if($(this).is(":focusable,canvas")){//If element is focusable, search for accessibility components.
@@ -251,6 +252,6 @@ fANDI.focusables = andiBar.createObjectValues(fANDI.focusables, 3);
 
 fANDI.addAccessKeysList(fANDI.accesskeys);
 fANDI.analyze(fANDI.focusables);
-andiBar.results(fANDI.focusables, fANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(fANDI.focusables, fANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 }//end init

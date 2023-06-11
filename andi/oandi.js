@@ -11,6 +11,7 @@ var oANDI = new AndiModule(oANDIVersionNumber,"o");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 oANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["heading"],"h1,h2,h3,h4,h5,h6")){
@@ -18,7 +19,7 @@ oANDI.analyze = function(objectClass){
 
             if(andiData.isAriaHidden != true)
                 objectClass.list.push(new CertainHeader([this], objectClass.list.length + 1, "", "", ""));
-                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "certain headings";
             if(andiData.role === "heading"){
@@ -247,6 +248,6 @@ oANDI.certainHeaders = andiBar.createObjectValues(oANDI.certainHeaders, 3);
 
 oANDI.analyze(oANDI.certainHeaders);
 oANDI.results(oANDI.certainHeaders);
-andiBar.results(oANDI.certainHeaders, oANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(oANDI.certainHeaders, oANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 }//end init

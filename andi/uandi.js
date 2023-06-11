@@ -23,12 +23,13 @@ var activeTableIndex = -1;          //The array index of the active table
 
 //This function will analyze the test page for table related markup relating to accessibility
 uANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Loop through each visible table
     var activeElementFound = false;
     $(TestPageData.allElements).filter("table").each(function(){
         if (!$(this).isSemantically(["table","grid","treegrid","presentation","none"],"table")) {
             objectClass.list.push(new StrangeTable([this], objectClass.list.length + 1, "<span style='font-style:italic'>Not Recognized as a Data Table</span>", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "strange tables";
 
@@ -196,6 +197,6 @@ uANDI.strangeTables = andiBar.createObjectValues(uANDI.strangeTables, 1);
 
 //analyze tables
 uANDI.analyze(uANDI.strangeTables);
-andiBar.results(uANDI.strangeTables, uANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(uANDI.strangeTables, uANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 }//end init

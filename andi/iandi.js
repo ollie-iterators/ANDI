@@ -11,12 +11,13 @@ var iANDI = new AndiModule(iandiVersionNumber,"i");
 
 //This function will analyze the test page for iframes
 iANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     $(TestPageData.allElements).each(function(){
         if($(this).is("iframe")){
             andiData = new AndiData(this);
             andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
             objectClass.list.push(new iFrame([this], objectClass.list.length + 1, "", "", ""))
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "iframes";
             AndiData.attachDataToElement(this);
@@ -103,7 +104,7 @@ iANDI.tableInfo = new TableInfo();
 iANDI.iFrames = andiBar.createObjectValues(iANDI.iFrames, 1);
 
 iANDI.analyze(iANDI.iFrames);
-andiBar.results(iANDI.iFrames, iANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(iANDI.iFrames, iANDI.tableInfo, attributesToAdd, showStartUpSummaryText);SummaryText);
 iANDI.iFrameOpen();
 
 }//end init

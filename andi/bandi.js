@@ -11,6 +11,7 @@ var bANDI = new AndiModule(bANDIVersionNumber,"b");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 bANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).is(":focusable,canvas")){
@@ -18,7 +19,7 @@ bANDI.analyze = function(objectClass){
 
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
             objectClass.list.push(new Attribute([this], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "list elements";
             AndiData.attachDataToElement(this);
@@ -189,6 +190,6 @@ bANDI.attributes = andiBar.createObjectValues(bANDI.attributes, 2);
 
 bANDI.analyze(bANDI.attributes);
 bANDI.results(); // TODO: Make the "Reading Order", "Role Attributes" and "Lang Attributes" buttons work
-andiBar.results(bANDI.attributes, bANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(bANDI.attributes, bANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 }//end init

@@ -29,6 +29,7 @@ var alertIcons = new function(){//new is intentional
 
 //This function will analyze the test page for link related markup relating to accessibility
 nANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Variables used to build the links/buttons list array.
     var nameDescription, alerts, accesskey, alertIcon, alertObject, relatedElement, nonUniqueIndex;
 
@@ -70,7 +71,7 @@ nANDI.analyze = function(objectClass){
 
                 andiCheck.commonFocusableElementChecks(andiData,$(this));
                 objectClass.list.push(new Button([this], objectClass.list.length + 1, nameDescription, "", ""));
-                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "buttons";
                 AndiData.attachDataToElement(this);
@@ -258,6 +259,6 @@ nANDI.tableInfo = new TableInfo();
 nANDI.buttons = andiBar.createObjectValues(nANDI.buttons, 2);
 
 nANDI.analyze(nANDI.buttons);
-andiBar.results(nANDI.buttons, nANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(nANDI.buttons, nANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 }//end init

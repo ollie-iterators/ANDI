@@ -11,6 +11,7 @@ var qANDI = new AndiModule(qANDIVersionNumber,"r");
 
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 qANDI.analyze = function(objectClass){
+    var attributesToAdd = [];
     //Loop through every visible element
     $(TestPageData.allElements).each(function(){
         if($(this).isSemantically(["listitem","list"],"ol,ul,li,dl,dd,dt")){
@@ -68,7 +69,7 @@ qANDI.analyze = function(objectClass){
 
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
             objectClass.list.push(new List([this], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "list elements";
             AndiData.attachDataToElement(this);
@@ -186,6 +187,6 @@ qANDI.tableInfo = new TableInfo();
 qANDI.lists = andiBar.createObjectValues(qANDI.lists, 12);
 
 qANDI.analyze(qANDI.lists);
-andiBar.results(qANDI.lists, qANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(qANDI.lists, qANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
 
 }//end init
