@@ -4388,7 +4388,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             var columnName = "";
             for (var x = 0; x < moduleList.columnNames.length; x += 1) {
                 var columnValue = "";
-                if (moduleList.columnNames[x].contains("data-andi508-")) {
+                if (moduleList.columnNames[x].includes("data-andi508-")) {
                     columnValue = moduleList.columnNames[x].replace("data-andi508-", "");
                 } else {
                     columnValue = moduleList.columnNames[x];
