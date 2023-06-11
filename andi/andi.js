@@ -4387,19 +4387,13 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         this.createColumnName = function (moduleList, tableModule, attributesToAdd) {
             var columnName = "";
             for (var x = 0; x < moduleList.columnNames.length; x += 1) {
-                var columnValue = "";
-                if (moduleList.columnNames[x].includes("data-andi508-")) {
-                    columnValue = moduleList.columnNames[x].replace("data-andi508-", "");
-                } else {
-                    columnValue = moduleList.columnNames[x];
-                }
-                columnName += ", [" + columnValue + "]";
+                columnName += ", [" + moduleList.columnNames[x] + "]";
             }
 
             for (var x = 0; x < attributesToAdd.length; x += 1) {
                 var valueToAdd;
-                if (String(attributesToAdd[x]).charAt(0) == "-") {
-                    valueToAdd = String(attributesToAdd[x]).substring(1);
+                if (String(attributesToAdd[x]).charAt(0).includes("data-andi508-")) {
+                    valueToAdd = String(attributesToAdd[x]).replace("data-andi508-", "");
                 } else {
                     valueToAdd = String(attributesToAdd[x]);
                 }
@@ -4428,11 +4422,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     if (String(moduleList.list[x].columnValues[r]).charAt(0) == "[") {
                         rowValues += ", " + moduleList.list[x].columnValues[r];
                     } else {
-                        if (moduleList.list[x].columnValues[r] == "undefined") {
-                            rowValues += ", []";
-                        } else {
-                            rowValues += ", [" + moduleList.list[x].columnValues[r] + "]";
-                        }
+                        rowValues += ", [" + moduleList.list[x].columnValues[r] + "]";
                     }
                 }
                 for (var r = 0; r < attributesToAdd.length; r += 1) {
