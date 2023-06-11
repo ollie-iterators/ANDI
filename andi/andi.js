@@ -4387,7 +4387,13 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         this.createColumnName = function (moduleList, tableModule, attributesToAdd) {
             var columnName = "";
             for (var x = 0; x < moduleList.columnNames.length; x += 1) {
-                columnName += ", [" + moduleList.columnNames[x] + "]";
+                var columnValue = "";
+                if (moduleList.columnNames[x].contains("data-andi508-")) {
+                    columnValue = moduleList.columnNames[x].replace("data-andi508-", "");
+                } else {
+                    columnValue = moduleList.columnNames[x];
+                }
+                columnName += ", [" + columnValue + "]";
             }
 
             for (var x = 0; x < attributesToAdd.length; x += 1) {
@@ -4422,7 +4428,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     if (String(moduleList.list[x].columnValues[r]).charAt(0) == "[") {
                         rowValues += ", " + moduleList.list[x].columnValues[r];
                     } else {
-                        rowValues += ", [" + moduleList.list[x].columnValues[r] + "]";
+                        if (moduleList.list[x].columnValues[r] == "undefined") {
+                            rowValues += ", []";
+                        } else {
+                            rowValues += ", [" + moduleList.list[x].columnValues[r] + "]";
+                        }
                     }
                 }
                 for (var r = 0; r < attributesToAdd.length; r += 1) {
