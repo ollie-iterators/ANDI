@@ -4166,8 +4166,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             var dataKeys = Object.keys(data);
             for (var d = 0; d < dataKeys.length; d += 1) {
                 if (!attributesToAdd.includes(dataKeys[d])) {
-                    attributesToAdd.push(data[dataKeys[d]]);
-                    $(objectClass.list[index].elementList[0]).attr(dataKeys[d], data[dataKeys[d]]);
+                    attributesToAdd.push("data-andi508-" + data[dataKeys[d]]);
+                    $(objectClass.list[index].elementList[0]).attr("data-andi508-" + dataKeys[d], data[dataKeys[d]]);
                 }
             }
         }
