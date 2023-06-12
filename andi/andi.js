@@ -4429,7 +4429,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     }
                 }
                 for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
-                    var styleTest = getStyles(moduleList.list[x].elementList[e]);
+                    var styleDict = getStyles(moduleList.list[x].elementList[e]);
+                    var styleKeys = Object.keys(styleDict);
                     $("#ANDI508-additionalElementDetails").append(Object.keys(styleTest));
                     // var styleDict = $(moduleList.list[x].elementList[e]).attr("data-andi508-style");
                     // var styleKeys = [];
@@ -4440,6 +4441,13 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     //     }
                     // }
                     // $("#ANDI508-additionalElementDetails").append("Style Keys: " + styleKeys.toString());
+                    for (var s = 0; s < styleKeys.length; s += 1) {
+                        if (String(styleDict[styleKeys[s]]).charAt(0) == "[") {
+                            rowValues += ", " + styleDict[styleKeys[s]];
+                        } else {
+                            rowValues += ", [" + styleDict[styleKeys[s]] + "]";
+                        }
+                    }
                     for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
                         if (String($(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r])).charAt(0) == "[") {
                             rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]);
