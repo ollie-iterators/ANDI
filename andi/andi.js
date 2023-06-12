@@ -4375,9 +4375,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
 
             for (var a = 0; a < attributesAdded.length; a += 1) {
-                $("#ANDI508-additionalElementDetails").append(attributesAdded[a]);
                 if (!attributesToAdd.includes(attributesAdded[a])) {
-                    if (!attributesToAdd.includes("-" + String(attributesAdded[a]))) {
+                    if (!attributesToAdd.includes(String(attributesAdded[a]))) {
                         attributesToAdd.push(String(attributesAdded[a]));
                     }
                 }
