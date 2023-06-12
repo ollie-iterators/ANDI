@@ -4385,22 +4385,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 columnName += ", [" + valueToAdd + "]";
             }
 
-            for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
-                var styleDict = getStyles(moduleList.list[x].elementList[e]);
-                var styleKeys = Object.keys(styleDict);
-
-                for (var s = 0; s < styleKeys.length; s += 1) {
-                    columnName += ", [" + styleKeys[s] + "]";
-                }
-                for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
-                    if (String($(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r])).charAt(0) == "[") {
-                        rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]);
-                    } else {
-                        rowValues += ", [" + $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]) + "]";
-                    }
-                }
-            }
-
             for (var c = 0; c < tableModule.cssProperties.length; c += 1) {
                 var valueToAdd;
                 if (String(tableModule.cssProperties[c]).length > 0) {
