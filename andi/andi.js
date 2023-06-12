@@ -4159,6 +4159,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 }
             }
         }
+
+        var computedStyle = window.getComputedStyle(objectClass.list[index].elementList[0]);
+        $(objectClass.list[index].elementList[0]).attr("data-andi508-computedStyle", computedStyle);
+        attributesToAdd.push("data-andi508-computedStyle");
+
         return attributesToAdd;
     }
 
