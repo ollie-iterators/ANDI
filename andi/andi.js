@@ -4393,7 +4393,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
             for (var x = 0; x < attributesToAdd.length; x += 1) {
                 var valueToAdd;
-                if (String(attributesToAdd[x]).charAt(0).includes("data-andi508-")) {
+                if (String(attributesToAdd[x]).includes("data-andi508-")) {
                     valueToAdd = String(attributesToAdd[x]).replace("data-andi508-", "");
                 } else {
                     valueToAdd = String(attributesToAdd[x]);
