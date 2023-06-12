@@ -191,7 +191,7 @@ AndiModule.inspect = function(element){
     if ($(element).hasClass("ANDI508-element")) {
 
         //Highlight the row in the list that associates with this element
-        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
+        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"), "viewList");
 
         andiBar.prepareActiveElementInspection(element);
 
