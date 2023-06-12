@@ -4431,7 +4431,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
                     var styleDict = $(moduleList.list[x].elementList[e]).attr("data-andi508-style");
                     var styleKeys = [];
-                    if (typeof styleDict === "undefined") {
+                    if (typeof styleDict !== "undefined") {
                         styleKeys = Object.keys(styleDict);
                     }
                     $("#ANDI508-additionalElementDetails").append(styleKeys.toString());
