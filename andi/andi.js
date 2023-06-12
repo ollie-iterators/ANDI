@@ -4430,6 +4430,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 }
                 for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
                     var styleDict = $(moduleList.list[x].elementList[e]).attr("data-andi508-style");
+                    $("#ANDI508-additionalElementDetails").append("Style Dict: " + styleDict);
                     var styleKeys = Object.keys(styleDict);
                     $("#ANDI508-additionalElementDetails").append(styleKeys.toString());
                     for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
