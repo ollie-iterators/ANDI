@@ -4434,7 +4434,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     if (typeof styleDict !== "undefined") {
                         styleKeys = Object.keys(styleDict);
                     }
-                    $("#ANDI508-additionalElementDetails").append(styleKeys.toString());
+                    $("#ANDI508-additionalElementDetails").append("Style Keys: " + styleKeys.toString());
                     for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
                         if (String($(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r])).charAt(0) == "[") {
                             rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]);
