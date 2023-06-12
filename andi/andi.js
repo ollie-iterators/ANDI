@@ -4429,15 +4429,17 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     }
                 }
                 for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
-                    var styleDict = $(moduleList.list[x].elementList[e]).attr("data-andi508-style");
-                    var styleKeys = [];
-                    if (typeof styleDict !== "undefined") {
-                        styleKeys = Object.keys(styleDict);
-                        for (var variable in styleDict) {
-                            $("#ANDI508-additionalElementDetails").append(variable);
-                        }
-                    }
-                    $("#ANDI508-additionalElementDetails").append("Style Keys: " + styleKeys.toString());
+                    var styleTest = getStyles(moduleList.list[x].elementList[e]);
+                    $("#ANDI508-additionalElementDetails").append(styleTest.toString());
+                    // var styleDict = $(moduleList.list[x].elementList[e]).attr("data-andi508-style");
+                    // var styleKeys = [];
+                    // if (typeof styleDict !== "undefined") {
+                    //     styleKeys = Object.keys(styleDict);
+                    //     for (var variable in styleDict) {
+                    //         $("#ANDI508-additionalElementDetails").append(variable);
+                    //     }
+                    // }
+                    // $("#ANDI508-additionalElementDetails").append("Style Keys: " + styleKeys.toString());
                     for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
                         if (String($(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r])).charAt(0) == "[") {
                             rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]);
@@ -4453,6 +4455,35 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                             "<a href='javascript:void(0)' data-andi508-relatedindex='" + moduleList.list[x].index + "'>" + rowValues + "</a></td></tr>";
             }
             return tableHTML;
+        }
+
+        function getStyles(el) {
+            var output = {};
+
+            if (!el || !el.style || !el.style.cssText) {
+                return output;
+            }
+
+            var camelize = function camelize(str) {
+                return str.replace (/(?:^|[-])(\w)/g, function (a, c) {
+                    c = a.substr(0, 1) === '-' ? c.toUpperCase () : c;
+                    return c ? c : '';
+                });
+            }
+
+            var style = el.style.cssText.split(';');
+
+            for (var i = 0; i < style.length; ++i) {
+                var rule = style[i].trim();
+
+                if (rule) {
+                    var ruleParts = rule.split(':');
+                    var key = camelize(ruleParts[0].trim());
+                    output[key] = ruleParts[1].trim();
+                }
+            }
+
+            return output;
         }
 
         //This function builds the table HTML
