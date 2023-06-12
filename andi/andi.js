@@ -4382,9 +4382,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 } else {
                     valueToAdd = String(attributesToAdd[x]);
                 }
-                if (!(valueToAdd == "style")) {
-                    columnName += ", [" + valueToAdd + "]";
-                }
+                columnName += ", [" + valueToAdd + "]";
             }
 
             for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
@@ -4435,35 +4433,14 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     } else {
                         attributeInList = String(attributesToAdd[r]);
                     }
-                    if (!(attributeInList == "data-andi508-style")) {
-                        var attributeToFind = $(moduleList.list[x].elementList[0]).attr(attributeInList);
-                        if (String(attributeToFind).charAt(0) == "[") {
-                            rowValues += ", " + String(attributeToFind);
-                        } else {
-                            rowValues += ", [" + String(attributeToFind) + "]";
-                        }
+                    var attributeToFind = $(moduleList.list[x].elementList[0]).attr(attributeInList);
+                    if (String(attributeToFind).charAt(0) == "[") {
+                        rowValues += ", " + String(attributeToFind);
+                    } else {
+                        rowValues += ", [" + String(attributeToFind) + "]";
                     }
                 }
                 for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
-                    var styleDict = getStyles(moduleList.list[x].elementList[e]);
-                    var styleKeys = Object.keys(styleDict);
-                    $("#ANDI508-additionalElementDetails").append(Object.keys(styleDict));
-                    // var styleDict = $(moduleList.list[x].elementList[e]).attr("data-andi508-style");
-                    // var styleKeys = [];
-                    // if (typeof styleDict !== "undefined") {
-                    //     styleKeys = Object.keys(styleDict);
-                    //     for (var variable in styleDict) {
-                    //         $("#ANDI508-additionalElementDetails").append(variable);
-                    //     }
-                    // }
-                    // $("#ANDI508-additionalElementDetails").append("Style Keys: " + styleKeys.toString());
-                    for (var s = 0; s < styleKeys.length; s += 1) {
-                        if (String(styleDict[styleKeys[s]]).charAt(0) == "[") {
-                            rowValues += ", " + styleDict[styleKeys[s]];
-                        } else {
-                            rowValues += ", [" + styleDict[styleKeys[s]] + "]";
-                        }
-                    }
                     for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
                         if (String($(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r])).charAt(0) == "[") {
                             rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]);
