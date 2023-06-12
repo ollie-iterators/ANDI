@@ -4154,7 +4154,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                         attributeName = attributeName.replace("data-andi508-", "");
                     }
                     if (!attributesToAdd.includes(attributeName)) {
-                        $("#ANDI508-additionalElementDetails").append("Attributes Added: " + attributeName);
                         attributesToAdd.push("data-andi508-" + attributeName);
                     }
                 }
@@ -4420,15 +4419,19 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     } else {
                         attributeInList = String(attributesToAdd[r]);
                     }
-                    $("#ANDI508-additionalElementDetails").append(attributeInList);
-                    var attributeToFind = $(moduleList.list[x].elementList[0]).attr(attributeInList);
-                    if (String(attributeToFind).charAt(0) == "[") {
-                        rowValues += ", " + String(attributeToFind);
-                    } else {
-                        rowValues += ", [" + String(attributeToFind) + "]";
+                    if (!(attributeInList == "data-andi508-style")) {
+                        var attributeToFind = $(moduleList.list[x].elementList[0]).attr(attributeInList);
+                        if (String(attributeToFind).charAt(0) == "[") {
+                            rowValues += ", " + String(attributeToFind);
+                        } else {
+                            rowValues += ", [" + String(attributeToFind) + "]";
+                        }
                     }
                 }
                 for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
+                    var styleDict = $(moduleList.list[x].elementList[e]).attr("data-andi508-style");
+                    var styleKeys = Object.keys(styleDict);
+                    $("#ANDI508-additionalElementDetails").append(styleKeys.toString());
                     for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
                         if (String($(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r])).charAt(0) == "[") {
                             rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]);
