@@ -4430,7 +4430,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 }
                 for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
                     var styleTest = getStyles(moduleList.list[x].elementList[e]);
-                    $("#ANDI508-additionalElementDetails").append(styleTest.toString());
+                    $("#ANDI508-additionalElementDetails").append(styleTest.keys());
                     // var styleDict = $(moduleList.list[x].elementList[e]).attr("data-andi508-style");
                     // var styleKeys = [];
                     // if (typeof styleDict !== "undefined") {
