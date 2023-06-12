@@ -4355,6 +4355,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     for (var a = 0; a < attrs.length; a += 1) {
                         if (attrs[a].includes("data-andi508-")) {
                             var attrsFixed = attrs[a].replace("data-andi508", "");
+                            $("#ANDI508-additionalElementDetails").append(attrsFixed);
                             if (attrsFixed != "-index") {
                                 if (String(attrsFixed).charAt(0).includes("-")) {
                                     if (!attributesToAdd.includes(String(attrsFixed))) {
