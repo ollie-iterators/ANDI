@@ -4317,8 +4317,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                             "<div class='ANDI508-scrollable'><table id='ANDI508-" + moduleClass + "-table' aria-label='" + mode + " List' tabindex='-1'><thead><tr>";
 
             if (moduleList.list.length > 0) {
-                var attributesToAdd = attributesAdded;
-                //var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
+                var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
 
                 // Build the column name
                 var columnName = andiResults.createColumnName(moduleList, tableModule, attributesToAdd);
@@ -4375,6 +4374,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
 
             for (var a = 0; a < attributesAdded.length; a += 1) {
+                $("#ANDI508-additionalElementDetails").append(attributesAdded[a]);
                 if (!attributesToAdd.includes(attributesAdded[a])) {
                     if (!attributesToAdd.includes("-" + String(attributesAdded[a]))) {
                         attributesToAdd.push(String(attributesAdded[a]));
