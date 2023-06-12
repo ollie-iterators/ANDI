@@ -4383,7 +4383,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 } else {
                     valueToAdd = String(attributesToAdd[x]);
                 }
-                columnName += ", [" + valueToAdd + "]";
+                if (!(valueToAdd == "style")) {
+                    columnName += ", [" + valueToAdd + "]";
+                }
             }
 
             for (var c = 0; c < tableModule.cssProperties.length; c += 1) {
@@ -4413,12 +4415,12 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 }
                 for (var r = 0; r < attributesToAdd.length; r += 1) {
                     var attributeInList;
-                    $("#ANDI508-additionalElementDetails").append(attributesToAdd[r]);
                     if (String(attributesToAdd[r]).charAt(0) == "-") {
                         attributeInList = "data-andi508" + String(attributesToAdd[r]);
                     } else {
                         attributeInList = String(attributesToAdd[r]);
                     }
+                    $("#ANDI508-additionalElementDetails").append(attributeInList);
                     var attributeToFind = $(moduleList.list[x].elementList[0]).attr(attributeInList);
                     if (String(attributeToFind).charAt(0) == "[") {
                         rowValues += ", " + String(attributeToFind);
