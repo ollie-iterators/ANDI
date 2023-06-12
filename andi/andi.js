@@ -4374,7 +4374,12 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             //     }
             // }
             for (var a = 0; a < attributesAdded.length; a += 1) {
-                if (!attributesToAdd.includes(attributesAdded[a])) {
+                if (attributesAdded[a].includes("data-andi508-")) {
+                    var attributesTest = attributesAdded[a].replace("data-andi508-", "");
+                    if (!attributesToAdd.includes(attributesTest)) {
+                        attributesToAdd.push(attributesAdded[a]);
+                    }
+                } else if (!attributesToAdd.includes(attributesAdded[a])) {
                     if (!attributesToAdd.includes(String(attributesAdded[a]))) {
                         attributesToAdd.push(String(attributesAdded[a]));
                     }
