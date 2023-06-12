@@ -186,6 +186,10 @@ gANDI.analyze = function(objectClass){
             objectClass.elementNums[2] += 1;
             objectClass.elementStrings[2] = "background images";
             $(this).addClass("gANDI508-background");
+            objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
+            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] = "images";
         }
 
         //Check for common font icon classes
