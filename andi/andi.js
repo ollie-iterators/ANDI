@@ -4150,12 +4150,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 if (!attrs.includes(attributeName)) {
                     $(objectClass.list[index].elementList[0]).attr(attributeName, attribute);
                 }
-                if (attributeName.includes("data-andi508-")) {
-                    var attributesTest = attributeName.replace("data-andi508-", "");
-                    if (!attributesToAdd.includes(attributesTest)) {
-                        attributesToAdd.push(attributeName);
-                    }
-                } else if (!attributesToAdd.includes(attributeName)) {
+                if (!attributesToAdd.includes(attributeName)) {
                     attributesToAdd.push(attributeName);
                 }
             }
