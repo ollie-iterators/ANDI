@@ -4317,7 +4317,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                             "<div class='ANDI508-scrollable'><table id='ANDI508-" + moduleClass + "-table' aria-label='" + mode + " List' tabindex='-1'><thead><tr>";
 
             if (moduleList.list.length > 0) {
-                var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
+                var attributesToAdd = [];
+                //var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
 
                 // Build the column name
                 var columnName = andiResults.createColumnName(moduleList, tableModule, attributesToAdd);
