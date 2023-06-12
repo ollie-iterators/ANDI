@@ -4162,7 +4162,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
         var computedStyle = objectClass.list[index].elementList[0].style;
         //var computedStyle = window.getComputedStyle(objectClass.list[index].elementList[0], "none");
-        $(objectClass.list[index].elementList[0]).attr("data-andi508-computedStyle", computedStyle.toString());
+        $(objectClass.list[index].elementList[0]).attr("data-andi508-computedStyle", computedStyle.cssText.toString());
         if (!attributesToAdd.includes("data-andi508-computedStyle")) {
             attributesToAdd.push("data-andi508-computedStyle");
         }
