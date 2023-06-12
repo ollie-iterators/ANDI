@@ -4358,6 +4358,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                             if (attrsFixed != "-index") {
                                 if (String(attrsFixed).charAt(0).includes("-")) {
                                     if (!attributesToAdd.includes(String(attrsFixed))) {
+                                        attrsFixed = String(attrsFixed).replace("-", "");
                                         attributesToAdd.push(String(attrsFixed));
                                     }
                                 } else {
