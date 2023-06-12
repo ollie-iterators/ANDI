@@ -4135,6 +4135,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
     //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
     // TODO: Figure out why there are two index columns in the table
+    // TODO: Figure out why there are elements in gANDI that do not have values for the style attribute
+    //       that show up in the table that do have background images.
     andiBar.getAttributes = function(objectClass, index, attributesToAdd) {
         if (objectClass.list[index].elementList[0].hasAttributes()) {
             var attrs = objectClass.list[index].elementList[0].getAttributeNames();
