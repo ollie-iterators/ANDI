@@ -4349,37 +4349,34 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         //This function will find the attributes to add to the table
         this.findAttributesToAdd = function (moduleList, attributesAdded) {
             var attributesToAdd = [];
-            for (var x = 0; x < 1; x += 1) {
-                if (moduleList.list[x].elementList[0].hasAttributes()) {
-                    var attrs = moduleList.list[x].elementList[0].getAttributeNames();
-                    for (var a = 0; a < attrs.length; a += 1) {
-                        if (attrs[a].includes("data-andi508-")) {
-                            var attrsFixed = attrs[a].replace("data-andi508", "");
-                            if (attrsFixed != "-index") {
-                                if (String(attrsFixed).charAt(0).includes("-")) {
-                                    if (!attributesToAdd.includes(String(attrsFixed))) {
-                                        attrsFixed = String(attrsFixed).replace("-", "");
-                                        attributesToAdd.push(String(attrsFixed));
-                                    }
-                                } else {
-                                    if (!attributesToAdd.includes(String(attrsFixed))) {
-                                        if (!attributesToAdd.includes("-" + String(attrsFixed))) {
-                                            attributesToAdd.push(String(attrsFixed));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            $("#ANDI508-additionalElementDetails").append("Attributes Added: " + attributesAdded.toString());
+            // for (var x = 0; x < 1; x += 1) {
+            //     if (moduleList.list[x].elementList[0].hasAttributes()) {
+            //         var attrs = moduleList.list[x].elementList[0].getAttributeNames();
+            //         for (var a = 0; a < attrs.length; a += 1) {
+            //             if (attrs[a].includes("data-andi508-")) {
+            //                 var attrsFixed = attrs[a].replace("data-andi508", "");
+            //                 if (attrsFixed != "-index") {
+            //                     if (String(attrsFixed).charAt(0).includes("-")) {
+            //                         if (!attributesToAdd.includes(String(attrsFixed))) {
+            //                             attrsFixed = String(attrsFixed).replace("-", "");
+            //                             attributesToAdd.push(String(attrsFixed));
+            //                         }
+            //                     } else {
+            //                         if (!attributesToAdd.includes(String(attrsFixed))) {
+            //                             if (!attributesToAdd.includes("-" + String(attrsFixed))) {
+            //                                 attributesToAdd.push(String(attrsFixed));
+            //                             }
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
             for (var a = 0; a < attributesAdded.length; a += 1) {
-                $("#ANDI508-additionalElementDetails").append(attributesAdded[a]);
                 if (!attributesToAdd.includes(attributesAdded[a])) {
                     if (!attributesToAdd.includes(String(attributesAdded[a]))) {
                         attributesToAdd.push(String(attributesAdded[a]));
-                        $("#ANDI508-additionalElementDetails").append("Attributes Added: " + attributesAdded.toString());
                     }
                 }
             }
