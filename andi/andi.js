@@ -4374,7 +4374,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     }
                 }
             }
-
+            $("#ANDI508-additionalElementDetails").append("Attributes Added: " + attributesAdded.toString());
             for (var a = 0; a < attributesAdded.length; a += 1) {
                 if (!attributesToAdd.includes(attributesAdded[a])) {
                     if (!attributesToAdd.includes(String(attributesAdded[a]))) {
