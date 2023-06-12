@@ -4433,6 +4433,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     var styleKeys = [];
                     if (typeof styleDict !== "undefined") {
                         styleKeys = Object.keys(styleDict);
+                        for (var variable in styleDict) {
+                            $("#ANDI508-additionalElementDetails").append(variable);
+                        }
                     }
                     $("#ANDI508-additionalElementDetails").append("Style Keys: " + styleKeys.toString());
                     for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
