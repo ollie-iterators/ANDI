@@ -763,13 +763,11 @@ function rgbToHex(rgbaColor){
 }
 
 // TODO: Figure out how to better organize this part of the code
-function updateLuminance(input) {
+function updateLuminance(color) {
 	var luminanceOutput = [];
     var luminanceClosest = "";
 
-	var color = input.color;
-
-	if (input.color.alpha < 1) {
+	if (color.alpha < 1) {
 		var lumBlack = color.overlayOn(Color.BLACK).luminance;
 		var lumWhite = color.overlayOn(Color.WHITE).luminance;
 
