@@ -765,8 +765,7 @@ function updateLuminance(color) {
 	var luminanceOutput = [];
     var luminanceClosest = "";
 
-    $("#ANDI508-additionalElementDetails").append(color.toString());
-    $("#ANDI508-additionalElementDetails").append(color.alpha.toString());
+
 
 	if (color.alpha < 1) {
 		var lumBlack = color.overlayOn(Color.BLACK).luminance;
@@ -775,8 +774,12 @@ function updateLuminance(color) {
         luminanceOutput = [lumBlack, lumWhite];
 		luminanceClosest = Math.min(lumBlack, lumWhite) < .2? "white" : "black";
 	} else {
+
+        $("#ANDI508-additionalElementDetails").append(color.luminance.toString());
+
         luminanceOutput = [color.luminance];
 		luminanceClosest = color.luminance < .2? "white" : "black";
+        $("#ANDI508-additionalElementDetails").append("Luminance Output: " + luminanceOutput);
 	}
     return luminanceOutput, luminanceClosest;
 }
