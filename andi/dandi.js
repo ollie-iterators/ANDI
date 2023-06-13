@@ -767,6 +767,9 @@ function updateLuminance(color) {
 	var luminanceOutput = [];
     var luminanceClosest = "";
 
+    $("#ANDI508-additionalElementDetails").append(color.toString());
+    $("#ANDI508-additionalElementDetails").append(color.alpha.toString());
+
 	if (color.alpha < 1) {
 		var lumBlack = color.overlayOn(Color.BLACK).luminance;
 		var lumWhite = color.overlayOn(Color.WHITE).luminance;
