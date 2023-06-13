@@ -6,3 +6,6 @@
 
 2. Use $("#ANDI508-additionalElementDetails").append(); to add things to ANDI that are used
    for debugging your fork of ANDI.
+
+3. Add information about how to alter the code to work with taking contrast ratios of
+   elements with opacity, and if you can figure out elements with background images
