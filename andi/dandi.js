@@ -765,8 +765,6 @@ function updateLuminance(color) {
 	var luminanceOutput = [];
     var luminanceClosest = "";
 
-
-
 	if (color.alpha < 1) {
 		var lumBlack = color.overlayOn(Color.BLACK).luminance;
 		var lumWhite = color.overlayOn(Color.WHITE).luminance;
@@ -774,12 +772,8 @@ function updateLuminance(color) {
         luminanceOutput = [lumBlack, lumWhite];
 		luminanceClosest = Math.min(lumBlack, lumWhite) < .2? "white" : "black";
 	} else {
-
-        $("#ANDI508-additionalElementDetails").append(color.luminance.toString());
-
         luminanceOutput = [color.luminance];
 		luminanceClosest = color.luminance < .2? "white" : "black";
-        $("#ANDI508-additionalElementDetails").append("Luminance Output: " + luminanceOutput);
 	}
     return luminanceOutput, luminanceClosest;
 }
