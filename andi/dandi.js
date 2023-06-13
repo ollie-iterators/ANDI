@@ -406,12 +406,12 @@ dANDI.getContrast = function(fgElement){
     //Get foreground color
     var fgColor = new Color($(fgElement).css("color"));
 
-    var luminanceBackgroundList, luminanceBackgroundClosest = updateLuminance(bgColor);
-
-    var luminanceForegroundList, luminanceForegroundClosest = updateLuminance(fgColor);
-
     var contrastList = [];
     if (fgColor.alpha < 1 || bgColor.alpha < 1) {
+        var luminanceBackgroundList, luminanceBackgroundClosest = updateLuminance(bgColor);
+
+        var luminanceForegroundList, luminanceForegroundClosest = updateLuminance(fgColor);
+
         semiTransparency = true;
         for (var f = 0; f < luminanceForegroundList.length; f += 1) {
             luminanceUpper = luminanceForegroundList[f];
