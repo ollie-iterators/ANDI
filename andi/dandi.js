@@ -774,8 +774,7 @@ function updateLuminance(color) {
 
         luminanceOutput = [lumBlack, lumWhite];
 		luminanceClosest = Math.min(lumBlack, lumWhite) < .2? "white" : "black";
-	}
-	else {
+	} else {
         luminanceOutput = [color.luminance];
 		luminanceClosest = color.luminance < .2? "white" : "black";
 	}
