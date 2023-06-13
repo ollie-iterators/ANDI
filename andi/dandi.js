@@ -411,23 +411,21 @@ dANDI.getContrast = function(fgElement){
     var luminanceForegroundList, luminanceForegroundClosest = updateLuminance(fgColor);
 
     var contrastList = [];
-    for (var f = 0; f < luminanceForegroundList.length; f += 1) {
-        luminanceUpper = luminanceForegroundList[f];
-        for (var b = 0; b < luminanceBackgroundList.length;) {
-            luminanceLower = luminanceBackgroundList[b];
+    if (fgColor.alpha < 1 || bgColor.alpha < 1) {
+        semiTransparency = true;
+        for (var f = 0; f < luminanceForegroundList.length; f += 1) {
+            luminanceUpper = luminanceForegroundList[f];
+            for (var b = 0; b < luminanceBackgroundList.length;) {
+                luminanceLower = luminanceBackgroundList[b];
 
-            contrast = (luminanceUpper + 0.05) / (luminanceLower + 0.05);
-            contrastList.push(contrast);
+                contrast = (luminanceUpper + 0.05) / (luminanceLower + 0.05);
+                contrastList.push(contrast);
+            }
         }
+    } else {
+        var contrast = fgColor.contrast(bgColor);
+        contrastList = [contrast.ratio];
     }
-
-    // if(fgColor.alpha < 1){
-    //     semiTransparency = true;
-    //     fgColor = fgColor.overlayOn(bgColor);
-    // }
-
-    // var contrast = fgColor.contrast(bgColor);
-    // var ratio = contrast.ratio;
 
     var dANDI_data = {
         bgColor:			bgColor,
