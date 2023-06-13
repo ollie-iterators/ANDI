@@ -9,7 +9,7 @@ var dANDIVersionNumber = "4.1.4";
 //TODO: select box, check for selected
 
 //create dANDI instance
-var dANDI = new AndiModule(dANDIVersionNumber,"c");
+var dANDI = new AndiModule(dANDIVersionNumber,"d");
 
 AndiModule.initActiveActionButtons({
     contrastPlayground:false
@@ -405,19 +405,35 @@ dANDI.getContrast = function(fgElement){
 
     //Get foreground color
     var fgColor = new Color($(fgElement).css("color"));
-    if(fgColor.alpha < 1){
-        semiTransparency = true;
-        fgColor = fgColor.overlayOn(bgColor);
+
+    var luminanceBackgroundList, luminanceBackgroundClosest = updateLuminance(bgColor);
+
+    var luminanceForegroundList, luminanceForegroundClosest = updateLuminance(fgColor);
+
+    var contrastList = [];
+    for (var f = 0; f < luminanceForegroundList.length; f += 1) {
+        luminanceUpper = luminanceForegroundList[f];
+        for (var b = 0; b < luminanceBackgroundList.length;) {
+            luminanceLower = luminanceBackgroundList[b];
+
+            contrast = (luminanceUpper + 0.05) / (luminanceLower + 0.05);
+            contrastList.push(contrast);
+        }
     }
 
-    var contrast = fgColor.contrast(bgColor);
-    var ratio = contrast.ratio;
+    // if(fgColor.alpha < 1){
+    //     semiTransparency = true;
+    //     fgColor = fgColor.overlayOn(bgColor);
+    // }
+
+    // var contrast = fgColor.contrast(bgColor);
+    // var ratio = contrast.ratio;
 
     var dANDI_data = {
         bgColor:			bgColor,
         fgColor:			fgColor,
-        contrast:			contrast,
-        ratio: 				ratio,
+        contrast:			contrastList,
+        ratio: 				Math.min(contrastList),
         semiTransparency:	semiTransparency,
         opacity:			opacity,
         bgImage:			$(bgElement).css("background-image"),
@@ -450,7 +466,7 @@ dANDI.getContrast = function(fgElement){
         else if(dANDI_data.size >= 18.66 && dANDI_data.weight >= 700) //700 is where bold begins, 18.66 is approx equal to 14pt
             dANDI_data.minReq = ratio_large;
 
-        if(dANDI_data.bgImage === "none" && !dANDI_data.opacity){
+        if(dANDI_data.bgImage === "none"){
             //No, Display PASS/FAIL Result and Requirement Ratio
             if(dANDI_data.ratio >= dANDI_data.minReq){
                 dANDI_data.result = "PASS";
@@ -744,6 +760,27 @@ function rgbToHex(rgbaColor){
         var hex = c.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
     }
+}
+
+// TODO: Figure out how to better organize this part of the code
+function updateLuminance(input) {
+	var luminanceOutput = [];
+    var luminanceClosest = "";
+
+	var color = input.color;
+
+	if (input.color.alpha < 1) {
+		var lumBlack = color.overlayOn(Color.BLACK).luminance;
+		var lumWhite = color.overlayOn(Color.WHITE).luminance;
+
+        luminanceOutput = [lumBlack, lumWhite];
+		luminanceClosest = Math.min(lumBlack, lumWhite) < .2? "white" : "black";
+	}
+	else {
+        luminanceOutput = [color.luminance];
+		luminanceClosest = color.luminance < .2? "white" : "black";
+	}
+    return luminanceOutput, luminanceClosest;
 }
 
 //===============

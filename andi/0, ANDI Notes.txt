@@ -9,3 +9,10 @@
 
 3. Add information about how to alter the code to work with taking contrast ratios of
    elements with opacity, and if you can figure out elements with background images
+   - Changes (for now):
+     - Added function updateLuminance
+       - Used updateLuminance to get new luminance values
+     - Made for loop to get contrastList before cANDI_data is made
+     - Commented out the old way contrast was gotten
+     - Changed contrast to contrastList
+     - Changed ratio to Math.min(contrastList)
