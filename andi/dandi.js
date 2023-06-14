@@ -775,6 +775,8 @@ function updateLuminance(color) {
         luminanceOutput = [color.luminance];
 		luminanceClosest = color.luminance < .2? "white" : "black";
 	}
+    $("#ANDI508-additionalElementDetails").append("Luminance Output: " + luminanceOutput.toString());
+
     return luminanceOutput, luminanceClosest;
 }
 
