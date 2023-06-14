@@ -4184,7 +4184,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         var styleAttributes = $(objectClass.list[index].elementList[0]).attr("style");
 
         if (typeof styleAttributes !== "undefined") {
-            var styleAttributesList = styleAttributes.toString().split('";');
+            var styleAttributesList = styleAttributes.toString().split(';');
 
             var newstyle=[];
             for (var i = 0; i < styleAttributesList.length; i++) {
