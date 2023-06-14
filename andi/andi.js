@@ -4184,7 +4184,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         var styleAttributes = $(objectClass.list[index].elementList[0]).attr("style");
 
         if (typeof styleAttributes !== "undefined") {
-            var styleAttributesList = styleAttributes.split(";");
+            var styleAttributesList = styleAttributes.toString().split(";");
 
             $("#ANDI508-additionalElementDetails").append("Style Attributes List: " + styleAttributesList.toString());
         }
