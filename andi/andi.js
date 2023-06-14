@@ -4183,9 +4183,13 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     andiBar.getStyleAttributes = function(objectClass, index, styleAttributesToAdd = []) {
         var styleAttributes = $(objectClass.list[index].elementList[0]).attr("style");
 
-        for (var s = 0; s < styleAttributes.length; s += 1) {
-            $("#ANDI508-additionalElementDetails").append("Style Attributes: " + styleAttributes[s]);
-        }
+        var styleAttributesList = styleAttributes.split(";");
+
+        $("#ANDI508-additionalElementDetails").append("Style Attributes List: " + styleAttributesList.toString());
+
+        // for (var s = 0; s < styleAttributes.length; s += 1) {
+        //     $("#ANDI508-additionalElementDetails").append("Style Attributes: " + styleAttributes[s]);
+        // }
     }
 
     //Inserts some counter totals, displays the accesskey list
