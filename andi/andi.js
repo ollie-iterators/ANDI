@@ -4191,8 +4191,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 newstyle.push(styleAttributesList[i]);
             }
 
-            for (var s = 0; s < styleAttributesList.length; s += 1) {
-                $("#ANDI508-additionalElementDetails").append("Style Attributes List Item: " + styleAttributesList[s].toString());
+            for (var s = 0; s < newstyle.length; s += 1) {
+                $("#ANDI508-additionalElementDetails").append("Style Attributes List Item: " + newstyle[s].toString());
             }
         }
 
