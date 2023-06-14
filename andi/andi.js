@@ -4181,7 +4181,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     }
 
     andiBar.getStyleAttributes = function(objectClass, index, styleAttributesToAdd = []) {
-        var styleAttributes = objectClass.list[index].elementList[0].attr("style");
+        var styleAttributes = $(objectClass.list[index].elementList[0]).attr("style");
 
         for (var s = 0; s < styleAttributes.length; s += 1) {
             $("#ANDI508-additionalElementDetails").append("Style Attributes: " + styleAttributes[s]);
