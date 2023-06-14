@@ -4188,7 +4188,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
             var newstyle=[];
             for (var i = 0; i < styleAttributesList.length; i++) {
-                newstyle.push(styleAttributesList[i]);
+                var stylePart = styleAttributesList[i].split(':')[0].toLowerCase().trim()
+                newstyle.push(stylePart);
             }
 
             for (var s = 0; s < newstyle.length; s += 1) {
