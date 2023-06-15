@@ -4188,6 +4188,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     var styleSplit = styleAttributesList[i].split(":");
                     var stylePart = "data-andi508-" + styleSplit[0].toLowerCase().trim();
 
+                    var styleAttribute = styleSplit.slice(1).join(":");
                     if (!styleAttributesToAdd.includes(stylePart)) {
                         styleAttributesToAdd.push(stylePart);
                     }
@@ -4196,7 +4197,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
         }
 
-        $("#ANDI508-additionalElementDetails").append("Style Attributes: " + styleAttributesToAdd.toString());
+        $("#ANDI508-additionalElementDetails").append("Style Attributes: " + styleAttributesToAdd.toString);
 
         return styleAttributesToAdd;
     }
