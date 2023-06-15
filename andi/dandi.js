@@ -407,15 +407,15 @@ dANDI.getContrast = function(fgElement){
 
     var contrastList = [];
     if (fgColor.alpha < 1 || bgColor.alpha < 1) {
-        var luminanceBackgroundList = updateLuminance(bgColor);
+        var luminanceBackgroundList, luminanceBackgroundClosest = updateLuminance(bgColor);
 
-        var luminanceForegroundList = updateLuminance(fgColor);
+        var luminanceForegroundList, luminanceForegroundClosest = updateLuminance(fgColor);
 
         semiTransparency = true;
-        for (var f = 0; f < luminanceForegroundList[0].length; f += 1) {
-            luminanceUpper = luminanceForegroundList[0][f];
-            for (var b = 0; b < luminanceBackgroundList[0].length;) {
-                luminanceLower = luminanceBackgroundList[0][b];
+        for (var f = 0; f < luminanceForegroundList.length; f += 1) {
+            luminanceUpper = luminanceForegroundList[f];
+            for (var b = 0; b < luminanceBackgroundList.length;) {
+                luminanceLower = luminanceBackgroundList[b];
 
                 contrast = (luminanceUpper + 0.05) / (luminanceLower + 0.05);
                 contrastList.push(contrast);
@@ -776,7 +776,7 @@ function updateLuminance(color) {
 	}
     $("#ANDI508-additionalElementDetails").append("Luminance Output: " + luminanceOutput.toString());
 
-    return [luminanceOutput, luminanceClosest];
+    return luminanceOutput, luminanceClosest;
 }
 
 //===============
