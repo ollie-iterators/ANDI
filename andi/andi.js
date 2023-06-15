@@ -4182,18 +4182,19 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         var styleAttributes = $(objectClass.list[index].elementList[0]).attr("style");
 
         if (typeof styleAttributes !== "undefined") {
-            var styleAttributesList = styleAttributes.toString().split(';');
+            if (styleAttributes.length > 0) {
+                var styleAttributesList = styleAttributes.toString().split(';');
 
-            for (var i = 0; i < styleAttributesList.length; i++) {
-                $("#ANDI508-additionalElementDetails").append("Style Attributes In List: " + styleAttributesList);
-                var styleSplit = styleAttributesList[i].split(":");
-                var stylePart = "data-andi508-" + styleSplit[0].toLowerCase().trim();
+                for (var i = 0; i < styleAttributesList.length; i++) {
+                    var styleSplit = styleAttributesList[i].split(":");
+                    var stylePart = "data-andi508-" + styleSplit[0].toLowerCase().trim();
 
-                var styleAttribute = styleSplit.slice(1).join(":");
-                if (!styleAttributesToAdd.includes(stylePart)) {
-                    styleAttributesToAdd.push(stylePart);
+                    var styleAttribute = styleSplit.slice(1).join(":");
+                    if (!styleAttributesToAdd.includes(stylePart)) {
+                        styleAttributesToAdd.push(stylePart);
+                    }
+                    $(objectClass.list[index].elementList[0]).attr(stylePart, styleAttribute);
                 }
-                $(objectClass.list[index].elementList[0]).attr(stylePart, styleAttribute);
             }
         }
 
