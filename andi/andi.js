@@ -4436,8 +4436,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 }
                 if (String(valueToAdd).length > 0) {
                     valueToAdd = String(styleAttributesAdded[s]);
+
+                    columnName += ", [" + valueToAdd + "]";
                 }
-                columnName += ", [" + valueToAdd + "]";
             }
 
             columnName = columnName.slice(2);
