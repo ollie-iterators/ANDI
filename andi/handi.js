@@ -22,18 +22,12 @@ AndiModule.hoverability = function(event){
 AndiModule.cleanup = function(testPage, element){
     if (element) {
         var elementAttrs = $(element).getAttributeNames();
-        var attributesToRemove = "";
         for (var e = 0; e < elementAttrs.length; e += 1) {
             if (elementAttrs[e].includes("data-andi508-")) {
-                if (attributesToRemove == "") {
-                    attributesToRemove = elementAttrs[e];
-                } else {
-                    attributesToRemove += " " + elementAttrs[e];
-                }
+                $(element).removeAttr(elementAttrs[e]);
             }
         }
-        $(element).removeAttr(attributesToRemove);
-        $(element).removeClass("ANDI508-forceReveal ANDI508-forceReveal-Display ANDI508-forceReveal-Visibility ANDI508-forceReveal-Position ANDI508-forceReveal-Opacity ANDI508-forceReveal-Overflow ANDI508-forceReveal-FontSize ANDI508-forceReveal-TextIndent");
+        $(element).removeAttr("data-andi508-hidingtechniques").removeClass("ANDI508-forceReveal ANDI508-forceReveal-Display ANDI508-forceReveal-Visibility ANDI508-forceReveal-Position ANDI508-forceReveal-Opacity ANDI508-forceReveal-Overflow ANDI508-forceReveal-FontSize ANDI508-forceReveal-TextIndent");
     }
     else
         $(testPage).find(".hANDI508-hasHiddenCssContent").removeClass("hANDI508-hasHiddenCssContent");

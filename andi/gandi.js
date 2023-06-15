@@ -15,17 +15,11 @@ var gANDI = new AndiModule(gandiVersionNumber,"g");
 AndiModule.cleanup = function(testPage, element){
     if (element) {
         var elementAttrs = $(element).getAttributeNames();
-        var attributesToRemove = "";
         for (var e = 0; e < elementAttrs.length; e += 1) {
             if (elementAttrs[e].includes("data-andi508-")) {
-                if (attributesToRemove == "") {
-                    attributesToRemove = elementAttrs[e];
-                } else {
-                    attributesToRemove += " " + elementAttrs[e];
-                }
+                $(element).removeAttr(elementAttrs[e]);
             }
         }
-        $(element).removeAttr(attributesToRemove);
         $(element).removeClass("gANDI508-fontIcon");
     }
     else{
