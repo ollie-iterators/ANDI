@@ -4139,7 +4139,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     // TODO: Figure out why there are two index columns in the table
     // TODO: Figure out why there are elements in gANDI that do not have values for the style attribute
     //       that show up in the table that do have background images.
-    andiBar.getAttributes = function(objectClass, index, attributesToAdd, data = "") {
+    andiBar.getAttributes = function(objectClass, index, attributesToAdd) {
         if (objectClass.list[index].elementList[0].hasAttributes()) {
             var attrs = objectClass.list[index].elementList[0].getAttributeNames();
             for (var a = 0; a < attrs.length; a += 1) {
@@ -4164,18 +4164,17 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
         }
 
+        return attributesToAdd;
+    }
+
+    andiBar.addAttributes = function(objectClass, index, data) {
         if (data != "") {
             var dataKeys = Object.keys(data);
             for (var d = 0; d < dataKeys.length; d += 1) {
                 var attributeName = "data-andi508-" + dataKeys[d];
-                if (!attributesToAdd.includes(attributeName)) {
-                    attributesToAdd.push(attributeName);
-                    $(objectClass.list[index].elementList[0]).attr("data-andi508-" + dataKeys[d], data[dataKeys[d]]);
-                }
+                $(objectClass.list[index].elementList[0]).attr(attributeName, data[dataKeys[d]]);
             }
         }
-
-        return attributesToAdd;
     }
 
     andiBar.getStyleAttributes = function(objectClass, index, styleAttributesToAdd = []) {
