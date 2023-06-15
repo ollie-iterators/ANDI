@@ -4139,7 +4139,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     // TODO: Figure out why there are two index columns in the table
     // TODO: Figure out why there are elements in gANDI that do not have values for the style attribute
     //       that show up in the table that do have background images.
-    andiBar.getAttributes = function(objectClass, index, attributesToAdd) {
+    andiBar.getAttributes = function(objectClass, tableModule, index, attributesToAdd) {
         if (objectClass.list[index].elementList[0].hasAttributes()) {
             var attrs = objectClass.list[index].elementList[0].getAttributeNames();
             for (var a = 0; a < attrs.length; a += 1) {
@@ -4159,6 +4159,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     }
                     if (!attributesToAdd.includes(attributeName)) {
                         attributesToAdd.push("data-andi508-" + attributeName);
+                        if (tableModule.attributesToRemove == "") {
+                            tableModule.attributesToRemove = "data-andi508-" + attributeName;
+                        } else {
+                            tableModule.attributesToRemove += " data-andi508-" + attributeName;
+                        }
                     }
                 }
             }
@@ -4167,12 +4172,17 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         return attributesToAdd;
     }
 
-    andiBar.addAttributes = function(objectClass, index, data) {
+    andiBar.addAttributes = function(objectClass, tableModule, index, data) {
         if (data != "") {
             var dataKeys = Object.keys(data);
             for (var d = 0; d < dataKeys.length; d += 1) {
                 var attributeName = "data-andi508-" + dataKeys[d];
                 $(objectClass.list[index].elementList[0]).attr(attributeName, data[dataKeys[d]]);
+                if (tableModule.attributesToRemove == "") {
+                    tableModule.attributesToRemove = attributeName;
+                } else {
+                    tableModule.attributesToRemove += " " + attributeName;
+                }
             }
         }
     }
@@ -4191,6 +4201,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     var styleAttribute = styleSplit.slice(1).join(":");
                     if (!styleAttributesToAdd.includes(stylePart)) {
                         styleAttributesToAdd.push(stylePart);
+                        if (tableModule.attributesToRemove == "") {
+                            tableModule.attributesToRemove = stylePart;
+                        } else {
+                            tableModule.attributesToRemove += " " + stylePart;
+                        }
                     }
                     $(objectClass.list[index].elementList[0]).attr(stylePart, styleAttribute);
                 }
@@ -4217,8 +4232,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         var attributesAdded = [];
         var styleAttributesAdded = [];
         for (var a = 0; a < moduleList.list.length; a += 1) {
-            attributesAdded = andiBar.getAttributes(moduleList, a, attributesAdded);
-            styleAttributesAdded = andiBar.getStyleAttributes(moduleList, a, styleAttributesAdded);
+            attributesAdded = andiBar.getAttributes(moduleList, tableModule, a, attributesAdded);
+            styleAttributesAdded = andiBar.getStyleAttributes(moduleList, tableModule, a, styleAttributesAdded);
         }
 
         andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded, styleAttributesAdded);

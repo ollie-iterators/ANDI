@@ -215,9 +215,10 @@ function PresentationTables() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode      = "Presentation Tables";
-    this.buttonTextList = [];
-    this.tabsTextList   = [];
+    this.tableMode          = "Presentation Tables";
+    this.buttonTextList     = [];
+    this.tabsTextList       = [];
+    this.attributesToRemove = "";
 }
 
 tANDI.presentationTables = new PresentationTables();

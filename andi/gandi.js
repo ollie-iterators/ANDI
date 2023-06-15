@@ -337,9 +337,10 @@ function Images() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode      = "Images";
-    this.buttonTextList = ["Fade Inline Images", "Hide Background Images", "Highlight Background Images", "Highlight Decorative Images", "Highlight Font Icons"];
-    this.tabsTextList   = [];
+    this.tableMode          = "Images";
+    this.buttonTextList     = ["Fade Inline Images", "Hide Background Images", "Highlight Background Images", "Highlight Decorative Images", "Highlight Font Icons"];
+    this.tabsTextList       = [];
+    this.attributesToRemove = "";
 }
 
 gANDI.images = new Images();

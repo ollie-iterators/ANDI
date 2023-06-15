@@ -42,7 +42,7 @@ dANDI.analyze = function(objectClass){
                         //Throw alerts if necessary
                         dANDI.processResult($(this));
                         objectClass.list.push(new Contrast([this], objectClass.list.length + 1, "", "", ""));
-                        andiBar.addAttributes(objectClass, objectClass.list.length - 1, dANDI_data);
+                        andiBar.addAttributes(objectClass, dANDI.tableInfo, objectClass.list.length - 1, dANDI_data);
                         objectClass.elementNums[0] += 1;
                         objectClass.elementStrings[0] = "color contrast elements"
                         AndiData.attachDataToElement(this);

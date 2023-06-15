@@ -307,9 +307,10 @@ function HiddenElements() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode      = "Hidden Elements";
-    this.buttonTextList = ["Force Reveal All", "Force Reveal Display", "Force Reveal Visibility", "Force Reveal Position", "Force Reveal Overflow", "Force Reveal Font Size", "Force Reveal Text Indent", "Force Reveal Opacity", "Title Attributes", "Highlight CSS Content"];
-    this.tabsTextList   = [];
+    this.tableMode          = "Hidden Elements";
+    this.buttonTextList     = ["Force Reveal All", "Force Reveal Display", "Force Reveal Visibility", "Force Reveal Position", "Force Reveal Overflow", "Force Reveal Font Size", "Force Reveal Text Indent", "Force Reveal Opacity", "Title Attributes", "Highlight CSS Content"];
+    this.tabsTextList       = [];
+    this.attributesToRemove = "";
 }
 
 hANDI.hiddenElements = new HiddenElements();

@@ -182,9 +182,10 @@ function LiveRegions() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode      = "Live Regions";
-    this.buttonTextList = ["Reading Order"];
-    this.tabsTextList   = [];
+    this.tableMode          = "Live Regions";
+    this.buttonTextList     = ["Reading Order"];
+    this.tabsTextList       = [];
+    this.attributesToRemove = "";
 }
 
 sANDI.liveRegions = new LiveRegions();

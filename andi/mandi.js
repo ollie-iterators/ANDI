@@ -127,9 +127,10 @@ function PossibleLinks(){
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode      = "Links";
-    this.buttonTextList = [];
-    this.tabsTextList   = [];
+    this.tableMode          = "Links";
+    this.buttonTextList     = [];
+    this.tabsTextList       = [];
+    this.attributesToRemove = "";
 }
 
 mANDI.links = new PossibleLinks();
