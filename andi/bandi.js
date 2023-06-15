@@ -9,7 +9,6 @@ var bANDIVersionNumber = "4.3.1";
 //create bANDI instance
 var bANDI = new AndiModule(bANDIVersionNumber,"b");
 
-var attributesToAdd = [];
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 bANDI.analyze = function(objectClass){
     //Loop through every visible element
@@ -19,7 +18,6 @@ bANDI.analyze = function(objectClass){
 
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
             objectClass.list.push(new Attribute([this], objectClass.list.length + 1, "", "", ""));
-            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "list elements";
             AndiData.attachDataToElement(this);
@@ -178,7 +176,6 @@ function Attributes() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Attributes";
-    this.cssProperties  = [];
     this.buttonTextList = ["Reading Order", "Label Tags", "Title Attributes", "Role Attributes", "Lang Attributes"];
     this.tabsTextList   = [];
 }
@@ -190,6 +187,6 @@ bANDI.attributes = andiBar.createObjectValues(bANDI.attributes, 2);
 
 bANDI.analyze(bANDI.attributes);
 bANDI.results(); // TODO: Make the "Reading Order", "Role Attributes" and "Lang Attributes" buttons work
-andiBar.results(bANDI.attributes, bANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
+andiBar.results(bANDI.attributes, bANDI.tableInfo, showStartUpSummaryText);
 
 }//end init

@@ -9,7 +9,6 @@ var sANDIVersionNumber = "4.3.1";
 //create sANDI instance
 var sANDI = new AndiModule(sANDIVersionNumber,"s");
 
-var attributesToAdd = [];
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 sANDI.analyze = function(objectClass){
     //Loop through every visible element
@@ -37,7 +36,6 @@ sANDI.analyze = function(objectClass){
                 andiAlerter.throwAlert(alert_0182);
 
             objectClass.list.push(new LiveRegion([this], objectClass.list.length + 1, andiData.accName, "", ""));
-            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "live regions";
             AndiData.attachDataToElement(this);
@@ -185,7 +183,6 @@ function LiveRegions() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Live Regions";
-    this.cssProperties  = [];
     this.buttonTextList = ["Reading Order"];
     this.tabsTextList   = [];
 }
@@ -196,6 +193,6 @@ sANDI.tableInfo = new TableInfo();
 sANDI.liveRegions = andiBar.createObjectValues(sANDI.liveRegions, 3);
 
 sANDI.analyze(sANDI.liveRegions);
-andiBar.results(sANDI.liveRegions, sANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
+andiBar.results(sANDI.liveRegions, sANDI.tableInfo, showStartUpSummaryText);
 
 }//end init

@@ -9,7 +9,6 @@ var oANDIVersionNumber = "4.3.1";
 //create oANDI instance
 var oANDI = new AndiModule(oANDIVersionNumber,"o");
 
-var attributesToAdd = [];
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 oANDI.analyze = function(objectClass){
     //Loop through every visible element
@@ -19,7 +18,6 @@ oANDI.analyze = function(objectClass){
 
             if(andiData.isAriaHidden != true)
                 objectClass.list.push(new CertainHeader([this], objectClass.list.length + 1, "", "", ""));
-                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "certain headings";
             if(andiData.role === "heading"){
@@ -235,7 +233,6 @@ function CertainHeaders() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Certain Headers";
-    this.cssProperties  = [];
     this.buttonTextList = ["Reading Order"];
     this.tabsTextList   = [];
 }
@@ -248,6 +245,6 @@ oANDI.certainHeaders = andiBar.createObjectValues(oANDI.certainHeaders, 3);
 
 oANDI.analyze(oANDI.certainHeaders);
 oANDI.results(oANDI.certainHeaders);
-andiBar.results(oANDI.certainHeaders, oANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
+andiBar.results(oANDI.certainHeaders, oANDI.tableInfo, showStartUpSummaryText);
 
 }//end init

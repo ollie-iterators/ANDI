@@ -15,7 +15,6 @@ AndiModule.initActiveActionButtons({
     contrastPlayground:false
 });
 
-var attributesToAdd = [];
 //This function will run tests on text containing elements
 cANDI.analyze = function(objectClass){
     //Elements that are disabled or have aria-disabled="true" do not need to be tested
@@ -966,7 +965,6 @@ function Contrasts() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Color Contrasts";
-    this.cssProperties  = [];
     this.buttonTextList = ["Grayscale"];
     this.tabsTextList   = []
 }
@@ -977,6 +975,6 @@ cANDI.tableInfo = new TableInfo();
 cANDI.contrasts = andiBar.createObjectValues(cANDI.contrasts, 3);
 
 cANDI.analyze(cANDI.contrasts);
-andiBar.results(cANDI.contrasts, cANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
+andiBar.results(cANDI.contrasts, cANDI.tableInfo, showStartUpSummaryText);
 
 }//end init

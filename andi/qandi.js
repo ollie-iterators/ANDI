@@ -9,7 +9,6 @@ var qANDIVersionNumber = "4.3.1";
 //create qANDI instance
 var qANDI = new AndiModule(qANDIVersionNumber,"r");
 
-var attributesToAdd = [];
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 qANDI.analyze = function(objectClass){
     //Loop through every visible element
@@ -69,7 +68,6 @@ qANDI.analyze = function(objectClass){
 
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
             objectClass.list.push(new List([this], objectClass.list.length + 1, "", "", ""));
-            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "list elements";
             AndiData.attachDataToElement(this);
@@ -176,7 +174,6 @@ function Lists() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Lists";
-    this.cssProperties  = [];
     this.buttonTextList = ["Reading Order"];
     this.tabsTextList   = [];
 }
@@ -187,6 +184,6 @@ qANDI.tableInfo = new TableInfo();
 qANDI.lists = andiBar.createObjectValues(qANDI.lists, 12);
 
 qANDI.analyze(qANDI.lists);
-andiBar.results(qANDI.lists, qANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
+andiBar.results(qANDI.lists, qANDI.tableInfo, showStartUpSummaryText);
 
 }//end init

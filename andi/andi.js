@@ -4175,8 +4175,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
         }
 
-        var styleAttributesToAdd = andiBar.getStyleAttributes(objectClass, index, styleAttributesToAdd);
-
         return attributesToAdd;
     }
 
@@ -4198,7 +4196,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     }
 
     //Inserts some counter totals, displays the accesskey list
-    andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
+    andiBar.results = function (moduleList, tableModule, startUpSummaryText) {
         $("#ANDI508-resultsSummary-heading").html(tableModule.tableMode + " Found: " + moduleList.elementNums[0]);
 
         andiResults.buildResultsDetails(moduleList);
@@ -4209,7 +4207,14 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
         andiResults.addElementListButton(tableModule.tableMode);
 
-        andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
+        var attributesAdded = [];
+        var styleAttributesAdded = [];
+        for (var a = 0; a < tableModule.list.length; a += 1) {
+            attributesAdded = andiBar.getAttributes(tableModule, a, attributesAdded);
+            styleAttributesAdded = andiBar.getStyleAttributes(objectClass, index, styleAttributesAdded);
+        }
+
+        andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded, styleAttributesAdded);
 
         //Show Startup Summary
         if(!andiBar.focusIsOnInspectableElement()){
@@ -4311,13 +4316,13 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
             $(pageClass).append(button);
         }
-        this.addElementListButtonLogic = function (moduleList, tableModule, attributesAdded) {
+        this.addElementListButtonLogic = function (moduleList, tableModule, attributesAdded, styleAttributesAdded) {
             var elementListString = tableModule.tableMode.replace(" ", "");
 
             //View Elements List Button
             $("#ANDI508-view" + elementListString + "List-button").click(function () {
                 if ($(this).attr("aria-expanded") === "false") {
-                    andiResults.viewList_buildTable(moduleList, tableModule, attributesAdded);
+                    andiResults.viewList_buildTable(moduleList, tableModule, attributesAdded, styleAttributesAdded);
                     andiResults.viewList_attachFocusEvents();
                     andiResults.viewList_attachSortEvent();
                     andiResults.viewList_attachButtonEvents();
@@ -4330,7 +4335,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         //This function builds the table for the view list
         // TODO: Make the code so that it works even if there are no elements found
         //       on the website being tested.
-        this.viewList_buildTable = function (moduleList, tableModule, attributesAdded = [], tableHeaderValue = "", moduleClass = "viewList") {
+        this.viewList_buildTable = function (moduleList, tableModule, attributesAdded = [], styleAttributesAdded = [], tableHeaderValue = "", moduleClass = "viewList") {
             var tableHeader = "";
             var mode = tableModule.tableMode;
 
@@ -4359,9 +4364,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
 
                 // Build the column name
-                var columnName = andiResults.createColumnName(moduleList, tableModule, attributesToAdd);
+                var columnName = andiResults.createColumnName(moduleList, tableModule, attributesToAdd, styleAttributesAdded);
 
-                var tableHTML = andiResults.addValuesToTable(moduleList, tableModule, attributesToAdd);
+                var tableHTML = andiResults.addValuesToTable(moduleList, tableModule, attributesToAdd, styleAttributesAdded);
 
                 var tabsHTML = andiResults.addTabsButtons(tableModule);
 
@@ -4404,7 +4409,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         }
 
         //This function will build the column name for the table
-        this.createColumnName = function (moduleList, tableModule, attributesToAdd) {
+        this.createColumnName = function (moduleList, tableModule, attributesToAdd, styleAttributesAdded) {
             var columnName = "";
             for (var x = 0; x < moduleList.columnNames.length; x += 1) {
                 columnName += ", [" + moduleList.columnNames[x] + "]";
@@ -4421,10 +4426,10 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
 
             // TODO: Replace cssProperties.length with styleAttributesToAdd
-            for (var c = 0; c < tableModule.cssProperties.length; c += 1) {
+            for (var s = 0; s < styleAttributesAdded.length; s += 1) {
                 var valueToAdd;
-                if (String(tableModule.cssProperties[c]).length > 0) {
-                    valueToAdd = String(tableModule.cssProperties[c]);
+                if (String(styleAttributesAdded[s]).length > 0) {
+                    valueToAdd = String(styleAttributesAdded[s]);
                 }
                 columnName += ", [" + valueToAdd + "]";
             }
@@ -4434,7 +4439,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             return columnName;
         }
         //This function will add the values to the table
-        this.addValuesToTable = function (moduleList, tableModule, attributesToAdd) {
+        this.addValuesToTable = function (moduleList, tableModule, attributesToAdd, styleAttributesAdded) {
             // Build the table
             var tableHTML = "";
             for (var x = 0; x < moduleList.list.length; x += 1) {
@@ -4462,11 +4467,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 }
                 for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
                     // TODO: Replace cssProperties.length with styleAttributesToAdd
-                    for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
-                        if (String($(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r])).charAt(0) == "[") {
-                            rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]);
+                    for (var r = 0; r < styleAttributesAdded.length; r += 1) {
+                        if (String($(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r])).charAt(0) == "[") {
+                            rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r]);
                         } else {
-                            rowValues += ", [" + $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]) + "]";
+                            rowValues += ", [" + $(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r]) + "]";
                         }
                     }
                 }

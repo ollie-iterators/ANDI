@@ -9,7 +9,6 @@ var iandiVersionNumber = "3.0.2";
 //create iANDI instance
 var iANDI = new AndiModule(iandiVersionNumber,"i");
 
-var attributesToAdd = [];
 //This function will analyze the test page for iframes
 iANDI.analyze = function(objectClass){
     $(TestPageData.allElements).each(function(){
@@ -17,7 +16,6 @@ iANDI.analyze = function(objectClass){
             andiData = new AndiData(this);
             andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
             objectClass.list.push(new iFrame([this], objectClass.list.length + 1, "", "", ""))
-            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "iframes";
             AndiData.attachDataToElement(this);
@@ -93,7 +91,6 @@ function iFrames() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "iFrames";
-    this.cssProperties  = [];
     this.buttonTextList = [];
     this.tabsTextList   = [];
 }
@@ -104,7 +101,7 @@ iANDI.tableInfo = new TableInfo();
 iANDI.iFrames = andiBar.createObjectValues(iANDI.iFrames, 1);
 
 iANDI.analyze(iANDI.iFrames);
-andiBar.results(iANDI.iFrames, iANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
+andiBar.results(iANDI.iFrames, iANDI.tableInfo, showStartUpSummaryText);
 iANDI.iFrameOpen();
 
 }//end init

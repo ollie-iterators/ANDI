@@ -9,7 +9,6 @@ var rANDIVersionNumber = "4.3.1";
 //create rANDI instance
 var rANDI = new AndiModule(rANDIVersionNumber,"r");
 
-var attributesToAdd = [];
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 rANDI.analyze = function(objectClass){
     //Loop through every visible element
@@ -19,7 +18,6 @@ rANDI.analyze = function(objectClass){
 
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
             objectClass.list.push(new Landmark([this], objectClass.list.length + 1, "", "", ""));
-            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "landmarks";
             AndiData.attachDataToElement(this);
@@ -126,7 +124,6 @@ function Landmarks() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Landmarks";
-    this.cssProperties  = [];
     this.buttonTextList = ["Reading Order"];
     this.tabsTextList   = [];
 }
@@ -137,6 +134,6 @@ rANDI.tableInfo = new TableInfo();
 rANDI.landmarks = andiBar.createObjectValues(rANDI.landmarks, 3);
 
 rANDI.analyze(rANDI.landmarks);
-andiBar.results(rANDI.landmarks, rANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
+andiBar.results(rANDI.landmarks, rANDI.tableInfo, showStartUpSummaryText);
 
 }//end init

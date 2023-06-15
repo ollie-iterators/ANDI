@@ -9,7 +9,6 @@ var fandiVersionNumber = "7.0.0";
 //create fANDI instance
 var fANDI = new AndiModule(fandiVersionNumber,"f");
 
-var attributesToAdd = [];
 //This function will analyze the test page for focusable element related markup relating to accessibility
 fANDI.analyze = function(objectClass){
     //Loop through every visible element and run tests
@@ -23,7 +22,6 @@ fANDI.analyze = function(objectClass){
                 fANDI.accesskeys.push(this, andiData.accesskey, andiData.andiElementIndex);
             testPageData.firstLaunchedModulePrep(this, andiData);
             objectClass.list.push(new Focusable([this], objectClass.list.length + 1, "", "", ""));
-            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "focusable elements"
             AndiData.attachDataToElement(this);
@@ -239,7 +237,6 @@ function Focusables() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Focusable Elements";
-    this.cssProperties  = [];
     this.buttonTextList = ["Tab Sequence"];
     this.tabsTextList   = [];
 }
@@ -252,6 +249,6 @@ fANDI.focusables = andiBar.createObjectValues(fANDI.focusables, 3);
 
 fANDI.addAccessKeysList(fANDI.accesskeys);
 fANDI.analyze(fANDI.focusables);
-andiBar.results(fANDI.focusables, fANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
+andiBar.results(fANDI.focusables, fANDI.tableInfo, showStartUpSummaryText);
 
 }//end init

@@ -21,7 +21,6 @@ AndiModule.hoverability = function(event){
 //These variables are for the page
 var activeTableIndex = -1;          //The array index of the active table
 
-var attributesToAdd = [];
 //This function will analyze the test page for table related markup relating to accessibility
 uANDI.analyze = function(objectClass){
     //Loop through each visible table
@@ -29,7 +28,6 @@ uANDI.analyze = function(objectClass){
     $(TestPageData.allElements).filter("table").each(function(){
         if (!$(this).isSemantically(["table","grid","treegrid","presentation","none"],"table")) {
             objectClass.list.push(new StrangeTable([this], objectClass.list.length + 1, "<span style='font-style:italic'>Not Recognized as a Data Table</span>", "", ""));
-            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "strange tables";
 
@@ -185,7 +183,6 @@ function StrangeTables() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Strange Tables";
-    this.cssProperties  = [];
     this.buttonTextList = [];
     this.tabsTextList   = [];
 }
@@ -197,6 +194,6 @@ uANDI.strangeTables = andiBar.createObjectValues(uANDI.strangeTables, 1);
 
 //analyze tables
 uANDI.analyze(uANDI.strangeTables);
-andiBar.results(uANDI.strangeTables, uANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
+andiBar.results(uANDI.strangeTables, uANDI.tableInfo, showStartUpSummaryText);
 
 }//end init

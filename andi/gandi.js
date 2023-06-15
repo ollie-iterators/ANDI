@@ -21,7 +21,6 @@ AndiModule.cleanup = function(testPage, element){
     $(testPage).find(".gANDI508-background").removeClass("gANDI508-background");
 };
 
-var attributesToAdd = [];
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 gANDI.analyze = function(objectClass){
     var isImageContainedByInteractiveWidget; //boolean if image is contained by link or button
@@ -57,7 +56,6 @@ gANDI.analyze = function(objectClass){
                     andiData = new AndiData(closestWidgetParent[0]);
                     andiCheck.commonFocusableElementChecks(andiData, $(closestWidgetParent));
                     objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
-                    attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                     objectClass.elementNums[0] += 1;
                     objectClass.elementStrings[0] = "images";
                     AndiData.attachDataToElement(closestWidgetParent);
@@ -73,7 +71,6 @@ gANDI.analyze = function(objectClass){
                 objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0171);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
-                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -83,7 +80,6 @@ gANDI.analyze = function(objectClass){
                 objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0172);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
-                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -93,7 +89,6 @@ gANDI.analyze = function(objectClass){
                 objectClass.elementStrings[1] = "inline images";
                 andiCheck.commonNonFocusableElementChecks(andiData, $(this), true);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
-                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -104,7 +99,6 @@ gANDI.analyze = function(objectClass){
                 andiCheck.commonFocusableElementChecks(andiData, $(this));
                 altTextAnalysis($.trim($(this).attr("alt")));
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
-                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -115,7 +109,6 @@ gANDI.analyze = function(objectClass){
                 objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0173);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
-                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -141,7 +134,6 @@ gANDI.analyze = function(objectClass){
                 }
 
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
-                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -158,7 +150,6 @@ gANDI.analyze = function(objectClass){
                         andiCheck.commonFocusableElementChecks(andiData, $(this));
                         altTextAnalysis($.trim($(this).attr("alt")));
                         objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
-                        attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                         objectClass.elementNums[0] += 1;
                         objectClass.elementStrings[0] = "images";
                         AndiData.attachDataToElement(this);
@@ -176,7 +167,6 @@ gANDI.analyze = function(objectClass){
                 //objectClass.elementStrings[1] = "inline images";
                 andiAlerter.throwAlert(alert_0134);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
-                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -187,7 +177,6 @@ gANDI.analyze = function(objectClass){
             objectClass.elementStrings[2] = "background images";
             $(this).addClass("gANDI508-background");
             objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
-            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "images";
         }
@@ -206,7 +195,6 @@ gANDI.analyze = function(objectClass){
             if(!$(this).hasClass("ANDI508-element")){
                 andiData = new AndiData(this);
                 objectClass.list.push(new Image([this], objectClass.list.length + 1, "", "", ""));
-                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "images";
                 AndiData.attachDataToElement(this);
@@ -350,7 +338,6 @@ function Images() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Images";
-    this.cssProperties  = ["background-image"];
     this.buttonTextList = ["Fade Inline Images", "Hide Background Images", "Highlight Background Images", "Highlight Decorative Images", "Highlight Font Icons"];
     this.tabsTextList   = [];
 }
@@ -361,6 +348,6 @@ gANDI.tableInfo = new TableInfo();
 gANDI.images = andiBar.createObjectValues(gANDI.images, 7);
 
 gANDI.analyze(gANDI.images);
-andiBar.results(gANDI.images, gANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
+andiBar.results(gANDI.images, gANDI.tableInfo, showStartUpSummaryText);
 
 }//end init

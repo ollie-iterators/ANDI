@@ -36,7 +36,6 @@ var alertIcons = new function(){//new is intentional
     }
 };
 
-var attributesToAdd = [];
 //This function will analyze the test page for link related markup relating to accessibility
 lANDI.analyze = function(objectClass){
     //Variables used to build the links/buttons list array.
@@ -84,12 +83,10 @@ lANDI.analyze = function(objectClass){
                         if(href){
                             //create Link object and add to array
                             lANDI.links.list.push(new CertainLink([this], objectClass.list.length + 1, nameDescription, "", rowClass));
-                            attributesToAdd = andiBar.getAttributes(lANDI.links, lANDI.links.list.length - 1, attributesToAdd);
                         }
                         else if(andiData.role === "link"){
                             //create Link object and add to array
                             lANDI.links.list.push(new CertainLink([this], objectClass.list.length + 1, nameDescription, "", rowClass));
-                            attributesToAdd = andiBar.getAttributes(lANDI.links, lANDI.links.list.length - 1, attributesToAdd);
 
                             isElementInTabOrder(this, "link");
                         }
@@ -428,7 +425,6 @@ function CertainLinks(){
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Links";
-    this.cssProperties  = [];
     this.buttonTextList = ["Highlight Ambiguous Links"];
     this.tabsTextList   = ["All", "Internal", "External"];
 }
@@ -439,6 +435,6 @@ lANDI.tableInfo = new TableInfo();
 lANDI.links = andiBar.createObjectValues(lANDI.links, 4);
 
 lANDI.analyze(lANDI.links);
-andiBar.results(lANDI.links, lANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
+andiBar.results(lANDI.links, lANDI.tableInfo, showStartUpSummaryText);
 
 }//end init

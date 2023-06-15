@@ -27,7 +27,6 @@ var alertIcons = new function(){//new is intentional
     }
 };
 
-var attributesToAdd = [];
 //This function will analyze the test page for link related markup relating to accessibility
 nANDI.analyze = function(objectClass){
     //Variables used to build the links/buttons list array.
@@ -71,7 +70,6 @@ nANDI.analyze = function(objectClass){
 
                 andiCheck.commonFocusableElementChecks(andiData,$(this));
                 objectClass.list.push(new Button([this], objectClass.list.length + 1, nameDescription, "", ""));
-                attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "buttons";
                 AndiData.attachDataToElement(this);
@@ -248,7 +246,6 @@ function Buttons(){
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Buttons";
-    this.cssProperties  = [];
     this.buttonTextList = ["Highlight Non Unique Buttons"];
     this.tabsTextList   = [];
 }
@@ -259,6 +256,6 @@ nANDI.tableInfo = new TableInfo();
 nANDI.buttons = andiBar.createObjectValues(nANDI.buttons, 2);
 
 nANDI.analyze(nANDI.buttons);
-andiBar.results(nANDI.buttons, nANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
+andiBar.results(nANDI.buttons, nANDI.tableInfo, showStartUpSummaryText);
 
 }//end init

@@ -76,7 +76,6 @@ hANDI.containsTestableContent = function(element){
     return needsTesting;
 };
 
-var attributesToAdd = [];
 //This function will analyze the test page for elements hidden using CSS
 hANDI.analyze = function(objectClass){
     var elementCss;
@@ -151,7 +150,6 @@ hANDI.analyze = function(objectClass){
             objectClass.list.push(new HiddenElement([this], objectClass.list.length + 1, "", "", ""));
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "hidden elements";
-            attributesToAdd = andiBar.getAttributes(objectClass, objectClass.list.length - 1, attributesToAdd);
             AndiData.attachDataToElement(this);
         }
     });
@@ -310,7 +308,6 @@ function HiddenElements() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Hidden Elements";
-    this.cssProperties  = [];
     this.buttonTextList = ["Force Reveal All", "Force Reveal Display", "Force Reveal Visibility", "Force Reveal Position", "Force Reveal Overflow", "Force Reveal Font Size", "Force Reveal Text Indent", "Force Reveal Opacity", "Title Attributes", "Highlight CSS Content"];
     this.tabsTextList   = [];
 }
@@ -321,7 +318,7 @@ hANDI.tableInfo = new TableInfo();
 hANDI.hiddenElements = andiBar.createObjectValues(hANDI.hiddenElements, 9);
 
 hANDI.analyze(hANDI.hiddenElements);
-andiBar.results(hANDI.hiddenElements, hANDI.tableInfo, attributesToAdd, showStartUpSummaryText);
+andiBar.results(hANDI.hiddenElements, hANDI.tableInfo, showStartUpSummaryText);
 hANDI.buildNewButton();
 
 }//end init
