@@ -4185,7 +4185,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             var styleAttributesList = styleAttributes.toString().split(';');
 
             for (var i = 0; i < styleAttributesList.length; i++) {
-                $("#ANDI508-additionalElementDetails").append("Style Attributes In List: " + styleAtt);
+                $("#ANDI508-additionalElementDetails").append("Style Attributes In List: " + styleAttributesList);
                 var styleSplit = styleAttributesList[i].split(":");
                 var stylePart = "data-andi508-" + styleSplit[0].toLowerCase().trim();
 
