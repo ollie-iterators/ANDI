@@ -4425,7 +4425,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 columnName += ", [" + valueToAdd + "]";
             }
 
-            // TODO: Replace cssProperties.length with styleAttributesToAdd
             for (var s = 0; s < styleAttributesAdded.length; s += 1) {
                 var valueToAdd;
                 if (String(styleAttributesAdded[s]).length > 0) {
@@ -4466,8 +4465,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     }
                 }
                 for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
-                    // TODO: Replace cssProperties.length with styleAttributesToAdd
                     for (var r = 0; r < styleAttributesAdded.length; r += 1) {
+                        $("#ANDI508-additionalElementDetails").append(moduleList.list[x].elementList[e].toString());
                         if (String($(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r])).charAt(0) == "[") {
                             rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r]);
                         } else {
