@@ -4444,7 +4444,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 } else {
                     $("#ANDI508-additionalElementDetails").append("Style Attributes Before: " + styleAttributesAdded.toString());
                     styleAttributesBefore = styleAttributesAdded.slice(0, s);
-                    styleAttributesAfter = styleAttributesAdded.slide(s + 1);
+                    styleAttributesAfter = styleAttributesAdded.slice(s + 1);
                     styleAttributesAdded = styleAttributesBefore.concat(styleAttributesAfter);
                     $("#ANDI508-additionalElementDetails").append("Style Attributes After: " + styleAttributesAdded.toString());
                 }
