@@ -4209,9 +4209,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
         var attributesAdded = [];
         var styleAttributesAdded = [];
-        for (var a = 0; a < tableModule.list.length; a += 1) {
-            attributesAdded = andiBar.getAttributes(tableModule, a, attributesAdded);
-            styleAttributesAdded = andiBar.getStyleAttributes(objectClass, index, styleAttributesAdded);
+        for (var a = 0; a < moduleList.list.length; a += 1) {
+            attributesAdded = andiBar.getAttributes(moduleList, a, attributesAdded);
+            styleAttributesAdded = andiBar.getStyleAttributes(moduleList, index, styleAttributesAdded);
         }
 
         andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded, styleAttributesAdded);
