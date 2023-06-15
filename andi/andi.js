@@ -4368,9 +4368,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
 
                 // Build the column name
-                var columnName, styleAttributesAdded = andiResults.createColumnName(moduleList, attributesToAdd, styleAttributesAdded);
+                var columnName = andiResults.createColumnName(moduleList, tableModule, attributesToAdd, styleAttributesAdded);
 
-                var tableHTML = andiResults.addValuesToTable(moduleList, attributesToAdd, styleAttributesAdded);
+                var tableHTML = andiResults.addValuesToTable(moduleList, tableModule, attributesToAdd, styleAttributesAdded);
 
                 var tabsHTML = andiResults.addTabsButtons(tableModule);
 
@@ -4413,7 +4413,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         }
 
         //This function will build the column name for the table
-        this.createColumnName = function (moduleList, attributesToAdd, styleAttributesAdded) {
+        this.createColumnName = function (moduleList, tableModule, attributesToAdd, styleAttributesAdded) {
             var columnName = "";
             for (var x = 0; x < moduleList.columnNames.length; x += 1) {
                 columnName += ", [" + moduleList.columnNames[x] + "]";
@@ -4431,30 +4431,22 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
             for (var s = 0; s < styleAttributesAdded.length; s += 1) {
                 var valueToAdd = String(styleAttributesAdded[s]);
-                $("#ANDI508-additionalElementDetails").append("Value To Add Before: " + valueToAdd);
                 if (String(valueToAdd).includes("data-andi508-")) {
                     valueToAdd = valueToAdd.replace("data-andi508-", "");
-                    $("#ANDI508-additionalElementDetails").append("Value To Add After: " + valueToAdd);
                 }
                 if (String(valueToAdd).length > 0) {
                     valueToAdd = String(styleAttributesAdded[s]);
 
                     columnName += ", [" + valueToAdd + "]";
-                } else {
-                    $("#ANDI508-additionalElementDetails").append("Style Attributes Before: " + styleAttributes.toString());
-                    styleAttributesBefore = styleAttributesAdded.slice(0, s);
-                    styleAttributesAfter = styleAttributesAdded.slide(s + 1);
-                    styleAttributesAdded = styleAttributesBefore.concat(styleAttributesAfter);
-                    $("#ANDI508-additionalElementDetails").append("Style Attributes After: " + styleAttributes.toString());
                 }
             }
 
             columnName = columnName.slice(2);
 
-            return columnName, styleAttributesAdded;
+            return columnName;
         }
         //This function will add the values to the table
-        this.addValuesToTable = function (moduleList, attributesToAdd, styleAttributesAdded) {
+        this.addValuesToTable = function (moduleList, tableModule, attributesToAdd, styleAttributesAdded) {
             // Build the table
             var tableHTML = "";
             for (var x = 0; x < moduleList.list.length; x += 1) {
