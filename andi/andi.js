@@ -544,8 +544,6 @@ function andiReady(){
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-s' aria-label='live regions'>live regions</button>"+
             //cANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-c' aria-label='color contrast'>color contrast</button>"+
-            //dANDI
-            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-d' aria-label='color contrast opacity'>color contrast opacity</button>"+
             //hANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-h' aria-label='hidden content'>hidden content</button>"+
             //iANDI
