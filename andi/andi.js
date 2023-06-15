@@ -4464,14 +4464,23 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                         rowValues += ", [" + String(attributeToFind) + "]";
                     }
                 }
-                for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
-                    for (var r = 0; r < styleAttributesAdded.length; r += 1) {
-                        $("#ANDI508-additionalElementDetails").append(moduleList.list[x].elementList[e].toString());
-                        if (String($(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r])).charAt(0) == "[") {
-                            rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r]);
-                        } else {
-                            rowValues += ", [" + $(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r]) + "]";
-                        }
+                // TODO: Figure out how to avoid the issue of moduleList.list[x].elementList[e]
+                //       not working.
+                // for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
+                //     for (var r = 0; r < styleAttributesAdded.length; r += 1) {
+                //         if (String($(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r])).charAt(0) == "[") {
+                //             rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r]);
+                //         } else {
+                //             rowValues += ", [" + $(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r]) + "]";
+                //         }
+                //     }
+                // }
+
+                for (var r = 0; r < styleAttributesAdded.length; r += 1) {
+                    if (String($(moduleList.list[x].elementList[0]).css(styleAttributesAdded[r])).charAt(0) == "[") {
+                        rowValues += ", " +  $(moduleList.list[x].elementList[0]).css(styleAttributesAdded[r]);
+                    } else {
+                        rowValues += ", [" + $(moduleList.list[x].elementList[0]).css(styleAttributesAdded[r]) + "]";
                     }
                 }
 
