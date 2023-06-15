@@ -12,11 +12,17 @@ var bANDI = new AndiModule(bANDIVersionNumber,"b");
 AndiModule.cleanup = function(testPage, element){
     if (element) {
         var elementAttrs = $(element).getAttributeNames();
+        var attributesToRemove = "";
         for (var e = 0; e < elementAttrs.length; e += 1) {
             if (elementAttrs[e].includes("data-andi508-")) {
-                $(element).removeAttr(elementAttrs[e]);
+                if (attributesToRemove == "") {
+                    attributesToRemove = elementAttrs[e];
+                } else {
+                    attributesToRemove += " " + elementAttrs[e];
+                }
             }
         }
+        $(element).removeAttr(attributesToRemove);
     }
 };
 
