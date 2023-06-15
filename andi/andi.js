@@ -4186,13 +4186,13 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
             for (var i = 0; i < styleAttributesList.length; i++) {
                 var styleSplit = styleAttributesList[i].split(":");
-                var stylePart = styleSplit[0].toLowerCase().trim();
+                var stylePart = "data-andi508-" + styleSplit[0].toLowerCase().trim();
 
-                var styleTest = styleSplit.slice(1).join(":");
-                $("#ANDI508-additionalElementDetails").append("Style Test: " + styleTest.toString());
+                var styleAttribute = styleSplit.slice(1).join(":");
                 if (!styleAttributesToAdd.includes(stylePart)) {
                     styleAttributesToAdd.push(stylePart);
                 }
+                $(objectClass.list[index].elementList[0]).attr(stylePart, styleAttribute);
             }
         }
 
@@ -4468,24 +4468,14 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                         rowValues += ", [" + String(attributeToFind) + "]";
                     }
                 }
-                // TODO: Figure out how to avoid the issue of moduleList.list[x].elementList[e]
-                //       not working.
-                // for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
-                //     for (var r = 0; r < styleAttributesAdded.length; r += 1) {
-                //         if (String($(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r])).charAt(0) == "[") {
-                //             rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r]);
-                //         } else {
-                //             rowValues += ", [" + $(moduleList.list[x].elementList[e]).css(styleAttributesAdded[r]) + "]";
-                //         }
-                //     }
-                // }
 
-                for (var r = 0; r < styleAttributesAdded.length; r += 1) {
-                    var styleAttributeToFind = $(moduleList.list[x].elementList[0]).css(attributeInList);
-                    if (cssPropertyToFind.charAt(0) == "[") {
-                        rowValues += ", " +  cssPropertyToFind;
-                    } else {
-                        rowValues += ", [" + $(moduleList.list[x].elementList[0]).css(styleAttributesAdded[r]) + "]";
+                for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
+                    for (var r = 0; r < styleAttributesAdded.length; r += 1) {
+                        if (String($(moduleList.list[x].elementList[e]).attr(styleAttributesAdded[r])).charAt(0) == "[") {
+                            rowValues += ", " +  $(moduleList.list[x].elementList[e]).attr(styleAttributesAdded[r]);
+                        } else {
+                            rowValues += ", [" + $(moduleList.list[x].elementList[e]).attr(styleAttributesAdded[r]) + "]";
+                        }
                     }
                 }
 
