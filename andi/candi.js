@@ -449,7 +449,7 @@ cANDI.getContrast = function(fgElement){
         else if(cANDI_data.size >= 18.66 && cANDI_data.weight >= 700) //700 is where bold begins, 18.66 is approx equal to 14pt
             cANDI_data.minReq = ratio_large;
 
-        if(cANDI_data.bgImage === "none" && !cANDI_data.opacity){
+        if(cANDI_data.bgImage === "none"){
             //No, Display PASS/FAIL Result and Requirement Ratio
             if(cANDI_data.ratio >= cANDI_data.minReq){
                 cANDI_data.result = "PASS";
@@ -518,10 +518,6 @@ cANDI.processResult = function(element){
             andiAlerter.throwAlert(alert_0240,[" ", "AA", minReq]);
     }
     else if(!cANDI_data.result){
-        //Opacity Less Than 1
-        if($(element).data("candi508").opacity)
-            andiAlerter.throwAlert(alert_0232);
-
         //Has Background Image
         if($(element).data("candi508").bgImage !== "none")
             andiAlerter.throwAlert(alert_0230);
@@ -700,10 +696,6 @@ cANDI.contrastDisplay = function(element){
         //Insert the reason:
         if(cANDI_data.bgImage != "none")
             $("#cANDI508-bg").html("<span class='cANDI508-attention'>has background image</span>");
-        else if(cANDI_data.opacity){
-            $("#cANDI508-bg").closest("tr").remove();
-            $("#cANDI508-fg").closest("tr").remove();
-        }
 
         $("#cANDI508-result").html("MANUAL TEST NEEDED").addClass("cANDI508-manual");
     }
