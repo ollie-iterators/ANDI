@@ -4368,8 +4368,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
 
                 // Build the column name
-                var columnName = [];
-                columnName, styleAttributesAdded = andiResults.createColumnName(moduleList, attributesToAdd, styleAttributesAdded);
+                var columnName, styleAttributesAdded = andiResults.createColumnName(moduleList, attributesToAdd, styleAttributesAdded);
 
                 var tableHTML = andiResults.addValuesToTable(moduleList, attributesToAdd, styleAttributesAdded);
 
