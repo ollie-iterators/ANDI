@@ -4442,11 +4442,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
                     columnName += ", [" + valueToAdd + "]";
                 } else {
-                    $("#ANDI508-additionalElementDetails").append("Style Attributes Before: " + styleAttributes.toString());
+                    $("#ANDI508-additionalElementDetails").append("Style Attributes Before: " + styleAttributesAdded.toString());
                     styleAttributesBefore = styleAttributesAdded.slice(0, s);
                     styleAttributesAfter = styleAttributesAdded.slide(s + 1);
                     styleAttributesAdded = styleAttributesBefore.concat(styleAttributesAfter);
-                    $("#ANDI508-additionalElementDetails").append("Style Attributes After: " + styleAttributes.toString());
+                    $("#ANDI508-additionalElementDetails").append("Style Attributes After: " + styleAttributesAdded.toString());
                 }
             }
 
