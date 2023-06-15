@@ -4430,8 +4430,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
 
             for (var s = 0; s < styleAttributesAdded.length; s += 1) {
-                var valueToAdd;
-                if (String(styleAttributesAdded[s]).length > 0) {
+                var valueToAdd = String(styleAttributesAdded[s]);
+                if (String(valueToAdd).includes("data-andi508-")) {
+                    valueToAdd = valueToAdd.replace("data-andi508-", "");
+                }
+                if (String(valueToAdd).length > 0) {
                     valueToAdd = String(styleAttributesAdded[s]);
                 }
                 columnName += ", [" + valueToAdd + "]";
