@@ -6,6 +6,17 @@ function init_module(){
 
 var oANDIVersionNumber = "4.3.1";
 
+AndiModule.cleanup = function(testPage, element){
+    if (element) {
+        var elementAttrs = $(element).getAttributeNames();
+        for (var e = 0; e < elementAttrs.length; e += 1) {
+            if (elementAttrs[e].includes("data-andi508-")) {
+                $(element).removeAttr(elementAttrs[e]);
+            }
+        }
+    }
+};
+
 //create oANDI instance
 var oANDI = new AndiModule(oANDIVersionNumber,"o");
 

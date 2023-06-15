@@ -11,6 +11,17 @@ var dANDIVersionNumber = "4.1.4";
 //create dANDI instance
 var dANDI = new AndiModule(dANDIVersionNumber,"d");
 
+AndiModule.cleanup = function(testPage, element){
+    if (element) {
+        var elementAttrs = $(element).getAttributeNames();
+        for (var e = 0; e < elementAttrs.length; e += 1) {
+            if (elementAttrs[e].includes("data-andi508-")) {
+                $(element).removeAttr(elementAttrs[e]);
+            }
+        }
+    }
+};
+
 AndiModule.initActiveActionButtons({
     contrastPlayground:false
 });

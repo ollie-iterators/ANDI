@@ -9,6 +9,17 @@ var fandiVersionNumber = "7.0.0";
 //create fANDI instance
 var fANDI = new AndiModule(fandiVersionNumber,"f");
 
+AndiModule.cleanup = function(testPage, element){
+    if (element) {
+        var elementAttrs = $(element).getAttributeNames();
+        for (var e = 0; e < elementAttrs.length; e += 1) {
+            if (elementAttrs[e].includes("data-andi508-")) {
+                $(element).removeAttr(elementAttrs[e]);
+            }
+        }
+    }
+};
+
 //This function will analyze the test page for focusable element related markup relating to accessibility
 fANDI.analyze = function(objectClass){
     //Loop through every visible element and run tests

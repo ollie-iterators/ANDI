@@ -11,8 +11,15 @@ var lANDI = new AndiModule(landiVersionNumber,"l");
 
 //This function removes markup in the test page that was added by this module
 AndiModule.cleanup = function(testPage, element){
-    if(element)
+    if (element) {
+        var elementAttrs = $(element).getAttributeNames();
+        for (var e = 0; e < elementAttrs.length; e += 1) {
+            if (elementAttrs[e].includes("data-andi508-")) {
+                $(element).removeAttr(elementAttrs[e]);
+            }
+        }
         $(element).removeClass("lANDI508-internalLink lANDI508-externalLink lANDI508-ambiguous lANDI508-anchorTarget");
+    }
 };
 
 //Alert icons for the links list table

@@ -9,6 +9,17 @@ var iandiVersionNumber = "3.0.2";
 //create iANDI instance
 var iANDI = new AndiModule(iandiVersionNumber,"i");
 
+AndiModule.cleanup = function(testPage, element){
+    if (element) {
+        var elementAttrs = $(element).getAttributeNames();
+        for (var e = 0; e < elementAttrs.length; e += 1) {
+            if (elementAttrs[e].includes("data-andi508-")) {
+                $(element).removeAttr(elementAttrs[e]);
+            }
+        }
+    }
+};
+
 //This function will analyze the test page for iframes
 iANDI.analyze = function(objectClass){
     $(TestPageData.allElements).each(function(){
