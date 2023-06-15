@@ -4184,8 +4184,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         if (typeof styleAttributes !== "undefined") {
             var styleAttributesList = styleAttributes.toString().split(';');
 
-            for (var i = 0; i < styleAttributesList.length; i++) {
-                $("#ANDI508-additionalElementDetails").append("Style Attributes Split: " + styleAttributesList[i]);
+            // NOTE: The first element in the styleAttributesList is always empty
+            for (var i = 1; i < styleAttributesList.length; i++) {
                 var styleSplit = styleAttributesList[i].split(":");
                 var stylePart = "data-andi508-" + styleSplit[0].toLowerCase().trim();
 
@@ -4432,14 +4432,12 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
             for (var s = 0; s < styleAttributesAdded.length; s += 1) {
                 var valueToAdd = String(styleAttributesAdded[s]);
-                if (String(valueToAdd).includes("data-andi508-")) {
+                if (valueToAdd.includes("data-andi508-")) {
                     valueToAdd = valueToAdd.replace("data-andi508-", "");
                 }
-                if (String(valueToAdd).length > 0) {
-                    valueToAdd = String(styleAttributesAdded[s]);
 
-                    columnName += ", [" + valueToAdd + "]";
-                }
+                columnName += ", [" + valueToAdd + "]";
+
             }
 
             columnName = columnName.slice(2);
