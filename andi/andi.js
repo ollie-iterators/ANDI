@@ -4185,7 +4185,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         }
     }
 
-    andiBar.getStyleAttributes = function(objectClass, index, styleAttributesToAdd = []) {
+    andiBar.getStyleAttributes = function(objectClass, tableModule, index, styleAttributesToAdd = []) {
         var styleAttributes = $(objectClass.list[index].elementList[0]).attr("style");
 
         if (typeof styleAttributes !== "undefined") {
