@@ -7,17 +7,6 @@ function init_module(){
 
 var tandiVersionNumber = "11.2.1";
 
-AndiModule.cleanup = function(testPage, element){
-    if (element) {
-        var elementAttrs = $(element).getAttributeNames();
-        for (var e = 0; e < elementAttrs.length; e += 1) {
-            if (elementAttrs[e].includes("data-andi508-")) {
-                $(element).removeAttr(elementAttrs[e]);
-            }
-        }
-    }
-};
-
 //create tANDI instance
 var tANDI = new AndiModule(tandiVersionNumber,"t");
 

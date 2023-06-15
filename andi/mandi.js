@@ -11,17 +11,8 @@ var mANDI = new AndiModule(mANDIVersionNumber,"m");
 
 //This function removes markup in the test page that was added by this module
 AndiModule.cleanup = function(testPage, element){
-    if (element) {
-        if (element) {
-            var elementAttrs = $(element).getAttributeNames();
-            for (var e = 0; e < elementAttrs.length; e += 1) {
-                if (elementAttrs[e].includes("data-andi508-")) {
-                    $(element).removeAttr(elementAttrs[e]);
-                }
-            }
-        }
+    if(element)
         $(element).removeClass("mANDI508-ambiguous");
-    }
 };
 
 //This function will analyze the test page for link related markup relating to accessibility
