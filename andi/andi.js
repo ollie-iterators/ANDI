@@ -4477,7 +4477,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 // }
 
                 for (var r = 0; r < styleAttributesAdded.length; r += 1) {
-                    if (String($(moduleList.list[x].elementList[0]).css(styleAttributesAdded[r])).charAt(0) == "[") {
+                    if (String($(moduleList.list[x].elementList[0]).css(styleAttributesAdded[r].toString())).charAt(0) == "[") {
                         rowValues += ", " +  $(moduleList.list[x].elementList[0]).css(styleAttributesAdded[r]);
                     } else {
                         rowValues += ", [" + $(moduleList.list[x].elementList[0]).css(styleAttributesAdded[r]) + "]";
