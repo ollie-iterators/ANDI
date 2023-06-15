@@ -407,9 +407,9 @@ dANDI.getContrast = function(fgElement){
 
     var contrastList = [];
     if (fgColor.alpha < 1 || bgColor.alpha < 1) {
-        var luminanceBackgroundList, luminanceBackgroundClosest = updateLuminance(bgColor);
+        var luminanceBackgroundList = updateLuminance(bgColor);
 
-        var luminanceForegroundList, luminanceForegroundClosest = updateLuminance(fgColor);
+        var luminanceForegroundList = updateLuminance(fgColor);
 
         semiTransparency = true;
         for (var f = 0; f < luminanceForegroundList.length; f += 1) {
@@ -760,6 +760,8 @@ function rgbToHex(rgbaColor){
 }
 
 // TODO: Figure out how to better organize this part of the code
+// TODO: Figure out how to get this function to work and see if you can
+//       add luminanceClosest later.
 function updateLuminance(color) {
 	var luminanceOutput = [];
     var luminanceClosest = "";
@@ -776,7 +778,7 @@ function updateLuminance(color) {
 	}
     $("#ANDI508-additionalElementDetails").append("Luminance Output: " + luminanceOutput.toString());
 
-    return luminanceOutput, luminanceClosest;
+    return luminanceOutput;
 }
 
 //===============
