@@ -4185,7 +4185,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             var styleAttributesList = styleAttributes.toString().split(';');
 
             for (var i = 0; i < styleAttributesList.length; i++) {
-                var stylePart = styleAttributesList[i].split(':')[0].toLowerCase().trim();
+                var styleSplit = styleAttributesList[i].split(":");
+                var stylePart = styleSplit[0].toLowerCase().trim();
+
+                var styleTest = styleSplit.slice(0).join(":");
+                $("#ANDI508-additionalElementDetails").append("Style Test: " + styleTest.toString());
                 if (!styleAttributesToAdd.includes(stylePart)) {
                     styleAttributesToAdd.push(stylePart);
                 }
@@ -4477,8 +4481,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 // }
 
                 for (var r = 0; r < styleAttributesAdded.length; r += 1) {
-                    if (String($(moduleList.list[x].elementList[0]).css(styleAttributesAdded[r].toString())).charAt(0) == "[") {
-                        rowValues += ", " +  $(moduleList.list[x].elementList[0]).css(styleAttributesAdded[r]);
+                    var styleAttributeToFind = $(moduleList.list[x].elementList[0]).css(attributeInList);
+                    if (cssPropertyToFind.charAt(0) == "[") {
+                        rowValues += ", " +  cssPropertyToFind;
                     } else {
                         rowValues += ", [" + $(moduleList.list[x].elementList[0]).css(styleAttributesAdded[r]) + "]";
                     }
