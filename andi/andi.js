@@ -4186,22 +4186,15 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         if (typeof styleAttributes !== "undefined") {
             var styleAttributesList = styleAttributes.toString().split(';');
 
-            var newstyle=[];
             for (var i = 0; i < styleAttributesList.length; i++) {
-                var stylePart = styleAttributesList[i].split(':')[0].toLowerCase().trim()
-                newstyle.push(stylePart);
-            }
-
-            for (var s = 0; s < newstyle.length; s += 1) {
-                $("#ANDI508-additionalElementDetails").append("Style Attributes List Item: " + newstyle[s].toString());
+                var stylePart = styleAttributesList[i].split(':')[0].toLowerCase().trim();
+                if (!styleAttributesToAdd.includes(stylePart)) {
+                    styleAttributesToAdd.push(stylePart);
+                }
             }
         }
 
-
-
-        // for (var s = 0; s < styleAttributes.length; s += 1) {
-        //     $("#ANDI508-additionalElementDetails").append("Style Attributes: " + styleAttributes[s]);
-        // }
+        return styleAttributesToAdd;
     }
 
     //Inserts some counter totals, displays the accesskey list
@@ -4427,6 +4420,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 columnName += ", [" + valueToAdd + "]";
             }
 
+            // TODO: Replace cssProperties.length with styleAttributesToAdd
             for (var c = 0; c < tableModule.cssProperties.length; c += 1) {
                 var valueToAdd;
                 if (String(tableModule.cssProperties[c]).length > 0) {
@@ -4467,6 +4461,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     }
                 }
                 for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
+                    // TODO: Replace cssProperties.length with styleAttributesToAdd
                     for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
                         if (String($(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r])).charAt(0) == "[") {
                             rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]);
