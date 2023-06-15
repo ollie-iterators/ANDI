@@ -4197,7 +4197,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
         }
 
-        $("#ANDI508-additionalElementDetails").append("Style Attributes: " + styleAttributesToAdd.toString);
+        $("#ANDI508-additionalElementDetails").append("Style Attributes: " + styleAttributesToAdd.toString());
 
         return styleAttributesToAdd;
     }
