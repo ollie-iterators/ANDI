@@ -889,11 +889,6 @@ _.prototype = {
                 ratio = 1 / ratio;
             }
 
-            //Original Code (Mod 3):
-            //ratio = Math.round(ratio, 1);
-            //Modified code (Mod 3): increased the contrast rounding precision to two decimals
-            ratio = Math.round(ratio, 2);
-
             return {
                 ratio: ratio,
                 error: 0,
