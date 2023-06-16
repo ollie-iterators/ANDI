@@ -415,11 +415,17 @@ cANDI.getContrast = function(fgElement){
 
     var contrast = fgColor.contrast(bgColor);
     var ratio = contrast.ratio;
+    var error = contrast.error;
+    var min = contrast.min;
+    var max = contrast.max;
 
     var cANDI_data = {
         bgColor:			bgColor,
         fgColor:			fgColor,
         contrast:			contrast,
+        error:              error,
+        min:                min,
+        max:                max,
         ratio: 				ratio,
         semiTransparency:	semiTransparency,
         opacity:			opacity,
