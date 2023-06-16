@@ -20,7 +20,6 @@
      - Changed code for changing fgColor if fgColor.alpha < 1
      - Added code for changing bgColor if bgColor.alpha < 1
      - Added values for error, min and max in cANDI_data
-     - changed opacity to opacityVal
 
 4. Color Contrast opacity code:
   - https://github.com/siege-media/contrast-ratio
