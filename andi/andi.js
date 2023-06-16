@@ -4177,7 +4177,10 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             for (var d = 0; d < dataKeys.length; d += 1) {
                 var attributeName = "data-andi508-" + dataKeys[d];
                 $(objectClass.list[index].elementList[0]).attr(attributeName, data[dataKeys[d]]);
-                objectClass.columnNames.push(attributeName);
+                if (!objectClass.columnNames.includes(attributeName)) {
+                    objectClass.columnNames.push(attributeName);
+                }
+
 
                 if (attributesToRemove == "") {
                     attributesToRemove = attributeName;
