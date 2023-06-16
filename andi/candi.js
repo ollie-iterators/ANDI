@@ -404,12 +404,12 @@ cANDI.getContrast = function(fgElement){
 
     //Get foreground color
     var fgColor = new Color($(fgElement).css("color"));
-    if(fgColor[3] < 1){
+    if(fgColor.alpha < 1){
         semiTransparency = true;
         fgColor = fgColor.overlayOn(Color.BLACK);
 
     }
-    if (bgColor[3] < 1) {
+    if (bgColor.alpha < 1) {
         bgColor = bgColor.overlayOn(Color.BLACK);
     }
 
@@ -421,9 +421,9 @@ cANDI.getContrast = function(fgElement){
 
     var cANDI_data = {
         bgColor:			bgColor,
-        bgColorAlpha:       bgColor[3],
+        bgColorAlpha:       bgColor.alpha,
         fgColor:			fgColor,
-        fgColorAlpha:       fgColor[3],
+        fgColorAlpha:       fgColor.alpha,
         contrast:			contrast,
         error:              error,
         min:                min,
