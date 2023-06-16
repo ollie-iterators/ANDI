@@ -430,7 +430,7 @@ cANDI.getContrast = function(fgElement){
         max:                max,
         ratio: 				ratio,
         semiTransparency:	semiTransparency,
-        opacity:			opacity,
+        opacityVal:			opacity,
         bgImage:			$(bgElement).css("background-image"),
         size:				parseFloat($(fgElement).css("font-size")),
         weight:				$(fgElement).css("font-weight"),
