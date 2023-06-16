@@ -398,12 +398,15 @@ cANDI.getContrast = function(fgElement){
     var semiTransparency = false;
     var opacity = false;
 
+
+
     //Get background color
-    var bgColor = window.getComputedStyle($(fgElement) , null).getPropertyValue("background-color");
-    //var bgColor = new Color($(fgElement).css("background-color"));
+    var backgroundColor = $(fgElement).css("background-color");
+    var bgColor = new Color($(fgElement).css("background-color"));
     var bgElement = getBgElement(fgElement);
 
     //Get foreground color
+    var foregroundColor = $(fgElement).css("color");
     var fgColor = new Color($(fgElement).css("color"));
     if(fgColor.alpha < 1){
         semiTransparency = true;
@@ -421,8 +424,10 @@ cANDI.getContrast = function(fgElement){
     var max = contrast.max;
 
     var cANDI_data = {
+        backgroundColor:    backgroundColor,
         bgColor:			bgColor,
         bgColorAlpha:       bgColor.alpha,
+        foregroundColor:    foregroundColor,
         fgColor:			fgColor,
         fgColorAlpha:       fgColor.alpha,
         contrast:			contrast,
