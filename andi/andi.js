@@ -4123,6 +4123,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     // This is where the code that I changed is going to go so that it does not impact
     // The spacing of the code above.
     var attributesToRemove = "";
+    var attributesToAdd = [];
 
     andiBar.createObjectValues = function (moduleList, numOfElementTypes) {
         for(var i = 0; i < numOfElementTypes; i++) {
@@ -4177,8 +4178,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             for (var d = 0; d < dataKeys.length; d += 1) {
                 var attributeName = "data-andi508-" + dataKeys[d];
                 $(objectClass.list[index].elementList[0]).attr(attributeName, data[dataKeys[d]]);
-                if (!objectClass.columnNames.includes(attributeName)) {
-                    objectClass.columnNames.push(attributeName);
+                if (!attributesToAdd.includes(attributeName)) {
+                    attributesToAdd.push(attributeName);
                 }
 
                 if (attributesToRemove == "") {
@@ -4386,7 +4387,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                             "<div class='ANDI508-scrollable'><table id='ANDI508-" + moduleClass + "-table' aria-label='" + mode + " List' tabindex='-1'><thead><tr>";
 
             if (moduleList.list.length > 0) {
-                var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
+                var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesToAdd, attributesAdded);
 
                 // Build the column name
                 var columnName = andiResults.createColumnName(moduleList, attributesToAdd, styleAttributesAdded);
@@ -4416,8 +4417,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
         }
         //This function will find the attributes to add to the table
-        this.findAttributesToAdd = function (moduleList, attributesAdded) {
-            var attributesToAdd = [];
+        this.findAttributesToAdd = function (moduleList, attributesToAdd, attributesAdded) {
             for (var a = 0; a < attributesAdded.length; a += 1) {
                 if (attributesAdded[a].includes("data-andi508-")) {
                     var attributesTest = attributesAdded[a].replace("data-andi508-", "");
