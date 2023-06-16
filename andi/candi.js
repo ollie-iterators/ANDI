@@ -421,7 +421,9 @@ cANDI.getContrast = function(fgElement){
 
     var cANDI_data = {
         bgColor:			bgColor,
+        bgColorAlpha:       bgColor.alpha,
         fgColor:			fgColor,
+        fgColorAlpha:       fgColor.alpha,
         contrast:			contrast,
         error:              error,
         min:                min,
@@ -928,8 +930,8 @@ _.prototype = {
         }
 
         return {
-            ratio: Math.round((min + max) / 2, 2),
-            error: Math.round((max - min) / 2, 2),
+            ratio: (min + max) / 2,
+            error: (max - min) / 2,
             min: min,
             max: max,
             closest: closest,
