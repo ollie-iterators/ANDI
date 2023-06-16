@@ -90,10 +90,9 @@ function iFrames() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode          = "iFrames";
-    this.buttonTextList     = [];
-    this.tabsTextList       = [];
-    this.attributesToRemove = "";
+    this.tableMode      = "iFrames";
+    this.buttonTextList = [];
+    this.tabsTextList   = [];
 }
 
 iANDI.iFrames = new iFrames();

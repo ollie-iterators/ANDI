@@ -1519,10 +1519,9 @@ function DataTables() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode          = "Data Tables";
-    this.buttonTextList     = ["Table Markup"];
-    this.tabsTextList       = [];
-    this.attributesToRemove = "";
+    this.tableMode      = "Data Tables";
+    this.buttonTextList = ["Table Markup"];
+    this.tabsTextList   = [];
 }
 
 vANDI.dataTables = new DataTables();

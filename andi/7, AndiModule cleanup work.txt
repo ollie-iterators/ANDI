@@ -2,7 +2,6 @@
 
 AndiModule.cleanup = function(testPage, element, tableModule){
     if (element) {
-        var elementAttrs = $(element).getAttributeNames();
-        $(element).removeAttr(tableModule.attributesToRemove);
+        $(element).removeAttr(attributesToRemove);
     }
 };

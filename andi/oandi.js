@@ -232,10 +232,9 @@ function CertainHeaders() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode          = "Certain Headers";
-    this.buttonTextList     = ["Reading Order"];
-    this.tabsTextList       = [];
-    this.attributesToRemove = "";
+    this.tableMode      = "Certain Headers";
+    this.buttonTextList = ["Reading Order"];
+    this.tabsTextList   = [];
 }
 
 oANDI.certainHeaders = new CertainHeaders();

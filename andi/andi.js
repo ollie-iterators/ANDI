@@ -4122,6 +4122,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
     // This is where the code that I changed is going to go so that it does not impact
     // The spacing of the code above.
+    var attributesToRemove = "";
 
     andiBar.createObjectValues = function (moduleList, numOfElementTypes) {
         for(var i = 0; i < numOfElementTypes; i++) {
@@ -4137,7 +4138,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     // TODO: Figure out why there are two index columns in the table
     // TODO: Figure out why there are elements in gANDI that do not have values for the style attribute
     //       that show up in the table that do have background images.
-    andiBar.getAttributes = function(objectClass, tableModule, index, attributesToAdd) {
+    andiBar.getAttributes = function(objectClass, index, attributesToAdd) {
         if (objectClass.list[index].elementList[0].hasAttributes()) {
             var attrs = objectClass.list[index].elementList[0].getAttributeNames();
             for (var a = 0; a < attrs.length; a += 1) {
@@ -4157,10 +4158,10 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     }
                     if (!attributesToAdd.includes(attributeName)) {
                         attributesToAdd.push("data-andi508-" + attributeName);
-                        if (tableModule.attributesToRemove == "") {
-                            tableModule.attributesToRemove = "data-andi508-" + attributeName;
+                        if (attributesToRemove == "") {
+                            attributesToRemove = "data-andi508-" + attributeName;
                         } else {
-                            tableModule.attributesToRemove += " data-andi508-" + attributeName;
+                            attributesToRemove += " data-andi508-" + attributeName;
                         }
                     }
                 }
@@ -4170,22 +4171,24 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         return attributesToAdd;
     }
 
-    andiBar.addAttributes = function(objectClass, tableModule, index, data) {
+    andiBar.addAttributes = function(objectClass, index, data) {
         if (data != "") {
             var dataKeys = Object.keys(data);
             for (var d = 0; d < dataKeys.length; d += 1) {
                 var attributeName = "data-andi508-" + dataKeys[d];
                 $(objectClass.list[index].elementList[0]).attr(attributeName, data[dataKeys[d]]);
-                if (tableModule.attributesToRemove == "") {
-                    tableModule.attributesToRemove = attributeName;
+                objectClass.columnNames.push(attributeName);
+
+                if (attributesToRemove == "") {
+                    attributesToRemove = attributeName;
                 } else {
-                    tableModule.attributesToRemove += " " + attributeName;
+                    attributesToRemove += " " + attributeName;
                 }
             }
         }
     }
 
-    andiBar.getStyleAttributes = function(objectClass, tableModule, index, styleAttributesToAdd = []) {
+    andiBar.getStyleAttributes = function(objectClass, index, styleAttributesToAdd = []) {
         var styleAttributes = $(objectClass.list[index].elementList[0]).attr("style");
 
         if (typeof styleAttributes !== "undefined") {
@@ -4199,10 +4202,10 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     var styleAttribute = styleSplit.slice(1).join(":");
                     if (!styleAttributesToAdd.includes(stylePart)) {
                         styleAttributesToAdd.push(stylePart);
-                        if (tableModule.attributesToRemove == "") {
-                            tableModule.attributesToRemove = stylePart;
+                        if (attributesToRemove == "") {
+                            attributesToRemove = stylePart;
                         } else {
-                            tableModule.attributesToRemove += " " + stylePart;
+                            attributesToRemove += " " + stylePart;
                         }
                     }
                     $(objectClass.list[index].elementList[0]).attr(stylePart, styleAttribute);
@@ -4230,8 +4233,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         var attributesAdded = [];
         var styleAttributesAdded = [];
         for (var a = 0; a < moduleList.list.length; a += 1) {
-            attributesAdded = andiBar.getAttributes(moduleList, tableModule, a, attributesAdded);
-            styleAttributesAdded = andiBar.getStyleAttributes(moduleList, tableModule, a, styleAttributesAdded);
+            attributesAdded = andiBar.getAttributes(moduleList, a, attributesAdded);
+            styleAttributesAdded = andiBar.getStyleAttributes(moduleList, a, styleAttributesAdded);
         }
 
         andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded, styleAttributesAdded);

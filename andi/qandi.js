@@ -173,10 +173,9 @@ function Lists() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode          = "Lists";
-    this.buttonTextList     = ["Reading Order"];
-    this.tabsTextList       = [];
-    this.attributesToRemove = "";
+    this.tableMode      = "Lists";
+    this.buttonTextList = ["Reading Order"];
+    this.tabsTextList   = [];
 }
 
 qANDI.lists = new Lists();
