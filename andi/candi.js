@@ -399,8 +399,7 @@ cANDI.getContrast = function(fgElement){
     var opacity = false;
 
     //Get background color
-    var bgColor = window.getComputedStyle(fgElement , null).getPropertyValue("background-color");
-    //var bgColor = new Color($(fgElement).css("background-color"));
+    var bgColor = new Color($(fgElement).css("background-color"));
     var bgElement = getBgElement(fgElement);
 
     //Get foreground color
