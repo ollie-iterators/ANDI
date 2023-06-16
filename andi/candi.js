@@ -406,7 +406,11 @@ cANDI.getContrast = function(fgElement){
     var fgColor = new Color($(fgElement).css("color"));
     if(fgColor.alpha < 1){
         semiTransparency = true;
-        fgColor = fgColor.overlayOn(bgColor);
+        fgColor = fgColor.overlayOn(Color.BLACK);
+
+    }
+    if (bgColor.alpha < 1) {
+        bgColor = bgColor.overlayOn(Color.BLACK);
     }
 
     var contrast = fgColor.contrast(bgColor);

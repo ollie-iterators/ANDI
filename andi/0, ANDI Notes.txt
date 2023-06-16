@@ -16,3 +16,7 @@
      - Commented out the old way contrast was gotten
      - Changed contrast to contrastList
      - Changed ratio to Math.min(contrastList)
+     - Removed if statements with opacity
+
+4. Color Contrast opacity code:
+  - https://github.com/siege-media/contrast-ratio
