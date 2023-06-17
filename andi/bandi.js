@@ -35,7 +35,7 @@ bANDI.analyze = function(objectClass){
             var attributeValue = $.trim($(this).attr(attributesToFind[a]));
             if (attributeValue) {
                 objectClass.elementNums[a + 2] += 1;
-                objectClass.elementStrings[a + 2] = "elements with " + attributesToFind[a] + "attributes";
+                objectClass.elementStrings[a + 2] = "elements with " + attributesToFind[a] + " attributes";
             }
         }
     });
