@@ -199,7 +199,6 @@ function AndiModule(moduleVersionNumber, moduleLetter){
         AndiModule.inspect(this);
         andiResetter.resizeHeights();
     };
-    AndiModule.cleanup = function(){}; //Cleanup does nothing by default
 
     //Previous Element Button - modules may overwrite this
     //Instantiating a module will reset any overrides
@@ -4871,4 +4870,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             });
         }
     }
+    AndiModule.cleanup = function(testPage, element, tableModule){
+        if (element) {
+            $(element).removeAttr(attributesToRemove);
+        }
+    };
 })();
