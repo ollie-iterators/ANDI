@@ -7,6 +7,8 @@ function init_module(){
 
 var vANDIVersionNumber = "11.2.1";
 
+andiBar.cleanup(testPage, element);
+
 //create vANDI instance
 var vANDI = new AndiModule(vANDIVersionNumber,"v");
 

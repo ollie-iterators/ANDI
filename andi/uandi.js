@@ -7,6 +7,8 @@ function init_module(){
 
 var uANDIVersionNumber = "11.2.1";
 
+andiBar.cleanup(testPage, element);
+
 //create uANDI instance
 var uANDI = new AndiModule(uANDIVersionNumber,"u");
 

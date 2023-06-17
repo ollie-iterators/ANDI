@@ -11,6 +11,8 @@ var cANDIVersionNumber = "4.1.4";
 //create cANDI instance
 var cANDI = new AndiModule(cANDIVersionNumber,"c");
 
+andiBar.cleanup(testPage, element);
+
 AndiModule.initActiveActionButtons({
     contrastPlayground:false
 });

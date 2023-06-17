@@ -9,6 +9,8 @@ var bANDIVersionNumber = "4.3.1";
 //create bANDI instance
 var bANDI = new AndiModule(bANDIVersionNumber,"b");
 
+andiBar.cleanup(testPage, element);
+
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 bANDI.analyze = function(objectClass){
     //Loop through every visible element

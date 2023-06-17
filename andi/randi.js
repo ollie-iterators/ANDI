@@ -6,6 +6,8 @@ function init_module(){
 
 var rANDIVersionNumber = "4.3.1";
 
+andiBar.cleanup(testPage, element);
+
 //create rANDI instance
 var rANDI = new AndiModule(rANDIVersionNumber,"r");
 

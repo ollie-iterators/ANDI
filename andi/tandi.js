@@ -7,6 +7,8 @@ function init_module(){
 
 var tandiVersionNumber = "11.2.1";
 
+andiBar.cleanup(testPage, element);
+
 //create tANDI instance
 var tANDI = new AndiModule(tandiVersionNumber,"t");
 

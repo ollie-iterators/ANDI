@@ -9,6 +9,8 @@ var nANDIVersionNumber = "8.2.1";
 //create nANDI instance
 var nANDI = new AndiModule(nANDIVersionNumber,"n");
 
+andiBar.cleanup(testPage, element);
+
 //Alert icons for the links list table
 //Ignore the jslint warning about the "new" declaration. It is needed.
 var alertIcons = new function(){//new is intentional

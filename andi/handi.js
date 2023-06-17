@@ -6,6 +6,8 @@ function init_module(){
 
 var handiVersionNumber = "4.0.3";
 
+andiBar.cleanup(testPage, element);
+
 //TODO: report whether an element should be visible or invisible to a screen reader
 
 //create hANDI instance

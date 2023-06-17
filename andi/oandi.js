@@ -9,6 +9,8 @@ var oANDIVersionNumber = "4.3.1";
 //create oANDI instance
 var oANDI = new AndiModule(oANDIVersionNumber,"o");
 
+andiBar.cleanup(testPage, element);
+
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 oANDI.analyze = function(objectClass){
     //Loop through every visible element
