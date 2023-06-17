@@ -400,8 +400,7 @@ cANDI.getContrast = function(fgElement){
 
     //Get background color
     var bgColor = new Color($(fgElement).css("background-color"));
-    //var bgElement = getBgElement(fgElement);
-    var bgElement = $(fgElement).closest("[background-image]")
+    var bgElement = getBgElement(fgElement);
 
     //Get foreground color
     var fgColor = new Color($(fgElement).css("color"));
