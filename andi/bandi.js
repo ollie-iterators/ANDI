@@ -26,16 +26,16 @@ bANDI.analyze = function(objectClass){
         //For all elements on the page
 
         if ($(this).is("label")) {
-            objectClass.elementNums[2] += 1;
-            objectClass.elementStrings[2] = "label tags"
+            objectClass.elementNums[1] += 1;
+            objectClass.elementStrings[1] = "label tags"
         }
 
         attributesToFind = ["title", "role", "lang"];
         for (var a = 0; a < attributesToFind.length; a++) {
             var attributeValue = $.trim($(this).attr(attributesToFind[a]));
             if (attributeValue) {
-                objectClass.elementNums[a] += 1;
-                objectClass.elementStrings[a] = "elements with " + attributesToFind[a] + "attributes";
+                objectClass.elementNums[a + 2] += 1;
+                objectClass.elementStrings[a + 2] = "elements with " + attributesToFind[a] + "attributes";
             }
         }
     });
@@ -210,7 +210,7 @@ function TableInfo() {
 bANDI.attributes = new Attributes();
 bANDI.tableInfo = new TableInfo();
 
-bANDI.attributes = andiBar.createObjectValues(bANDI.attributes, 2);
+bANDI.attributes = andiBar.createObjectValues(bANDI.attributes, 5);
 
 bANDI.analyze(bANDI.attributes);
 bANDI.results(); // TODO: Make the "Reading Order", "Role Attributes" and "Lang Attributes" buttons work
