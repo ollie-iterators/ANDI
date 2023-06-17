@@ -94,64 +94,7 @@ AndiModule.inspect = function(element){
     }
 };
 
-//This function will overlay the reading order sequence.
-AndiOverlay.prototype.overlayReadingOrder = function(){
-    //Elements that should be excluded from the scan, hidden elements will automatically be filtered out
-    var exclusions = "option,script,style,noscript";
-    //Elements that should be included in the scan even if they don't have innerText
-    var inclusions = "select,input,textarea";
 
-    var readingSequence = 0;
-    var overlayObject;
-
-    traverseReadingOrder(document.getElementById("ANDI508-testPage"));
-
-    //This recursive function traverses the dom tree and inserts the reading order overlay
-    //It distinguishes between element nodes and text nodes
-    //It will check for aria-hidden=true (with inheritance)
-    function traverseReadingOrder(element, ariaHidden){
-
-        //Check for aria-hidden=true
-        ariaHidden = (ariaHidden || $(element).attr("aria-hidden") === "true") ? true : false;
-
-        for(var z=0; z<element.childNodes.length; z++){
-
-            //if child is an element object that is visible
-            if(element.childNodes[z].nodeType === 1){
-                if(!$(element.childNodes[z]).is(exclusions) && $(element.childNodes[z]).is(":shown")){
-                    if($(element.childNodes[z]).is(inclusions)){//no need to look at this element's childNodes
-                        insertReadingOrder(ariaHidden, element.childNodes[z]);
-                        z++;//because a new node was inserted, the indexes changed
-                    }
-                    else{//recursion here:
-                        traverseReadingOrder(element.childNodes[z], ariaHidden);
-                    }
-                }
-            }
-            //else if child is a text node
-            else if(element.childNodes[z].nodeType === 3){
-                if($.trim(element.childNodes[z].nodeValue) !== ""){
-                    //Found some text
-                    insertReadingOrder(ariaHidden, element.childNodes[z]);
-                    z++;//because a new node was inserted, the indexes changed
-                }
-            }
-        }
-
-        //this function inserts the reading order overlay
-        //if it's hidden using aria-hidden it will insert an alert overlay
-        function insertReadingOrder(ariaHidden, node){
-            if(ariaHidden){
-                overlayObject = andiOverlay.createOverlay("ANDI508-overlay-alert ANDI508-overlay-readingOrder", "X", "hidden from screen reader using aria-hidden=true");
-            }
-            else{
-                readingSequence++;
-                overlayObject = andiOverlay.createOverlay("ANDI508-overlay-readingOrder", readingSequence);
-            }
-            andiOverlay.insertAssociatedOverlay(node, overlayObject);
-        }
-    }
-};
 
 //This object class is used to store data about each list. Object instances will be placed into an array.
 function List(elementList, index, nameDescription, alerts, rowClass) {
@@ -174,7 +117,7 @@ function Lists() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Lists";
-    this.buttonTextList = ["Reading Order"];
+    this.buttonTextList = [];
     this.tabsTextList   = [];
 }
 
