@@ -60,3 +60,49 @@
     grid, or treegrid
   - aria-rowspan: defines the number of rows spanned by a cell or gridcell within a table,
     grid, or treegrid
+
+# CSS Properties #
+  - Color Contrast (cANDI: color contrast):
+    - font-size: sets the size of the font
+    - text-indent: sets the length of empty space (indentation) that is put before lines of
+      text in a block
+    - overflow: sets the desired behavior when content does not fit in the parent element box
+      (overflows) in the horizontal and/or vertical direction
+    - height: specifies the height of the element
+    - width: specifies the width of the element
+    - background-color: sets the background color of an element
+    - color: sets the color of text
+    - background-image: sets one or more background images on an element
+    - font-weight: sets the weight (or boldness) of the font
+    - font-family: specifies a prioritized list of one or more font family names and/or generic
+      family names for the selected element
+    - opacity: sets the opacity of an element
+    - text-shadow: adds shadows to text
+
+  - Graphics/Images (gANDI: graphics/images):
+    - background-image: sets one or more background images on an element
+
+  - Hidden Elements (hANDI: hidden elements):
+    - display: sets whether an element is treated as a block or inline box and the layout used for
+      its children, such as flow layout, grid or flex
+    - visibility: shows or hides an element without changing the layout of a document
+    - position: sets how an element is positioned in a document
+    - opacity: sets the opacity of an element
+    - overflow: sets the desired behavior when content does not fit in the parent element box
+      (overflows) in the horizontal and/or vertical direction
+    - height: specifies the height of the element
+    - width: specifies the width of the element
+    - font-size: sets the size of the font
+    - text-indent: sets the length of empty space (indentation) that is put before lines of
+      text in a block
+
+  - Possible Headers (pANDI: possible headers):
+    - font-size: sets the size of the font
+    - font-weight: sets the weight (or boldness) of the font
+
+# Additional attributes #
+  - Hidden Elements: (hANDI: hidden elements):
+    - hidden (HTML): an enumerated attribute indicating that the browser should not render the
+      contents of the element
+    - offset(): Get the current coordinates of the first element, or set the coordinates of
+      every element, in the set of matched elements, relative to the document
