@@ -9,8 +9,6 @@ var qANDIVersionNumber = "4.3.1";
 //create qANDI instance
 var qANDI = new AndiModule(qANDIVersionNumber,"r");
 
-andiBar.cleanup(testPage, element);
-
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 qANDI.analyze = function(objectClass){
     //Loop through every visible element

@@ -9,8 +9,6 @@ var mANDIVersionNumber = "8.2.1";
 //create mANDI instance
 var mANDI = new AndiModule(mANDIVersionNumber,"m");
 
-andiBar.cleanup(testPage, element);
-
 //This function removes markup in the test page that was added by this module
 AndiModule.cleanup = function(testPage, element){
     if(element)

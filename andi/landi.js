@@ -9,8 +9,6 @@ var landiVersionNumber = "8.2.1";
 //create lANDI instance
 var lANDI = new AndiModule(landiVersionNumber,"l");
 
-andiBar.cleanup(testPage, element);
-
 //This function removes markup in the test page that was added by this module
 AndiModule.cleanup = function(testPage, element){
     if(element)

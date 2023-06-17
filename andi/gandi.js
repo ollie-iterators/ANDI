@@ -11,8 +11,6 @@ var gandiVersionNumber = "6.1.1";
 //create gANDI instance
 var gANDI = new AndiModule(gandiVersionNumber,"g");
 
-andiBar.cleanup(testPage, element);
-
 //This function removes markup in the test page that was added by this module
 AndiModule.cleanup = function(testPage, element){
     if(element)

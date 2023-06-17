@@ -4318,12 +4318,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         });
     }
 
-    andiBar.cleanup = function(testPage, element){
-        if (element) {
-            $(element).removeAttr(attributesToRemove);
-        }
-    };
-
     //This object handles the creating of the results table
     function AndiResults() {
         this.buildResultsDetails = function(moduleList) {
@@ -4876,4 +4870,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             });
         }
     }
+    AndiModule.cleanup = function(testPage, element, tableModule){
+        if (element) {
+            $(element).removeAttr(attributesToRemove);
+        }
+    };
 })();
