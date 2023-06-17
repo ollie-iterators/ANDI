@@ -156,33 +156,6 @@ AndiOverlay.prototype.overlayTabOrder = function(){
     });
 };
 
-//This function will overlay the label elements.
-AndiOverlay.prototype.overlayLabelTags = function(){
-    var labelText, labelFor, overlayClasses, overlayObject, titleText;
-    $("#ANDI508-testPage label").filter(":visible").each(function(){
-        labelText = "&lt;label";
-        overlayClasses = "ANDI508-overlay-labelTags";
-        titleText = "";
-        labelFor = $(this).attr("for");
-
-        if(labelFor){
-            labelText += " for=" + labelFor;
-            if(!document.getElementById(labelFor)){ //id that matches for cannot be found
-                overlayClasses += " ANDI508-overlay-alert";
-                titleText += "no matching [id]";
-            }
-        }
-        else
-            titleText += "no [for] attribute";
-        labelText += "&gt;";
-
-        overlayObject = andiOverlay.createOverlay(overlayClasses, labelText, titleText, 0);
-        andiOverlay.insertAssociatedOverlay(this, overlayObject, true);
-        $(this).after(andiOverlay.createOverlay(overlayClasses, "&lt;/label&gt;", "", 0));
-    });
-
-};
-
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
 AndiModule.inspect = function(element){
