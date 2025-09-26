@@ -23,11 +23,6 @@ AndiModule.hoverability = function(event){
 
 //This function removes markup in the test page that was added by this module
 AndiModule.cleanup = function(testPage, element){
-
-};
-
-//This function removes markup in the test page that was added by this module
-AndiModule.cleanup = function(testPage, element){
     if(element) {
         attributes = element.getAttributes();
         for (var i = 0; i < attributes.length; i++) {
