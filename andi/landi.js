@@ -9,20 +9,6 @@ var landiVersionNumber = "8.2.1";
 //create lANDI instance
 var lANDI = new AndiModule(landiVersionNumber,"l");
 
-//This function removes markup in the test page that was added by this module
-AndiModule.cleanup = function(testPage, element){
-    if(element)
-        //This function removes markup in the test page that was added by this module
-        attributes = element.getAttributeNames();
-        for (var i = 0; i < attributes.length; i++) {
-            if (attributes[i].$name.startsWith("data-andi508")) {
-                element.removeAttribute(attributes[i].$name);
-            }
-        }
-
-        $(element).removeClass("lANDI508-internalLink lANDI508-externalLink lANDI508-ambiguous lANDI508-anchorTarget");
-};
-
 //Alert icons for the links list table
 //Ignore the jslint warning about the "new" declaration. It is needed.
 var alertIcons = new function(){//new is intentional
