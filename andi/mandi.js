@@ -12,6 +12,14 @@ var mANDI = new AndiModule(mANDIVersionNumber,"m");
 //This function removes markup in the test page that was added by this module
 AndiModule.cleanup = function(testPage, element){
     if(element)
+        //This function removes markup in the test page that was added by this module
+        attributes = element.getAttributes();
+        for (var i = 0; i < attributes.length; i++) {
+            if (attributes[i].$name.startsWith("data-andi508")) {
+                element.removeAttribute(attributes[i].$name);
+            }
+        }
+
         $(element).removeClass("mANDI508-ambiguous");
 };
 

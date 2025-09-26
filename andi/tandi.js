@@ -10,6 +10,16 @@ var tandiVersionNumber = "11.2.1";
 //create tANDI instance
 var tANDI = new AndiModule(tandiVersionNumber,"t");
 
+//This function removes markup in the test page that was added by this module
+AndiModule.cleanup = function(testPage, element){
+    attributes = element.getAttributes();
+    for (var i = 0; i < attributes.length; i++) {
+        if (attributes[i].$name.startsWith("data-andi508")) {
+            element.removeAttribute(attributes[i].$name);
+        }
+    }
+};
+
 //This function updates the Active Element Inspector when mouseover is on a given to a highlighted element.
 //Holding the shift key will prevent inspection from changing.
 AndiModule.hoverability = function(event){

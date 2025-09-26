@@ -21,7 +21,13 @@ AndiModule.hoverability = function(event){
 //This function removes markup in the test page that was added by this module
 AndiModule.cleanup = function(testPage, element){
     if(element){
-        $(element).removeAttr("data-andi508-hidingtechniques").removeClass("ANDI508-forceReveal ANDI508-forceReveal-Display ANDI508-forceReveal-Visibility ANDI508-forceReveal-Position ANDI508-forceReveal-Opacity ANDI508-forceReveal-Overflow ANDI508-forceReveal-FontSize ANDI508-forceReveal-TextIndent");
+        attributes = element.getAttributes();
+        for (var i = 0; i < attributes.length; i++) {
+            if (attributes[i].$name.startsWith("data-andi508")) {
+                element.removeAttribute(attributes[i].$name);
+            }
+        }
+        $(element).removeClass("ANDI508-forceReveal ANDI508-forceReveal-Display ANDI508-forceReveal-Visibility ANDI508-forceReveal-Position ANDI508-forceReveal-Opacity ANDI508-forceReveal-Overflow ANDI508-forceReveal-FontSize ANDI508-forceReveal-TextIndent");
     }
     else
         $(testPage).find(".hANDI508-hasHiddenCssContent").removeClass("hANDI508-hasHiddenCssContent");

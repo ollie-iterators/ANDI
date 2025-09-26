@@ -23,9 +23,20 @@ AndiModule.hoverability = function(event){
 
 //This function removes markup in the test page that was added by this module
 AndiModule.cleanup = function(testPage, element){
-    if(element)
-        $(element).removeClass("vANDI508-highlight").removeAttr("data-vANDI508-rowindex data-vANDI508-colindex data-vANDI508-rowgroupindex data-vANDI508-colgroupindex");
-    else{
+
+};
+
+//This function removes markup in the test page that was added by this module
+AndiModule.cleanup = function(testPage, element){
+    if(element) {
+        attributes = element.getAttributes();
+        for (var i = 0; i < attributes.length; i++) {
+            if (attributes[i].$name.startsWith("data-andi508")) {
+                element.removeAttribute(attributes[i].$name);
+            }
+        }
+         $(element).removeClass("vANDI508-highlight").removeAttr("data-vANDI508-rowindex data-vANDI508-colindex data-vANDI508-rowgroupindex data-vANDI508-colgroupindex");
+    } else {
         $(testPage).find("tr[data-vANDI508-colgroupsegment]").removeAttr("data-vANDI508-colgroupsegment");
         $("#ANDI508-prevTable-button").remove();
         $("#ANDI508-nextTable-button").remove();
