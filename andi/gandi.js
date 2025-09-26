@@ -13,15 +13,16 @@ var gANDI = new AndiModule(gandiVersionNumber,"g");
 
 //This function removes markup in the test page that was added by this module
 AndiModule.cleanup = function(testPage, element){
-    attributes = element.getAttributes();
-    for (var i = 0; i < attributes.length; i++) {
-        if (attributes[i].$name.startsWith("data-andi508")) {
-            element.removeAttribute(attributes[i].$name);
+    if(element) {
+        attributes = element.getAttributes();
+        for (var i = 0; i < attributes.length; i++) {
+            if (attributes[i].$name.startsWith("data-andi508")) {
+                element.removeAttribute(attributes[i].$name);
+            }
         }
+         $(element).removeClass("gANDI508-fontIcon");
     }
 
-    if(element)
-        $(element).removeClass("gANDI508-fontIcon");
     else{
         $(testPage).find(".gANDI508-decorative").removeClass("gANDI508-decorative");
     }
