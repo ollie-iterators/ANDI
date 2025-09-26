@@ -199,7 +199,17 @@ function AndiModule(moduleVersionNumber, moduleLetter){
         AndiModule.inspect(this);
         andiResetter.resizeHeights();
     };
-    AndiModule.cleanup = function(){}; //Cleanup does nothing by default
+    //This function removes markup in the test page that was added by this module
+    AndiModule.cleanup = function(testPage, element){
+        if(element) {
+            attributes = element.getAttributeNames();
+            for (var i = 0; i < attributes.length; i++) {
+                if (attributes[i].$name.startsWith("data-andi508")) {
+                    element.removeAttribute(attributes[i].$name);
+                }
+            }
+        }
+    };
 
     //Previous Element Button - modules may overwrite this
     //Instantiating a module will reset any overrides
@@ -1200,8 +1210,7 @@ function AndiResetter(){
             $(testPage).find(".ANDI508-element").each(function(){
 
                 //Module specific cleanup for this element
-                if(AndiModule.cleanup !== undefined)
-                    AndiModule.cleanup(testPage, this);
+                AndiModule.cleanup(testPage, this);
 
                 //Global cleanup
                 $(this)

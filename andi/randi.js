@@ -9,18 +9,6 @@ var rANDIVersionNumber = "4.3.1";
 //create rANDI instance
 var rANDI = new AndiModule(rANDIVersionNumber,"r");
 
-//This function removes markup in the test page that was added by this module
-AndiModule.cleanup = function(testPage, element){
-    if(element) {
-        attributes = element.getAttributeNames();
-        for (var i = 0; i < attributes.length; i++) {
-            if (attributes[i].$name.startsWith("data-andi508")) {
-                element.removeAttribute(attributes[i].$name);
-            }
-        }
-    }
-};
-
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 rANDI.analyze = function(objectClass){
     //Loop through every visible element

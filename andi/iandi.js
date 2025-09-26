@@ -9,18 +9,6 @@ var iandiVersionNumber = "3.0.2";
 //create iANDI instance
 var iANDI = new AndiModule(iandiVersionNumber,"i");
 
-//This function removes markup in the test page that was added by this module
-AndiModule.cleanup = function(testPage, element){
-    if(element) {
-        attributes = element.getAttributeNames();
-        for (var i = 0; i < attributes.length; i++) {
-            if (attributes[i].$name.startsWith("data-andi508")) {
-                element.removeAttribute(attributes[i].$name);
-            }
-        }
-    }
-};
-
 //This function will analyze the test page for iframes
 iANDI.analyze = function(objectClass){
     $(TestPageData.allElements).each(function(){
