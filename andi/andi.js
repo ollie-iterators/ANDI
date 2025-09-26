@@ -216,6 +216,7 @@ function AndiModule(moduleVersionNumber, moduleLetter){
                 }
             }
         }
+        $(testPage).find(moduleLetter + "ANDI508-*").removeClass(moduleLetter + "ANDI508-*");
     };
 
     //Previous Element Button - modules may overwrite this
