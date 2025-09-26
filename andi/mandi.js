@@ -13,7 +13,7 @@ var mANDI = new AndiModule(mANDIVersionNumber,"m");
 AndiModule.cleanup = function(testPage, element){
     if(element)
         //This function removes markup in the test page that was added by this module
-        attributes = element.getAttributes();
+        attributes = element.getAttributeNames();
         for (var i = 0; i < attributes.length; i++) {
             if (attributes[i].$name.startsWith("data-andi508")) {
                 element.removeAttribute(attributes[i].$name);
