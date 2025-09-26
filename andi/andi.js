@@ -205,7 +205,7 @@ function AndiModule(moduleVersionNumber, moduleLetter){
             attributes = element.getAttributeNames();
             for (var i = 0; i < attributes.length; i++) {
                 if (attributes[i].startsWith("data-andi508")) {
-                    element.removeAttribute(attributes[i]);
+                    element.removeAttr(attributes[i]);
                 }
             }
         }
