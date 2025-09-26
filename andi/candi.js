@@ -15,18 +15,6 @@ AndiModule.initActiveActionButtons({
     contrastPlayground:false
 });
 
-//This function removes markup in the test page that was added by this module
-AndiModule.cleanup = function(testPage, element){
-    if(element) {
-        attributes = element.getAttributeNames();
-        for (var i = 0; i < attributes.length; i++) {
-            if (attributes[i].$name.startsWith("data-andi508")) {
-                element.removeAttribute(attributes[i].$name);
-            }
-        }
-    }
-};
-
 //This function will run tests on text containing elements
 cANDI.analyze = function(objectClass){
     //Elements that are disabled or have aria-disabled="true" do not need to be tested
