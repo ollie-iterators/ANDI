@@ -20,7 +20,7 @@ AndiModule.cleanup = function(testPage, element){
                 element.removeAttribute(attributes[i].$name);
             }
         }
-         $(element).removeClass("gANDI508-fontIcon");
+         //$(element).removeClass("gANDI508-fontIcon");
     }
 
     else{
