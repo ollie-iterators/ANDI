@@ -14,7 +14,7 @@ var hANDI = new AndiModule(handiVersionNumber,"h");
 //This function updates the Active Element Inspector when mouseover/hover is on a given to a highlighted element.
 //Holding the shift key will prevent inspection from changing.
 AndiModule.hoverability = function(event){
-    if(!event.shiftKey && $(this).hasClass("ANDI508-forceReveal")) //check for holding shift key
+    if(!event.shiftKey && $(this).hasClass("hANDI508-forceReveal")) //check for holding shift key
         AndiModule.inspect(this);
 };
 
@@ -27,7 +27,6 @@ AndiModule.cleanup = function(testPage, element){
                 element.removeAttribute(attributes[i].$name);
             }
         }
-        $(element).removeClass("ANDI508-forceReveal ANDI508-forceReveal-Display ANDI508-forceReveal-Visibility ANDI508-forceReveal-Position ANDI508-forceReveal-Opacity ANDI508-forceReveal-Overflow ANDI508-forceReveal-FontSize ANDI508-forceReveal-TextIndent");
     }
     else
         $(testPage).find(".hANDI508-hasHiddenCssContent").removeClass("hANDI508-hasHiddenCssContent");
@@ -100,21 +99,21 @@ hANDI.analyze = function(objectClass){
                 //element visibility is hidden
                 objectClass.elementNums[2] += 1;
                 objectClass.elementStrings[2] = "visibility:hidden"
-                $(this).addClass("ANDI508-forceReveal-Visibility");
+                $(this).addClass("hANDI508-forceReveal-Visibility");
                 elementCss += "visibility:hidden; ";
             }
             if($(this).css("position")=="absolute" && ($(this).offset().left < 0 || $(this).offset().top < 0)){
                 //element is positioned offscreen
                 objectClass.elementNums[3] += 1;
                 objectClass.elementStrings[3] = "position:absolute"
-                $(this).addClass("ANDI508-forceReveal-Position");
+                $(this).addClass("hANDI508-forceReveal-Position");
                 elementCss += "position:absolute; ";
             }
             if($(this).css("opacity")=="0"){
                 //element opacity is zero
                 objectClass.elementNums[4] += 1;
                 objectClass.elementStrings[4] = "opacity:0"
-                $(this).addClass("ANDI508-forceReveal-Opacity");
+                $(this).addClass("hANDI508-forceReveal-Opacity");
                 elementCss += "opacity:0; ";
             }
             //if element has innerText
@@ -125,14 +124,14 @@ hANDI.analyze = function(objectClass){
                     //element has overflow hidden and a small height or width
                     objectClass.elementNums[5] += 1;
                     objectClass.elementStrings[5] = "overflow:hidden"
-                    $(this).addClass("ANDI508-forceReveal-Overflow");
+                    $(this).addClass("hANDI508-forceReveal-Overflow");
                     elementCss += "overflow:hidden; ";
                 }
                 if(parseInt($(this).css("font-size")) === 0){
                     //element font-size is 0
                     objectClass.elementNums[6] += 1;
                     objectClass.elementStrings[6] = "font-size:0"
-                    $(this).addClass("ANDI508-forceReveal-FontSize");
+                    $(this).addClass("hANDI508-forceReveal-FontSize");
                     elementCss += "font-size:0; ";
                 }
             }
@@ -140,7 +139,7 @@ hANDI.analyze = function(objectClass){
                 //element has a text-indent that makes it off screen
                 objectClass.elementNums[7] += 1;
                 objectClass.elementStrings[7] = "text-indent"
-                $(this).addClass("ANDI508-forceReveal-TextIndent");
+                $(this).addClass("hANDI508-forceReveal-TextIndent");
                 elementCss += "text-indent:"+$(this).css("text-indent")+"; ";
             }
         }
@@ -265,7 +264,7 @@ $("#ANDI508-button-prevElement").off("click").click(function(){
         //This will skip over elements that may have been removed from the DOM and are not force revealed
         for(var x=index; x>0; x--){
             prevElement = $("#ANDI508-testPage [data-andi508-index='"+(x - 1)+"']");
-            if($(prevElement).length && $(prevElement).hasClass("ANDI508-forceReveal")){
+            if($(prevElement).length && $(prevElement).hasClass("hANDI508-forceReveal")){
                 andiFocuser.focusByIndex(x - 1);
                 break;
             }
@@ -286,7 +285,7 @@ $("#ANDI508-button-nextElement").off("click").click(function(){
         //This will skip over elements that may have been removed from the DOM and are not force revealed
         for(var x=index; x<testPageData.andiElementIndex; x++){
             nextElement = $("#ANDI508-testPage [data-andi508-index='"+(x + 1)+"']");
-            if($(nextElement).length && $(nextElement).hasClass("ANDI508-forceReveal")){
+            if($(nextElement).length && $(nextElement).hasClass("hANDI508-forceReveal")){
                 andiFocuser.focusByIndex(x + 1);
                 break;
             }
