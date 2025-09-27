@@ -208,6 +208,8 @@ function AndiModule(moduleVersionNumber, moduleLetter){
                     element.removeAttr(attributes[i]);
                 }
             }
+            // data-andi508-class is handled seaprately because it is not removed
+            // whith removeAttr in the loop above
             element.removeAttr("data-andi508-class")
             classes = element.getAttr("class");
             classList = classes.split(" ");
@@ -219,6 +221,7 @@ function AndiModule(moduleVersionNumber, moduleLetter){
 
         }
         $(testPage).find(moduleLetter + "ANDI508-*").removeClass(moduleLetter + "ANDI508-*");
+        $(testPage).find("[data-andi508-class]").removeAttr("data-andi508-class");
     };
 
     //Previous Element Button - modules may overwrite this
