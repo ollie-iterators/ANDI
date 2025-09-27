@@ -94,7 +94,7 @@ AndiModule.initActiveActionButtons({
 vANDI.analyze = function(objectClass){
     //Loop through each visible table
     var activeElementFound = false;
-    $(TestPageData.allElements).filter("table,[role=table],[role=grid],[role=treegrid]").each(function(){
+    $(TestPageData.allElements).filter("table,th,td,tr,th[role=table],[role=grid],[role=treegrid][role=columnheader],[role=rowheader],[role=row]").each(function(){
         //Store this table in the array
 
 
@@ -107,17 +107,16 @@ vANDI.analyze = function(objectClass){
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
             andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[1] += 1;
-            objectClass.elementStrings[1] += "data cells";
+            if ($(this).is("th")) {
+                objectClass.elementStrings[1] += "header cells";
+            } else {
+                objectClass.elementStrings[1] += "data cells";
+            }
         } else if ($(this).isSemantically(["row"], "tr")) {
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
             andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[2] += 1;
             objectClass.elementStrings[2] += "data rows";
-        } else if ($(this).isSemantically(["columnheader", "rowheader"], "th")) {
-            objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
-            objectClass.elementNums[3] += 1;
-            objectClass.elementStrings[3] += "header cells";
         }
 
 
