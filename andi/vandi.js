@@ -94,7 +94,7 @@ AndiModule.initActiveActionButtons({
 vANDI.analyze = function(objectClass){
     //Loop through each visible table
     var activeElementFound = false;
-    $(TestPageData.allElements).filter("table,th,td,tr,th[role=table],[role=grid],[role=treegrid][role=columnheader],[role=rowheader],[role=row]").each(function(){
+    $(TestPageData.allElements).filter().each(function(){
         //Store this table in the array
 
 
