@@ -300,7 +300,7 @@ AndiModule.inspect = function(element){
             if($(element).is("th")){
                 var id = $(element).attr("id");
                 if(id){
-                    $(table).find("th.ANDI508-element:not(.vANDI508-highlight),td.ANDI508-element:not(.vANDI508-highlight)").filter(":visible").each(function(){
+                    $(table).find("th.ANDI508-element:not(.vANDI508-highlight),td.ANDI508-element:not(.vANDI508-highlight)").each(function(){
                         headers = $(this).attr("headers");
                         if(headers){
                             idsArray = headers.split(" ");
@@ -323,7 +323,7 @@ AndiModule.inspect = function(element){
             //if inspected element is a td
             if($(element).is("td")){
                 //Highlight associating <th> for this <td>
-                $(table).find("th.ANDI508-element").filter(":visible").each(function(){
+                $(table).find("th.ANDI508-element").each(function(){
                     s = $(this).attr("scope");
                     ci = $(this).attr("data-andi508-colindex");
                     ri = $(this).attr("data-andi508-rowindex");
@@ -349,7 +349,7 @@ AndiModule.inspect = function(element){
                 //Highlight associating <th> and <td> for this <th>
                 var scope = $(element).attr("scope");
                 var cgi, rgi;
-                $(table).find("th.ANDI508-element,td.ANDI508-element").filter(":visible").each(function(){
+                $(table).find("th.ANDI508-element,td.ANDI508-element").each(function(){
                     s = $(this).attr("scope");
                     ci = $(this).attr("data-andi508-colindex");
                     ri = $(this).attr("data-andi508-rowindex");
@@ -413,7 +413,7 @@ AndiModule.inspect = function(element){
                 ( $(element).getValidRole() === "cell" && $(table).getValidRole() === "table" ) ||
                 ( $(element).getValidRole() === "gridcell" && ($(table).getValidRole() === "grid" || $(table).getValidRole() === "treegrid") )
             ){
-                $(table).find("[role=columnheader].ANDI508-element,[role=rowheader].ANDI508-element").filter(":visible").each(function(){
+                $(table).find("[role=columnheader].ANDI508-element,[role=rowheader].ANDI508-element").each(function(){
                     ci = $(this).attr("data-andi508-colindex");
                     ri = $(this).attr("data-andi508-rowindex");
                     //alert(colIndex+" "+rowIndex+" |"+ci+ri)
@@ -431,7 +431,7 @@ AndiModule.inspect = function(element){
             }
             else if($(element).is("[role=columnheader],[role=rowheader]")){
                 s = ($(element).is("[role=columnheader]")) ? "col" : "row";
-                $(table).find(".ANDI508-element").filter(":visible").each(function(){
+                $(table).find(".ANDI508-element").each(function(){
                     ci = $(this).attr("data-andi508-colindex");
                     ri = $(this).attr("data-andi508-rowindex");
                     row_index_matches = index_match(rowIndex, ri);
@@ -591,9 +591,9 @@ function analyzeTable(table){
         var rowspanArray = [];
 
         //Cache the visible elements (performance)
-        var all_rows = $(table).find("tr").filter(":visible");
-        var all_th = $(all_rows).find("th").filter(":visible");
-        var all_cells = $(all_rows).find("th,td").filter(":visible");
+        var all_rows = $(table).find("tr");
+        var all_th = $(all_rows).find("th");
+        var all_cells = $(all_rows).find("th,td");
 
         //==DATA TABLE==//
         //This is a little hack to force the table tag to go first in the index
@@ -613,7 +613,7 @@ function analyzeTable(table){
             colIndex = 0;
             colgroupSegmentation_colgroupsPerRowCounter = 0;
 
-            cells = $(row).find("th,td").filter(":visible");
+            cells = $(row).find("th,td");
 
             //Set colCount
             if(colCount < cells.length)
@@ -740,7 +740,7 @@ function analyzeTable(table){
                 row = $(this);
                 if(colgroupSegmentation){
                     colgroupsInThisRow = 0;
-                    $(row).find("th,td").filter(":visible").each(function(){
+                    $(row).find("th,td").each(function(){
                         if($(this).attr("scope") == "colgroup"){
                             colgroupsInThisRow++;
                             //store this colgroupIndex to temp variable
@@ -757,7 +757,7 @@ function analyzeTable(table){
                     }
                 }
                 if(rowgroupIndex > 0){
-                    $(row).find("th,td").filter(":visible").each(function(){
+                    $(row).find("th,td").each(function(){
                         //Rowgroup
                         if($(this).attr("scope") == "rowgroup"){
                             lastRowgroupIndex = $(this).attr("data-andi508-rowgroupindex");
@@ -1007,9 +1007,9 @@ function analyzeTable(table){
         var rowspanArray = [];
 
         //Cache the visible elements (performance)
-        var all_rows = $(table).find("[role=row]").filter(":visible");
-        //var all_th = $(all_rows).find("[role=columnheader],[role=rowheader]").filter(":visible");
-        var all_cells = $(table).find("[role=columnheader],[role=rowheader],"+cell_role).filter(":visible");
+        var all_rows = $(table).find("[role=row]");
+        //var all_th = $(all_rows).find("[role=columnheader],[role=rowheader]");
+        var all_cells = $(table).find("[role=columnheader],[role=rowheader],"+cell_role);
 
         //This is a little hack to force the table tag to go first in the index
         //so that it is inspected first with the previous and next buttons.
@@ -1027,7 +1027,7 @@ function analyzeTable(table){
             colIndex = 0;
             colgroupSegmentation_colgroupsPerRowCounter = 0;
 
-            cells = $(row).find("th,[role=columnheader],[role=rowheader],"+cell_role).filter(":visible");
+            cells = $(row).find("th,[role=columnheader],[role=rowheader],"+cell_role);
 
             //Set colCount
             if(colCount < cells.length)
@@ -1256,7 +1256,7 @@ vANDI.viewList_buildTable = function(){
             namingMethod = "aria-label";
         }
         if(!tableName){
-            tableName = cleanUp($(table).find("caption").filter(":visible").first().text());
+            tableName = cleanUp($(table).find("caption").first().text());
             namingMethod = "&lt;caption&gt;";
         }
         if(!tableName){
