@@ -1234,8 +1234,7 @@ function AndiResetter(){
             });
 
             //Module specific cleanup for all elements
-            if(AndiModule.cleanup !== undefined)
-                AndiModule.cleanup(testPage);
+            AndiModule.cleanup(testPage);
 
             andiLaser.cleanupLaserTargets(testPage);
 
