@@ -18,20 +18,6 @@ AndiModule.hoverability = function(event){
         AndiModule.inspect(this);
 };
 
-//This function removes markup in the test page that was added by this module
-AndiModule.cleanup = function(testPage, element){
-    if(element){
-        attributes = element.getAttributeNames();
-        for (var i = 0; i < attributes.length; i++) {
-            if (attributes[i].$name.startsWith("data-andi508")) {
-                element.removeAttribute(attributes[i].$name);
-            }
-        }
-    }
-    else
-        $(testPage).find(".hANDI508-hasHiddenCssContent").removeClass("hANDI508-hasHiddenCssContent");
-};
-
 AndiModule.inspect = function(element){
     if ($(element).hasClass("ANDI508-element")) {
 
