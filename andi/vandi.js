@@ -106,17 +106,19 @@ vANDI.analyze = function(objectClass){
         } else if ($(this).isSemantically(["columnheader", "rowheader"], "th,td")) {
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
             andiBar.getAttributes(objectClass, objectClass.list.length - 1);
-            objectClass.elementNums[1] += 1;
+
             if ($(this).is("th")) {
+                objectClass.elementNums[1] += 1;
                 objectClass.elementStrings[1] += "header cells";
             } else {
-                objectClass.elementStrings[1] += "data cells";
+                objectClass.elementNums[2] += 1;
+                objectClass.elementStrings[2] += "data cells";
             }
         } else if ($(this).isSemantically(["row"], "tr")) {
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
             andiBar.getAttributes(objectClass, objectClass.list.length - 1);
-            objectClass.elementNums[2] += 1;
-            objectClass.elementStrings[2] += "data rows";
+            objectClass.elementNums[3] += 1;
+            objectClass.elementStrings[3] += "data rows";
         }
 
 
