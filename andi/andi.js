@@ -208,14 +208,12 @@ function AndiModule(moduleVersionNumber, moduleLetter){
                     element.removeAttr(attributes[i]);
                 }
             }
-            let classes = ["class", "data-andi508-class"];
-            for (var j = 0; j < classes.length; j++) {
-                classes = element.getAttr(classes[j]);
-                classList = classes.split(" ");
-                for (var c = 0; c < classList.length; c++) {
-                    if (classList[c].startsWith(moduleLetter + "ANDI508-")) {
-                        element.removeClass(classList[c]);
-                    }
+            element.removeAttr("data-andi508-class")
+            classes = element.getAttr("class");
+            classList = classes.split(" ");
+            for (var c = 0; c < classList.length; c++) {
+                if (classList[c].startsWith(moduleLetter + "ANDI508-")) {
+                    element.removeClass(classList[c]);
                 }
             }
 
