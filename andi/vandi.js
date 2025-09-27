@@ -103,7 +103,23 @@ vANDI.analyze = function(objectClass){
             andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "data tables";
+        } else if ($(this).isSemantically(["columnheader", "rowheader"], "th,td")) {
+            objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            objectClass.elementNums[1] += 1;
+            objectClass.elementStrings[1] += "data cells";
+        } else if ($(this).isSemantically(["row"], "tr")) {
+            objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            objectClass.elementNums[2] += 1;
+            objectClass.elementStrings[2] += "data rows";
+        } else if ($(this).isSemantically(["columnheader", "rowheader"], "th")) {
+            objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            objectClass.elementNums[3] += 1;
+            objectClass.elementStrings[3] += "header cells";
         }
+
 
         //Determine if this is a refresh of vANDI (there is an active element)
         if(!activeElementFound &&
