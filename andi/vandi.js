@@ -94,7 +94,7 @@ AndiModule.initActiveActionButtons({
 vANDI.analyze = function(objectClass){
     //Loop through each visible table
     var activeElementFound = false;
-    $(TestPageData.allElements).filter().each(function(){
+    $(TestPageData.allElements).each(function(){
         //Store this table in the array
 
 
