@@ -103,22 +103,12 @@ vANDI.analyze = function(objectClass){
             andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "data tables";
-        } else if ($(this).isSemantically(["columnheader", "rowheader"], "th,td")) {
-            objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
-
-            if ($(this).is("th")) {
-                objectClass.elementNums[1] += 1;
-                objectClass.elementStrings[1] += "header cells";
-            } else {
-                objectClass.elementNums[2] += 1;
-                objectClass.elementStrings[2] += "data cells";
-            }
-        } else if ($(this).isSemantically(["row"], "tr")) {
-            objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
-            objectClass.elementNums[3] += 1;
-            objectClass.elementStrings[3] += "data rows";
+            var all_rows = $(table).find("tr");
+            var all_th = $(all_rows).find("th");
+            var all_cells = $(all_rows).find("th,td");
+            objectClass.rowList = all_rows;
+            objectClass.thList = all_th;
+            objectClass.cellList = all_cells;
         }
 
 
