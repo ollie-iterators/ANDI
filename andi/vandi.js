@@ -99,27 +99,10 @@ vANDI.analyze = function(objectClass){
 
         var tableList = [];
         if($(this).isSemantically(["table","grid","treegrid"],"table")){
-            tableList.push(this);
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
             andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "data tables";
-            var all_rows = $(table).find("tr");
-            var all_th = $(all_rows).find("th");
-            var all_cells = $(all_rows).find("th,td");
-            //objectClass.rowList = all_rows;
-            objectClass.thList = all_th;
-            objectClass.cellList = all_cells;
-            $(all_rows).each(function() {
-                objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-            });
-        }
-
-        for (var i = 0; i < tableList.length; i++) {
-            var all_rows = $(tableList[i]).find("tr");
-            $(all_rows).each(function() {
-                objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-            });
         }
 
         //Determine if this is a refresh of vANDI (there is an active element)
@@ -147,7 +130,7 @@ vANDI.analyze = function(objectClass){
 
         if(!activeElementFound)
             activeTableIndex = 0;//Analyze first table
-        //analyzeTable(objectClass.list[activeTableIndex].elementList[0]);
+        analyzeTable(objectClass.list[activeTableIndex].elementList[0]);
 
         //If there are more than one table and prevTable/nextTable buttons haven't yet been added
         if(objectClass.elementNums[0] > 1 && $("#ANDI508-prevTable-button").length === 0){
