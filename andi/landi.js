@@ -158,10 +158,10 @@ lANDI.analyze = function(objectClass){
         for(var x=0; x<lANDI.links.list.length; x++){
             if(nameDescription.toLowerCase() == lANDI.links.list[x].nameDescription.toLowerCase()){ //nameDescription match
 
-                if(href.toLowerCase().replace(regEx,"") != lANDI.links.list[x]["href"].toLowerCase().replace(regEx,"")){ //href doesn't match, throw alert
+                if(href.toLowerCase().replace(regEx,"") != lANDI.links.list[x].href.toLowerCase().replace(regEx,"")){ //href doesn't match, throw alert
 
                     //Determine which alert level should be thrown
-                    if(href.charAt(0) == "#" || lANDI.links.list[x]["href"].charAt(0) == "#"){
+                    if(href.charAt(0) == "#" || lANDI.links.list[x].href.charAt(0) == "#"){
                         //One link is internal
                         alertIcon = alertIcons.caution_ambiguous;
                         alertObject = alert_0162;
