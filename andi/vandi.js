@@ -128,9 +128,13 @@ vANDI.analyze = function(objectClass){
 
         $("#ANDI508-module-actions").html(moduleActionButtons);
 
-        if(!activeElementFound)
-            activeTableIndex = 0;//Analyze first table
-        analyzeTable(objectClass.list[activeTableIndex].elementList[0]);
+        // if(!activeElementFound)
+        //     activeTableIndex = 0;//Analyze first table
+        for (var i = 0; i < dataTablesCount; i++) {
+            var dataTable = tableArray[i];
+            analyzeTable(dataTable);
+        }
+
 
         //If there are more than one table and prevTable/nextTable buttons haven't yet been added
         if(objectClass.elementNums[0] > 1 && $("#ANDI508-prevTable-button").length === 0){
