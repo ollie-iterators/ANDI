@@ -97,8 +97,9 @@ vANDI.analyze = function(objectClass){
     $(TestPageData.allElements).each(function(){
         //Store this table in the array
 
-
+        var tableList = [];
         if($(this).isSemantically(["table","grid","treegrid"],"table")){
+            tableList.push(this);
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
             andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
@@ -114,6 +115,12 @@ vANDI.analyze = function(objectClass){
             });
         }
 
+        for (var i = 0; i < tableList.length; i++) {
+            var all_rows = $(tableList[i]).find("tr");
+            $(all_rows).each(function() {
+                objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            });
+        }
 
         //Determine if this is a refresh of vANDI (there is an active element)
         if(!activeElementFound &&
