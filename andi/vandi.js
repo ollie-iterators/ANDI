@@ -80,6 +80,8 @@ $("#ANDI508-button-nextElement").off("click").click(function(){
 var activeTableIndex = -1;			//The array index of the active table
 
 //These variables are for the current table being analyzed (the active table)
+var tableArray = [];                //The array of all the cells in the current table
+var dataTablesCount = 0;            //The total number of data tables found on the page
 var cellCount = 0;					//The total number of <th> and <td>
 var rowCount = 0;					//The total number of <tr>
 var colCount = 0;					//The total number of columns (maximum number of <th> or <td> in a <tr>)
@@ -97,19 +99,17 @@ vANDI.analyze = function(objectClass){
     $(TestPageData.allElements).each(function(){
         //Store this table in the array
 
-        var tableList = [];
+
         if($(this).isSemantically(["table","grid","treegrid"],"table")){
-            objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
-            objectClass.elementNums[0] += 1;
-            objectClass.elementStrings[0] += "data tables";
+            tableArray.push(this);
+            dataTablesCount++;
         }
 
         //Determine if this is a refresh of vANDI (there is an active element)
         if(!activeElementFound &&
             ($(this).hasClass("ANDI508-element-active") || $(this).find("th.ANDI508-element-active,td.ANDI508-element-active").first().length ))
         {
-            activeTableIndex = objectClass.elementNums[0];//set this index to this table
+            activeTableIndex = dataTablesCount;//set this index to this table
             activeElementFound = true;
         }
     });
@@ -863,6 +863,10 @@ function analyzeTable(table){
                 //Header cell is empty
                 andiAlerter.throwAlert(alert_0132);
 
+            objectClass.list.push(new DataTable([cell], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            objectClass.elementNums[1] += 1;
+            objectClass.elementStrings[1] = "data table cell";
             AndiData.attachDataToElement(cell);
         });
 
@@ -971,6 +975,10 @@ function analyzeTable(table){
 
         cellCount = thCount + tdCount;
 
+        objectClass.list.push(new DataTable([table], objectClass.list.length + 1, "", "", ""));
+        andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+        objectClass.elementNums[0] += 1;
+        objectClass.elementStrings[0] = "data table";
         AndiData.attachDataToElement(table);
 
         testPageData.andiElementIndex = lastIndex; //set the index back to the last element's index so things dependent on this number don't break
@@ -1147,6 +1155,10 @@ function analyzeTable(table){
                     //Header cell is empty
                     andiAlerter.throwAlert(alert_0132);
 
+                objectClass.list.push(new DataTable([cell], objectClass.list.length + 1, "", "", ""));
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+                objectClass.elementNums[1] += 1;
+                objectClass.elementStrings[1] = "data table cell";
                 AndiData.attachDataToElement(cell);
             }
             else{
@@ -1189,6 +1201,10 @@ function analyzeTable(table){
 
         cellCount = headerCount + nonHeaderCount;
 
+        objectClass.list.push(new DataTable([table], objectClass.list.length + 1, "", "", ""));
+        andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+        objectClass.elementNums[0] += 1;
+        objectClass.elementStrings[0] = "data table";
         AndiData.attachDataToElement(table);
 
         testPageData.andiElementIndex = lastIndex; //set the index back to the last element's index so things dependent on this number don't break
