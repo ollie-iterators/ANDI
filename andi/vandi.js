@@ -867,7 +867,7 @@ function analyzeTable(table){
                 //Header cell is empty
                 andiAlerter.throwAlert(alert_0132);
 
-            objectClass.list.push(new DataTable([cell], objectClass.list.length + 1, "", "", ""));
+            objectClass.list.push(new DataTable([cell[0]], objectClass.list.length + 1, "", "", ""));
             andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[1] += 1;
             objectClass.elementStrings[1] = "data table cell";
@@ -1159,7 +1159,7 @@ function analyzeTable(table){
                     //Header cell is empty
                     andiAlerter.throwAlert(alert_0132);
 
-                objectClass.list.push(new DataTable([cell], objectClass.list.length + 1, "", "", ""));
+                objectClass.list.push(new DataTable([cell[0]], objectClass.list.length + 1, "", "", ""));
                 andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[1] += 1;
                 objectClass.elementStrings[1] = "data table cell";
