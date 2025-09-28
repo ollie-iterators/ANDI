@@ -106,9 +106,12 @@ vANDI.analyze = function(objectClass){
             var all_rows = $(table).find("tr");
             var all_th = $(all_rows).find("th");
             var all_cells = $(all_rows).find("th,td");
-            objectClass.rowList = all_rows;
+            //objectClass.rowList = all_rows;
             objectClass.thList = all_th;
             objectClass.cellList = all_cells;
+            $(all_rows).each(function() {
+                objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            }
         }
 
 
