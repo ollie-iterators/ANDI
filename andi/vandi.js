@@ -111,7 +111,7 @@ vANDI.analyze = function(objectClass){
             objectClass.cellList = all_cells;
             $(all_rows).each(function() {
                 objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-            }
+            });
         }
 
 
