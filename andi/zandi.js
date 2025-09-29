@@ -1,5 +1,5 @@
 //=========================================//
-//tANDI: tables ANDI					   //
+//zANDI: tables ANDI					   //
 //Created By Social Security Administration//
 //=========================================//
 
@@ -8,7 +8,7 @@ function init_module(){
 var tandiVersionNumber = "11.2.1";
 
 //create tANDI instance
-var tANDI = new AndiModule(tandiVersionNumber,"t");
+var tANDI = new AndiModule(tandiVersionNumber,"z");
 
 //a scope at this depth level triggers an alert
 tANDI.scopeLevelLimit = 4;

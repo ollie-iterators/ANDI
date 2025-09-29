@@ -319,6 +319,12 @@ body.ANDI508-testPage
 #ANDI508.ANDI508-module-v #ANDI508-module-name,
 #ANDI508.ANDI508-module-v #ANDI508-module-actions button.ANDI508-module-action-active
 	{color:#febadc !important;} /*ffc1fb*/
+/*zANDI*/
+#ANDI508 .ANDI508-module-name-z,
+#ANDI508 #ANDI508-moduleMenu-button-z,
+#ANDI508.ANDI508-module-z #ANDI508-module-name,
+#ANDI508.ANDI508-module-z #ANDI508-module-actions button.ANDI508-module-action-active
+	{color:#febadc !important;} /*ffc1fb*/
 /*wANDI*/
 #ANDI508 .ANDI508-module-name-w,
 #ANDI508 #ANDI508-moduleMenu-button-w,
