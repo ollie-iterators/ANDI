@@ -5,16 +5,16 @@
 
 function init_module(){
 
-var tandiVersionNumber = "11.2.1";
+var zANDIVersionNumber = "11.2.1";
 
-//create tANDI instance
-var tANDI = new AndiModule(tandiVersionNumber,"z");
+//create zANDI instance
+var zANDI = new AndiModule(zANDIVersionNumber,"z");
 
 //a scope at this depth level triggers an alert
-tANDI.scopeLevelLimit = 4;
+zANDI.scopeLevelLimit = 4;
 
 //Delimeter for the the header cells
-tANDI.associatedHeaderCellsDelimeter = " <span aria-hidden='true'>|</span> ";
+zANDI.associatedHeaderCellsDelimeter = " <span aria-hidden='true'>|</span> ";
 
 //This function updates the Active Element Inspector when mouseover is on a given to a highlighted element.
 //Holding the shift key will prevent inspection from changing.
@@ -27,9 +27,9 @@ AndiModule.hoverability = function(event){
 //This function removes markup in the test page that was added by this module
 AndiModule.cleanup = function(testPage, element){
 	if(element)
-		$(element).removeClass("tANDI508-highlight").removeAttr("data-tandi508-rowindex data-tandi508-colindex data-tandi508-rowgroupindex data-tandi508-colgroupindex");
+		$(element).removeClass("zANDI508-highlight").removeAttr("data-zANDI508-rowindex data-zANDI508-colindex data-zANDI508-rowgroupindex data-zANDI508-colgroupindex");
 	else{
-		$(testPage).find("tr[data-tandi508-colgroupsegment]").removeAttr("data-tandi508-colgroupsegment");
+		$(testPage).find("tr[data-zANDI508-colgroupsegment]").removeAttr("data-zANDI508-colgroupsegment");
 		$("#ANDI508-prevTable-button").remove();
 		$("#ANDI508-nextTable-button").remove();
 	}
@@ -94,7 +94,7 @@ AndiModule.initActiveActionButtons({
 });
 
 //This function will analyze the test page for table related markup relating to accessibility
-tANDI.analyze = function(){
+zANDI.analyze = function(){
 	if(TestPageData.page_using_table){
 		//Loop through each visible table
 		var activeElementFound = false;
@@ -116,7 +116,7 @@ tANDI.analyze = function(){
 				presentationTablesCount++;
 			}
 
-			//Determine if this is a refresh of tANDI (there is an active element)
+			//Determine if this is a refresh of zANDI (there is an active element)
 			if(!activeElementFound &&
 				($(this).hasClass("ANDI508-element-active") || $(this).find("th.ANDI508-element-active,td.ANDI508-element-active").first().length ))
 			{
@@ -203,11 +203,11 @@ tANDI.analyze = function(){
 					activeTableIndex = tableArray.length-1;
 				else
 					activeTableIndex--;
-				tANDI.reset();
+				zANDI.reset();
 				analyzeTable(tableArray[activeTableIndex]);
-				tANDI.results();
+				zANDI.results();
 				andiFocuser.focusByIndex(1);
-				tANDI.redoMarkup();
+				zANDI.redoMarkup();
 				andiBar.viewList_highlightSelectedTable(activeTableIndex, true);
 				andiResetter.resizeHeights();
 				return false;
@@ -227,12 +227,12 @@ tANDI.analyze = function(){
 				else
 					activeTableIndex++;
 
-				tANDI.reset();
+				zANDI.reset();
 				analyzeTable(tableArray[activeTableIndex]);
-				tANDI.results();
+				zANDI.results();
 				andiFocuser.focusByIndex(1);
-				tANDI.redoMarkup();
-				tANDI.viewList_highlightSelectedTable(activeTableIndex, true);
+				zANDI.redoMarkup();
+				zANDI.viewList_highlightSelectedTable(activeTableIndex, true);
 				andiResetter.resizeHeights();
 				return false;
 			})
@@ -250,10 +250,10 @@ tANDI.analyze = function(){
 AndiModule.inspect = function(element){
 	andiBar.prepareActiveElementInspection(element);
 
-	//Remove other tANDI highlights
-	$("#ANDI508-testPage .tANDI508-highlight").removeClass("tANDI508-highlight");
+	//Remove other zANDI highlights
+	$("#ANDI508-testPage .zANDI508-highlight").removeClass("zANDI508-highlight");
 	//Highlight This Element
-	$(element).addClass("tANDI508-highlight");
+	$(element).addClass("zANDI508-highlight");
 
 	var associatedHeaderCellsText = (!$(element).is("table,[role=table],[role=grid],[role=treegrid]")) ? grabHeadersAndHighlightRelatedCells(element) : "";
 
@@ -293,10 +293,10 @@ AndiModule.inspect = function(element){
 		var accumulatedHeaderText = "";
 		var accumulatedHeaderTextArray = []; //will store each text block so it can be compared against
 		var table = $(element).closest("table,[role=table],[role=grid],[role=treegrid]");
-		var rowIndex = $(element).attr("data-tandi508-rowindex");
-		var colIndex = $(element).attr("data-tandi508-colindex");
-		var colgroupIndex = $(element).attr("data-tandi508-colgroupindex");
-		var rowgroupIndex = $(element).attr("data-tandi508-rowgroupindex");
+		var rowIndex = $(element).attr("data-zANDI508-rowindex");
+		var colIndex = $(element).attr("data-zANDI508-colindex");
+		var colgroupIndex = $(element).attr("data-zANDI508-colgroupindex");
+		var rowgroupIndex = $(element).attr("data-zANDI508-rowgroupindex");
 
 		//Update activeTableIndex to this element's table.
 		//activeTableIndex = $(table).attr("data-andi508-index") - 1;
@@ -326,7 +326,7 @@ AndiModule.inspect = function(element){
 			if($(element).is("th")){
 				var id = $(element).attr("id");
 				if(id){
-					$(table).find("th.ANDI508-element:not(.tANDI508-highlight),td.ANDI508-element:not(.tANDI508-highlight)").filter(":visible").each(function(){
+					$(table).find("th.ANDI508-element:not(.zANDI508-highlight),td.ANDI508-element:not(.zANDI508-highlight)").filter(":visible").each(function(){
 						headers = $(this).attr("headers");
 						if(headers){
 							idsArray = headers.split(" ");
@@ -351,19 +351,19 @@ AndiModule.inspect = function(element){
 				//Highlight associating <th> for this <td>
 				$(table).find("th.ANDI508-element").filter(":visible").each(function(){
 					s = $(this).attr("scope");
-					ci = $(this).attr("data-tandi508-colindex");
-					ri = $(this).attr("data-tandi508-rowindex");
+					ci = $(this).attr("data-zANDI508-colindex");
+					ri = $(this).attr("data-zANDI508-rowindex");
 
 					//get associated th from col
 					if(s != "row" && s != "rowgroup" &&
-						(!colgroupIndex || (colgroupIndex == $(this).attr("data-tandi508-colgroupindex"))) &&
+						(!colgroupIndex || (colgroupIndex == $(this).attr("data-zANDI508-colgroupindex"))) &&
 						index_match(colIndex, ci) && !index_match(rowIndex, ri) )
 					{
 						addHighlight(this, true);
 					}
 					//get associated th from row
 					else if(s != "col" && s != "colgroup" &&
-						(!rowgroupIndex || (rowgroupIndex == $(this).attr("data-tandi508-rowgroupindex"))) &&
+						(!rowgroupIndex || (rowgroupIndex == $(this).attr("data-zANDI508-rowgroupindex"))) &&
 						index_match(rowIndex, ri) && !index_match(colIndex, ci) )
 					{
 						addHighlight(this, true);
@@ -377,10 +377,10 @@ AndiModule.inspect = function(element){
 				var cgi, rgi;
 				$(table).find("th.ANDI508-element,td.ANDI508-element").filter(":visible").each(function(){
 					s = $(this).attr("scope");
-					ci = $(this).attr("data-tandi508-colindex");
-					ri = $(this).attr("data-tandi508-rowindex");
-					cgi = $(this).attr("data-tandi508-colgroupindex");
-					rgi = $(this).attr("data-tandi508-rowgroupindex");
+					ci = $(this).attr("data-zANDI508-colindex");
+					ri = $(this).attr("data-zANDI508-rowindex");
+					cgi = $(this).attr("data-zANDI508-colgroupindex");
+					rgi = $(this).attr("data-zANDI508-rowgroupindex");
 					row_index_matches = index_match(rowIndex, ri);
 					col_index_matches = index_match(colIndex, ci);
 					isSameColgroup = (!colgroupIndex || colgroupIndex == cgi);
@@ -409,7 +409,7 @@ AndiModule.inspect = function(element){
 							addHighlight(this);
 						}
 						else if(isSameColgroup && scope === "colgroup" && col_index_matches){
-							if($(element).parent().attr("data-tandi508-colgroupsegment")){
+							if($(element).parent().attr("data-zANDI508-colgroupsegment")){
 								if(colgroupIndex == cgi)
 									addHighlight(this);
 							}
@@ -440,8 +440,8 @@ AndiModule.inspect = function(element){
 				( $(element).getValidRole() === "gridcell" && ($(table).getValidRole() === "grid" || $(table).getValidRole() === "treegrid") )
 			){
 				$(table).find("[role=columnheader].ANDI508-element,[role=rowheader].ANDI508-element").filter(":visible").each(function(){
-					ci = $(this).attr("data-tandi508-colindex");
-					ri = $(this).attr("data-tandi508-rowindex");
+					ci = $(this).attr("data-zANDI508-colindex");
+					ri = $(this).attr("data-zANDI508-rowindex");
 					//alert(colIndex+" "+rowIndex+" |"+ci+ri)
 					//Highlight associating columnheader for this cell
 					if(index_match(colIndex, ci) && !index_match(rowIndex, ri) )
@@ -458,8 +458,8 @@ AndiModule.inspect = function(element){
 			else if($(element).is("[role=columnheader],[role=rowheader]")){
 				s = ($(element).is("[role=columnheader]")) ? "col" : "row";
 				$(table).find(".ANDI508-element").filter(":visible").each(function(){
-					ci = $(this).attr("data-tandi508-colindex");
-					ri = $(this).attr("data-tandi508-rowindex");
+					ci = $(this).attr("data-zANDI508-colindex");
+					ri = $(this).attr("data-zANDI508-rowindex");
 					row_index_matches = index_match(rowIndex, ri);
 					col_index_matches = index_match(colIndex, ci);
 
@@ -496,13 +496,13 @@ AndiModule.inspect = function(element){
 		//This functoin will add the highlight to the element
 		//if updateAssociatedHeaderCellsText is true it will add the text to the header cells
 		function addHighlight(element, updateAssociatedHeaderCellsText){
-			$(element).addClass("tANDI508-highlight");
+			$(element).addClass("zANDI508-highlight");
 			if(updateAssociatedHeaderCellsText){
 				var text = andiUtility.formatForHtml(andiUtility.getVisibleInnerText(element));
 				//Check if this block of text has already been added (duplicate header)
 				if(accumulatedHeaderTextArray.indexOf(text) === -1){
 					accumulatedHeaderTextArray.push(text);
-					accumulatedHeaderText += text + tANDI.associatedHeaderCellsDelimeter;
+					accumulatedHeaderText += text + zANDI.associatedHeaderCellsDelimeter;
 				}
 			}
 		}
@@ -510,15 +510,15 @@ AndiModule.inspect = function(element){
 	}
 };
 
-//This function will remove tANDI markup from every table and rebuild the alert list
-tANDI.reset = function(){
+//This function will remove zANDI markup from every table and rebuild the alert list
+zANDI.reset = function(){
 	var testPage = document.getElementById("ANDI508-testPage");
 
 	//Every ANDI508-element
 	$(testPage).find(".ANDI508-element").each(function(){
 		$(this)
-			.removeClass("tANDI508-highlight")
-			.removeAttr("data-andi508-index data-tandi508-rowindex data-tandi508-colindex data-tandi508-colgroupindex data-tandi508-rowgroupindex")
+			.removeClass("zANDI508-highlight")
+			.removeAttr("data-andi508-index data-zANDI508-rowindex data-zANDI508-colindex data-zANDI508-colgroupindex data-zANDI508-rowgroupindex")
 			.removeClass("ANDI508-element ANDI508-element-danger ANDI508-highlight")
 			.removeData("ANDI508")
 			.off("focus",AndiModule.focusability)
@@ -533,13 +533,13 @@ tANDI.reset = function(){
 };
 
 //This function hides the scopeMode headersIdMode buttons
-tANDI.hideModeButtons = function(){
+zANDI.hideModeButtons = function(){
 	AndiModule.activeActionButtons.modeButtonsVisible = false;
 	$("#ANDI508-scopeMode-button").add("#ANDI508-headersIdMode-button").add($("#ANDI508-markup-button").prev())
 		.addClass("ANDI508-module-action-hidden");
 };
 //This function shows the scopeMode headersIdMode buttons
-tANDI.showModeButtons = function(mode){
+zANDI.showModeButtons = function(mode){
 	AndiModule.activeActionButtons.modeButtonsVisible = true;
 	var scopeModeButton = document.getElementById("ANDI508-scopeMode-button");
 	var headersIdButton = document.getElementById("ANDI508-headersIdMode-button");
@@ -586,7 +586,7 @@ function analyzeTable(table){
 		//Each cell in a row is given a rowIndex
 		//Each cell in a column is given a colIndex
 
-		//The way tANDI analyzes the table is that it begins looking at the cells first
+		//The way zANDI analyzes the table is that it begins looking at the cells first
 		//to determine if there is any existing scenarios that should trigger an alert.
 		//When each cell has been evaluated, it will then attach alerts to the table element.
 
@@ -659,7 +659,7 @@ function analyzeTable(table){
 
 			AndiData.attachDataToElement(table);
 
-			tANDI.hideModeButtons();
+			zANDI.hideModeButtons();
 			AndiModule.activeActionButtons.scopeMode = true;
 		}
 		else if($.trim(role) && role !== "table" && role !== "grid" && role !== "treegrid"){
@@ -709,13 +709,13 @@ function analyzeTable(table){
 							if(scope == "colgroup"){
 								//TODO: more logic here to catch misuse of colgroup
 								colgroupIndex++;
-								$(cell).attr("data-tandi508-colgroupindex",colgroupIndex);
+								$(cell).attr("data-zANDI508-colgroupindex",colgroupIndex);
 								colgroupSegmentation_colgroupsPerRowCounter++;
 							}
 							else if(scope == "rowgroup"){
 								//TODO: more logic here to catch misuse of colgroup
 								rowgroupIndex++;
-								$(cell).attr("data-tandi508-rowgroupindex",rowgroupIndex);
+								$(cell).attr("data-zANDI508-rowgroupindex",rowgroupIndex);
 							}
 						}
 					}
@@ -762,7 +762,7 @@ function analyzeTable(table){
 					}
 
 					if(colspan < 2){
-						$(cell).attr("data-tandi508-colindex",colIndex);
+						$(cell).attr("data-zANDI508-colindex",colIndex);
 						rowspanArray[colIndex] = rowspan;
 						colIndex++;
 					}
@@ -774,12 +774,12 @@ function analyzeTable(table){
 							rowspanArray[colIndex] = rowspan;
 							colIndex++;
 						}
-						$(cell).attr("data-tandi508-colindex", $.trim(indexValue));
+						$(cell).attr("data-zANDI508-colindex", $.trim(indexValue));
 					}
 
 					//store rowIndex
 					if(rowspan < 2){
-						$(cell).attr("data-tandi508-rowindex",rowIndex);
+						$(cell).attr("data-zANDI508-rowindex",rowIndex);
 					}
 					else{
 						//rowspanArray[colIndex] = rowspan;
@@ -787,7 +787,7 @@ function analyzeTable(table){
 						rowIndexPlusRowspan  = parseInt(rowIndex) + rowspan;
 						for(var c=rowIndex; c<rowIndexPlusRowspan; c++)
 							indexValue += c + " ";
-						$(cell).attr("data-tandi508-rowindex",$.trim(indexValue));
+						$(cell).attr("data-zANDI508-rowindex",$.trim(indexValue));
 					}
 				});
 
@@ -818,30 +818,30 @@ function analyzeTable(table){
 							if($(this).attr("scope") == "colgroup"){
 								colgroupsInThisRow++;
 								//store this colgroupIndex to temp variable
-								c = $(this).attr("data-tandi508-colgroupindex");
+								c = $(this).attr("data-zANDI508-colgroupindex");
 							}
 							else if(lastColgroupIndex)
 								//set this cell's colgroupIndex
-								$(this).attr("data-tandi508-colgroupindex", lastColgroupIndex);
+								$(this).attr("data-zANDI508-colgroupindex", lastColgroupIndex);
 						});
 
 						if(colgroupsInThisRow === 1){
 							lastColgroupIndex = c;
-							$(row).attr("data-tandi508-colgroupsegment","true");
+							$(row).attr("data-zANDI508-colgroupsegment","true");
 						}
 					}
 					if(rowgroupIndex > 0){
 						$(row).find("th,td").filter(":visible").each(function(){
 							//Rowgroup
 							if($(this).attr("scope") == "rowgroup"){
-								lastRowgroupIndex = $(this).attr("data-tandi508-rowgroupindex");
+								lastRowgroupIndex = $(this).attr("data-zANDI508-rowgroupindex");
 								//Get rowspan
 								lastRowgroupRowSpan = $(this).attr("rowspan");
 								if(!lastRowgroupRowSpan)
 									lastRowgroupRowSpan = 1;
 							}
 							else if(lastRowgroupIndex && lastRowgroupRowSpan > 0)
-								$(this).attr("data-tandi508-rowgroupindex", lastRowgroupIndex);
+								$(this).attr("data-zANDI508-rowgroupindex", lastRowgroupIndex);
 						});
 						//Decrement lastRowgroupRowSpan
 						lastRowgroupRowSpan--;
@@ -868,14 +868,14 @@ function analyzeTable(table){
 
 						//Determine if there are "too many" scope rows
 						if(!tooManyScopeRowLevels){
-							colIndex = $(cell).attr("data-tandi508-colindex");
-							for(var f=0; f<=tANDI.scopeLevelLimit; f++){
+							colIndex = $(cell).attr("data-zANDI508-colindex");
+							for(var f=0; f<=zANDI.scopeLevelLimit; f++){
 								if(!scopeRowLevel[f] || (!scopeRowLevel[f] && (scopeRowLevel[f-1] != colIndex))){
 									//scope found at this colIndex
 									scopeRowLevel[f] = colIndex;
 									break;
 								}
-								else if((f == tANDI.scopeLevelLimit) && (colIndex >= f))
+								else if((f == zANDI.scopeLevelLimit) && (colIndex >= f))
 									//scope levelLimit has been exceeeded
 									tooManyScopeRowLevels = true;
 							}
@@ -886,14 +886,14 @@ function analyzeTable(table){
 
 						//Determine if there are too many scope columns
 						if(!tooManyScopeColLevels){
-							rowIndex = $(cell).attr("data-tandi508-rowindex");
-							for(var g=0; g<=tANDI.scopeLevelLimit; g++){
+							rowIndex = $(cell).attr("data-zANDI508-rowindex");
+							for(var g=0; g<=zANDI.scopeLevelLimit; g++){
 								if(!scopeColLevel[g] || (!scopeColLevel[g] && (scopeColLevel[g-1] != rowIndex))){
 									//scope found at this rowIndex
 									scopeColLevel[g] = rowIndex;
 									break;
 								}
-								else if((g == tANDI.scopeLevelLimit) && (rowIndex >= g))
+								else if((g == zANDI.scopeLevelLimit) && (rowIndex >= g))
 									//scope levelLimit has been exceeeded
 									tooManyScopeColLevels = true;
 							}
@@ -920,9 +920,9 @@ function analyzeTable(table){
 					if(AndiModule.activeActionButtons.scopeMode){
 						//Only throw scope alerts if in "scope mode"
 						if(tooManyScopeRowLevels)
-							andiAlerter.throwAlert(alert_0043,[tANDI.scopeLevelLimit,"row"]);
+							andiAlerter.throwAlert(alert_0043,[zANDI.scopeLevelLimit,"row"]);
 						if(tooManyScopeColLevels)
-							andiAlerter.throwAlert(alert_0043,[tANDI.scopeLevelLimit,"col"]);
+							andiAlerter.throwAlert(alert_0043,[zANDI.scopeLevelLimit,"col"]);
 						andiCheck.detectDeprecatedHTML($(cell));
 						if(scope !== "col" && scope !== "row" && scope !== "colgroup" && scope !== "rowgroup")//scope value is invalid
 							andiAlerter.throwAlert(alert_007C,[scope]);
@@ -930,10 +930,10 @@ function analyzeTable(table){
 				}
 
 				if(headers)
-					tANDI.grab_headers(cell, andiData, table);
+					zANDI.grab_headers(cell, andiData, table);
 
 				//If this is not the upper left cell
-				if($(cell).is("th") && !andiData.accName && !($(this).attr("data-tandi508-rowindex") === "1" && $(this).attr("data-tandi508-colindex") === "1"))
+				if($(cell).is("th") && !andiData.accName && !($(this).attr("data-zANDI508-rowindex") === "1" && $(this).attr("data-zANDI508-colindex") === "1"))
 					//Header cell is empty
 					andiAlerter.throwAlert(alert_0132);
 
@@ -943,17 +943,17 @@ function analyzeTable(table){
 			if(tableHasHeaders){
 				//[headers] exist, show mode selection buttons
 				if(AndiModule.activeActionButtons.modeButtonsVisible && $("#ANDI508-scopeMode-button").attr("aria-pressed") === "true"){
-					tANDI.showModeButtons("scope");
+					zANDI.showModeButtons("scope");
 					AndiModule.activeActionButtons.scopeMode = true;
 				}
 				else{
-					tANDI.showModeButtons("headersId");
+					zANDI.showModeButtons("headersId");
 					AndiModule.activeActionButtons.scopeMode = false;
 				}
 			}
 			else{
 				//No [headers], force scopeMode
-				tANDI.hideModeButtons();
+				zANDI.hideModeButtons();
 				AndiModule.activeActionButtons.scopeMode = true;
 			}
 
@@ -994,8 +994,8 @@ function analyzeTable(table){
 							//if this th does not have scope
 							xDirectionHasTh = false;
 							yDirectionHasTh = false;
-							rowIndex = $(this).attr("data-tandi508-rowindex");
-							colIndex = $(this).attr("data-tandi508-colindex");
+							rowIndex = $(this).attr("data-zANDI508-rowindex");
+							colIndex = $(this).attr("data-zANDI508-colindex");
 							cell = $(this);
 							if(!$(this).attr("scope")){
 								//determine if this is at an intersection of th
@@ -1003,9 +1003,9 @@ function analyzeTable(table){
 								var yDirectionThCount = 0;
 								$(all_th).each(function(){
 									//determine if x direction multiple th at this rowindex
-									if(rowIndex == $(this).attr("data-tandi508-rowindex"))
+									if(rowIndex == $(this).attr("data-zANDI508-rowindex"))
 										xDirectionThCount++;
-									if(colIndex == $(this).attr("data-tandi508-colindex"))
+									if(colIndex == $(this).attr("data-zANDI508-colindex"))
 										yDirectionThCount++;
 
 									if(xDirectionThCount>1)
@@ -1065,7 +1065,7 @@ function analyzeTable(table){
 		//Each cell in a row is given a rowIndex
 		//Each cell in a column is given a colIndex
 
-		//The way tANDI analyzes the table is that it begins looking at the cells first
+		//The way zANDI analyzes the table is that it begins looking at the cells first
 		//to determine if there is any existing scenarios that should trigger an alert.
 		//When each cell has been evaluated, it will then attach alerts to the table element.
 
@@ -1161,7 +1161,7 @@ function analyzeTable(table){
 				}
 
 				if(colspan < 2){
-					$(cell).attr("data-tandi508-colindex",colIndex);
+					$(cell).attr("data-zANDI508-colindex",colIndex);
 					rowspanArray[colIndex] = rowspan;
 					colIndex++;
 				}
@@ -1173,12 +1173,12 @@ function analyzeTable(table){
 						rowspanArray[colIndex] = rowspan;
 						colIndex++;
 					}
-					$(cell).attr("data-tandi508-colindex", $.trim(indexValue));
+					$(cell).attr("data-zANDI508-colindex", $.trim(indexValue));
 				}
 
 				//store rowIndex
 				if(rowspan < 2){
-					$(cell).attr("data-tandi508-rowindex",rowIndex);
+					$(cell).attr("data-zANDI508-rowindex",rowIndex);
 				}
 				else{
 					//rowspanArray[colIndex] = rowspan;
@@ -1186,7 +1186,7 @@ function analyzeTable(table){
 					rowIndexPlusRowspan  = parseInt(rowIndex) + rowspan;
 					for(var c=rowIndex; c<rowIndexPlusRowspan; c++)
 						indexValue += c + " ";
-					$(cell).attr("data-tandi508-rowindex",$.trim(indexValue));
+					$(cell).attr("data-zANDI508-rowindex",$.trim(indexValue));
 				}
 			});
 
@@ -1218,7 +1218,7 @@ function analyzeTable(table){
 					andiCheck.commonNonFocusableElementChecks(andiData, $(cell));
 
 				//If this is not the upper left cell
-				if($(cell).is("[role=columnheader],[role=rowheader]") && !andiData.accName && !($(this).attr("data-tandi508-rowindex") === "1" && $(this).attr("data-tandi508-colindex") === "1"))
+				if($(cell).is("[role=columnheader],[role=rowheader]") && !andiData.accName && !($(this).attr("data-zANDI508-rowindex") === "1" && $(this).attr("data-zANDI508-colindex") === "1"))
 					//Header cell is empty
 					andiAlerter.throwAlert(alert_0132);
 
@@ -1230,7 +1230,7 @@ function analyzeTable(table){
 		});
 
 		//Default to scope mode
-		tANDI.hideModeButtons();
+		zANDI.hideModeButtons();
 		AndiModule.activeActionButtons.scopeMode = true;
 
 		//FOR THE DATA TABLE...
@@ -1289,14 +1289,14 @@ function analyzeTable(table){
 	}
 }
 
-tANDI.viewList_tableReady = false;
-tANDI.viewList_buttonAppended = false;
+zANDI.viewList_tableReady = false;
+zANDI.viewList_buttonAppended = false;
 
 //This function will build the Table List html and inject into the ANDI Bar
-tANDI.viewList_buildTable = function(){
+zANDI.viewList_buildTable = function(){
 
 	//Build scrollable container and table head
-	var appendHTML = "<div id='tANDI508-viewList' class='ANDI508-viewOtherResults-expanded' style='display:none;'>"+
+	var appendHTML = "<div id='zANDI508-viewList' class='ANDI508-viewOtherResults-expanded' style='display:none;'>"+
 		"<div class='ANDI508-scrollable'><table id='ANDI508-viewList-table' aria-label='List of Tables' tabindex='-1'><thead><tr>"+
 		"<th scope='col' style='width:10%'>#</th>"+
 		"<th scope='col' style='width:75%'>Table&nbsp;Name</th>"+
@@ -1407,8 +1407,8 @@ tANDI.viewList_buildTable = function(){
 
 //This function highlights the active table in the table list
 //index: refers to the index of the table in the tableArray
-tANDI.viewList_highlightSelectedTable = function(index, scrollIntoView){
-	if(tANDI.viewList_tableReady){
+zANDI.viewList_highlightSelectedTable = function(index, scrollIntoView){
+	if(zANDI.viewList_tableReady){
 		var activeTableFound = false;
 		$("#ANDI508-viewList-table td a").each(function(){
 			if(!activeTableFound && $(this).attr("data-andi508-relatedtable") == index){
@@ -1427,7 +1427,7 @@ tANDI.viewList_highlightSelectedTable = function(index, scrollIntoView){
 //This function will overlay the table markup.
 AndiOverlay.prototype.overlayTableMarkup = function(){
 	var scope, headers, id, role, markupOverlay;
-	$("#ANDI508-testPage [data-tandi508-colindex]").each(function(){
+	$("#ANDI508-testPage [data-zANDI508-colindex]").each(function(){
 		scope = $(this).attr("scope");
 		headers = $(this).attr("headers");
 		id = this.id;
@@ -1449,7 +1449,7 @@ AndiOverlay.prototype.overlayTableMarkup = function(){
 };
 
 //This function will detect if markup button should be re-pressed
-tANDI.redoMarkup = function(){
+zANDI.redoMarkup = function(){
 	if(AndiModule.activeActionButtons.markup){
 		andiOverlay.overlayButton_off("overlay",$("#ANDI508-markup-button"));
 		andiOverlay.removeOverlay("ANDI508-overlay-tableMarkup");
@@ -1457,7 +1457,7 @@ tANDI.redoMarkup = function(){
 	}
 };
 
-tANDI.grab_headers = function(element, elementData, table){
+zANDI.grab_headers = function(element, elementData, table){
 	var headers = $.trim($(element).attr("headers"));
 	if(headers !== undefined){
 		if(!$(element).is("th") && !$(element).is("td"))
@@ -1599,14 +1599,14 @@ function TableInfo() {
     this.tabsTextList   = [];
 }
 
-vANDI.dataTables = new DataTables();
-vANDI.tableInfo = new TableInfo();
+zANDI.dataTables = new DataTables();
+zANDI.tableInfo = new TableInfo();
 
-vANDI.dataTables = andiBar.createObjectValues(vANDI.dataTables, 1);
+zANDI.dataTables = andiBar.createObjectValues(zANDI.dataTables, 1);
 
 //analyze tables
-tANDI.analyze();
-andiBar.results(vANDI.dataTables, vANDI.tableInfo, [], showStartUpSummaryText);
+zANDI.analyze();
+andiBar.results(zANDI.dataTables, zANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
 	"viewTableList",
