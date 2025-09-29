@@ -91,7 +91,7 @@ AndiModule.initActiveActionButtons({
 });
 
 //This function will analyze the test page for table related markup relating to accessibility
-zANDI.analyze = function(){
+zANDI.analyze = function(objectClass){
 	if(TestPageData.page_using_table){
 		//Loop through each visible table
 		var activeElementFound = false;
@@ -1549,7 +1549,7 @@ zANDI.tableInfo = new TableInfo();
 zANDI.dataTables = andiBar.createObjectValues(zANDI.dataTables, 1);
 
 //analyze tables
-zANDI.analyze();
+zANDI.analyze(zANDI.dataTables);
 andiBar.results(zANDI.dataTables, zANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
