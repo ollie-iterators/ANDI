@@ -555,6 +555,12 @@ function andiReady(){
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-u' aria-label='strange tables'>strange tables</button>"+
             //vANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-v' aria-label='data tables'>data tables</button>"+
+            //wANDI
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-w' aria-label='data tables'>data tables</button>"+
+            //xANDI
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-x' aria-label='data tables'>data tables</button>"+
+            //yANDI
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-y' aria-label='data tables'>data tables</button>"+
             //oANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-o' aria-label='certain headers'>certain headers</button>"+
             //pANDI
