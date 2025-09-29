@@ -554,7 +554,7 @@ function andiReady(){
             //uANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-u' aria-label='strange tables'>strange tables</button>"+
             //vANDI
-            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-v' aria-label='data tables'>data tables</button>"+
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-w' aria-label='data tables'>data tables</button>"+
             //wANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-w' aria-label='data table rows'>data table rows</button>"+
             //xANDI
