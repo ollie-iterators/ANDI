@@ -313,11 +313,29 @@ body.ANDI508-testPage
 #ANDI508.ANDI508-module-u #ANDI508-module-name,
 #ANDI508.ANDI508-module-u #ANDI508-module-actions button.ANDI508-module-action-active
 	{color:#febadc !important;} /*ffc1fb*/
-/*tANDI*/
+/*vANDI*/
 #ANDI508 .ANDI508-module-name-v,
 #ANDI508 #ANDI508-moduleMenu-button-v,
 #ANDI508.ANDI508-module-v #ANDI508-module-name,
 #ANDI508.ANDI508-module-v #ANDI508-module-actions button.ANDI508-module-action-active
+	{color:#febadc !important;} /*ffc1fb*/
+/*wANDI*/
+#ANDI508 .ANDI508-module-name-w,
+#ANDI508 #ANDI508-moduleMenu-button-w,
+#ANDI508.ANDI508-module-w #ANDI508-module-name,
+#ANDI508.ANDI508-module-w #ANDI508-module-actions button.ANDI508-module-action-active
+	{color:#febadc !important;} /*ffc1fb*/
+/*xANDI*/
+#ANDI508 .ANDI508-module-name-x,
+#ANDI508 #ANDI508-moduleMenu-button-x,
+#ANDI508.ANDI508-module-x #ANDI508-module-name,
+#ANDI508.ANDI508-module-x #ANDI508-module-actions button.ANDI508-module-action-active
+	{color:#febadc !important;} /*ffc1fb*/
+/*yANDI*/
+#ANDI508 .ANDI508-module-name-y,
+#ANDI508 #ANDI508-moduleMenu-button-y,
+#ANDI508.ANDI508-module-y #ANDI508-module-name,
+#ANDI508.ANDI508-module-y #ANDI508-module-actions button.ANDI508-module-action-active
 	{color:#febadc !important;} /*ffc1fb*/
 /*lANDI*/
 #ANDI508 .ANDI508-module-name-l,
