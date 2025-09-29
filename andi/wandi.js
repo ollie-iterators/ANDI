@@ -63,7 +63,7 @@ wANDI.analyze = function(objectClass){
         if($(this).isSemantically(["row"],"tr")){
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
             andiBar.getAttributes(objectClass, objectClass.list.length - 1);
-            objectClass.list[objectClass.list.length - 1].closestTable = $(this).closest("table,[role=table],[role=grid],[role=treegrid]")[0];
+            objectClass.list[objectClass.list.length - 1]["data-andi508-closestTable"] = $(this).closest("table,[role=table],[role=grid],[role=treegrid]")[0];
             objectClass.elementNums[0] += 1;
         }
 
