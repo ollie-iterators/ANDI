@@ -37,45 +37,6 @@ AndiModule.cleanup = function(testPage, element){
     }
 };
 
-//Override Previous Element Button to jump to and analyze the previous table:
-$("#ANDI508-button-prevElement").off("click").click(function(){
-    var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
-    if(isNaN(index)){ //no active element yet
-        activeTableIndex = 0;
-        andiFocuser.focusByIndex(testPageData.andiElementIndex); //first element
-    }
-    else if(index == 1){
-        if(wANDI.dataTables.list.length <= 1)
-            //If there is only 1 table, loop back to last cell
-            andiFocuser.focusByIndex(testPageData.andiElementIndex);
-        else{
-            //Analyze previous table
-            $("#ANDI508-prevTable-button").click();
-            //Focus on last cell
-            andiFocuser.focusByIndex(testPageData.andiElementIndex);
-        }
-    }
-    else
-        //Go to previous element in this table
-        andiFocuser.focusByIndex(index - 1);
-});
-
-//Override Next Element Button to jump to and analyze the next table:
-$("#ANDI508-button-nextElement").off("click").click(function(){
-    var index = parseInt($("#ANDI508-testPage .ANDI508-element-active").attr("data-andi508-index"));
-    if(index == testPageData.andiElementIndex || isNaN(index)){
-        if(wANDI.dataTables.list.length <= 1)
-            //If there is only 1 table, loop back to first cell
-            andiFocuser.focusByIndex(1);
-        else
-            //Analyze previous table
-            $("#ANDI508-nextTable-button").click();
-    }
-    else
-        //Go to next element in this table
-        andiFocuser.focusByIndex(index + 1);
-});
-
 //These variables are for the page
 var activeTableIndex = -1;			//The array index of the active table
 
@@ -163,54 +124,6 @@ wANDI.analyze = function(objectClass){
             AndiModule.launchModule("v");
             andiResetter.resizeHeights();
             return false;
-        });
-
-        //Define prevTable button functionality
-        $("#ANDI508-prevTable-button")
-        .click(function(){
-            if(activeTableIndex < 0)
-                //focus on first table
-                activeTableIndex = 0;
-            else if(activeTableIndex === 0)
-                activeTableIndex = objectClass.list.length-1;
-            else
-                activeTableIndex--;
-            wANDI.reset();
-            analyzeTable(objectClass.list[activeTableIndex].elementList[0]);
-            andiFocuser.focusByIndex(1);
-            wANDI.redoMarkup();
-            wANDI.viewList_highlightSelectedTable(activeTableIndex, true);
-            andiResetter.resizeHeights();
-            return false;
-        })
-        .mousedown(function(){
-            $(this).addClass("ANDI508-module-action-active");
-        })
-        .mouseup(function(){
-            $(this).removeClass("ANDI508-module-action-active");
-        });
-
-        //Define nextTable button functionality
-        $("#ANDI508-nextTable-button")
-        .click(function(){
-            if(activeTableIndex == objectClass.list.length-1)
-                activeTableIndex = 0;
-            else
-                activeTableIndex++;
-
-            wANDI.reset();
-            analyzeTable(objectClass.list[activeTableIndex].elementList[0]);
-            andiFocuser.focusByIndex(1);
-            wANDI.redoMarkup();
-            wANDI.viewList_highlightSelectedTable(activeTableIndex, true);
-            andiResetter.resizeHeights();
-            return false;
-        })
-        .mousedown(function(){
-            $(this).addClass("ANDI508-module-action-active");
-        })
-        .mouseup(function(){
-            $(this).removeClass("ANDI508-module-action-active");
         });
     }
 };
