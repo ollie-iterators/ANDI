@@ -1527,6 +1527,16 @@ function buildArrayOnIndex(value){
 		return [value];
 }
 
+//This object class is used to store data about each presentation table. Object instances will be placed into an array.
+function DataTable(elementList, index, nameDescription, alerts, rowClass) {
+    this.elementList     = elementList;
+    this.index           = index;
+    this.nameDescription = nameDescription;
+    this.alerts          = alerts;
+    this.columnValues    = [elementList, index, nameDescription, alerts];
+    this.rowClass        = rowClass;
+}
+
 //This object class is used to keep track of the presentation tables on the page
 function DataTables() {
     this.list           = [];
