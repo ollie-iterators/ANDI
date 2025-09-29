@@ -4224,6 +4224,23 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         });
     };
 
+    //This function highlights the active table in the table list
+    //index: refers to the index of the table in the tableArray
+    andiBar.viewList_highlightSelectedTable = function(index, scrollIntoView){
+        var activeTableFound = false;
+        $("#ANDI508-viewList-table td a").each(function(){
+            if(!activeTableFound && $(this).attr("data-andi508-relatedtable") == index){
+                //this is the active table
+                $(this).attr("aria-selected","true").closest("tr").addClass("ANDI508-table-row-inspecting");
+                if(scrollIntoView)
+                    this.scrollIntoView();
+                activeTableFound = true;
+            }
+            else//not the active table
+                $(this).removeAttr("aria-selected").closest("tr").removeClass();
+        });
+    };
+
     andiBar.viewList_toggle = function (mode, btn, buttonClass, addClass = "") {
         var origClass = "ANDI508-viewOtherResults-button-expanded";
         var classToAdd = origClass + " " + addClass;

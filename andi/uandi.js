@@ -140,26 +140,9 @@ uANDI.viewList_attachEvents = function(){
         activeTableIndex = $(this).attr("data-andi508-relatedtable");
         analyzeTable(uANDI.strangeTables.list[activeTableIndex].elementList[0]);
         andiFocuser.focusByIndex(1);
-        uANDI.viewList_highlightSelectedTable(activeTableIndex, false);
+        andiBar.viewList_highlightSelectedTable(activeTableIndex, false);
         andiResetter.resizeHeights();
         return false;
-    });
-};
-
-//This function highlights the active table in the table list
-//index: refers to the index of the table in the tableArray
-uANDI.viewList_highlightSelectedTable = function(index, scrollIntoView){
-    var activeTableFound = false;
-    $("#ANDI508-viewList-table td a").each(function(){
-        if(!activeTableFound && $(this).attr("data-andi508-relatedtable") == index){
-            //this is the active table
-            $(this).attr("aria-selected","true").closest("tr").addClass("ANDI508-table-row-inspecting");
-            if(scrollIntoView)
-                this.scrollIntoView();
-            activeTableFound = true;
-        }
-        else//not the active table
-            $(this).removeAttr("aria-selected").closest("tr").removeClass();
     });
 };
 
