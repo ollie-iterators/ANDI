@@ -41,7 +41,6 @@ AndiModule.cleanup = function(testPage, element){
 var activeTableIndex = -1;			//The array index of the active table
 
 //These variables are for the current table being analyzed (the active table)
-var tableArray = [];                //The array of all the cells in the current table
 var dataTablesCount = 0;            //The total number of data tables found on the page
 var cellCount = 0;					//The total number of <th> and <td>
 var rowCount = 0;					//The total number of <tr>
@@ -61,71 +60,71 @@ wANDI.analyze = function(objectClass){
         //Store this table in the array
 
 
-        if($(this).isSemantically(["table","grid","treegrid"],"table")){
-            tableArray.push(this);
-            dataTablesCount++;
+        if($(this).isSemantically(["row"],"tr")){
+            objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            objectClass.elementNums[0] += 1;
         }
 
-        //Determine if this is a refresh of wANDI (there is an active element)
-        if(!activeElementFound &&
-            ($(this).hasClass("ANDI508-element-active") || $(this).find("th.ANDI508-element-active,td.ANDI508-element-active").first().length ))
-        {
-            activeTableIndex = dataTablesCount;//set this index to this table
-            activeElementFound = true;
-        }
+        // //Determine if this is a refresh of wANDI (there is an active element)
+        // if(!activeElementFound &&
+        //     ($(this).hasClass("ANDI508-element-active") || $(this).find("th.ANDI508-element-active,td.ANDI508-element-active").first().length ))
+        // {
+        //     activeTableIndex = dataTablesCount;//set this index to this table
+        //     activeElementFound = true;
+        // }
     });
 
-    //If the page has tables
-    if(objectClass.elementNums[0] > 0){
+    // //If the page has tables
+    // if(objectClass.elementNums[0] > 0){
 
-        var moduleActionButtons = "";
+    //     var moduleActionButtons = "";
 
-        //Scope Mode / Headers/ID Mode buttons
-        moduleActionButtons += "<button id='ANDI508-scopeMode-button' aria-pressed='";
-        moduleActionButtons += (AndiModule.activeActionButtons.scopeMode)? "true' class='ANDI508-module-action-active'" : "false'";
-        moduleActionButtons += ">scope mode</button><button id='ANDI508-headersIdMode-button' aria-pressed='";
-        moduleActionButtons += (!AndiModule.activeActionButtons.scopeMode)? "true' class='ANDI508-module-action-active'" : "false'";
-        moduleActionButtons += ">headers/id mode</button>";
+    //     //Scope Mode / Headers/ID Mode buttons
+    //     moduleActionButtons += "<button id='ANDI508-scopeMode-button' aria-pressed='";
+    //     moduleActionButtons += (AndiModule.activeActionButtons.scopeMode)? "true' class='ANDI508-module-action-active'" : "false'";
+    //     moduleActionButtons += ">scope mode</button><button id='ANDI508-headersIdMode-button' aria-pressed='";
+    //     moduleActionButtons += (!AndiModule.activeActionButtons.scopeMode)? "true' class='ANDI508-module-action-active'" : "false'";
+    //     moduleActionButtons += ">headers/id mode</button>";
 
-        $("#ANDI508-module-actions").html(moduleActionButtons);
+    //     $("#ANDI508-module-actions").html(moduleActionButtons);
 
-        // if(!activeElementFound)
-        //     activeTableIndex = 0;//Analyze first table
-        for (var i = 0; i < dataTablesCount; i++) {
-            var dataTable = tableArray[i];
-            analyzeTable(dataTable);
-        }
+    //     // if(!activeElementFound)
+    //     //     activeTableIndex = 0;//Analyze first table
+    //     for (var i = 0; i < dataTablesCount; i++) {
+    //         var dataTable = tableArray[i];
+    //         analyzeTable(dataTable);
+    //     }
 
 
-        //If there are more than one table and prevTable/nextTable buttons haven't yet been added
-        if(objectClass.elementNums[0] > 1 && $("#ANDI508-prevTable-button").length === 0){
-            //Add "prev table" and "next table" buttons
-            $("#ANDI508-elementControls").append(
-                "<button id='ANDI508-prevTable-button' aria-label='Previous Table' title='Analyze Previous Table'><img src='"+icons_url+"prev-table.png' alt='' /></button> "+
-                "<button id='ANDI508-nextTable-button' aria-label='Next Table' title='Analyze Next Table'><img src='"+icons_url+"next-table.png' alt='' /></button>"
-            );
-        }
+    //     //If there are more than one table and prevTable/nextTable buttons haven't yet been added
+    //     if(objectClass.elementNums[0] > 1 && $("#ANDI508-prevTable-button").length === 0){
+    //         //Add "prev table" and "next table" buttons
+    //         $("#ANDI508-elementControls").append(
+    //             "<button id='ANDI508-prevTable-button' aria-label='Previous Table' title='Analyze Previous Table'><img src='"+icons_url+"prev-table.png' alt='' /></button> "+
+    //             "<button id='ANDI508-nextTable-button' aria-label='Next Table' title='Analyze Next Table'><img src='"+icons_url+"next-table.png' alt='' /></button>"
+    //         );
+    //     }
 
-        //Define scopeMode button functionality
-        $("#ANDI508-scopeMode-button").click(function(){
-            andiResetter.softReset($("#ANDI508-testPage"));
-            AndiModule.activeActionButtons.scopeMode = true;
-            AndiModule.activeActionButtons.modeButtonsVisible = true;
-            AndiModule.launchModule("v");
-            andiResetter.resizeHeights();
-            return false;
-        });
+    //     //Define scopeMode button functionality
+    //     $("#ANDI508-scopeMode-button").click(function(){
+    //         andiResetter.softReset($("#ANDI508-testPage"));
+    //         AndiModule.activeActionButtons.scopeMode = true;
+    //         AndiModule.activeActionButtons.modeButtonsVisible = true;
+    //         AndiModule.launchModule("v");
+    //         andiResetter.resizeHeights();
+    //         return false;
+    //     });
 
-        //Define headersIdMode button functionality
-        $("#ANDI508-headersIdMode-button").click(function(){
-            andiResetter.softReset($("#ANDI508-testPage"));
-            AndiModule.activeActionButtons.scopeMode = false;
-            AndiModule.activeActionButtons.modeButtonsVisible = true;
-            AndiModule.launchModule("v");
-            andiResetter.resizeHeights();
-            return false;
-        });
-    }
+    //     //Define headersIdMode button functionality
+    //     $("#ANDI508-headersIdMode-button").click(function(){
+    //         andiResetter.softReset($("#ANDI508-testPage"));
+    //         AndiModule.activeActionButtons.scopeMode = false;
+    //         AndiModule.activeActionButtons.modeButtonsVisible = true;
+    //         AndiModule.launchModule("v");
+    //         andiResetter.resizeHeights();
+    //         return false;
+    //     });
+    // }
 };
 
 var showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-t'>tables</span> by tabbing to or hovering over the table cells. " ;
