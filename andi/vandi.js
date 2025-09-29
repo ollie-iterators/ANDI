@@ -130,7 +130,7 @@ vANDI.analyze = function(objectClass){
 
         $("#ANDI508-module-actions").html(moduleActionButtons);
 
-         if(!activeElementFound)
+        if(!activeElementFound)
              activeTableIndex = 0;//Analyze first table
         analyzeTable(activeTableIndex);
 
