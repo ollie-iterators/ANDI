@@ -111,7 +111,7 @@ vANDI.analyze = function(objectClass){
         if(!activeElementFound &&
             ($(this).hasClass("ANDI508-element-active") || $(this).find("th.ANDI508-element-active,td.ANDI508-element-active").first().length ))
         {
-            activeTableIndex = dataTablesCount;//set this index to this table
+            activeTableIndex = objectClass.elementNums[0];//set this index to this table
             activeElementFound = true;
         }
     });
@@ -132,7 +132,7 @@ vANDI.analyze = function(objectClass){
 
         // if(!activeElementFound)
         //     activeTableIndex = 0;//Analyze first table
-        for (var i = 0; i < dataTablesCount; i++) {
+        for (var i = 0; i < objectClass.elementNums[0]; i++) {
             var dataTable = tableArray[i];
             analyzeTable(dataTable);
         }
