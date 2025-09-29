@@ -1424,34 +1424,6 @@ tANDI.viewList_highlightSelectedTable = function(index, scrollIntoView){
 	}
 };
 
-//This function hide/shows the view list
-tANDI.viewList_toggle = function(btn){
-	if($(btn).attr("aria-expanded") === "false"){
-		//show List, hide alert list
-		$("#ANDI508-alerts-list").hide();
-		andiSettings.minimode(false);
-		$(btn)
-			.addClass("ANDI508-viewOtherResults-button-expanded")
-			.html(listIcon+"hide table list")
-			.attr("aria-expanded","true")
-			.find("img").attr("src",icons_url+"list-on.png");
-		$("#tANDI508-viewList").slideDown(AndiSettings.andiAnimationSpeed).focus();
-		AndiModule.activeActionButtons.viewTableList = true;
-	}
-	else{
-		//hide List, show alert list
-		$("#tANDI508-viewList").slideUp(AndiSettings.andiAnimationSpeed);
-		//$("#ANDI508-resultsSummary").show();
-		if(testPageData.numberOfAccessibilityAlertsFound > 0)
-			$("#ANDI508-alerts-list").show();
-		$(btn)
-			.removeClass("ANDI508-viewOtherResults-button-expanded")
-			.html(listIcon+"view table list")
-			.attr("aria-expanded","false");
-		AndiModule.activeActionButtons.viewTableList = false;
-	}
-};
-
 //This function will overlay the table markup.
 AndiOverlay.prototype.overlayTableMarkup = function(){
 	var scope, headers, id, role, markupOverlay;
