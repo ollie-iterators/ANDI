@@ -142,9 +142,9 @@ vANDI.analyze = function(objectClass){
 
         $("#ANDI508-module-actions").html(moduleActionButtons);
 
-        if(!activeElementFound)
-             activeTableIndex = 0;//Analyze first table
-        analyzeTable(activeTableIndex);
+        // if(!activeElementFound)
+        //      activeTableIndex = 0;//Analyze first table
+        // analyzeTable(activeTableIndex);
 
 
         //If there are more than one table and prevTable/nextTable buttons haven't yet been added
