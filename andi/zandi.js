@@ -246,6 +246,9 @@ zANDI.analyze = function(){
 	}
 };
 
+var showStartUpSummaryText = "Discover accessibility markup for <span class='ANDI508-module-name-z'>tables</span> by tabbing to or hovering over the table cells. " ;
+showStartUpSummaryText += "Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every data table cell. ";
+showStartUpSummaryText += "Tables should be tested one at a time - Press the next table button <img src='"+icons_url+"next-table.png' style='width:12px' alt='' /> to cycle through the tables.";
 //This function will inspect a table or table cell
 AndiModule.inspect = function(element){
 	andiBar.prepareActiveElementInspection(element);
