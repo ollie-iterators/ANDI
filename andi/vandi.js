@@ -101,8 +101,10 @@ vANDI.analyze = function(objectClass){
 
 
         if($(this).isSemantically(["table","grid","treegrid"],"table")){
-            tableArray.push(this);
-            dataTablesCount++;
+            objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            objectClass.elementNums[0] += 1;
+            objectClass.elementStrings[0] = "Data Table";
         }
 
         //Determine if this is a refresh of vANDI (there is an active element)
