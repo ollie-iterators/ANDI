@@ -211,7 +211,7 @@ function AndiModule(moduleVersionNumber, moduleLetter){
             // data-andi508-class is handled seaprately because it is not removed
             // whith removeAttr in the loop above
             element.removeAttribute("data-andi508-class")
-            classes = element.getAttr("class");
+            classes = element.getAttribute("class");
             classList = classes.split(" ");
             for (var c = 0; c < classList.length; c++) {
                 if (classList[c].startsWith(moduleLetter + "ANDI508-")) {
