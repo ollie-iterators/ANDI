@@ -215,7 +215,7 @@ function AndiModule(moduleVersionNumber, moduleLetter){
             classList = classes.split(" ");
             for (var c = 0; c < classList.length; c++) {
                 if (classList[c].startsWith(moduleLetter + "ANDI508-")) {
-                    element.removeClass(classList[c]);
+                    $(element).removeClass(classList[c]);
                 }
             }
 
