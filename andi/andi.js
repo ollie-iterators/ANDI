@@ -205,12 +205,12 @@ function AndiModule(moduleVersionNumber, moduleLetter){
             attributes = element.getAttributeNames();
             for (var i = 0; i < attributes.length; i++) {
                 if (attributes[i].startsWith("data-andi508")) {
-                    element.removeAttr(attributes[i]);
+                    element.removeAttribute(attributes[i]);
                 }
             }
             // data-andi508-class is handled seaprately because it is not removed
             // whith removeAttr in the loop above
-            element.removeAttr("data-andi508-class")
+            element.removeAttribute("data-andi508-class")
             classes = element.getAttr("class");
             classList = classes.split(" ");
             for (var c = 0; c < classList.length; c++) {
