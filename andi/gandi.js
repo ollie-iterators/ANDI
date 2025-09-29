@@ -11,23 +11,6 @@ var gandiVersionNumber = "6.1.1";
 //create gANDI instance
 var gANDI = new AndiModule(gandiVersionNumber,"g");
 
-//This function removes markup in the test page that was added by this module
-AndiModule.cleanup = function(testPage, element){
-    if(element) {
-        attributes = element.getAttributeNames();
-        for (var i = 0; i < attributes.length; i++) {
-            if (attributes[i].substring(0, 12) == "data-andi508") {
-                element.removeAttribute(attributes[i]);
-            }
-        }
-    }
-
-    else{
-        $(testPage).find(".gANDI508-decorative").removeClass("gANDI508-decorative");
-    }
-    $(testPage).find(".gANDI508-background").removeClass("gANDI508-background");
-};
-
 //This function will analyze the test page for graphics/image related markup relating to accessibility
 gANDI.analyze = function(objectClass){
     var isImageContainedByInteractiveWidget; //boolean if image is contained by link or button

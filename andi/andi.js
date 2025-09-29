@@ -200,6 +200,7 @@ function AndiModule(moduleVersionNumber, moduleLetter){
         andiResetter.resizeHeights();
     };
     //This function removes markup in the test page that was added by this module
+    // TODO: Work on fixing the cleanup function so that it removes classes from data-andi508-class (ex: gandi508-background)
     AndiModule.cleanup = function(testPage, element){
         if(element) {
             attributes = element.getAttributeNames();
