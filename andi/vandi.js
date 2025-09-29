@@ -107,14 +107,17 @@ vANDI.analyze = function(objectClass){
             objectClass.elementStrings[0] = "Data Table";
         } else if ($(this).isSemantically(["row"], "tr")) {
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[1] += 1;
             objectClass.elementStrings[1] = "Table Row";
         } else if ($(this).isSemantically(["columnheader", "rowheader"], "th")) {
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[2] += 1;
             objectClass.elementStrings[2] = "Header Cell";
         } else if ($(this).isSemantically(["cell", "gridcell"], "td")) {
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[3] += 1;
             objectClass.elementStrings[3] = "Table Cell";
         }
