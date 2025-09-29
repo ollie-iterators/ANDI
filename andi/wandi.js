@@ -62,6 +62,7 @@ wANDI.analyze = function(objectClass){
 
         if($(this).isSemantically(["row"],"tr")){
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
         }
 
