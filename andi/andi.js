@@ -204,8 +204,10 @@ function AndiModule(moduleVersionNumber, moduleLetter){
         if(element) {
             attributes = element.getAttributeNames();
             for (var i = 0; i < attributes.length; i++) {
-                if (attributes[i].startsWith("data-andi508")) {
-                    $(element).removeAttr(attributes[i]);
+                if (attributes[i].length >= 12) {
+                    if (attributes[i].substring(0, 12) == "data-andi508") {
+                        $(element).removeAttr(attributes[i]);
+                    }
                 }
             }
             // data-andi508-class is handled seaprately because it is not removed
