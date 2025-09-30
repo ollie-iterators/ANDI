@@ -4188,6 +4188,21 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
         }
     }
+    AndiData.data = {
+        andiElementIndex: testPageData.andiElementIndex,
+        components: {} //will store the accessible components as they are gathered
+        };
+
+    andiBar.addAndiDataAttributes = function(objectClass, index, theData) {
+        attributesToAdd = theData.data.components.keys();
+        for (var a = 0; a < attributesToAdd.length; a += 1) {
+            var attributeName = "data-andi508-" + attributesToAdd[a].toLowerCase();
+            var attributeValue = theData.data.components[attributesToAdd[a]];
+            if (attributeValue && !$(objectClass.list[index].elementList[0]).attr(attributeName)) {
+                $(objectClass.list[index].elementList[0]).attr(attributeName, attributeValue);
+            }
+        }
+    }
 
     //Inserts some counter totals, displays the accesskey list
     andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
