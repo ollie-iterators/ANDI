@@ -13,8 +13,6 @@ var host_url = "https://ollie-iterators.github.io/ANDI/andi/";
 var help_url = host_url+"help/";
 var icons_url = host_url+"icons/";
 
-var andiComponents = {};
-
 //Load andi.css file immediately to minimize page flash
 (function(){
     var head = document.getElementsByTagName("head")[0];
@@ -2092,8 +2090,6 @@ function AndiData(element, skipTAC){
         andiElementIndex: testPageData.andiElementIndex,
         components: {} //will store the accessible components as they are gathered
         };
-
-    andiComponents[AndiData.data.andiElementIndex] = AndiData.data.components;
 
     AndiData.grab_semantics(element, AndiData.data);
 
@@ -4191,18 +4187,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 // }
             }
         }
-    }
-
-    andiBar.addAndiDataAttributes = function(objectClass, index) {
-        attributesToAdd = andiComponents[index];
-        $(objectClass.list[index].elementList[0]).attr("data-andi508-andidata", attributesToAdd);
-        // for (var a = 0; a < attributesToAdd.length; a += 1) {
-        //     var attributeName = "data-andi508-" + attributesToAdd[a].toLowerCase();
-        //     var attributeValue = theData.data.components[attributesToAdd[a]];
-        //     if (attributeValue && !$(objectClass.list[index].elementList[0]).attr(attributeName)) {
-        //         $(objectClass.list[index].elementList[0]).attr(attributeName, attributeValue);
-        //     }
-        // }
     }
 
     //Inserts some counter totals, displays the accesskey list

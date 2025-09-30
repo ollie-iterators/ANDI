@@ -93,7 +93,6 @@ function analyzeTable(table){
         //==TABLE WITH NONTYPICAL ROLE==//
         andiData = new AndiData(table);
         andiAlerter.throwAlert(alert_004I,[role]);
-        andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1);
         AndiData.attachDataToElement(table);
     }
 }

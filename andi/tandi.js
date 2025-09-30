@@ -127,7 +127,6 @@ function analyzeTable(table){
     if(presentationTablesShouldNotHave)
         andiAlerter.throwAlert(alert_0041, [presentationTablesShouldNotHave.slice(0,-2)]);
 
-    andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1);
     AndiData.attachDataToElement(table);
 }
 

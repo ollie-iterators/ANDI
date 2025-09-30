@@ -93,7 +93,6 @@ lANDI.analyze = function(objectClass){
                         andiCheck.commonFocusableElementChecks(andiData,$(this));
                     }
                 }
-                andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1);
                 AndiData.attachDataToElement(this);
             }
         }
