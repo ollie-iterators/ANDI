@@ -4195,13 +4195,14 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
     andiBar.addAndiDataAttributes = function(objectClass, index) {
         attributesToAdd = andiComponents[index];
-        for (var a = 0; a < attributesToAdd.length; a += 1) {
-            var attributeName = "data-andi508-" + attributesToAdd[a].toLowerCase();
-            var attributeValue = theData.data.components[attributesToAdd[a]];
-            if (attributeValue && !$(objectClass.list[index].elementList[0]).attr(attributeName)) {
-                $(objectClass.list[index].elementList[0]).attr(attributeName, attributeValue);
-            }
-        }
+        $(objectClass.list[index].elementList[0]).attr("data-andi508-andidata", attributesToAdd);
+        // for (var a = 0; a < attributesToAdd.length; a += 1) {
+        //     var attributeName = "data-andi508-" + attributesToAdd[a].toLowerCase();
+        //     var attributeValue = theData.data.components[attributesToAdd[a]];
+        //     if (attributeValue && !$(objectClass.list[index].elementList[0]).attr(attributeName)) {
+        //         $(objectClass.list[index].elementList[0]).attr(attributeName, attributeValue);
+        //     }
+        // }
     }
 
     //Inserts some counter totals, displays the accesskey list
