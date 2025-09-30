@@ -2093,10 +2093,7 @@ function AndiData(element, skipTAC){
         components: {} //will store the accessible components as they are gathered
         };
 
-    andiComponents.push( {
-        key: AndiData.data.andiElementIndex,
-        value: AndiData.data.components
-    })
+    andiComponents[AndiData.data.andiElementIndex] = AndiData.data.components;
 
     AndiData.grab_semantics(element, AndiData.data);
 
