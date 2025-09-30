@@ -23,6 +23,7 @@ mANDI.analyze = function(objectClass){
                 andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "possible links";
+                andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1, andiData);
                 AndiData.attachDataToElement(this);
                 //Don't allow element to appear in next/prev flow or hover. Also remove highlight.
                 $(this).addClass("ANDI508-exclude-from-inspection").removeClass("ANDI508-highlight");

@@ -23,7 +23,7 @@ bANDI.analyze = function(objectClass){
             andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "list elements";
-            andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1, andiData)
+            andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1, andiData);
             AndiData.attachDataToElement(this);
         }
 

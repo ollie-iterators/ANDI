@@ -18,6 +18,7 @@ pANDI.analyze = function(objectClass){
                 andiData = new AndiData(this);
 
                 andiAlerter.throwAlert(alert_0190);
+                andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1, andiData);
                 AndiData.attachDataToElement(this);
                 objectClass.list.push(new PossibleHeader([this], objectClass.list.length + 1, "", "", ""));
                 andiBar.getAttributes(objectClass, objectClass.list.length - 1);

@@ -42,6 +42,7 @@ oANDI.analyze = function(objectClass){
             }
 
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
+            andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1, andiData);
             AndiData.attachDataToElement(this);
         }
     });
