@@ -4188,10 +4188,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
         }
     }
-    AndiData.data = {
-        andiElementIndex: testPageData.andiElementIndex,
-        components: {} //will store the accessible components as they are gathered
-        };
 
     andiBar.addAndiDataAttributes = function(objectClass, index, theData) {
         attributesToAdd = theData.data.components.keys();
