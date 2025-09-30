@@ -4190,7 +4190,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     }
 
     andiBar.addAndiDataAttributes = function(objectClass, index, theData) {
-        $(objectClass.list[index].elementList[0]).attr("data-andi508-andiData", theData.components);
+        $(objectClass.list[index].elementList[0]).attr("data-andi508-andiData", theData.components.keys());
         //     }
         // attributesToAdd = theData.data.components.keys();
         // for (var a = 0; a < attributesToAdd.length; a += 1) {
