@@ -13,6 +13,8 @@ var host_url = "https://ollie-iterators.github.io/ANDI/andi/";
 var help_url = host_url+"help/";
 var icons_url = host_url+"icons/";
 
+var andiComponents = {};
+
 //Load andi.css file immediately to minimize page flash
 (function(){
     var head = document.getElementsByTagName("head")[0];
@@ -2090,6 +2092,11 @@ function AndiData(element, skipTAC){
         andiElementIndex: testPageData.andiElementIndex,
         components: {} //will store the accessible components as they are gathered
         };
+
+    andiComponents.push( {
+        key: AndiData.data.andiElementIndex,
+        value: AndiData.data.components
+    })
 
     AndiData.grab_semantics(element, AndiData.data);
 
@@ -4189,8 +4196,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         }
     }
 
-    andiBar.addAndiDataAttributes = function(objectClass, index, theData) {
-        $(objectClass.list[index].elementList[0]).attr("data-andi508-andiData", theData.components);
+    andiBar.addAndiDataAttributes = function(objectClass, index) {
+        $(objectClass.list[index].elementList[0]).attr("data-andi508-andiData", andiComponents[index]);
         //     }
         // attributesToAdd = theData.data.components.keys();
         // for (var a = 0; a < attributesToAdd.length; a += 1) {

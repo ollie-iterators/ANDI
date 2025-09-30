@@ -871,7 +871,7 @@ function analyzeTable(table){
             andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[1] += 1;
             objectClass.elementStrings[1] = "data table cell";
-            andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1, andiData);
+            andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1);
             AndiData.attachDataToElement(cell);
         });
 
@@ -984,7 +984,7 @@ function analyzeTable(table){
         andiBar.getAttributes(objectClass, objectClass.list.length - 1);
         objectClass.elementNums[0] += 1;
         objectClass.elementStrings[0] = "data table";
-        andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1, andiData);
+        andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1);
         AndiData.attachDataToElement(table);
 
         testPageData.andiElementIndex = lastIndex; //set the index back to the last element's index so things dependent on this number don't break
@@ -1165,7 +1165,7 @@ function analyzeTable(table){
                 andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[1] += 1;
                 objectClass.elementStrings[1] = "data table cell";
-                andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1, andiData);
+                andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1);
                 AndiData.attachDataToElement(cell);
             }
             else{
@@ -1212,7 +1212,7 @@ function analyzeTable(table){
         andiBar.getAttributes(objectClass, objectClass.list.length - 1);
         objectClass.elementNums[0] += 1;
         objectClass.elementStrings[0] = "data table";
-        andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1, andiData);
+        andiBar.addAndiDataAttributes(objectClass, objectClass.list.length - 1);
         AndiData.attachDataToElement(table);
 
         testPageData.andiElementIndex = lastIndex; //set the index back to the last element's index so things dependent on this number don't break
