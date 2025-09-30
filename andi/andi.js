@@ -4194,7 +4194,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     }
 
     andiBar.addAndiDataAttributes = function(objectClass, index) {
-        attributesToAdd = andiComponents[index].keys();
+        attributesToAdd = andiComponents[index];
         for (var a = 0; a < attributesToAdd.length; a += 1) {
             var attributeName = "data-andi508-" + attributesToAdd[a].toLowerCase();
             var attributeValue = theData.data.components[attributesToAdd[a]];
