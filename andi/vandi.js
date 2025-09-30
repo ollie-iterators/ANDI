@@ -1553,7 +1553,7 @@ function TableInfo() {
 vANDI.dataTables = new DataTables();
 vANDI.tableInfo = new TableInfo();
 
-vANDI.dataTables = andiBar.createObjectValues(vANDI.dataTables, 1);
+vANDI.dataTables = andiBar.createObjectValues(vANDI.dataTables, 4);
 
 //analyze tables
 vANDI.analyze(vANDI.dataTables);
