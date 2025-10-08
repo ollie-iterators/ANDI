@@ -240,38 +240,6 @@ function AndiModule(moduleVersionNumber, moduleLetter){
 		}
 	});
 }
-var ANDI = new AndiModule("1.0.0","a");
-
-// Use this to add functions to the code
-// NOTE: Change the names of the functions as needed
-//This object class is used to store data about the color contrast of the element. Object instances will be placed into an array.
-function Element(elementList, index, nameDescription, alerts, rowClass) {
-    this.elementList     = elementList;
-    this.index           = index;
-    this.nameDescription = nameDescription;
-    this.alerts          = alerts;
-    this.columnValues    = [elementList, index, nameDescription, alerts];
-    this.rowClass        = rowClass;
-}
-
-//This object class is used to keep track of the color contrast of the elements on the page
-function Elements() {
-    this.list           = [];
-    this.elementNums    = [];
-    this.elementStrings = [];
-    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
-    this.tableMode      = "Module Name";
-    this.cssProperties  = [];
-    this.buttonTextList = [];
-    this.tabsTextList   = []
-}
-
-ANDI.elements = new Elements();
-ANDI.tableInfo = new TableInfo();
 //Each module may implement these public methods
 AndiModule.prototype.hoverability = undefined;
 AndiModule.prototype.focusability = undefined;
@@ -356,7 +324,7 @@ AndiModule.launchModule = function(module){
 		script.src = host_url + module + "andi.js";
 		script.type="text/javascript";
 		script.id="andiModuleScript";
-		script.onload = script.onreadystatechange = function(){if(!done && (!this.readyState || this.readyState=="loaded" || this.readyState=="complete")){done=true; init_module(ANDI.elements, AndiAlerter.tableInfo, Element());}};
+		script.onload = script.onreadystatechange = function(){if(!done && (!this.readyState || this.readyState=="loaded" || this.readyState=="complete")){done=true; init_module();}};
 
 		$("#andiModuleScript").remove(); //Remove previously added module script
 		$("#andiModuleCss").remove();//remove previously added module css
@@ -1232,111 +1200,6 @@ function AndiBar(){
 				});
 		});
 	};
-}
-
-andiBar.getAttributes = function(objectClass, index) {
-        if (objectClass.list[index].elementList[0].hasAttributes()) {
-            var attrs = objectClass.list[index].elementList[0].getAttributeNames();
-            for (var a = 0; a < attrs.length; a += 1) {
-                attribute = objectClass.list[index].elementList[0].getAttribute(attrs[a]);
-                objectClass.list[index][attrs[a]] = attribute;
-                if (attrs[a].includes("data-andi508-")) {
-                    var attributeName = attrs[a];
-                } else {
-                    var attributeName = "data-andi508-" + attrs[a];
-                }
-                if (!attrs.includes(attributeName)) {
-                    $(objectClass.list[index].elementList[0]).attr(attributeName, attribute);
-                }
-                //objectClass.list[index].columnValues.push(attribute);
-                // if (!objectClass.columnNames.includes(attrs[a])) {
-                //     objectClass.columnNames.push(attrs[a]);
-                // }
-            }
-        }
-    }
-
-//Inserts some counter totals, displays the accesskey list
-andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
-    $("#ANDI508-resultsSummary-heading").html(tableModule.tableMode + " Found: " + moduleList.elementNums[0]);
-
-    andiResults.buildResultsDetails(moduleList);
-
-    for (var b = 0; b < tableModule.buttonTextList.length; b += 1) {
-        andiResults.addButton(tableModule.buttonTextList[b]);
-    }
-
-    andiResults.addElementListButton(tableModule.tableMode);
-
-    andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
-
-    //Show Startup Summary
-    if(!andiBar.focusIsOnInspectableElement()){
-        andiBar.showElementControls();
-        andiBar.showStartUpSummary(startUpSummaryText,true);
-    }
-
-    andiAlerter.updateAlertList();
-
-    $("#ANDI508").focus();
-};
-
-//This function will highlight the text of the row.
-andiBar.viewList_rowHighlight = function (index, buttonClass) {
-    $("#ANDI508-" + buttonClass + "-table tbody tr").each(function () {
-        $(this).removeClass("ANDI508-table-row-inspecting");
-        if ($(this).find("th").first().html() == index) {
-            $(this).addClass("ANDI508-table-row-inspecting");
-        }
-    });
-};
-
-andiBar.viewList_toggle = function (mode, btn, buttonClass, addClass = "") {
-    var origClass = "ANDI508-viewOtherResults-button-expanded";
-    var classToAdd = origClass + " " + addClass;
-    if ($(btn).attr("aria-expanded") === "false") {
-        //show List, hide alert list
-        $("#ANDI508-alerts-list").hide();
-        andiSettings.minimode(false);
-
-        var buttonHideText = listIcon + "Hide " + mode + " List";
-
-        $(btn)
-            .addClass($.trim(classToAdd))
-            .html($.trim(buttonHideText))
-            .attr("aria-expanded", "true")
-            .find("img").attr("src", icons_url + "list-on.png");
-        $("#ANDI508-" + buttonClass).slideDown(50).focus();
-    } else {
-        //hide List, show alert list
-        $("#ANDI508-" + buttonClass).slideUp(50);
-        $("#ANDI508-resultsSummary").show();
-
-        $("#ANDI508-alerts-list").show();
-
-        var buttonViewText = listIcon + "View " + mode + " List";
-
-        if (addClass == "") {
-            $(btn)
-            .removeClass($.trim(classToAdd))
-            .html($.trim(buttonViewText))
-            .attr("aria-expanded", "false");
-        } else {
-            $(btn)
-            .removeClass($.trim(classToAdd))
-            .html($.trim(buttonViewText))
-            .attr("aria-expanded", "false")
-            .addClass(origClass);
-        }
-    }
-}
-
-andiBar.createObjectValues = function (moduleList, numOfElementTypes) {
-    for(var i = 0; i < numOfElementTypes; i++) {
-        moduleList.elementNums.push(0);
-        moduleList.elementStrings.push("");
-    }
-    return moduleList;
 }
 
 //This class is used to reset things that ANDI changed.
