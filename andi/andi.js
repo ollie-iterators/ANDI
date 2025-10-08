@@ -240,7 +240,7 @@ function AndiModule(moduleVersionNumber, moduleLetter){
 		}
 	});
 }
-var ANDI = new AndiModule("1.0.0",AndiModule.module);
+var ANDI = new AndiModule("1.0.0","a");
 
 // Use this to add functions to the code
 // NOTE: Change the names of the functions as needed
