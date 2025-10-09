@@ -329,7 +329,7 @@ fANDI.elements = new Elements();
 fANDI.tableInfo = new TableInfo();
 
 fANDI.analyze();
-fANDI.results();
+//fANDI.results();
 andiBar.results(fANDI.elements, fANDI.tableInfo, [], "");
 
 }//end init
