@@ -1244,7 +1244,7 @@ andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSum
         andiResults.addButton(tableModule.buttonTextList[b]);
     }
 
-    andiResults.addElementListButton(tableModule.tableMode);
+    andiBar.addElementListButton(tableModule.tableMode);
 
     andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
 
@@ -1259,7 +1259,7 @@ andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSum
     $("#ANDI508").focus();
 };
 
-andiResults.addElementListButton = function(mode) {
+andiBar.addElementListButton = function(mode) {
     buttonID = "ANDI508-view" + mode + "Results-button";
     $("#ANDI508-additionalPageResults").append("<button id='" + buttonID + "' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view" + mode + " list</button>");
 }
