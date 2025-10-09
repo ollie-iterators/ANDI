@@ -1259,6 +1259,11 @@ andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSum
     $("#ANDI508").focus();
 };
 
+andiResults.addElementListButton = function(mode) {
+    buttonID = "ANDI508-view" + mode + "Results-button";
+    $("#ANDI508-additionalPageResults").append("<button id='" + buttonID + "' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view" + mode + " list</button>");
+}
+
 andiBar.viewList_toggle = function (mode, btn, buttonClass, addClass = "") {
     var origClass = "ANDI508-viewOtherResults-button-expanded";
     var classToAdd = origClass + " " + addClass;
