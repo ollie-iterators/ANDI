@@ -1261,7 +1261,7 @@ andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSum
 
 andiBar.addElementListButton = function(mode) {
     buttonID = "ANDI508-view" + mode + "Results-button";
-    $("#ANDI508-additionalPageResults").append("<button id='" + buttonID + "' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view" + mode + " list</button>");
+    $("#ANDI508-additionalPageResults").append("<button id='" + buttonID + "' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view " + mode + " list</button>");
 }
 
 andiBar.addElementListButtonLogic = function(mode) {
