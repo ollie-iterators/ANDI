@@ -1240,9 +1240,9 @@ andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSum
 
     andiResults.buildResultsDetails(moduleList);
 
-    for (var b = 0; b < tableModule.buttonTextList.length; b += 1) {
-        andiResults.addButton(tableModule.buttonTextList[b]);
-    }
+    // for (var b = 0; b < tableModule.buttonTextList.length; b += 1) {
+    //     andiResults.addButton(tableModule.buttonTextList[b]);
+    // }
 
     andiBar.addElementListButton(tableModule.tableMode);
 
