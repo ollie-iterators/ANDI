@@ -319,7 +319,7 @@ function FocusableElements() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode      = "Module Name";
+    this.tableMode      = "Focusable Elements";
     this.cssProperties  = [];
     this.buttonTextList = [];
     this.tabsTextList   = []
