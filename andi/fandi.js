@@ -17,19 +17,24 @@ AndiModule.initActiveActionButtons({
 
 //This function will analyze the test page for focusable element related markup relating to accessibility
 fANDI.analyze = function(){
-	
+
+    fANDI.focusableElements = new FocusableElements();
+
 	fANDI.accesskeys = new AndiAccesskeys();
-	
+
 	//Loop through every visible element and run tests
 	$(TestPageData.allVisibleElements).each(function(){
 		if($(this).is(":focusable,canvas")){//If element is focusable, search for accessibility components.
 			andiData = new AndiData(this);
-			
+
 			andiCheck.commonFocusableElementChecks(andiData, $(this));
 			andiCheck.lookForCanvasFallback(this);
 			if(andiData.accesskey)
 				fANDI.accesskeys.push(this, andiData.accesskey, andiData.andiElementIndex);
 			testPageData.firstLaunchedModulePrep(this, andiData);
+            fANDI.focusableElements.list.push(new FocusableElement(this, andiData.andiElementIndex, "", "", ""))
+            fANDI.focusableElements.elementNums[0] += 1;
+            fANDI.focusableElements.elementStrings[0] = "Focusable Elements";
 			AndiData.attachDataToElement(this);
 		}
 		else{
@@ -37,7 +42,7 @@ fANDI.analyze = function(){
 			andiCheck.isThisElementDisabled(this);
 		}
 	});
-	
+
 	andiCheck.areLabelForValid();
 	andiCheck.areThereDisabledElements("elements");
 };
@@ -45,14 +50,14 @@ fANDI.analyze = function(){
 function AndiAccesskeys(){
 	//Raw accesskey values will be stored here and checked against
 	var duplicateComparator = "";
-	
+
 	//Stores HTML to display the accesskeys
 	var list = "";
-	
+
 	this.getListHtml = function(){
 		return list;
 	};
-	
+
 	this.push = function(element, accesskey, index){
 		if(accesskey){
 			//Is accesskey value more than one character?
@@ -85,7 +90,7 @@ function AndiAccesskeys(){
 				}
 			}
 		}
-		
+
 		function addToList(accesskey, alertObject){
 			var addClass = "";
 			var titleText = "";
@@ -95,7 +100,7 @@ function AndiAccesskeys(){
 			}
 			else
 				titleText = "AccessKey "+accesskey+" found, focus on element";
-			
+
 			if(index === 0)
 				list += "<span tabindex='0' "+addClass+" title='"+ titleText +"'>"+accesskey+"</span> ";
 			else
@@ -109,11 +114,11 @@ function AndiAccesskeys(){
 fANDI.results = function(){
 
 	andiBar.updateResultsSummary("Focusable Elements Found: "+testPageData.andiElementIndex);
-	
+
 	//Are There Focusable Elements?
 	if(testPageData.andiElementIndex > 0){
 		//Yes, Focusable Elements were found
-		
+
 		//Accesskeys List:
 		if(fANDI.accesskeys.getListHtml()){
 			$("#ANDI508-additionalPageResults").append("<p id='ANDI508-accesskeysFound'>AccessKeys: "+"{ "+fANDI.accesskeys.getListHtml()+"}</p>");
@@ -125,16 +130,16 @@ fANDI.results = function(){
 			});
 			$("#ANDI508-accesskeysFound").show();
 		}
-		
+
 		//Tab Order button
 		var moduleActionButtons = "<button id='ANDI508-tabOrder-button' aria-label='Tab Order Indicators' aria-pressed='false'>tab order"+overlayIcon+"</button>";
 		if(TestPageData.page_using_titleAttr)
 			moduleActionButtons += "<button id='ANDI508-titleAttributes-button' aria-label='Title Attributes' aria-pressed='false'>title attributes"+overlayIcon+"</button>";
 		if(testPageData.page_using_label)
 			moduleActionButtons += "<button id='ANDI508-labelTags-button' aria-label='Label Tags' aria-pressed='false'>label tags"+overlayIcon+"</button>";
-		
+
 		$("#ANDI508-module-actions").append(moduleActionButtons);
-		
+
 		//Define tabOrder button functionality
 		$("#ANDI508-tabOrder-button").click(function(){
 			if($(this).attr("aria-pressed") == "false"){
@@ -150,7 +155,7 @@ fANDI.results = function(){
 			andiResetter.resizeHeights();
 			return false;
 		});
-		
+
 		//Define titleAttributes button functionality
 		$("#ANDI508-titleAttributes-button").click(function(){
 			if($(this).attr("aria-pressed") == "false"){
@@ -166,7 +171,7 @@ fANDI.results = function(){
 			andiResetter.resizeHeights();
 			return false;
 		});
-		
+
 		//Define titleAttributes button functionality
 		$("#ANDI508-labelTags-button").click(function(){
 			if($(this).attr("aria-pressed") == "false"){
@@ -192,15 +197,15 @@ fANDI.results = function(){
 		andiBar.hideElementControls();
 		andiBar.showStartUpSummary("No focusable elements were found on this page.");
 }
-	
+
 	andiAlerter.updateAlertList();
-	
+
 	AndiModule.engageActiveActionButtons([
 		"tabOrder",
 		"titleAttributes",
 		"labelTags"
 	]);
-	
+
 	$("#ANDI508").focus();
 };
 
@@ -231,7 +236,7 @@ AndiOverlay.prototype.overlayTabOrder = function(){
 		}
 		i++;
 	}
-	
+
 	//PASS 2: Get tabindex=0 and natively tabbable:
 	var titleText;
 	var lastRadioGroupName;
@@ -244,7 +249,7 @@ AndiOverlay.prototype.overlayTabOrder = function(){
 		}
 		else if(tabindex == 0 || ($(this).is(":tabbable") && !(tabindex > 0) )){
 			//tabindex is 0 or natively tabbable and tabindex is not greater than zero
-			
+
 			if($(this).is("input[type=radio][name]")){
 				if(lastRadioGroupName !== undefined && lastRadioGroupName === $(this).attr("name"))
 					return; //this is a subsequent radio button, don't add overlay
@@ -283,20 +288,51 @@ AndiOverlay.prototype.overlayLabelTags = function(){
 		andiOverlay.insertAssociatedOverlay(this, overlayObject, true);
 		$(this).after(andiOverlay.createOverlay(overlayClasses, "&lt;/label&gt;", "", 0));
 	});
-	
+
 };
 
 //This function will update the info in the Active Element Inspection.
 //Should be called after the mouse hover or focus in event.
 AndiModule.inspect = function(element){
 	andiBar.prepareActiveElementInspection(element);
-	
+
 	var elementData = $(element).data("andi508");
 	var addOnProps = AndiData.getAddOnProps(element, elementData);
-	
+
 	andiBar.displayOutput(elementData, element, addOnProps);
 	andiBar.displayTable(elementData, element, addOnProps);
 };
+
+// Use this to add functions to the code
+// NOTE: Change the names of the functions as needed
+//This object class is used to store data about the color contrast of the element. Object instances will be placed into an array.
+function FocusableElement(elementList, index, nameDescription, alerts, rowClass) {
+    this.elementList     = elementList;
+    this.index           = index;
+    this.nameDescription = nameDescription;
+    this.alerts          = alerts;
+    this.columnValues    = [elementList, index, nameDescription, alerts];
+    this.rowClass        = rowClass;
+}
+
+//This object class is used to keep track of the color contrast of the elements on the page
+function FocusableElements() {
+    this.list           = [];
+    this.elementNums    = [];
+    this.elementStrings = [];
+    this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
+}
+
+// This object class is used to keep track of the table information
+function TableInfo() {
+    this.tableMode      = "Focusable Elements";
+    this.cssProperties  = [];
+    this.buttonTextList = [];
+    this.tabsTextList   = []
+}
+
+module.elements = new Elements();
+module.tableInfo = new TableInfo();
 
 fANDI.analyze();
 fANDI.results();
