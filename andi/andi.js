@@ -4133,20 +4133,22 @@ function TestPageData(){
 TestPageData.page_using_table = false;
 TestPageData.page_using_caption = false;
 
+andiResults = new AndiResults();
+
 //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
 //Inserts some counter totals, displays the accesskey list
 andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
     $("#ANDI508-resultsSummary-heading").html(tableModule.tableMode + " Found: " + moduleList.elementNums[0]);
 
-    AndiResults.buildResultsDetails(moduleList);
+    andiResults.buildResultsDetails(moduleList);
 
     for (var b = 0; b < tableModule.buttonTextList.length; b += 1) {
-        AndiResults.addButton(tableModule.buttonTextList[b]);
+        andiResults.addButton(tableModule.buttonTextList[b]);
     }
 
-    AndiResults.addElementListButton(tableModule.tableMode);
+    andiResults.addElementListButton(tableModule.tableMode);
 
-    AndiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
+    andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
 
     andiBar.focusIsOnInspectableElement()
     $("#ANDI508-elementControls button").css("display", "inline-block");
