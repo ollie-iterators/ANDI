@@ -331,10 +331,11 @@ function TableInfo() {
     this.tabsTextList   = []
 }
 
-module.elements = new Elements();
-module.tableInfo = new TableInfo();
+fANDI.elements = new FocusableElements();
+fANDI.tableInfo = new TableInfo();
 
 fANDI.analyze();
 fANDI.results();
+andiBar.results(fANDI.elements, fANDI.tableInfo, [], "");
 
 }//end init
