@@ -4138,15 +4138,15 @@ TestPageData.page_using_caption = false;
 andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
     $("#ANDI508-resultsSummary-heading").html(tableModule.tableMode + " Found: " + moduleList.elementNums[0]);
 
-    andiResults.buildResultsDetails(moduleList);
+    AndiResults.buildResultsDetails(moduleList);
 
     for (var b = 0; b < tableModule.buttonTextList.length; b += 1) {
-        andiResults.addButton(tableModule.buttonTextList[b]);
+        AndiResults.addButton(tableModule.buttonTextList[b]);
     }
 
-    andiResults.addElementListButton(tableModule.tableMode);
+    AndiResults.addElementListButton(tableModule.tableMode);
 
-    andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
+    AndiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
 
     andiBar.focusIsOnInspectableElement()
     $("#ANDI508-elementControls button").css("display", "inline-block");
