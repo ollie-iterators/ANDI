@@ -32,7 +32,7 @@ fANDI.analyze = function(){
 			if(andiData.accesskey)
 				fANDI.accesskeys.push(this, andiData.accesskey, andiData.andiElementIndex);
 			testPageData.firstLaunchedModulePrep(this, andiData);
-            fANDI.focusableElements.list.push(new FocusableElement(this, andiData.andiElementIndex, "", "", ""))
+            fANDI.focusableElements.list.push(new FocusableElement([this], andiData.andiElementIndex, "", "", ""))
             fANDI.focusableElements.elementNums[0] += 1;
             fANDI.focusableElements.elementStrings[0] = "Focusable Elements";
 			AndiData.attachDataToElement(this);
