@@ -31,7 +31,9 @@ fANDI.analyze = function(){
 			if(andiData.accesskey)
 				fANDI.accesskeys.push(this, andiData.accesskey, andiData.andiElementIndex);
 			testPageData.firstLaunchedModulePrep(this, andiData);
-            fANDI.elements.list.push(new FocusableElement(this, andiData.andiElementIndex, andiData.nameDescription, andiData.alerts, ""));
+            fANDI.focusableElements.list.push(new FocusableElement([this], andiData.andiElementIndex, "", "", ""))
+            fANDI.focusableElements.elementNums[0] += 1;
+            fANDI.focusableElements.elementStrings[0] = "Focusable Elements";
 			AndiData.attachDataToElement(this);
 		}
 		else{
@@ -325,11 +327,11 @@ function TableInfo() {
     this.tabsTextList   = []
 }
 
-fANDI.elements = new Elements();
+fANDI.elements = new FocusableElements();
 fANDI.tableInfo = new TableInfo();
 
 fANDI.analyze();
-//fANDI.results();
+fANDI.results();
 andiBar.results(fANDI.elements, fANDI.tableInfo, [], "");
 
 }//end init
