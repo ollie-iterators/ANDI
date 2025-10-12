@@ -4317,7 +4317,7 @@ function AndiResults() {
                 andiResults.viewList_attachSortEvent();
                 andiResults.viewList_attachButtonEvents();
             }
-            andiResults.viewList_toggle(tableModule.tableMode, this, "viewList");
+            andiBar.viewList_toggle(tableModule.tableMode, this, "viewList");
             andiResetter.resizeHeights();
             return false;
         });
@@ -4326,7 +4326,6 @@ function AndiResults() {
     // TODO: Make the code so that it works even if there are no elements found
     //       on the website being tested.
     this.viewList_buildTable = function (moduleList, tableModule, attributesAdded = [], tableHeaderValue = "", moduleClass = "viewList") {
-        var tableHTML = "";
         var tableHeader = "";
         var mode = tableModule.tableMode;
 
@@ -4352,100 +4351,14 @@ function AndiResults() {
                         "<div class='ANDI508-scrollable'><table id='ANDI508-" + moduleClass + "-table' aria-label='" + mode + " List' tabindex='-1'><thead><tr>";
 
         if (moduleList.list.length > 0) {
+            var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
+
             // Build the column name
-            var columnName = "";
+            var columnName = andiResults.createColumnName(moduleList, tableModule, attributesToAdd);
 
-            var attributesToAdd = [];
-            for (var x = 0; x < 1; x += 1) {
-                if (moduleList.list[x].elementList[0].hasAttributes()) {
-                    var attrs = moduleList.list[x].elementList[0].getAttributeNames();
-                    for (var a = 0; a < attrs.length; a += 1) {
-                        if (attrs[a].includes("data-andi508-")) {
-                            var attrsFixed = attrs[a].replace("data-andi508", "");
-                            if (attrsFixed != "-index") {
-                                if (String(attrsFixed).charAt(0).includes("-")) {
-                                    if (!attributesToAdd.includes(String(attrsFixed))) {
-                                        attributesToAdd.push(String(attrsFixed));
-                                    }
-                                } else {
-                                    if (!attributesToAdd.includes(String(attrsFixed))) {
-                                        if (!attributesToAdd.includes("-" + String(attrsFixed))) {
-                                            attributesToAdd.push(String(attrsFixed));
-                                        }
-                                    }
-                                }
+            var tableHTML = andiResults.addValuesToTable(moduleList, tableModule, attributesToAdd);
 
-                            }
-                        }
-                    }
-                }
-            }
-
-            for (var a = 0; a < attributesAdded.length; a += 1) {
-                if (!attributesToAdd.includes(attributesAdded[a])) {
-                    if (!attributesToAdd.includes("-" + String(attributesAdded[a]))) {
-                        attributesToAdd.push(String(attributesAdded[a]));
-                    }
-                }
-            }
-
-            for (var x = 0; x < moduleList.columnNames.length; x += 1) {
-                columnName += ", [" + moduleList.columnNames[x] + "]";
-            }
-
-            for (var x = 0; x < attributesToAdd.length; x += 1) {
-                var valueToAdd;
-                if (String(attributesToAdd[x]).charAt(0) == "-") {
-                    valueToAdd = String(attributesToAdd[x]).substring(1);
-                } else {
-                    valueToAdd = String(attributesToAdd[x]);
-                }
-                columnName += ", [" + valueToAdd + "]";
-            }
-
-            columnName = columnName.slice(2);
-
-            // Build the table
-            for (var x = 0; x < moduleList.list.length; x += 1) {
-                var rowValues = ""
-                for (var r = 0; r < moduleList.list[x].columnValues.length; r += 1) {
-                    if (String(moduleList.list[x].columnValues[r]).charAt(0) == "[") {
-                        rowValues += ", " + moduleList.list[x].columnValues[r];
-                    } else {
-                        rowValues += ", [" + moduleList.list[x].columnValues[r] + "]";
-                    }
-                }
-                for (var r = 0; r < attributesToAdd.length; r += 1) {
-                    var attributeInList;
-                    if (String(attributesToAdd[r]).charAt(0) == "-") {
-                        attributeInList = "data-andi508" + String(attributesToAdd[r]);
-                    } else {
-                        attributeInList = String(attributesToAdd[r]);
-                    }
-                    var attributeToFind = $(moduleList.list[x].elementList[0]).attr(attributeInList);
-                    if (String(attributeToFind).charAt(0) == "[") {
-                        rowValues += ", " + String(attributeToFind);
-                    } else {
-                        rowValues += ", [" + String(attributeToFind) + "]";
-                    }
-                }
-                for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
-                    for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
-                        if (String($(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r])).charAt(0) == "[") {
-                            rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]);
-                        } else {
-                            rowValues += ", [" + $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]) + "]";
-                        }
-                    }
-                }
-
-                rowValues = rowValues.slice(2);
-
-                tableHTML += "<tr class='" + $.trim(moduleList.list[x].rowClass) + "'><th scope='row'>" + moduleList.list[x].index + "</th><td>" +
-                            "<a href='javascript:void(0)' data-andi508-relatedindex='" + moduleList.list[x].index + "'>" + rowValues + "</a></td></tr>";
-            }
-
-            var tabsHTML = andiBar.addTabsButtons(tableModule);
+            var tabsHTML = andiResults.addTabsButtons(tableModule);
 
             if (tabsHTML != "") {
                 appendHTML += tabsHTML;
@@ -4457,14 +4370,127 @@ function AndiResults() {
             $("#ANDI508-additionalPageResults").append(appendHTML + "</tr></thead><tbody>" + tableHTML + "</tbody></table></div></div>");
 
             for (var x = 0; x < tableModule.tabsTextList.length; x += 1) {
-                andiResults.addTabsButtonLogic(tableModule.tableModuleName, tableModule.tabsTextList[x], tableModule.tableMode, "viewList", tableModule.tabsTextList[x])
+                andiResults.addTabsButtonLogic(AndiModule.module + "ANDI", tableModule.tabsTextList[x], tableModule.tableMode, "viewList", tableModule.tabsTextList[x])
             }
 
             andiResults.addNextTabButtonLogic();
 
-            andiResults.initializeModuleActionGroups("ANDI508-additionalPageResults");
+            andiBar.initializeModuleActionGroups();
+            // NOTE: initializeModuleActionGroups used to be:
+            // andiBar.initializeModuleActionGroups("ANDI508-additionalPageResults");
         }
     }
+    //This function will find the attributes to add to the table
+    this.findAttributesToAdd = function (moduleList, attributesAdded) {
+        var attributesToAdd = [];
+        for (var x = 0; x < 1; x += 1) {
+            if (moduleList.list[x].elementList[0].hasAttributes()) {
+                var attrs = moduleList.list[x].elementList[0].getAttributeNames();
+                for (var a = 0; a < attrs.length; a += 1) {
+                    if (attrs[a].includes("data-andi508-")) {
+                        var attrsFixed = attrs[a].replace("data-andi508", "");
+                        if (attrsFixed != "-index") {
+                            if (String(attrsFixed).charAt(0).includes("-")) {
+                                if (!attributesToAdd.includes(String(attrsFixed))) {
+                                    attributesToAdd.push(String(attrsFixed));
+                                }
+                            } else {
+                                if (!attributesToAdd.includes(String(attrsFixed))) {
+                                    if (!attributesToAdd.includes("-" + String(attrsFixed))) {
+                                        attributesToAdd.push(String(attrsFixed));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for (var a = 0; a < attributesAdded.length; a += 1) {
+            if (!attributesToAdd.includes(attributesAdded[a])) {
+                if (!attributesToAdd.includes("-" + String(attributesAdded[a]))) {
+                    attributesToAdd.push(String(attributesAdded[a]));
+                }
+            }
+        }
+        return attributesToAdd;
+    }
+
+    //This function will build the column name for the table
+    this.createColumnName = function (moduleList, tableModule, attributesToAdd) {
+        var columnName = "";
+        for (var x = 0; x < moduleList.columnNames.length; x += 1) {
+            columnName += ", [" + moduleList.columnNames[x] + "]";
+        }
+
+        for (var x = 0; x < attributesToAdd.length; x += 1) {
+            var valueToAdd;
+            if (String(attributesToAdd[x]).charAt(0) == "-") {
+                valueToAdd = String(attributesToAdd[x]).substring(1);
+            } else {
+                valueToAdd = String(attributesToAdd[x]);
+            }
+            columnName += ", [" + valueToAdd + "]";
+        }
+
+        for (var c = 0; c < tableModule.cssProperties.length; c += 1) {
+            var valueToAdd;
+            if (String(tableModule.cssProperties[c]).length > 0) {
+                valueToAdd = String(tableModule.cssProperties[c]);
+            }
+            columnName += ", [" + valueToAdd + "]";
+        }
+
+        columnName = columnName.slice(2);
+
+        return columnName;
+    }
+    //This function will add the values to the table
+    this.addValuesToTable = function (moduleList, tableModule, attributesToAdd) {
+        // Build the table
+        var tableHTML = "";
+        for (var x = 0; x < moduleList.list.length; x += 1) {
+            var rowValues = ""
+            for (var r = 0; r < moduleList.list[x].columnValues.length; r += 1) {
+                if (String(moduleList.list[x].columnValues[r]).charAt(0) == "[") {
+                    rowValues += ", " + moduleList.list[x].columnValues[r];
+                } else {
+                    rowValues += ", [" + moduleList.list[x].columnValues[r] + "]";
+                }
+            }
+            for (var r = 0; r < attributesToAdd.length; r += 1) {
+                var attributeInList;
+                if (String(attributesToAdd[r]).charAt(0) == "-") {
+                    attributeInList = "data-andi508" + String(attributesToAdd[r]);
+                } else {
+                    attributeInList = String(attributesToAdd[r]);
+                }
+                var attributeToFind = $(moduleList.list[x].elementList[0]).attr(attributeInList);
+                if (String(attributeToFind).charAt(0) == "[") {
+                    rowValues += ", " + String(attributeToFind);
+                } else {
+                    rowValues += ", [" + String(attributeToFind) + "]";
+                }
+            }
+            for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
+                for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
+                    if (String($(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r])).charAt(0) == "[") {
+                        rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]);
+                    } else {
+                        rowValues += ", [" + $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]) + "]";
+                    }
+                }
+            }
+
+            rowValues = rowValues.slice(2);
+
+            tableHTML += "<tr class='" + $.trim(moduleList.list[x].rowClass) + "'><th scope='row'>" + moduleList.list[x].index + "</th><td>" +
+                        "<a href='javascript:void(0)' data-andi508-relatedindex='" + moduleList.list[x].index + "'>" + rowValues + "</a></td></tr>";
+        }
+        return tableHTML;
+    }
+
     //This function builds the table HTML
     this.viewList_buildTableHTML = function (tableHeader = "", moduleClass = "viewList", isFirst = false) {
         var appendHTML = "<div id='ANDI508-" + moduleClass + "' class='ANDI508-viewOtherResults-expanded'"
@@ -4489,46 +4515,7 @@ function AndiResults() {
         $("#ANDI508-" + buttonClass + "-tabs button").removeClass().attr("aria-selected", "false");
         $(tab).addClass("ANDI508-tab-active").attr("aria-selected", "true");
     };
-
-    this.viewList_toggle = function (mode, btn, buttonClass, addClass = "") {
-        var origClass = "ANDI508-viewOtherResults-button-expanded";
-        var classToAdd = origClass + " " + addClass;
-        if ($(btn).attr("aria-expanded") === "false") {
-            //show List, hide alert list
-            $("#ANDI508-alerts-list").hide();
-            andiSettings.minimode(false);
-
-            var buttonHideText = listIcon + "Hide " + mode + " List";
-
-            $(btn)
-                .addClass($.trim(classToAdd))
-                .html($.trim(buttonHideText))
-                .attr("aria-expanded", "true")
-                .find("img").attr("src", icons_url + "list-on.png");
-            $("#ANDI508-" + buttonClass).slideDown(50).focus();
-        } else {
-            //hide List, show alert list
-            $("#ANDI508-" + buttonClass).slideUp(50);
-            $("#ANDI508-resultsSummary").show();
-
-            $("#ANDI508-alerts-list").show();
-
-            var buttonViewText = listIcon + "View " + mode + " List";
-
-            if (addClass == "") {
-                $(btn)
-                .removeClass($.trim(classToAdd))
-                .html($.trim(buttonViewText))
-                .attr("aria-expanded", "false");
-            } else {
-                $(btn)
-                .removeClass($.trim(classToAdd))
-                .html($.trim(buttonViewText))
-                .attr("aria-expanded", "false")
-                .addClass(origClass);
-            }
-        }
-    }
+    // TODO: Move viewList_toggle back here if the code is able to be moved to andi.js
     this.alterTable = function (module, buttonClass, buttonType, buttonText) {
         $("#ANDI508-" + buttonClass + "-table tbody tr").each(function () {
             var tabsClassCondition = "list" + buttonType + "-" + buttonText.toLowerCase();
@@ -4544,6 +4531,28 @@ function AndiResults() {
                 }
             }
         });
+    }
+    this.alterClasses = function (module, action, buttonText) {
+        classesToRemove = ["Internal", "External", "Ambiguous"];
+        var classToAdd = "";
+        if (classesToRemove.includes(buttonText)) {
+            classesToRemove.splice(classesToRemove.indexOf(buttonText), 1);
+            classToAdd = "ANDI508-" + action + buttonText;
+        }
+        var removeClasses = "";
+        for (var x = 0; x < classesToRemove.length; x += 1) {
+            if (removeClasses == "") {
+                removeClasses += "ANDI508-" + action + classesToRemove[x];
+            } else {
+                removeClasses += " ANDI508-" + action + classesToRemove[x];
+            }
+        }
+        if (classToAdd != "") {
+            $("#ANDI508-testPage").removeClass(removeClasses).addClass(classToAdd);
+        } else {
+            $("#ANDI508-testPage").removeClass(removeClasses);
+        }
+
     }
     //This function attaches the hover and focus events to the items in the view list
     this.viewList_attachFocusEvents = function (eventClass = "#ANDI508-viewList-table td") {
@@ -4624,7 +4633,7 @@ function AndiResults() {
             }
 
             //Highlight the row in the list that associates with this element
-            andiResults.viewList_rowHighlight(focusGoesOnThisIndex);
+            andiBar.viewList_rowHighlight(focusGoesOnThisIndex);
             $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function () {
                 this.scrollIntoView();
             });
@@ -4661,7 +4670,7 @@ function AndiResults() {
             }
 
             //Highlight the row in the list that associates with this element
-            andiResults.viewList_rowHighlight(focusGoesOnThisIndex);
+            andiBar.viewList_rowHighlight(focusGoesOnThisIndex);
             $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function () {
                 this.scrollIntoView();
             });
@@ -4669,16 +4678,8 @@ function AndiResults() {
             return false;
         });
     };
-    //This function will highlight the text of the row.
-    this.viewList_rowHighlight = function (index, buttonClass) {
-        $("#ANDI508-" + buttonClass + "-table tbody tr").each(function () {
-            $(this).removeClass("ANDI508-table-row-inspecting");
-            if ($(this).find("th").first().html() == index) {
-                $(this).addClass("ANDI508-table-row-inspecting");
-            }
-        });
-    };
     //TODO: Think if the code below is necessary
+    // TODO: Also think about whether you should use initActiveActionButtons
     this.addButton = function (buttonText) {
         var buttonId = buttonText.replaceAll(" ", "");
         buttonId = buttonId[0].toLowerCase() + buttonId.substring(1);
@@ -4722,9 +4723,24 @@ function AndiResults() {
                 } else if (buttonClass == "readingOrder") {
                     andiOverlay.overlayReadingOrder();
                 } else if (buttonClass == "langAttributes") {
-                    andiOverlay.overlayLangAttributes();
+                    andiOverlay.overlayAttributes("lang", "");
                 } else if (buttonClass == "roleAttributes") {
-                    andiOverlay.overlayRoleAttributes();
+                    andiOverlay.overlayAttributes("role", ".ANDI508-overlay");
+                } else if (buttonClass.includes("forceReveal")) {
+                    if (buttonClass == "forceRevealAll") {
+                        // TODO: Think about using setAttribute instead of addClass
+                        $($.trim(pageClass)).addClass("ANDI508-forceReveal"); // Done so that ANDI508-forceRevealAll is not added to the page
+                        var reveal = ["Display", "Visibility", "Position", "Opacity", "Overflow", "FontSize", "TextIndent"];
+                        for (var r = 0; r < reveal.length; r++) {
+                            $("#ANDI508-testPage .ANDI508-forceReveal-"+reveal[r]).each(function(){
+                                $(this).addClass("ANDI508-forceReveal");
+                            });
+                        }
+                    } else {
+                        $("#ANDI508-testPage .ANDI508-forceReveal-"+buttonClass.split("forceReveal")[1]).each(function(){
+                            $(this).addClass("ANDI508-forceReveal");
+                        });
+                    }
                 } else {
                     $($.trim(pageClass)).addClass("ANDI508-" + buttonClass);
                 }
@@ -4735,10 +4751,40 @@ function AndiResults() {
                 } else {
                     $("#ANDI508-testPage span.ANDI508-overlay-" + buttonClass).remove();
                 }
+
+                if (buttonClass == "forceRevealAll") {
+                    var reveal = ["Display", "Visibility", "Position", "Opacity", "Overflow", "FontSize", "TextIndent"];
+                    for (var r = 0; r < reveal.length; r++) {
+                        $("#ANDI508-testPage .ANDI508-forceReveal-"+reveal[r]).each(function(){
+                            $(this).removeClass("ANDI508-forceReveal");
+                        });
+                    }
+                } else {
+                    $("#ANDI508-testPage .ANDI508-forceReveal-"+buttonClass.split("forceReveal")[1]).each(function(){
+                        $(this).removeClass("ANDI508-forceReveal");
+                    });
+                }
             }
             andiResetter.resizeHeights();
             return false;
         });
+    }
+    this.addTabsButtons = function(tableModule) {
+        var tabsHTML = "";
+        var buttonMode = tableModule.tableMode;
+        for (var x = 0; x < tableModule.tabsTextList.length; x += 1) {
+            tabsHTML += '<button id="ANDI508-list' + buttonMode + "-tab-" + tableModule.tabsTextList[x].toLowerCase();
+            tabsHTML += '" aria-label="View ' + tableModule.tabsTextList[x] + ' ' + buttonMode;
+            if (tableModule.tabsTextList[x] == "All") {
+                tabsHTML += '" aria-selected = "true" class = "ANDI508-tab-active"';
+                tabsHTML += ' data-andi508-relatedclass = "ANDI508-element"';
+                tabsHTML += '>' + tableModule.tabsTextList[x] + ' ' + buttonMode + "</button>";
+            } else {
+                tabsHTML += '" aria-selected = "false" class = "ANDI508-' + tableModule.tabsTextList[x];
+                tabsHTML += buttonMode + '">' + tableModule.tabsTextList[x] + ' ' + buttonMode + "</button>";
+            }
+        }
+        return tabsHTML;
     }
     this.addTabsButtonLogic = function (module, buttonText, buttonMode, buttonClass, technique = "") {
         var buttonId = buttonText.toLowerCase();
@@ -4746,14 +4792,14 @@ function AndiResults() {
         var buttonType = buttonMode.replace(" ", "");
         var fullButtonClass = "#ANDI508-list" + buttonType + "-tab-" + buttonId;
         $(fullButtonClass).click(function () {
-            andiBar.viewList_selectTab(this, buttonClass);
+            andiResults.viewList_selectTab(this, buttonClass);
             andiResults.alterTable(module, buttonClass, buttonType, buttonText);
+
             //Alter which classes are still on the page
-            andiBar.alterClasses(module, "highlight", buttonText);
+            andiResults.alterClasses(module, "highlight", buttonText);
+            // TODO: Think about how to make code for hANDI buttons (they work differently than the buttons for the
+            //       other modules)
             //Turn Off Ambiguous Button
-            if (module == "hANDI") {// TODO: Change to a different test
-                andiBar.alterElements(technique);
-            }
             andiOverlay.overlayButton_off("find", $("#ANDI508-highlightAmbiguous" + buttonType + "-button"));
             andiResetter.resizeHeights();
             return false;
@@ -4775,59 +4821,6 @@ function AndiResults() {
                 }
             });
         });
-    }
-    this.createStartUpSummaryText = function (tableModule, startUpSummaryText) {
-        var moduleLetter = tableModule.tableModuleName.replace("ANDI", "");
-        var moduleArea = tableModule.tableMode.toLowerCase();
-        var spanText = "<span class='ANDI508-module-name-";
-        if (AndiModule.module != "q") {
-            spanText += moduleLetter + "'>" + moduleArea + "</span>";
-        } else {
-            spanText += moduleLetter + "'>" + moduleArea.slice(0, -1) + "</span";
-        }
-
-        if (["e", "f", "g", "l", "n", "o", "s", "u"].includes(AndiModule.module)) {
-            startUpSummaryText += "Discover accessibility markup for ";
-
-            if (AndiModule.module == "g") {
-                startUpSummaryText += " inline ";
-            }
-            if (AndiModule.module != "u") {
-                startUpSummaryText += spanText + " by hovering over the highlighted elements or pressing the next/previous element buttons.";
-                if (AndiModule.module == "g") {
-                    startUpSummaryText += " Ensure that every meaningful/non-decorative image has a text equivalent.";
-                } else if (AndiModule.module == "s") {
-                    startUpSummaryText += " For updated Output, refresh ANDI whenever the Live Region changes.";
-                } else {
-                    startUpSummaryText += " Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every " + moduleArea.slice(0, -1) + ".";
-                }
-            } else {
-                startUpSummaryText += spanText + " by hovering over the highlighted elements or tabbing to the table cells.";
-                startUpSummaryText += " Determine if the ANDI Output conveys a complete and meaningful contextual equivalent for every data table cell."
-                startUpSummaryText += " Tables should be tested one at a time - Press the next table button <img src='" + icons_url + "next-table.png' style='width:12px' alt='' /> to cycle through the tables.";
-            }
-        } else if (["p", "q", "r", "t"].includes(AndiModule.module)) {
-            startUpSummaryText += "Determine if the " + spanText;
-
-            if (AndiModule.module == "q") {
-                startUpSummaryText += " container types used";
-            }
-            startUpSummaryText += " are appropriately applied.";
-        } else if (AndiModule.module == "c") {
-            //" for elements containing text."
-            startUpSummaryText = "Discover the " + spanText;
-            startUpSummaryText += " for elements containing text."
-        } else if (AndiModule.module == "i") {
-            startUpSummaryText = " To test the contents of " + spanText;
-            startUpSummaryText += ", each must be viewed independently.<br />Inspect an iframe, press the \"test in new tab\" button, then launch ANDI.";
-        } else if (AndiModule.module == "h") {
-            startUpSummaryText = "Find the " + spanText;
-            startUpSummaryText += " that should be tested for accessibility using other ANDI modules. Use the style toggle buttons to force the";
-            startUpSummaryText += " hidden content to be revealed. The revealed content will not remain revealed after changing modules.";
-            startUpSummaryText += " Content injected with CSS may be invisible to a screen reader.";
-        }
-
-        return startUpSummaryText;
     }
 }
 
