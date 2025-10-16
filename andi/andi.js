@@ -4341,7 +4341,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                             "<div class='ANDI508-scrollable'><table id='ANDI508-" + moduleClass + "-table' aria-label='" + mode + " List' tabindex='-1'><thead><tr>";
 
             var attributes = [];
-            var rowClasses = [];
+            var rowClasses = ["All"];
             if (moduleList.list.length > 0) {
                 for (var i = 0; i < moduleList.list.length; i += 1) {
                     var attrs = moduleList.list[i].elementList[0].getAttributeNames();
@@ -4358,7 +4358,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                         if (rowClassToAdd.includes("ANDI508-listLinks")) {
                             // TODO: Think about making this more generic.
                             stringPosition = moduleList.list[i].rowClass.indexOf("ANDI508-listLinks-");
-                            classToAdd = rowClassToAdd.slice(stringPosition + 18, rowClassToAdd.length);
+                            classFixed = rowClassToAdd.slice(stringPosition + 18, rowClassToAdd.length);
+                            classToAdd = classFixed[0].toUpperCase() + classFixed.slice(1);
                             if (!rowClasses.includes(classToAdd)) {
                                 rowClasses.push(classToAdd);
                             }
@@ -4789,16 +4790,18 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         this.addTabsButtons = function(tableModule, rowClasses) {
             var tabsHTML = "";
             var buttonMode = tableModule.tableMode;
-            for (var x = 0; x < rowClasses.length; x += 1) {
-                tabsHTML += '<button id="ANDI508-list' + buttonMode + "-tab-" + rowClasses[x].toLowerCase();
-                tabsHTML += '" aria-label="View ' + rowClasses[x] + ' ' + buttonMode;
-                if (rowClasses[x] == "All") {
-                    tabsHTML += '" aria-selected = "true" class = "ANDI508-tab-active"';
-                    tabsHTML += ' data-andi508-relatedclass = "ANDI508-element"';
-                    tabsHTML += '>' + rowClasses[x] + ' ' + buttonMode + "</button>";
-                } else {
-                    tabsHTML += '" aria-selected = "false" class = "ANDI508-' + rowClasses[x];
-                    tabsHTML += buttonMode + '">' + rowClasses[x] + ' ' + buttonMode + "</button>";
+            if (rowClasses.length > 1) {
+                for (var x = 0; x < rowClasses.length; x += 1) {
+                    tabsHTML += '<button id="ANDI508-list' + buttonMode + "-tab-" + rowClasses[x].toLowerCase();
+                    tabsHTML += '" aria-label="View ' + rowClasses[x] + ' ' + buttonMode;
+                    if (rowClasses[x] == "All") {
+                        tabsHTML += '" aria-selected = "true" class = "ANDI508-tab-active"';
+                        tabsHTML += ' data-andi508-relatedclass = "ANDI508-element"';
+                        tabsHTML += '>' + rowClasses[x] + ' ' + buttonMode + "</button>";
+                    } else {
+                        tabsHTML += '" aria-selected = "false" class = "ANDI508-' + rowClasses[x];
+                        tabsHTML += buttonMode + '">' + rowClasses[x] + ' ' + buttonMode + "</button>";
+                    }
                 }
             }
             return tabsHTML;
