@@ -4144,6 +4144,130 @@ andiResults = new AndiResults();
             $(pageClass).append(button);
         }
 
+        this.addElementListButtonLogic = function (moduleList, tableModule, attributesAdded) {
+            var elementListString = tableModule.tableMode.replace(" ", "");
+
+            //View Elements List Button
+            $("#ANDI508-view" + elementListString + "List-button").click(function () {
+                if ($(this).attr("aria-expanded") === "false") {
+                    andiResults.viewList_buildTable(moduleList, tableModule, attributesAdded);
+                    andiResults.viewList_attachFocusEvents();
+                    andiResults.viewList_attachSortEvent();
+                    //andiResults.viewList_attachButtonEvents();
+                }
+                andiBar.viewList_toggle(tableModule.tableMode, this, "viewList");
+                andiResetter.resizeHeights();
+                return false;
+            });
+        }
+        // TODO: Make the code more consensed
+        this.viewList_buildTable = function (moduleList, tableModule, attributesAdded = [], tableHeaderValue = "", moduleClass = "viewList") {
+            var tableHeader = "";
+            var mode = tableModule.tableMode;
+
+            // NOTE: The function andiBar.findEvents can probably be used to get events.
+
+            // NOTE: onblur, onchange, and ondblclick need to be moved to new dictionary about .is("")
+            //       onblur, onchange, and ondblclick are used in fANDI
+
+            // NOTE: mANDI used onkeydown and onkeyup.
+
+            // NOTE: Create list of error attributes that are used for certain tests for modules.
+
+            if (tableHeaderValue == "") {
+                tableHeader = mode + " List";
+            } else {
+                tableHeader = tableHeaderValue;
+            }
+
+            var appendHTML = andiResults.viewList_buildTableHTML(tableHeader, moduleClass);
+            var nextPrevHTML = "<button id='tableANDI508-" + moduleClass + "-button-prev' aria-label='Previous Item in the list' accesskey='" + andiHotkeyList.key_prev.key + "'><img src='" + icons_url + "prev.png' alt='' /></button>" +
+                            "<button id='tableANDI508-" + moduleClass + "-button-next' aria-label='Next Item in the list'  accesskey='" + andiHotkeyList.key_next.key + "'><img src='" + icons_url + "next.png' alt='' /></button>" +
+                            "</div>" +
+                            "<div class='ANDI508-scrollable'><table id='ANDI508-" + moduleClass + "-table' aria-label='" + mode + " List' tabindex='-1'><thead><tr>";
+
+            if (moduleList.list.length > 0) {
+                var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
+
+                // Build the column name
+                var columnName = andiResults.createColumnName(moduleList, tableModule, attributesToAdd);
+
+                var tableHTML = andiResults.addValuesToTable(moduleList, tableModule, attributesToAdd);
+
+                var tabsHTML = andiResults.addTabsButtons(tableModule);
+
+                if (tabsHTML != "") {
+                    appendHTML += tabsHTML;
+                }
+
+                appendHTML += nextPrevHTML + "<th scope='col' style='width:5%'><a href='javascript:void(0)' aria-label='" + mode.slice(0, -1) + " number'>#<i aria-hidden='true'></i></a></th>" +
+                "<th scope='col' style='width:95%'><a href='javascript:void(0)'>" + columnName + "<i aria-hidden='true'></i></a></th>";
+
+                $("#ANDI508-additionalPageResults").append(appendHTML + "</tr></thead><tbody>" + tableHTML + "</tbody></table></div></div>");
+
+                for (var x = 0; x < tableModule.tabsTextList.length; x += 1) {
+                    andiResults.addTabsButtonLogic(AndiModule.module + "ANDI", tableModule.tabsTextList[x], tableModule.tableMode, "viewList", tableModule.tabsTextList[x])
+                }
+
+                andiResults.addNextTabButtonLogic();
+
+                andiBar.initializeModuleActionGroups();
+                // NOTE: initializeModuleActionGroups used to be:
+                // andiBar.initializeModuleActionGroups("ANDI508-additionalPageResults");
+            }
+        }
+        //This function attaches the hover and focus events to the items in the view list
+        this.viewList_attachFocusEvents = function (eventClass = "#ANDI508-viewList-table td") {
+            //Add focus click to each output in the table
+            $(eventClass + " a[data-andi508-relatedindex]").each(function () {
+                andiFocuser.addFocusClick($(this));
+                var relatedElement = $("#ANDI508-testPage [data-andi508-index=" + $(this).attr("data-andi508-relatedindex") + "]").first();
+                andiLaser.createLaserTrigger($(this), $(relatedElement));
+                $(this)
+                .hover(function () {
+                    if (!event.shiftKey) {
+                        AndiModule.inspect(relatedElement[0]);
+                    }
+                })
+                .focus(function () {
+                    AndiModule.inspect(relatedElement[0]);
+                });
+            });
+        }
+        this.viewList_attachSortEvent = function () {
+            //This will define the click logic for the table sorting.
+            //Table sorting does not use aria-sort because .removeAttr("aria-sort") crashes in old IE
+            $("#ANDI508-viewList-table th a").click(function () {
+                var table = $(this).closest("table");
+                $(table).find("th").find("i").html("")
+                    .end().find("a");//remove all arrow
+
+                    var rows = $(table).find("tr:gt(0)").toArray().sort(sortCompare($(this).parent().index()));
+                    this.asc = !this.asc;
+                    if (!this.asc) {
+                        rows = rows.reverse();
+                        $(this).attr("title", "descending")
+                            .parent().find("i").html("&#9650;");//up arrow
+                    } else {
+                        $(this).attr("title", "ascending")
+                            .parent().find("i").html("&#9660;");//down arrow
+                    }
+                    for (var i = 0; i < rows.length; i += 1) {
+                        $(table).append(rows[i]);
+                    }
+                    //Table Sort Functionality
+                    function sortCompare(index) {
+                        return function(a, b) {
+                            var valA = getCellValue(a, index);
+                            var valB = getCellValue(b, index);
+                            return !isNaN(valA) && !isNaN(valB) ? valA - valB : valA.localeCompare(valB);
+                        };
+                        function getCellValue(row, index) {
+                            return $(row).children("td,th").eq(index).text();
+                        }
+                    }
+                });
+            }
     }
 
 //==============//

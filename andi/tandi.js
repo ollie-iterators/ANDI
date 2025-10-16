@@ -254,7 +254,7 @@ tANDI.results = function(){
 
 	if(tableCountTotal > 0){
 		if(!tANDI.viewList_buttonAppended){
-			$("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewTableList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view table list</button>");
+            andiResults.addElementListButton("table");
 
 			//viewTableList Button
 			$("#ANDI508-viewTableList-button").click(function(){
