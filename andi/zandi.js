@@ -100,7 +100,7 @@ zANDI.analyze = function(objectClass){
 			if($(this).isSemantically(["table","grid","treegrid"],"table")){
 				//It's a data table
                 objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-                andiResults.getAttributes(objectClass, objectClass.list.length - 1);
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "Data Table";
 			}

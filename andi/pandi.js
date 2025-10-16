@@ -20,7 +20,7 @@ pANDI.analyze = function(objectClass){
                 andiAlerter.throwAlert(alert_0190);
                 AndiData.attachDataToElement(this);
                 objectClass.list.push(new PossibleHeader([this], objectClass.list.length + 1, "", "", ""));
-                andiResults.getAttributes(objectClass, objectClass.list.length - 1);
+                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "possible headings";
             }
@@ -169,7 +169,7 @@ AndiModule.inspect = function(element){
     if ($(element).hasClass("ANDI508-element")) {
 
         //Highlight the row in the list that associates with this element
-        andiResults.viewList_rowHighlight($(element).attr("data-andi508-index"));
+        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
 
         andiBar.prepareActiveElementInspection(element);
 

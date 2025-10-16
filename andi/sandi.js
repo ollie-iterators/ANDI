@@ -36,7 +36,7 @@ sANDI.analyze = function(objectClass){
                 andiAlerter.throwAlert(alert_0182);
 
             objectClass.list.push(new LiveRegion([this], objectClass.list.length + 1, andiData.accName, "", ""));
-            andiResults.getAttributes(objectClass, objectClass.list.length - 1);
+            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "live regions";
             AndiData.attachDataToElement(this);
@@ -51,7 +51,7 @@ AndiModule.inspect = function(element){
     if ($(element).hasClass("ANDI508-element")) {
 
         //Highlight the row in the list that associates with this element
-        andiResults.viewList_rowHighlight($(element).attr("data-andi508-index"));
+        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
 
         andiBar.prepareActiveElementInspection(element);
 
