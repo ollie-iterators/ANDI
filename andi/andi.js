@@ -4355,9 +4355,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     }
                     if (moduleList.list[i].rowClass != "" && !rowClasses.includes(moduleList.list[i].rowClass)) {
                         rowClassToAdd = moduleList.list[i].rowClass;
-                        if (rowClassToAdd.includes(moduleLetter + "ANDI508-listLinks")) {
+                        if (rowClassToAdd.includes("ANDI508-listLinks")) {
                             // TODO: Think about making this more generic.
-                            rowClasses.push(moduleList.list[i].rowClass.replace(moduleLetter + "ANDI508-listLinks-", ""));
+                            stringPosition = moduleList.list[i].rowClass.indexOf("ANDI508-listLinks-");
+                            classToAdd = rowClassToAdd.slice(stringPosition, rowClassToAdd.length);
+                            rowClasses.push(classToAdd);
                         }
                     }
 
