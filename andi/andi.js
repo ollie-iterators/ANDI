@@ -4346,7 +4346,10 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                     var attrs = moduleList.list[i].elementList[0].getAttributeNames();
                     for (var a = 0; a < attrs.length; a += 1) {
                         if (!attributes.includes(attrs[a])) {
-                            attributes.push(attrs[a]);
+                            if (!attrs[a].includes("data-andi508-")) {
+                                attributes.push(attrs[a]);
+                            }
+
                         }
                     }
 
