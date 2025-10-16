@@ -42,7 +42,7 @@ AndiSettings.andiAnimationSpeed = 50; //milliseconds
 AndiSettings.elementHighlightsOn = true;
 
 //Default Module
-AndiModule.module = "f";
+AndiModule.module = "l";
 
 //===============//
 // ANDI OBJECTS: //
