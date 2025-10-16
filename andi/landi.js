@@ -418,7 +418,6 @@ function CertainLinks(){
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Links";
-    this.cssProperties  = [];
     this.buttonTextList = ["Highlight Ambiguous Links"];
     this.tabsTextList   = ["All", "Internal", "External"];
 }

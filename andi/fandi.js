@@ -237,7 +237,6 @@ function Focusables() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Focusable Elements";
-    this.cssProperties  = [];
     this.buttonTextList = ["Tab Sequence"];
     this.tabsTextList   = [];
 }

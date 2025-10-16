@@ -178,7 +178,6 @@ function Attributes() {
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Attributes";
-    this.cssProperties  = [];
     this.buttonTextList = ["Reading Order", "Label Tags", "Title Attributes", "Role Attributes", "Lang Attributes"];
     this.tabsTextList   = [];
 }

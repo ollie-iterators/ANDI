@@ -122,7 +122,6 @@ function PossibleLinks(){
 // This object class is used to keep track of the table information
 function TableInfo() {
     this.tableMode      = "Possible Links";
-    this.cssProperties  = [];
     this.buttonTextList = [];
     this.tabsTextList   = [];
 }
