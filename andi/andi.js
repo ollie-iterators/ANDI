@@ -4167,9 +4167,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
     //Inserts some counter totals, displays the accesskey list
     andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
-        buttonClass = "#ANDI508-moduleMenu-button-" + AndiModule.module;
-        tableMode = $(buttonClass).attr("aria-label");
-        $("#ANDI508-resultsSummary-heading").html(tableMode + " Found: " + moduleList.elementNums[0]);
+        $("#ANDI508-resultsSummary-heading").html(tableModule.tableMode + " Found: " + moduleList.elementNums[0]);
 
         andiResults.buildResultsDetails(moduleList);
 
