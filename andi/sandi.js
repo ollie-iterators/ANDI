@@ -36,7 +36,6 @@ sANDI.analyze = function(objectClass){
                 andiAlerter.throwAlert(alert_0182);
 
             objectClass.list.push(new LiveRegion([this], objectClass.list.length + 1, andiData.accName, "", ""));
-            // andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "live regions";
             AndiData.attachDataToElement(this);

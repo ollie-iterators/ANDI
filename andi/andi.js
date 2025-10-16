@@ -4165,30 +4165,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
     var andiResults = new AndiResults();
 
-    //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-
-    andiBar.getAttributes = function(objectClass, index) {
-        if (objectClass.list[index].elementList[0].hasAttributes()) {
-            var attrs = objectClass.list[index].elementList[0].getAttributeNames();
-            for (var a = 0; a < attrs.length; a += 1) {
-                attribute = objectClass.list[index].elementList[0].getAttribute(attrs[a]);
-                objectClass.list[index][attrs[a]] = attribute;
-                if (attrs[a].includes("data-andi508-")) {
-                    var attributeName = attrs[a];
-                } else {
-                    var attributeName = "data-andi508-" + attrs[a];
-                }
-                if (!attrs.includes(attributeName)) {
-                    $(objectClass.list[index].elementList[0]).attr(attributeName, attribute);
-                }
-                //objectClass.list[index].columnValues.push(attribute);
-                // if (!objectClass.columnNames.includes(attrs[a])) {
-                //     objectClass.columnNames.push(attrs[a]);
-                // }
-            }
-        }
-    }
-
     //Inserts some counter totals, displays the accesskey list
     andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
         $("#ANDI508-resultsSummary-heading").html(tableModule.tableMode + " Found: " + moduleList.elementNums[0]);

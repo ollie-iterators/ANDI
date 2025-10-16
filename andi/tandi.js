@@ -28,7 +28,6 @@ tANDI.analyze = function(objectClass){
     $(TestPageData.allElements).filter("[role=presentation],[role=none]").each(function(){
         if($(this).isSemantically(["presentation","none"])){
             objectClass.list.push(new PresentationTable([this], objectClass.list.length + 1, "<span style='font-style:italic'>Presentation Table</span>", "", ""));
-            // andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "presentation tables";
 

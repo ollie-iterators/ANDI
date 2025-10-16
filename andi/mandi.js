@@ -20,7 +20,6 @@ mANDI.analyze = function(objectClass){
                 andiData = new AndiData(this);
                 isLinkKeyboardAccessible(undefined, this);
                 objectClass.list.push(new PossibleLink([this], objectClass.list.length + 1, "", "", ""));
-                // andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "possible links";
                 AndiData.attachDataToElement(this);

@@ -28,7 +28,6 @@ uANDI.analyze = function(objectClass){
     $(TestPageData.allElements).filter("table").each(function(){
         if (!$(this).isSemantically(["table","grid","treegrid","presentation","none"],"table")) {
             objectClass.list.push(new StrangeTable([this], objectClass.list.length + 1, "<span style='font-style:italic'>Not Recognized as a Data Table</span>", "", ""));
-            // andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] += "strange tables";
 
