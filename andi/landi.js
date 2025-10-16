@@ -60,6 +60,7 @@ lANDI.analyze = function(objectClass){
 
                     if(isLinkKeyboardAccessible(href, this)){
                         if(nameDescription){
+                            // TODO: make scanForAmbiguity work again
                             ambiguousIndex = "";
                             //ambiguousIndex = scanForAmbiguity(this, nameDescription, href);
 
