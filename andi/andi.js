@@ -331,7 +331,6 @@ AndiModule.launchModule = function(module){
             AndiModule.module = module; //Set current module to launched module
             AndiModule.activeActionButtons = {}; //Reset action buttons
         }
-        var andiResults = new AndiResults();
 
         testPageData = new TestPageData(); //get fresh test page data
 
