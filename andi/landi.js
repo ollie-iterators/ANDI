@@ -519,19 +519,20 @@ lANDI.results = function(){
 					});
 				}
                 andiResults.addElementListButton("links");
+                andiResults.addElementListButtonLogic(lANDI.links, "", []);
 
 				//Links List Button
-				$("#ANDI508-viewLinksList-button").click(function(){
-					if(!lANDI.viewList_tableReady){
-						lANDI.viewList_buildTable("links");
-						lANDI.viewList_attachEvents();
-						lANDI.viewList_attachEvents_links();
-						lANDI.viewList_tableReady = true;
-					}
-					lANDI.viewList_toggle("links", this);
-					andiResetter.resizeHeights();
-					return false;
-				});
+				// $("#ANDI508-viewLinksList-button").click(function(){
+				// 	if(!lANDI.viewList_tableReady){
+				// 		lANDI.viewList_buildTable("links");
+				// 		lANDI.viewList_attachEvents();
+				// 		lANDI.viewList_attachEvents_links();
+				// 		lANDI.viewList_tableReady = true;
+				// 	}
+				// 	lANDI.viewList_toggle("links", this);
+				// 	andiResetter.resizeHeights();
+				// 	return false;
+				// });
 
 				//Show Startup Summary
 				if(!andiBar.focusIsOnInspectableElement()){
