@@ -4157,40 +4157,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
     var andiResults = new AndiResults();
 
-    //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
-
-    andiBar.getAttributes = function(objectClass, index) {
-        if (objectClass.list[index].elementList[0].hasAttributes()) {
-            var attrs = objectClass.list[index].elementList[0].getAttributeNames();
-            for (var a = 0; a < attrs.length; a += 1) {
-                attribute = objectClass.list[index].elementList[0].getAttribute(attrs[a]);
-                objectClass.list[index][attrs[a]] = attribute;
-                if (attrs[a].includes("data-andi508-")) {
-                    var attributeName = attrs[a];
-                } else {
-                    var attributeName = "data-andi508-" + attrs[a];
-                }
-                if (!attrs.includes(attributeName)) {
-                    $(objectClass.list[index].elementList[0]).attr(attributeName, attribute);
-                }
-                //objectClass.list[index].columnValues.push(attribute);
-                // if (!objectClass.columnNames.includes(attrs[a])) {
-                //     objectClass.columnNames.push(attrs[a]);
-                // }
-            }
-        }
-    }
-
-    //This function will highlight the text of the row.
-    andiBar.viewList_rowHighlight = function (index, buttonClass) {
-        $("#ANDI508-" + buttonClass + "-table tbody tr").each(function () {
-            $(this).removeClass("ANDI508-table-row-inspecting");
-            if ($(this).find("th").first().html() == index) {
-                $(this).addClass("ANDI508-table-row-inspecting");
-            }
-        });
-    };
-
     //This function highlights the active table in the table list
     //index: refers to the index of the table in the tableArray
     andiBar.viewList_highlightSelectedTable = function(index, scrollIntoView){
@@ -4311,6 +4277,30 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
             return moduleList;
         }
+
+        //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
+        this.getAttributes = function(objectClass, index) {
+            if (objectClass.list[index].elementList[0].hasAttributes()) {
+                var attrs = objectClass.list[index].elementList[0].getAttributeNames();
+                for (var a = 0; a < attrs.length; a += 1) {
+                    attribute = objectClass.list[index].elementList[0].getAttribute(attrs[a]);
+                    objectClass.list[index][attrs[a]] = attribute;
+                    if (attrs[a].includes("data-andi508-")) {
+                        var attributeName = attrs[a];
+                    } else {
+                        var attributeName = "data-andi508-" + attrs[a];
+                    }
+                    if (!attrs.includes(attributeName)) {
+                        $(objectClass.list[index].elementList[0]).attr(attributeName, attribute);
+                    }
+                    //objectClass.list[index].columnValues.push(attribute);
+                    // if (!objectClass.columnNames.includes(attrs[a])) {
+                    //     objectClass.columnNames.push(attrs[a]);
+                    // }
+                }
+            }
+        }
+
         //Inserts some counter totals, displays the accesskey list
         this.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
             $("#ANDI508-resultsSummary-heading").html(tableModule.tableMode + " Found: " + moduleList.elementNums[0]);
@@ -4530,6 +4520,16 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             $("#ANDI508-" + buttonClass + "-tabs button").removeClass().attr("aria-selected", "false");
             $(tab).addClass("ANDI508-tab-active").attr("aria-selected", "true");
         };
+
+        //This function will highlight the text of the row.
+        this.viewList_rowHighlight = function (index, buttonClass) {
+            $("#ANDI508-" + buttonClass + "-table tbody tr").each(function () {
+                $(this).removeClass("ANDI508-table-row-inspecting");
+                if ($(this).find("th").first().html() == index) {
+                    $(this).addClass("ANDI508-table-row-inspecting");
+                }
+            });
+        };
         // TODO: Move viewList_toggle back here if the code is able to be moved to andi.js
         this.alterTable = function (module, buttonClass, buttonType, buttonText) {
             $("#ANDI508-" + buttonClass + "-table tbody tr").each(function () {
@@ -4648,7 +4648,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 }
 
                 //Highlight the row in the list that associates with this element
-                andiBar.viewList_rowHighlight(focusGoesOnThisIndex);
+                andiResults.viewList_rowHighlight(focusGoesOnThisIndex);
                 $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function () {
                     this.scrollIntoView();
                 });
@@ -4685,7 +4685,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 }
 
                 //Highlight the row in the list that associates with this element
-                andiBar.viewList_rowHighlight(focusGoesOnThisIndex);
+                andiResults.viewList_rowHighlight(focusGoesOnThisIndex);
                 $("#ANDI508-viewList-table tbody tr.ANDI508-table-row-inspecting").first().each(function () {
                     this.scrollIntoView();
                 });

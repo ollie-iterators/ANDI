@@ -77,12 +77,12 @@ lANDI.analyze = function(objectClass){
                         if(href){
                             //create Link object and add to array
                             lANDI.links.list.push(new CertainLink([this], objectClass.list.length + 1, nameDescription, "", rowClass));
-                            andiBar.getAttributes(lANDI.links, lANDI.links.list.length - 1);
+                            andiResults.getAttributes(lANDI.links, lANDI.links.list.length - 1);
                         }
                         else if(andiData.role === "link"){
                             //create Link object and add to array
                             lANDI.links.list.push(new CertainLink([this], objectClass.list.length + 1, nameDescription, "", rowClass));
-                            andiBar.getAttributes(lANDI.links, lANDI.links.list.length - 1);
+                            andiResults.getAttributes(lANDI.links, lANDI.links.list.length - 1);
 
                             isElementInTabOrder(this, "link");
                         }
@@ -295,7 +295,7 @@ AndiModule.inspect = function(element){
     if ($(element).hasClass("ANDI508-element")) {
 
         //Highlight the row in the list that associates with this element
-        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
+        andiResults.viewList_rowHighlight($(element).attr("data-andi508-index"));
 
         andiBar.prepareActiveElementInspection(element);
 

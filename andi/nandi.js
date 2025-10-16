@@ -70,7 +70,7 @@ nANDI.analyze = function(objectClass){
 
                 andiCheck.commonFocusableElementChecks(andiData,$(this));
                 objectClass.list.push(new Button([this], objectClass.list.length + 1, nameDescription, "", ""));
-                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+                andiResults.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "buttons";
                 AndiData.attachDataToElement(this);
@@ -158,7 +158,7 @@ AndiModule.inspect = function(element){
     if ($(element).hasClass("ANDI508-element")) {
 
         //Highlight the row in the list that associates with this element
-        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
+        andiResults.viewList_rowHighlight($(element).attr("data-andi508-index"));
 
         andiBar.prepareActiveElementInspection(element);
 

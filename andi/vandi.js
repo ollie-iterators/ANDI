@@ -102,22 +102,22 @@ vANDI.analyze = function(objectClass){
 
         if($(this).isSemantically(["table","grid","treegrid"],"table")){
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            andiResults.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "Data Table";
         } else if ($(this).isSemantically(["row"], "tr")) {
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            andiResults.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[1] += 1;
             objectClass.elementStrings[1] = "Table Row";
         } else if ($(this).isSemantically(["columnheader", "rowheader"], "th")) {
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            andiResults.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[2] += 1;
             objectClass.elementStrings[2] = "Header Cell";
         } else if ($(this).isSemantically(["cell", "gridcell"], "td")) {
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            andiResults.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[3] += 1;
             objectClass.elementStrings[3] = "Table Cell";
         }
@@ -237,7 +237,7 @@ AndiModule.inspect = function(element){
     if ($(element).hasClass("ANDI508-element")) {
 
         //Highlight the row in the list that associates with this element
-        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
+        andiResults.viewList_rowHighlight($(element).attr("data-andi508-index"));
 
         andiBar.prepareActiveElementInspection(element);
 
@@ -882,7 +882,7 @@ function analyzeTable(table){
                 andiAlerter.throwAlert(alert_0132);
 
             objectClass.list.push(new DataTable([cell[0]], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            andiResults.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[1] += 1;
             objectClass.elementStrings[1] = "data table cell";
             AndiData.attachDataToElement(cell);
@@ -994,7 +994,7 @@ function analyzeTable(table){
         cellCount = thCount + tdCount;
 
         objectClass.list.push(new DataTable([table], objectClass.list.length + 1, "", "", ""));
-        andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+        andiResults.getAttributes(objectClass, objectClass.list.length - 1);
         objectClass.elementNums[0] += 1;
         objectClass.elementStrings[0] = "data table";
         AndiData.attachDataToElement(table);
@@ -1174,7 +1174,7 @@ function analyzeTable(table){
                     andiAlerter.throwAlert(alert_0132);
 
                 objectClass.list.push(new DataTable([cell[0]], objectClass.list.length + 1, "", "", ""));
-                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+                andiResults.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[1] += 1;
                 objectClass.elementStrings[1] = "data table cell";
                 AndiData.attachDataToElement(cell);
@@ -1220,7 +1220,7 @@ function analyzeTable(table){
         cellCount = headerCount + nonHeaderCount;
 
         objectClass.list.push(new DataTable([table], objectClass.list.length + 1, "", "", ""));
-        andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+        andiResults.getAttributes(objectClass, objectClass.list.length - 1);
         objectClass.elementNums[0] += 1;
         objectClass.elementStrings[0] = "data table";
         AndiData.attachDataToElement(table);

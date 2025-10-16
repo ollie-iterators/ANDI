@@ -18,7 +18,7 @@ oANDI.analyze = function(objectClass){
 
             if(andiData.isAriaHidden != true)
                 objectClass.list.push(new CertainHeader([this], objectClass.list.length + 1, "", "", ""));
-                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+                andiResults.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "certain headings";
             if(andiData.role === "heading"){
@@ -141,7 +141,7 @@ AndiModule.inspect = function(element){
     if ($(element).hasClass("ANDI508-element")) {
 
         //Highlight the row in the list that associates with this element
-        andiBar.viewList_rowHighlight($(element).attr("data-andi508-index"));
+        andiResults.viewList_rowHighlight($(element).attr("data-andi508-index"));
 
         andiBar.prepareActiveElementInspection(element);
 
