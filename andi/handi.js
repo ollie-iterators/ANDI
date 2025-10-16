@@ -141,7 +141,7 @@ hANDI.analyze = function(objectClass){
             objectClass.list.push(new HiddenElement([this], objectClass.list.length + 1, "", "", ""));
             objectClass.elementNums[0] += 1;
             objectClass.elementStrings[0] = "hidden elements";
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            // andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             AndiData.attachDataToElement(this);
         }
     });

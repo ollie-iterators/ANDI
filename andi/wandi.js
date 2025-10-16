@@ -62,7 +62,7 @@ wANDI.analyze = function(objectClass){
 
         if($(this).isSemantically(["row"],"tr")){
             objectClass.list.push(new DataTable([this], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            // andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.list[objectClass.list.length - 1]["data-andi508-closestTable"] = $(this).closest("table,[role=table],[role=grid],[role=treegrid]")[0];
             objectClass.elementNums[0] += 1;
         }
@@ -782,7 +782,7 @@ function analyzeTable(table){
                 andiAlerter.throwAlert(alert_0132);
 
             objectClass.list.push(new DataTable([cell[0]], objectClass.list.length + 1, "", "", ""));
-            andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+            // andiBar.getAttributes(objectClass, objectClass.list.length - 1);
             objectClass.elementNums[1] += 1;
             objectClass.elementStrings[1] = "data table cell";
             AndiData.attachDataToElement(cell);
@@ -894,7 +894,7 @@ function analyzeTable(table){
         cellCount = thCount + tdCount;
 
         objectClass.list.push(new DataTable([table], objectClass.list.length + 1, "", "", ""));
-        andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+        // andiBar.getAttributes(objectClass, objectClass.list.length - 1);
         objectClass.elementNums[0] += 1;
         objectClass.elementStrings[0] = "data table";
         AndiData.attachDataToElement(table);
@@ -1074,7 +1074,7 @@ function analyzeTable(table){
                     andiAlerter.throwAlert(alert_0132);
 
                 objectClass.list.push(new DataTable([cell[0]], objectClass.list.length + 1, "", "", ""));
-                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+                // andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[1] += 1;
                 objectClass.elementStrings[1] = "data table cell";
                 AndiData.attachDataToElement(cell);
@@ -1120,7 +1120,7 @@ function analyzeTable(table){
         cellCount = headerCount + nonHeaderCount;
 
         objectClass.list.push(new DataTable([table], objectClass.list.length + 1, "", "", ""));
-        andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+        // andiBar.getAttributes(objectClass, objectClass.list.length - 1);
         objectClass.elementNums[0] += 1;
         objectClass.elementStrings[0] = "data table";
         AndiData.attachDataToElement(table);

@@ -70,7 +70,7 @@ nANDI.analyze = function(objectClass){
 
                 andiCheck.commonFocusableElementChecks(andiData,$(this));
                 objectClass.list.push(new Button([this], objectClass.list.length + 1, nameDescription, "", ""));
-                andiBar.getAttributes(objectClass, objectClass.list.length - 1);
+                // andiBar.getAttributes(objectClass, objectClass.list.length - 1);
                 objectClass.elementNums[0] += 1;
                 objectClass.elementStrings[0] = "buttons";
                 AndiData.attachDataToElement(this);

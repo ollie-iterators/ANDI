@@ -4364,8 +4364,19 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                             "</div>" +
                             "<div class='ANDI508-scrollable'><table id='ANDI508-" + moduleClass + "-table' aria-label='" + mode + " List' tabindex='-1'><thead><tr>";
 
+            var attributes = [];
             if (moduleList.list.length > 0) {
-                var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
+                for (var i = 0; i < moduleList.list.length; i += 1) {
+                    var attrs = moduleList.list[i].elementList[0].getAttributeNames();
+                    for (var a = 0; a < attrs.length; a += 1) {
+                        if (!attributes.includes(attrs[a])) {
+                            attributes.push(attrs[a]);
+                        }
+                    }
+
+                }
+                var attributesToAdd = attributes;
+                // var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
 
                 // Build the column name
                 var columnName = andiResults.createColumnName(moduleList, tableModule, attributesToAdd);

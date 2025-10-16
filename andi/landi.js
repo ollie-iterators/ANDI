@@ -77,12 +77,12 @@ lANDI.analyze = function(objectClass){
                         if(href){
                             //create Link object and add to array
                             lANDI.links.list.push(new CertainLink([this], objectClass.list.length + 1, nameDescription, "", rowClass));
-                            andiBar.getAttributes(lANDI.links, lANDI.links.list.length - 1);
+                            // andiBar.getAttributes(lANDI.links, lANDI.links.list.length - 1);
                         }
                         else if(andiData.role === "link"){
                             //create Link object and add to array
                             lANDI.links.list.push(new CertainLink([this], objectClass.list.length + 1, nameDescription, "", rowClass));
-                            andiBar.getAttributes(lANDI.links, lANDI.links.list.length - 1);
+                            // andiBar.getAttributes(lANDI.links, lANDI.links.list.length - 1);
 
                             isElementInTabOrder(this, "link");
                         }
