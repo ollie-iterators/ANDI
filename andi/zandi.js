@@ -1529,7 +1529,6 @@ function DataTables() {
 function TableInfo() {
     this.tableMode      = "Data Tables";
     this.buttonTextList = ["Table Markup"];
-    this.tabsTextList   = [];
 }
 
 zANDI.dataTables = new DataTables();
