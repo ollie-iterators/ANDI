@@ -2,7 +2,7 @@
 //iANDI: iframe ANDI						   //
 //Created By Social Security Administration	   //
 //=============================================//
-function init_module(andiResults){
+function init_module(){
 
 var iandiVersionNumber = "3.0.2";
 
@@ -103,7 +103,7 @@ iANDI.tableInfo = new TableInfo();
 iANDI.iFrames = andiBar.createObjectValues(iANDI.iFrames, 1);
 
 iANDI.analyze(iANDI.iFrames);
-andiResults.results(iANDI.iFrames, iANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(iANDI.iFrames, iANDI.tableInfo, [], showStartUpSummaryText);
 iANDI.iFrameOpen();
 
 }//end init

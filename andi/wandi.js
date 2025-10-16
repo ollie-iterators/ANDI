@@ -3,7 +3,7 @@
 //Created By Social Security Administration//
 //=========================================//
 
-function init_module(andiResults){
+function init_module(){
 
 var wANDIVersionNumber = "11.2.1";
 
@@ -1455,7 +1455,7 @@ wANDI.dataTables = andiBar.createObjectValues(wANDI.dataTables, 1);
 
 //analyze tables
 wANDI.analyze(wANDI.dataTables);
-andiResults.results(wANDI.dataTables, wANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(wANDI.dataTables, wANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
     "markup"

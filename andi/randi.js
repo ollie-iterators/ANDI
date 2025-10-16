@@ -2,7 +2,7 @@
 //rANDI: landmarks ANDI                     //
 //Created By Social Security Administration //
 //==========================================//
-function init_module(andiResults){
+function init_module(){
 
 var rANDIVersionNumber = "4.3.1";
 
@@ -77,6 +77,6 @@ rANDI.tableInfo = new TableInfo();
 rANDI.landmarks = andiBar.createObjectValues(rANDI.landmarks, 3);
 
 rANDI.analyze(rANDI.landmarks);
-andiResults.results(rANDI.landmarks, rANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(rANDI.landmarks, rANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

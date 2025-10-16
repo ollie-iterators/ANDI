@@ -2,7 +2,7 @@
 //sANDI: live regions ANDI                  //
 //Created By Social Security Administration //
 //==========================================//
-function init_module(andiResults){
+function init_module(){
 
 var sANDIVersionNumber = "4.3.1";
 
@@ -136,6 +136,6 @@ sANDI.tableInfo = new TableInfo();
 sANDI.liveRegions = andiBar.createObjectValues(sANDI.liveRegions, 3);
 
 sANDI.analyze(sANDI.liveRegions);
-andiResults.results(sANDI.liveRegions, sANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(sANDI.liveRegions, sANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

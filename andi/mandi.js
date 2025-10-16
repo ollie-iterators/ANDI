@@ -2,7 +2,7 @@
 //mANDI: possible links ANDI                //
 //Created By Social Security Administration //
 //==========================================//
-function init_module(andiResults){
+function init_module(){
 
 var mANDIVersionNumber = "8.2.1";
 
@@ -134,6 +134,6 @@ mANDI.tableInfo = new TableInfo();
 mANDI.links = andiBar.createObjectValues(mANDI.links, 1);
 
 mANDI.analyze(mANDI.links);
-andiResults.results(mANDI.links, mANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(mANDI.links, mANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init
