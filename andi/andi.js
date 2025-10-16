@@ -4174,9 +4174,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         for (var t = 0; t < tableModeSplit.lenth; t += 1) {
             tableMode += tableModeSplit[t][0].toUpperCase() + tableModeSplit[t].slice(1) + " ";
         }
-        tableMode = tableMode.trim();
 
-        $("#ANDI508-resultsSummary-heading").html(tableMode + " Found: " + moduleList.elementNums[0]);
+        $("#ANDI508-resultsSummary-heading").html(tableMode + "Found: " + moduleList.elementNums[0]);
 
         andiResults.buildResultsDetails(moduleList);
 
