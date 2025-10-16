@@ -428,9 +428,9 @@ function TableInfo() {
 lANDI.links = new CertainLinks();
 lANDI.tableInfo = new TableInfo();
 
-lANDI.links = andiResults.createObjectValues(lANDI.links, 4);
+lANDI.links = andiBar.createObjectValues(lANDI.links, 4);
 
 lANDI.analyze(lANDI.links);
-andiResults.results(lANDI.links, lANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(lANDI.links, lANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

@@ -131,9 +131,9 @@ function TableInfo() {
 mANDI.links = new PossibleLinks();
 mANDI.tableInfo = new TableInfo();
 
-mANDI.links = andiResults.createObjectValues(mANDI.links, 1);
+mANDI.links = andiBar.createObjectValues(mANDI.links, 1);
 
 mANDI.analyze(mANDI.links);
-andiResults.results(mANDI.links, mANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(mANDI.links, mANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

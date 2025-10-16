@@ -133,9 +133,9 @@ function TableInfo() {
 sANDI.liveRegions = new LiveRegions();
 sANDI.tableInfo = new TableInfo();
 
-sANDI.liveRegions = andiResults.createObjectValues(sANDI.liveRegions, 3);
+sANDI.liveRegions = andiBar.createObjectValues(sANDI.liveRegions, 3);
 
 sANDI.analyze(sANDI.liveRegions);
-andiResults.results(sANDI.liveRegions, sANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(sANDI.liveRegions, sANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

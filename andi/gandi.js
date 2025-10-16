@@ -347,9 +347,9 @@ function TableInfo() {
 gANDI.images = new Images();
 gANDI.tableInfo = new TableInfo();
 
-gANDI.images = andiResults.createObjectValues(gANDI.images, 7);
+gANDI.images = andiBar.createObjectValues(gANDI.images, 7);
 
 gANDI.analyze(gANDI.images);
-andiResults.results(gANDI.images, gANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(gANDI.images, gANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

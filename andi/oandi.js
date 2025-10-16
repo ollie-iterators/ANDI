@@ -184,10 +184,10 @@ oANDI.certainHeaders = new CertainHeaders();
 
 oANDI.tableInfo = new TableInfo();
 
-oANDI.certainHeaders = andiResults.createObjectValues(oANDI.certainHeaders, 3);
+oANDI.certainHeaders = andiBar.createObjectValues(oANDI.certainHeaders, 3);
 
 oANDI.analyze(oANDI.certainHeaders);
 oANDI.results(oANDI.certainHeaders);
-andiResults.results(oANDI.certainHeaders, oANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(oANDI.certainHeaders, oANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

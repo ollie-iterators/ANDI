@@ -973,9 +973,9 @@ function TableInfo() {
 cANDI.contrasts = new Contrasts();
 cANDI.tableInfo = new TableInfo();
 
-cANDI.contrasts = andiResults.createObjectValues(cANDI.contrasts, 3);
+cANDI.contrasts = andiBar.createObjectValues(cANDI.contrasts, 3);
 
 cANDI.analyze(cANDI.contrasts);
-andiResults.results(cANDI.contrasts, cANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(cANDI.contrasts, cANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

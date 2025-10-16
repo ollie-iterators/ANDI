@@ -255,9 +255,9 @@ function TableInfo() {
 nANDI.buttons = new Buttons();
 nANDI.tableInfo = new TableInfo();
 
-nANDI.buttons = andiResults.createObjectValues(nANDI.buttons, 2);
+nANDI.buttons = andiBar.createObjectValues(nANDI.buttons, 2);
 
 nANDI.analyze(nANDI.buttons);
-andiResults.results(nANDI.buttons, nANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(nANDI.buttons, nANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

@@ -74,9 +74,9 @@ function TableInfo() {
 rANDI.landmarks = new Landmarks();
 rANDI.tableInfo = new TableInfo();
 
-rANDI.landmarks = andiResults.createObjectValues(rANDI.landmarks, 3);
+rANDI.landmarks = andiBar.createObjectValues(rANDI.landmarks, 3);
 
 rANDI.analyze(rANDI.landmarks);
-andiResults.results(rANDI.landmarks, rANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(rANDI.landmarks, rANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

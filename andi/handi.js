@@ -308,10 +308,10 @@ function TableInfo() {
 hANDI.hiddenElements = new HiddenElements();
 hANDI.tableInfo = new TableInfo();
 
-hANDI.hiddenElements = andiResults.createObjectValues(hANDI.hiddenElements, 9);
+hANDI.hiddenElements = andiBar.createObjectValues(hANDI.hiddenElements, 9);
 
 hANDI.analyze(hANDI.hiddenElements);
-andiResults.results(hANDI.hiddenElements, hANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(hANDI.hiddenElements, hANDI.tableInfo, [], showStartUpSummaryText);
 hANDI.buildNewButton();
 
 }//end init

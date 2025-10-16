@@ -208,10 +208,10 @@ function TableInfo() {
 tANDI.presentationTables = new PresentationTables();
 tANDI.tableInfo = new TableInfo();
 
-tANDI.presentationTables = andiResults.createObjectValues(tANDI.presentationTables, 1);
+tANDI.presentationTables = andiBar.createObjectValues(tANDI.presentationTables, 1);
 
 //analyze tables
 tANDI.analyze(tANDI.presentationTables);
-andiResults.results(tANDI.presentationTables, tANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(tANDI.presentationTables, tANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

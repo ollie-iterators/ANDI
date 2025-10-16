@@ -211,10 +211,10 @@ function TableInfo() {
 pANDI.possibleHeaders = new PossibleHeaders();
 pANDI.tableInfo = new TableInfo();
 
-pANDI.possibleHeaders = andiResults.createObjectValues(pANDI.possibleHeaders, 3);
+pANDI.possibleHeaders = andiBar.createObjectValues(pANDI.possibleHeaders, 3);
 
 pANDI.analyze(pANDI.possibleHeaders);
 pANDI.results(pANDI.possibleHeaders);
-andiResults.results(pANDI.possibleHeaders, pANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(pANDI.possibleHeaders, pANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init
