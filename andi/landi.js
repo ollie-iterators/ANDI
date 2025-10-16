@@ -518,8 +518,8 @@ lANDI.results = function(){
 						return false;
 					});
 				}
-
-				$("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewLinksList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view links list</button>");
+                andiResults.addElementListButton("links");
+				//$("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewLinksList-button' class='ANDI508-viewOtherResults-button' aria-expanded='false'>"+listIcon+"view links list</button>");
 
 				//Links List Button
 				$("#ANDI508-viewLinksList-button").click(function(){
@@ -580,7 +580,8 @@ lANDI.results = function(){
 					});
 				}
 
-				$("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewButtonsList-button' class='ANDI508-viewOtherResults-button' aria-label='View Buttons List' aria-expanded='false'>"+listIcon+"view buttons list</button>");
+                andiResults.addElementListButton("buttons");
+				//$("#ANDI508-additionalPageResults").append("<button id='ANDI508-viewButtonsList-button' class='ANDI508-viewOtherResults-button' aria-label='View Buttons List' aria-expanded='false'>"+listIcon+"view buttons list</button>");
 
 				//View Button List Button
 				$("#ANDI508-viewButtonsList-button").click(function(){

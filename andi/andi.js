@@ -4133,6 +4133,19 @@ function TestPageData(){
 TestPageData.page_using_table = false;
 TestPageData.page_using_caption = false;
 
+andiResults = new AndiResults();
+
+//This object handles the creating of the results table
+    function AndiResults() {
+        this.addElementListButton = function (buttonText, buttonClass = "ANDI508-viewOtherResults-button", pageClass = "#ANDI508-additionalPageResults") {
+            var buttonId = buttonText.replace(/ /g, "");
+            var button = "<button id='ANDI508-view" + buttonId + "List-button' class='" + buttonClass + "' aria-label='View " + buttonText + " List' aria-expanded='false'>" + listIcon + "View " + buttonText + " List</button>";
+
+            $(pageClass).append(button);
+        }
+
+    }
+
 //==============//
 // jQuery Load: //
 //==============//
