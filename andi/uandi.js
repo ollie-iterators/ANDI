@@ -165,7 +165,6 @@ function StrangeTables() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
-    this.tableMode      = "Strange Tables";
     this.buttonTextList = [];
 }
 
