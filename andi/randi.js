@@ -64,6 +64,7 @@ function Landmarks() {
 
 // This object class is used to keep track of the table information
 function TableInfo() {
+    this.tableMode      = "Landmarks";
     this.buttonTextList = [];
 }
 
