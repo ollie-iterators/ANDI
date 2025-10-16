@@ -2,7 +2,7 @@
 //hANDI: hidden content ANDI 				//
 //Created By Social Security Administration //
 //==========================================//
-function init_module(){
+function init_module(andiResults){
 
 var handiVersionNumber = "4.0.3";
 
@@ -311,7 +311,7 @@ hANDI.tableInfo = new TableInfo();
 hANDI.hiddenElements = andiBar.createObjectValues(hANDI.hiddenElements, 9);
 
 hANDI.analyze(hANDI.hiddenElements);
-andiBar.results(hANDI.hiddenElements, hANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(hANDI.hiddenElements, hANDI.tableInfo, [], showStartUpSummaryText);
 hANDI.buildNewButton();
 
 }//end init

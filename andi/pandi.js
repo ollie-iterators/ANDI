@@ -2,7 +2,7 @@
 //pANDI: possible headers ANDI              //
 //Created By Social Security Administration //
 //==========================================//
-function init_module(){
+function init_module(andiResults){
 
 var pANDIVersionNumber = "4.3.1";
 
@@ -215,6 +215,6 @@ pANDI.possibleHeaders = andiBar.createObjectValues(pANDI.possibleHeaders, 3);
 
 pANDI.analyze(pANDI.possibleHeaders);
 pANDI.results(pANDI.possibleHeaders);
-andiBar.results(pANDI.possibleHeaders, pANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(pANDI.possibleHeaders, pANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

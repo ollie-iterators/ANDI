@@ -344,7 +344,7 @@ AndiModule.launchModule = function(module){
         script.src = host_url + module + "andi.js";
         script.type="text/javascript";
         script.id="andiModuleScript";
-        script.onload = script.onreadystatechange = function(){if(!done && (!this.readyState || this.readyState=="loaded" || this.readyState=="complete")){done=true; init_module();}};
+        script.onload = script.onreadystatechange = function(){if(!done && (!this.readyState || this.readyState=="loaded" || this.readyState=="complete")){done=true; init_module(andiResults);}};
 
         $("#andiModuleScript").remove(); //Remove previously added module script
         $("#andiModuleCss").remove();//remove previously added module css
@@ -4189,31 +4189,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         }
     }
 
-    //Inserts some counter totals, displays the accesskey list
-    andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
-        $("#ANDI508-resultsSummary-heading").html(tableModule.tableMode + " Found: " + moduleList.elementNums[0]);
-
-        andiResults.buildResultsDetails(moduleList);
-
-        for (var b = 0; b < tableModule.buttonTextList.length; b += 1) {
-            andiResults.addButton(tableModule.buttonTextList[b]);
-        }
-
-        andiResults.addElementListButton(tableModule.tableMode);
-
-        andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
-
-        //Show Startup Summary
-        if(!andiBar.focusIsOnInspectableElement()){
-            andiBar.showElementControls();
-            andiBar.showStartUpSummary(startUpSummaryText,true);
-        }
-
-        andiAlerter.updateAlertList();
-
-        $("#ANDI508").focus();
-    };
-
     //This function will highlight the text of the row.
     andiBar.viewList_rowHighlight = function (index, buttonClass) {
         $("#ANDI508-" + buttonClass + "-table tbody tr").each(function () {
@@ -4336,6 +4311,32 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 return false;
             });
         }
+
+        //Inserts some counter totals, displays the accesskey list
+        this.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
+            $("#ANDI508-resultsSummary-heading").html(tableModule.tableMode + " Found: " + moduleList.elementNums[0]);
+
+            andiResults.buildResultsDetails(moduleList);
+
+            for (var b = 0; b < tableModule.buttonTextList.length; b += 1) {
+                andiResults.addButton(tableModule.buttonTextList[b]);
+            }
+
+            andiResults.addElementListButton(tableModule.tableMode);
+
+            andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
+
+            //Show Startup Summary
+            if(!andiBar.focusIsOnInspectableElement()){
+                andiBar.showElementControls();
+                andiBar.showStartUpSummary(startUpSummaryText,true);
+            }
+
+            andiAlerter.updateAlertList();
+
+            $("#ANDI508").focus();
+        };
+
         //This function builds the table for the view list
         // TODO: Make the code so that it works even if there are no elements found
         //       on the website being tested.

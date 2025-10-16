@@ -2,7 +2,7 @@
 //qANDI: lists ANDI                         //
 //Created By Social Security Administration //
 //==========================================//
-function init_module(){
+function init_module(andiResults){
 
 var qANDIVersionNumber = "4.3.1";
 
@@ -127,6 +127,6 @@ qANDI.tableInfo = new TableInfo();
 qANDI.lists = andiBar.createObjectValues(qANDI.lists, 12);
 
 qANDI.analyze(qANDI.lists);
-andiBar.results(qANDI.lists, qANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(qANDI.lists, qANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

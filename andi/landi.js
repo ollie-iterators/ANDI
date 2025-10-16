@@ -2,7 +2,7 @@
 //lANDI: certain links ANDI                 //
 //Created By Social Security Administration //
 //==========================================//
-function init_module(){
+function init_module(andiResults){
 
 var landiVersionNumber = "8.2.1";
 
@@ -431,6 +431,6 @@ lANDI.tableInfo = new TableInfo();
 lANDI.links = andiBar.createObjectValues(lANDI.links, 4);
 
 lANDI.analyze(lANDI.links);
-andiBar.results(lANDI.links, lANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(lANDI.links, lANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

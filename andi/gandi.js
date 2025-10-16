@@ -2,7 +2,7 @@
 //gANDI: graphics ANDI 						//
 //Created By Social Security Administration //
 //==========================================//
-function init_module(){
+function init_module(andiResults){
 
 var gandiVersionNumber = "6.1.1";
 
@@ -350,6 +350,6 @@ gANDI.tableInfo = new TableInfo();
 gANDI.images = andiBar.createObjectValues(gANDI.images, 7);
 
 gANDI.analyze(gANDI.images);
-andiBar.results(gANDI.images, gANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(gANDI.images, gANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

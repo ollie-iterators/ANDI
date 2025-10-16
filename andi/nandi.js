@@ -2,7 +2,7 @@
 //nANDI: buttons ANDI                       //
 //Created By Social Security Administration //
 //==========================================//
-function init_module(){
+function init_module(andiResults){
 
 var nANDIVersionNumber = "8.2.1";
 
@@ -258,6 +258,6 @@ nANDI.tableInfo = new TableInfo();
 nANDI.buttons = andiBar.createObjectValues(nANDI.buttons, 2);
 
 nANDI.analyze(nANDI.buttons);
-andiBar.results(nANDI.buttons, nANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(nANDI.buttons, nANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

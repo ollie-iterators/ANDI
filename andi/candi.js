@@ -2,7 +2,7 @@
 //cANDI: colors ANDI 						//
 //Created By Social Security Administration //
 //==========================================//
-function init_module(){
+function init_module(andiResults){
 
 var cANDIVersionNumber = "4.1.4";
 
@@ -976,6 +976,6 @@ cANDI.tableInfo = new TableInfo();
 cANDI.contrasts = andiBar.createObjectValues(cANDI.contrasts, 3);
 
 cANDI.analyze(cANDI.contrasts);
-andiBar.results(cANDI.contrasts, cANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(cANDI.contrasts, cANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

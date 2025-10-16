@@ -2,7 +2,7 @@
 //fANDI: focusable elements ANDI (default mode)//
 //Created By Social Security Administration	   //
 //=============================================//
-function init_module(){
+function init_module(andiResults){
 
 var fandiVersionNumber = "7.0.0";
 
@@ -251,6 +251,6 @@ fANDI.focusables = andiBar.createObjectValues(fANDI.focusables, 3);
 
 fANDI.addAccessKeysList(fANDI.accesskeys);
 fANDI.analyze(fANDI.focusables);
-andiBar.results(fANDI.focusables, fANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(fANDI.focusables, fANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init
