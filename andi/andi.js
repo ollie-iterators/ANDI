@@ -4358,7 +4358,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                         if (rowClassToAdd.includes("ANDI508-listLinks")) {
                             // TODO: Think about making this more generic.
                             stringPosition = moduleList.list[i].rowClass.indexOf("ANDI508-listLinks-");
-                            classToAdd = rowClassToAdd.slice(stringPosition, rowClassToAdd.length);
+                            classToAdd = rowClassToAdd.slice(stringPosition + 18, rowClassToAdd.length);
                             rowClasses.push(classToAdd);
                         }
                     }
