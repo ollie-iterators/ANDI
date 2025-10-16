@@ -1439,7 +1439,6 @@ function DataTables() {
 function TableInfo() {
     this.tableMode      = "Data Tables";
     this.buttonTextList = ["Table Markup"];
-    this.tabsTextList   = [];
 }
 
 wANDI.dataTables = new DataTables();

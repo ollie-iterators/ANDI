@@ -238,7 +238,6 @@ function Focusables() {
 function TableInfo() {
     this.tableMode      = "Focusable Elements";
     this.buttonTextList = ["Tab Sequence"];
-    this.tabsTextList   = [];
 }
 
 fANDI.focusables = new Focusables();

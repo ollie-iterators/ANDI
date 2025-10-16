@@ -965,7 +965,6 @@ function Contrasts() {
 function TableInfo() {
     this.tableMode      = "Color Contrasts";
     this.buttonTextList = ["Grayscale"];
-    this.tabsTextList   = []
 }
 
 cANDI.contrasts = new Contrasts();

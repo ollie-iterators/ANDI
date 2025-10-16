@@ -123,7 +123,6 @@ function PossibleLinks(){
 function TableInfo() {
     this.tableMode      = "Possible Links";
     this.buttonTextList = [];
-    this.tabsTextList   = [];
 }
 
 mANDI.links = new PossibleLinks();

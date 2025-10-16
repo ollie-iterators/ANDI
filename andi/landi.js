@@ -421,7 +421,6 @@ function CertainLinks(){
 function TableInfo() {
     this.tableMode      = "Links";
     this.buttonTextList = ["Highlight Ambiguous Links"];
-    this.tabsTextList   = ["All", "Internal", "External"];
 }
 
 lANDI.links = new CertainLinks();

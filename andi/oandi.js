@@ -175,7 +175,6 @@ function CertainHeaders() {
 function TableInfo() {
     this.tableMode      = "Certain Headers";
     this.buttonTextList = [];
-    this.tabsTextList   = [];
 }
 
 oANDI.certainHeaders = new CertainHeaders();

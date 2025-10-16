@@ -179,7 +179,6 @@ function Attributes() {
 function TableInfo() {
     this.tableMode      = "Attributes";
     this.buttonTextList = ["Reading Order", "Label Tags", "Title Attributes", "Role Attributes", "Lang Attributes"];
-    this.tabsTextList   = [];
 }
 
 bANDI.attributes = new Attributes();

@@ -300,7 +300,6 @@ function HiddenElements() {
 function TableInfo() {
     this.tableMode      = "Hidden Elements";
     this.buttonTextList = ["Force Reveal All", "Force Reveal Display", "Force Reveal Visibility", "Force Reveal Position", "Force Reveal Overflow", "Force Reveal Font Size", "Force Reveal Text Indent", "Force Reveal Opacity", "Title Attributes", "Highlight CSS Content"];
-    this.tabsTextList   = [];
 }
 
 hANDI.hiddenElements = new HiddenElements();

@@ -200,7 +200,6 @@ function PresentationTables() {
 function TableInfo() {
     this.tableMode      = "Presentation Tables";
     this.buttonTextList = [];
-    this.tabsTextList   = [];
 }
 
 tANDI.presentationTables = new PresentationTables();

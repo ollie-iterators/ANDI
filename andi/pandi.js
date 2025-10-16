@@ -203,7 +203,6 @@ function PossibleHeaders() {
 function TableInfo() {
     this.tableMode      = "Possible Headers";
     this.buttonTextList = [];
-    this.tabsTextList   = [];
 }
 
 pANDI.possibleHeaders = new PossibleHeaders();

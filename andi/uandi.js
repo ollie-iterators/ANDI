@@ -167,7 +167,6 @@ function StrangeTables() {
 function TableInfo() {
     this.tableMode      = "Strange Tables";
     this.buttonTextList = [];
-    this.tabsTextList   = [];
 }
 
 uANDI.strangeTables = new StrangeTables();

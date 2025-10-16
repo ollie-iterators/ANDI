@@ -92,7 +92,6 @@ function iFrames() {
 function TableInfo() {
     this.tableMode      = "iFrames";
     this.buttonTextList = [];
-    this.tabsTextList   = [];
 }
 
 iANDI.iFrames = new iFrames();

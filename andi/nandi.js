@@ -247,7 +247,6 @@ function Buttons(){
 function TableInfo() {
     this.tableMode      = "Buttons";
     this.buttonTextList = ["Highlight Non Unique Buttons"];
-    this.tabsTextList   = [];
 }
 
 nANDI.buttons = new Buttons();

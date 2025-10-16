@@ -125,7 +125,6 @@ function LiveRegions() {
 function TableInfo() {
     this.tableMode      = "Live Regions";
     this.buttonTextList = [];
-    this.tabsTextList   = [];
 }
 
 sANDI.liveRegions = new LiveRegions();
