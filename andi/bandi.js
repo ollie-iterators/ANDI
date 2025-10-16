@@ -187,10 +187,10 @@ function TableInfo() {
 bANDI.attributes = new Attributes();
 bANDI.tableInfo = new TableInfo();
 
-bANDI.attributes = andiBar.createObjectValues(bANDI.attributes, 2);
+bANDI.attributes = andiResults.createObjectValues(bANDI.attributes, 2);
 
 bANDI.analyze(bANDI.attributes);
 bANDI.results(); // TODO: Make the "Reading Order", "Role Attributes" and "Lang Attributes" buttons work
-andiBar.results(bANDI.attributes, bANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(bANDI.attributes, bANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

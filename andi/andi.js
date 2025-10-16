@@ -4155,14 +4155,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     // This is where the code that I changed is going to go so that it does not impact
     // The spacing of the code above.
 
-    andiBar.createObjectValues = function (moduleList, numOfElementTypes) {
-        for(var i = 0; i < numOfElementTypes; i++) {
-            moduleList.elementNums.push(0);
-            moduleList.elementStrings.push("");
-        }
-        return moduleList;
-    }
-
     var andiResults = new AndiResults();
 
     //This function adds the finishing touches and functionality to ANDI's display once it's done scanning the page.
@@ -4188,31 +4180,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
         }
     }
-
-    //Inserts some counter totals, displays the accesskey list
-    andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
-        $("#ANDI508-resultsSummary-heading").html(tableModule.tableMode + " Found: " + moduleList.elementNums[0]);
-
-        andiResults.buildResultsDetails(moduleList);
-
-        for (var b = 0; b < tableModule.buttonTextList.length; b += 1) {
-            andiResults.addButton(tableModule.buttonTextList[b]);
-        }
-
-        andiResults.addElementListButton(tableModule.tableMode);
-
-        andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
-
-        //Show Startup Summary
-        if(!andiBar.focusIsOnInspectableElement()){
-            andiBar.showElementControls();
-            andiBar.showStartUpSummary(startUpSummaryText,true);
-        }
-
-        andiAlerter.updateAlertList();
-
-        $("#ANDI508").focus();
-    };
 
     //This function will highlight the text of the row.
     andiBar.viewList_rowHighlight = function (index, buttonClass) {
@@ -4336,6 +4303,40 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 return false;
             });
         }
+
+        this.createObjectValues = function (moduleList, numOfElementTypes) {
+            for(var i = 0; i < numOfElementTypes; i++) {
+                moduleList.elementNums.push(0);
+                moduleList.elementStrings.push("");
+            }
+            return moduleList;
+        }
+        //Inserts some counter totals, displays the accesskey list
+        this.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
+            $("#ANDI508-resultsSummary-heading").html(tableModule.tableMode + " Found: " + moduleList.elementNums[0]);
+
+            andiResults.buildResultsDetails(moduleList);
+
+            for (var b = 0; b < tableModule.buttonTextList.length; b += 1) {
+                andiResults.addButton(tableModule.buttonTextList[b]);
+            }
+
+            andiResults.addElementListButton(tableModule.tableMode);
+
+            andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
+
+            //Show Startup Summary
+            if(!andiBar.focusIsOnInspectableElement()){
+                andiBar.showElementControls();
+                andiBar.showStartUpSummary(startUpSummaryText,true);
+            }
+
+            andiAlerter.updateAlertList();
+
+            $("#ANDI508").focus();
+        };
+
+
         //This function builds the table for the view list
         // TODO: Make the code so that it works even if there are no elements found
         //       on the website being tested.

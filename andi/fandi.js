@@ -247,10 +247,10 @@ fANDI.focusables = new Focusables();
 fANDI.tableInfo = new TableInfo();
 fANDI.accesskeys = new AndiAccesskeys();
 
-fANDI.focusables = andiBar.createObjectValues(fANDI.focusables, 3);
+fANDI.focusables = andiResults.createObjectValues(fANDI.focusables, 3);
 
 fANDI.addAccessKeysList(fANDI.accesskeys);
 fANDI.analyze(fANDI.focusables);
-andiBar.results(fANDI.focusables, fANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(fANDI.focusables, fANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

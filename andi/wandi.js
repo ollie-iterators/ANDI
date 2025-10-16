@@ -1451,11 +1451,11 @@ function TableInfo() {
 wANDI.dataTables = new DataTables();
 wANDI.tableInfo = new TableInfo();
 
-wANDI.dataTables = andiBar.createObjectValues(wANDI.dataTables, 1);
+wANDI.dataTables = andiResults.createObjectValues(wANDI.dataTables, 1);
 
 //analyze tables
 wANDI.analyze(wANDI.dataTables);
-andiBar.results(wANDI.dataTables, wANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(wANDI.dataTables, wANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
     "markup"

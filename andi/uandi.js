@@ -175,10 +175,10 @@ function TableInfo() {
 uANDI.strangeTables = new StrangeTables();
 uANDI.tableInfo = new TableInfo();
 
-uANDI.strangeTables = andiBar.createObjectValues(uANDI.strangeTables, 1);
+uANDI.strangeTables = andiResults.createObjectValues(uANDI.strangeTables, 1);
 
 //analyze tables
 uANDI.analyze(uANDI.strangeTables);
-andiBar.results(uANDI.strangeTables, uANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(uANDI.strangeTables, uANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

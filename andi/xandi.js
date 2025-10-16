@@ -1537,11 +1537,11 @@ function TableInfo() {
 xANDI.dataTables = new DataTables();
 xANDI.tableInfo = new TableInfo();
 
-xANDI.dataTables = andiBar.createObjectValues(xANDI.dataTables, 1);
+xANDI.dataTables = andiResults.createObjectValues(xANDI.dataTables, 1);
 
 //analyze tables
 xANDI.analyze(xANDI.dataTables);
-andiBar.results(xANDI.dataTables, xANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(xANDI.dataTables, xANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
     "markup"

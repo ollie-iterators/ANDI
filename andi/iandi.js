@@ -100,10 +100,10 @@ function TableInfo() {
 iANDI.iFrames = new iFrames();
 iANDI.tableInfo = new TableInfo();
 
-iANDI.iFrames = andiBar.createObjectValues(iANDI.iFrames, 1);
+iANDI.iFrames = andiResults.createObjectValues(iANDI.iFrames, 1);
 
 iANDI.analyze(iANDI.iFrames);
-andiBar.results(iANDI.iFrames, iANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(iANDI.iFrames, iANDI.tableInfo, [], showStartUpSummaryText);
 iANDI.iFrameOpen();
 
 }//end init

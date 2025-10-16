@@ -124,9 +124,9 @@ function TableInfo() {
 qANDI.lists = new Lists();
 qANDI.tableInfo = new TableInfo();
 
-qANDI.lists = andiBar.createObjectValues(qANDI.lists, 12);
+qANDI.lists = andiResults.createObjectValues(qANDI.lists, 12);
 
 qANDI.analyze(qANDI.lists);
-andiBar.results(qANDI.lists, qANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(qANDI.lists, qANDI.tableInfo, [], showStartUpSummaryText);
 
 }//end init

@@ -1537,11 +1537,11 @@ function TableInfo() {
 yANDI.dataTables = new DataTables();
 yANDI.tableInfo = new TableInfo();
 
-yANDI.dataTables = andiBar.createObjectValues(yANDI.dataTables, 1);
+yANDI.dataTables = andiResults.createObjectValues(yANDI.dataTables, 1);
 
 //analyze tables
 yANDI.analyze(yANDI.dataTables);
-andiBar.results(yANDI.dataTables, yANDI.tableInfo, [], showStartUpSummaryText);
+andiResults.results(yANDI.dataTables, yANDI.tableInfo, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
     "markup"
