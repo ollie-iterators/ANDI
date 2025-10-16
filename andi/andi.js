@@ -4359,7 +4359,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                             // TODO: Think about making this more generic.
                             stringPosition = moduleList.list[i].rowClass.indexOf("ANDI508-listLinks-");
                             classToAdd = rowClassToAdd.slice(stringPosition + 18, rowClassToAdd.length);
-                            rowClasses.push(classToAdd);
+                            if (!rowClasses.includes(classToAdd)) {
+                                rowClasses.push(classToAdd);
+                            }
                         }
                     }
 
