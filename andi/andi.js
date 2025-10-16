@@ -4437,11 +4437,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 }
                 columnName += ", [" + valueToAdd + "]";
             }
-
-            for (var c = 0; c < tableModule.cssProperties.length; c += 1) {
+            var cssProperties = ["background-image"]
+            for (var c = 0; c < cssProperties.length; c += 1) {
                 var valueToAdd;
-                if (String(tableModule.cssProperties[c]).length > 0) {
-                    valueToAdd = String(tableModule.cssProperties[c]);
+                if (String(cssProperties[c]).length > 0) {
+                    valueToAdd = String(cssProperties[c]);
                 }
                 columnName += ", [" + valueToAdd + "]";
             }
@@ -4477,12 +4477,13 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                         rowValues += ", [" + String(attributeToFind) + "]";
                     }
                 }
+                var cssProperties = ["background-image"];
                 for (var e = 0; e < moduleList.list[x].elementList.length; e += 1) {
-                    for (var r = 0; r < tableModule.cssProperties.length; r += 1) {
-                        if (String($(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r])).charAt(0) == "[") {
-                            rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]);
+                    for (var r = 0; r < cssProperties.length; r += 1) {
+                        if (String($(moduleList.list[x].elementList[e]).css(cssProperties[r])).charAt(0) == "[") {
+                            rowValues += ", " +  $(moduleList.list[x].elementList[e]).css(cssProperties[r]);
                         } else {
-                            rowValues += ", [" + $(moduleList.list[x].elementList[e]).css(tableModule.cssProperties[r]) + "]";
+                            rowValues += ", [" + $(moduleList.list[x].elementList[e]).css(cssProperties[r]) + "]";
                         }
                     }
                 }
