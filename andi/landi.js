@@ -581,19 +581,20 @@ lANDI.results = function(){
 				}
 
                 andiResults.addElementListButton("buttons");
+                andiResults.addElementListButtonLogic(lANDI.buttons, "", []);
 
 				//View Button List Button
-				$("#ANDI508-viewButtonsList-button").click(function(){
-					if(!lANDI.viewList_tableReady){
-						lANDI.viewList_buildTable("buttons");
-						lANDI.viewList_attachEvents();
-						lANDI.viewList_attachEvents_buttons();
-						lANDI.viewList_tableReady = true;
-					}
-					lANDI.viewList_toggle("buttons", this);
-					andiResetter.resizeHeights();
-					return false;
-				});
+				// $("#ANDI508-viewButtonsList-button").click(function(){
+				// 	if(!lANDI.viewList_tableReady){
+				// 		lANDI.viewList_buildTable("buttons");
+				// 		lANDI.viewList_attachEvents();
+				// 		lANDI.viewList_attachEvents_buttons();
+				// 		lANDI.viewList_tableReady = true;
+				// 	}
+				// 	lANDI.viewList_toggle("buttons", this);
+				// 	andiResetter.resizeHeights();
+				// 	return false;
+				// });
 
 				//Show Startup Summary
 				if(!andiBar.focusIsOnInspectableElement()){
