@@ -4175,6 +4175,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             tableMode += tableModeSplit[t][0].toUpperCase() + tableModeSplit[t].slice(1) + " ";
         }
 
+        var tableMode = moduleList.elementStrings[0];
+        if (tableMode == "") {
+            tableMode += " (No Elements Found)";
+        }
+
         var rowClasses = ["All"];
         if (moduleList.list.length > 0) {
             for (var i = 0; i < moduleList.list.length; i += 1) {
