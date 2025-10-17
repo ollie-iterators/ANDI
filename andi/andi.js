@@ -4185,7 +4185,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
         andiResults.addElementListButton(tableMode);
 
-        andiResults.addElementListButtonLogic(moduleList, tableModule, tableMode, attributesAdded);
+        andiResults.addElementListButtonLogic(moduleList, tableModule, tableMode, rowClasses, attributesAdded);
 
         //Show Startup Summary
         if(!andiBar.focusIsOnInspectableElement()){
@@ -4304,7 +4304,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
             $(pageClass).append(button);
         }
-        this.addElementListButtonLogic = function (moduleList, tableModule, tableMode, attributesAdded) {
+        this.addElementListButtonLogic = function (moduleList, tableModule, tableMode, rowClasses, attributesAdded) {
             var elementListString = tableMode.replace(/ /g, "");
 
             //View Elements List Button
