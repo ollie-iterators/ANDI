@@ -1,5 +1,5 @@
 //==========================================//
-//lANDI: links ANDI                         //
+//lANDI: certain links ANDI                 //
 //Created By Social Security Administration //
 //==========================================//
 function init_module(){
@@ -42,7 +42,7 @@ lANDI.analyze = function(objectClass){
             if(!andiCheck.isThisElementDisabled(this)){
 
                 lANDI.links.elementNums[0] += 1;
-                lANDI.links.elementStrings[0] = "links";
+                lANDI.links.elementStrings[0] = "certain links";
 
                 andiData = new AndiData(this);
 
