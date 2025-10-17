@@ -4377,7 +4377,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                             if (!attrs[a].includes("data-andi508-")) {
                                 attributes.push(attrs[a]);
                             }
-
                         }
                     }
                 }
@@ -4385,11 +4384,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 // var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
 
                 // Build the column name
-                var columnName = andiResults.createColumnName(moduleList, tableModule, attributesToAdd);
+                var columnName = andiResults.createColumnName(moduleList, attributesToAdd);
 
-                var tableHTML = andiResults.addValuesToTable(moduleList, tableModule, attributesToAdd);
+                var tableHTML = andiResults.addValuesToTable(moduleList, attributesToAdd);
 
-                var tabsHTML = andiResults.addTabsButtons(tableModule, tableMode, rowClasses);
+                var tabsHTML = andiResults.addTabsButtons(tableMode, rowClasses);
 
                 if (tabsHTML != "") {
                     appendHTML += tabsHTML;
@@ -4449,7 +4448,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         }
 
         //This function will build the column name for the table
-        this.createColumnName = function (moduleList, tableModule, attributesToAdd) {
+        this.createColumnName = function (moduleList, attributesToAdd) {
             var columnName = "";
             for (var x = 0; x < moduleList.columnNames.length; x += 1) {
                 columnName += ", [" + moduleList.columnNames[x] + "]";
@@ -4478,7 +4477,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             return columnName;
         }
         //This function will add the values to the table
-        this.addValuesToTable = function (moduleList, tableModule, attributesToAdd) {
+        this.addValuesToTable = function (moduleList, attributesToAdd) {
             // Build the table
             var tableHTML = "";
             for (var x = 0; x < moduleList.list.length; x += 1) {
@@ -4801,7 +4800,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 return false;
             });
         }
-        this.addTabsButtons = function(tableModule, tableMode, rowClasses) {
+        this.addTabsButtons = function(tableMode, rowClasses) {
             var tabsHTML = "";
             var buttonMode = tableMode;
             buttonMode = buttonMode.replace(/ /g, "");
