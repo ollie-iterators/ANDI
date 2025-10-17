@@ -4175,6 +4175,25 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             tableMode += tableModeSplit[t][0].toUpperCase() + tableModeSplit[t].slice(1) + " ";
         }
 
+        var rowClasses = ["All"];
+        if (moduleList.list.length > 0) {
+            for (var i = 0; i < moduleList.list.length; i += 1) {
+                if (moduleList.list[i].rowClass != "" && !rowClasses.includes(moduleList.list[i].rowClass)) {
+                    rowClassToAdd = moduleList.list[i].rowClass;
+                    if (rowClassToAdd.includes("ANDI508-listLinks")) {
+                        // TODO: Think about making this more generic.
+                        stringPosition = moduleList.list[i].rowClass.indexOf("ANDI508-listLinks-");
+                        classFixed = rowClassToAdd.slice(stringPosition + 18, rowClassToAdd.length);
+                        classToAdd = classFixed[0].toUpperCase() + classFixed.slice(1);
+                        if (!rowClasses.includes(classToAdd)) {
+                            rowClasses.push(classToAdd);
+                        }
+                    }
+                }
+
+            }
+        }
+
         $("#ANDI508-resultsSummary-heading").html(tableMode + "Found: " + moduleList.elementNums[0]);
 
         andiResults.buildResultsDetails(moduleList);
@@ -4349,7 +4368,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                             "<div class='ANDI508-scrollable'><table id='ANDI508-" + moduleClass + "-table' aria-label='" + mode + " List' tabindex='-1'><thead><tr>";
 
             var attributes = [];
-            var rowClasses = ["All"];
+
             if (moduleList.list.length > 0) {
                 for (var i = 0; i < moduleList.list.length; i += 1) {
                     var attrs = moduleList.list[i].elementList[0].getAttributeNames();
@@ -4361,19 +4380,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
                         }
                     }
-                    if (moduleList.list[i].rowClass != "" && !rowClasses.includes(moduleList.list[i].rowClass)) {
-                        rowClassToAdd = moduleList.list[i].rowClass;
-                        if (rowClassToAdd.includes("ANDI508-listLinks")) {
-                            // TODO: Think about making this more generic.
-                            stringPosition = moduleList.list[i].rowClass.indexOf("ANDI508-listLinks-");
-                            classFixed = rowClassToAdd.slice(stringPosition + 18, rowClassToAdd.length);
-                            classToAdd = classFixed[0].toUpperCase() + classFixed.slice(1);
-                            if (!rowClasses.includes(classToAdd)) {
-                                rowClasses.push(classToAdd);
-                            }
-                        }
-                    }
-
                 }
                 var attributesToAdd = attributes;
                 // var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
