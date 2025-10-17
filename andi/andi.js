@@ -4168,12 +4168,12 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     //Inserts some counter totals, displays the accesskey list
     andiBar.results = function (moduleList, attributesAdded, startUpSummaryText) {
         buttonClass = "#ANDI508-moduleMenu-button-" + AndiModule.module;
-        var tableModeString = $(buttonClass).attr("aria-label");
+        var tableModeString = moduleList.elementStrings[0];
         var tableModeSplit = tableModeString.split(" ");
-        var tableMode = moduleList.elementStrings[0];
-        // for (var t = 0; t < tableModeSplit.length; t += 1) {
-        //     tableMode += tableModeSplit[t][0].toUpperCase() + tableModeSplit[t].slice(1) + " ";
-        // }
+        var tableMode = "";
+        for (var t = 0; t < tableModeSplit.length; t += 1) {
+            tableMode += tableModeSplit[t][0].toUpperCase() + tableModeSplit[t].slice(1) + " ";
+        }
 
         var rowClasses = ["All"];
         if (moduleList.list.length > 0) {
