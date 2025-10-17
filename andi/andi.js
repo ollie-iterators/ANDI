@@ -4318,16 +4318,13 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
         }
         this.addElementListButton = function (buttonText, buttonClass = "ANDI508-viewOtherResults-button", pageClass = "#ANDI508-additionalPageResults") {
-            var buttonId = buttonText.replace(/ /g, "");
-            var button = "<button id='ANDI508-view" + buttonId + "List-button' class='" + buttonClass + "' aria-label='View " + buttonText + " List' aria-expanded='false'>" + listIcon + "View " + buttonText + " List</button>";
+            var button = "<button id='ANDI508-viewElementsList-button' class='" + buttonClass + "' aria-label='View " + buttonText + " List' aria-expanded='false'>" + listIcon + "View " + buttonText + " List</button>";
 
             $(pageClass).append(button);
         }
         this.addElementListButtonLogic = function (moduleList, tableModule, tableMode, rowClasses, attributesAdded) {
-            var elementListString = tableMode.replace(/ /g, "");
-
             //View Elements List Button
-            $("#ANDI508-view" + elementListString + "List-button").click(function () {
+            $("#ANDI508-viewElementsList-button").click(function () {
                 if ($(this).attr("aria-expanded") === "false") {
                     andiResults.viewList_buildTable(moduleList, tableModule, tableMode, rowClasses, attributesAdded);
                     andiResults.viewList_attachFocusEvents();
