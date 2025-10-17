@@ -547,7 +547,7 @@ function andiReady(){
             //gANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-g' aria-label='graphics slash images'>graphics/images</button>"+
             //lANDI
-            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-l' aria-label='certain links'>certain links</button>"+
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-l' aria-label='links'>links</button>"+
             //mANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-m' aria-label='possible links'>possible links</button>"+
             //nANDI
@@ -4318,7 +4318,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
         }
         this.addElementListButton = function (buttonText, buttonClass = "ANDI508-viewOtherResults-button", pageClass = "#ANDI508-additionalPageResults") {
-            var buttonId = buttonText.replaceAll(/ /g, "");
+            var buttonId = buttonText.replace(/ /g, "");
             var button = "<button id='ANDI508-view" + buttonId + "List-button' class='" + buttonClass + "' aria-label='View " + buttonText + " List' aria-expanded='false'>" + listIcon + "View " + buttonText + " List</button>";
 
             $(pageClass).append(button);
@@ -4804,7 +4804,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         this.addTabsButtons = function(tableModule, tableMode, rowClasses) {
             var tabsHTML = "";
             var buttonMode = tableMode;
-            buttonMode = buttonMode.replaceAll(/ /g, "");
+            buttonMode = buttonMode.replace(/ /g, "");
             if (rowClasses.length > 1) {
                 for (var x = 0; x < rowClasses.length; x += 1) {
                     tabsHTML += '<button id="ANDI508-list' + buttonMode + "-tab-" + rowClasses[x].toLowerCase();
