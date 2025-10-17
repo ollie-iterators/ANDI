@@ -547,7 +547,7 @@ function andiReady(){
             //gANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-g' aria-label='graphics slash images'>graphics/images</button>"+
             //lANDI
-            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-l' aria-label='certain links'>certain links</button>"+
+            "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-l' aria-label='links'>links</button>"+
             //mANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-m' aria-label='possible links'>possible links</button>"+
             //nANDI
@@ -4324,7 +4324,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             $(pageClass).append(button);
         }
         this.addElementListButtonLogic = function (moduleList, tableModule, tableMode, rowClasses, attributesAdded) {
-            var elementListString = tableMode.replaceAll(/ /g, "");
+            var elementListString = tableMode.replace(/ /g, "");
 
             //View Elements List Button
             $("#ANDI508-view" + elementListString + "List-button").click(function () {
