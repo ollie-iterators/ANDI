@@ -4324,7 +4324,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             $(pageClass).append(button);
         }
         this.addElementListButtonLogic = function (moduleList, tableModule, tableMode, rowClasses, attributesAdded) {
-            var elementListString = tableMode.replace(" ", "");
+            var elementListString = tableMode.replace(/ /g, "");
 
             //View Elements List Button
             $("#ANDI508-view" + elementListString + "List-button").click(function () {
@@ -4804,6 +4804,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         this.addTabsButtons = function(tableModule, tableMode, rowClasses) {
             var tabsHTML = "";
             var buttonMode = tableMode;
+            buttonMode = buttonMode.replace(/ /g, "");
             if (rowClasses.length > 1) {
                 for (var x = 0; x < rowClasses.length; x += 1) {
                     tabsHTML += '<button id="ANDI508-list' + buttonMode + "-tab-" + rowClasses[x].toLowerCase();
