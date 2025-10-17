@@ -4194,7 +4194,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             }
         }
 
-        $("#ANDI508-resultsSummary-heading").html(tableMode + "Found: " + moduleList.elementNums[0]);
+        $("#ANDI508-resultsSummary-heading").html(tableMode + " Found: " + moduleList.elementNums[0]);
 
         andiResults.buildResultsDetails(moduleList);
 
