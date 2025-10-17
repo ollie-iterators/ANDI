@@ -29,7 +29,7 @@ tANDI.analyze = function(objectClass){
         if($(this).isSemantically(["presentation","none"])){
             objectClass.list.push(new PresentationTable([this], objectClass.list.length + 1, "<span style='font-style:italic'>Presentation Table</span>", "", ""));
             objectClass.elementNums[0] += 1;
-            objectClass.elementStrings[0] += "presentation tables";
+            objectClass.elementStrings[0] = "presentation tables";
 
             analyzeTable(objectClass.list[objectClass.list.length - 1].elementList[0]);
         }

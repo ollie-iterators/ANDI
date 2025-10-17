@@ -29,7 +29,7 @@ uANDI.analyze = function(objectClass){
         if (!$(this).isSemantically(["table","grid","treegrid","presentation","none"],"table")) {
             objectClass.list.push(new StrangeTable([this], objectClass.list.length + 1, "<span style='font-style:italic'>Not Recognized as a Data Table</span>", "", ""));
             objectClass.elementNums[0] += 1;
-            objectClass.elementStrings[0] += "strange tables";
+            objectClass.elementStrings[0] = "strange tables";
 
             analyzeTable(objectClass.list[objectClass.list.length - 1].elementList[0]);
         }
