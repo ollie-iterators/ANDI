@@ -4324,7 +4324,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             $(pageClass).append(button);
         }
         this.addElementListButtonLogic = function (moduleList, tableModule, tableMode, rowClasses, attributesAdded) {
-            var elementListString = tableMode.replace(/ /g, "");
+            var elementListString = tableMode.replaceAll(/ /g, "");
 
             //View Elements List Button
             $("#ANDI508-view" + elementListString + "List-button").click(function () {
