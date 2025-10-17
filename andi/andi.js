@@ -544,7 +544,7 @@ function andiReady(){
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-f' aria-label='focusable elements'>focusable elements</button>"+
             //bANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-b' aria-label='attributes'>attributes</button>"+
-            //gANDI
+            //gANDI (TODO: Think about changing name to 'images' only)
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-g' aria-label='graphics slash images'>graphics/images</button>"+
             //lANDI
             "<button role='menuitem' class='ANDI508-moduleMenu-option' id='ANDI508-moduleMenu-button-l' aria-label='links'>links</button>"+
