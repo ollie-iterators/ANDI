@@ -4364,21 +4364,19 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                             "</div>" +
                             "<div class='ANDI508-scrollable'><table id='ANDI508-" + moduleClass + "-table' aria-label='" + mode + " List' tabindex='-1'><thead><tr>";
 
-            var attributes = [];
+            var attributesToAdd = [];
 
             if (moduleList.list.length > 0) {
                 for (var i = 0; i < moduleList.list.length; i += 1) {
                     var attrs = moduleList.list[i].elementList[0].getAttributeNames();
                     for (var a = 0; a < attrs.length; a += 1) {
-                        if (!attributes.includes(attrs[a])) {
+                        if (!attributesToAdd.includes(attrs[a])) {
                             if (!attrs[a].includes("data-andi508-")) {
-                                attributes.push(attrs[a]);
+                                attributesToAdd.push(attrs[a]);
                             }
                         }
                     }
                 }
-                var attributesToAdd = attributes;
-                // var attributesToAdd = andiResults.findAttributesToAdd(moduleList, attributesAdded);
 
                 // Build the column name
                 var columnName = andiResults.createColumnName(moduleList, attributesToAdd);
@@ -4406,42 +4404,6 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 // NOTE: initializeModuleActionGroups used to be:
                 // andiBar.initializeModuleActionGroups("ANDI508-additionalPageResults");
             }
-        }
-        //This function will find the attributes to add to the table
-        this.findAttributesToAdd = function (moduleList, attributesAdded) {
-            var attributesToAdd = [];
-            for (var x = 0; x < 1; x += 1) {
-                if (moduleList.list[x].elementList[0].hasAttributes()) {
-                    var attrs = moduleList.list[x].elementList[0].getAttributeNames();
-                    for (var a = 0; a < attrs.length; a += 1) {
-                        if (attrs[a].includes("data-andi508-")) {
-                            var attrsFixed = attrs[a].replace("data-andi508", "");
-                            if (attrsFixed != "-index") {
-                                if (String(attrsFixed).charAt(0).includes("-")) {
-                                    if (!attributesToAdd.includes(String(attrsFixed))) {
-                                        attributesToAdd.push(String(attrsFixed));
-                                    }
-                                } else {
-                                    if (!attributesToAdd.includes(String(attrsFixed))) {
-                                        if (!attributesToAdd.includes("-" + String(attrsFixed))) {
-                                            attributesToAdd.push(String(attrsFixed));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            for (var a = 0; a < attributesAdded.length; a += 1) {
-                if (!attributesToAdd.includes(attributesAdded[a])) {
-                    if (!attributesToAdd.includes("-" + String(attributesAdded[a]))) {
-                        attributesToAdd.push(String(attributesAdded[a]));
-                    }
-                }
-            }
-            return attributesToAdd;
         }
 
         //This function will build the column name for the table
