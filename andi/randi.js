@@ -60,19 +60,14 @@ function Landmarks() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
     this.buttonTextList = [];
 }
 
 rANDI.landmarks = new Landmarks();
-rANDI.tableInfo = new TableInfo();
 
 rANDI.landmarks = andiBar.createObjectValues(rANDI.landmarks, 3);
 
 rANDI.analyze(rANDI.landmarks);
-andiBar.results(rANDI.landmarks, rANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(rANDI.landmarks, [], showStartUpSummaryText);
 
 }//end init

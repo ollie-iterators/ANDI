@@ -173,20 +173,15 @@ function Attributes() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
     this.buttonTextList = ["Reading Order", "Label Tags", "Title Attributes", "Role Attributes", "Lang Attributes"];
 }
 
 bANDI.attributes = new Attributes();
-bANDI.tableInfo = new TableInfo();
 
 bANDI.attributes = andiBar.createObjectValues(bANDI.attributes, 2);
 
 bANDI.analyze(bANDI.attributes);
 bANDI.results(); // TODO: Make the "Reading Order", "Role Attributes" and "Lang Attributes" buttons work
-andiBar.results(bANDI.attributes, bANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(bANDI.attributes, [], showStartUpSummaryText);
 
 }//end init

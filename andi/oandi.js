@@ -168,22 +168,16 @@ function CertainHeaders() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
+    this.buttonTextList = [];
     this.outlineReady   = false;
 }
 
-// This object class is used to keep track of the table information
-function TableInfo() {
-    this.buttonTextList = [];
-}
-
 oANDI.certainHeaders = new CertainHeaders();
-
-oANDI.tableInfo = new TableInfo();
 
 oANDI.certainHeaders = andiBar.createObjectValues(oANDI.certainHeaders, 3);
 
 oANDI.analyze(oANDI.certainHeaders);
 oANDI.results(oANDI.certainHeaders);
-andiBar.results(oANDI.certainHeaders, oANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(oANDI.certainHeaders, [], showStartUpSummaryText);
 
 }//end init

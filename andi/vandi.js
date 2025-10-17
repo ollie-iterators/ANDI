@@ -1532,21 +1532,16 @@ function DataTables() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
     this.buttonTextList = ["Table Markup"];
 }
 
 vANDI.dataTables = new DataTables();
-vANDI.tableInfo = new TableInfo();
 
 vANDI.dataTables = andiBar.createObjectValues(vANDI.dataTables, 4);
 
 //analyze tables
 vANDI.analyze(vANDI.dataTables);
-andiBar.results(vANDI.dataTables, vANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(vANDI.dataTables, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
     "markup"

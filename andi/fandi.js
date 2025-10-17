@@ -232,21 +232,16 @@ function Focusables() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
     this.buttonTextList = ["Tab Sequence"];
 }
 
 fANDI.focusables = new Focusables();
-fANDI.tableInfo = new TableInfo();
 fANDI.accesskeys = new AndiAccesskeys();
 
 fANDI.focusables = andiBar.createObjectValues(fANDI.focusables, 3);
 
 fANDI.addAccessKeysList(fANDI.accesskeys);
 fANDI.analyze(fANDI.focusables);
-andiBar.results(fANDI.focusables, fANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(fANDI.focusables, [], showStartUpSummaryText);
 
 }//end init

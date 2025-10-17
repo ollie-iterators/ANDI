@@ -110,19 +110,14 @@ function Lists() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
     this.buttonTextList = [];
 }
 
 qANDI.lists = new Lists();
-qANDI.tableInfo = new TableInfo();
 
 qANDI.lists = andiBar.createObjectValues(qANDI.lists, 12);
 
 qANDI.analyze(qANDI.lists);
-andiBar.results(qANDI.lists, qANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(qANDI.lists, [], showStartUpSummaryText);
 
 }//end init

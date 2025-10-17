@@ -294,20 +294,15 @@ function HiddenElements() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
     this.buttonTextList = ["Force Reveal All", "Force Reveal Display", "Force Reveal Visibility", "Force Reveal Position", "Force Reveal Overflow", "Force Reveal Font Size", "Force Reveal Text Indent", "Force Reveal Opacity", "Title Attributes", "Highlight CSS Content"];
 }
 
 hANDI.hiddenElements = new HiddenElements();
-hANDI.tableInfo = new TableInfo();
 
 hANDI.hiddenElements = andiBar.createObjectValues(hANDI.hiddenElements, 9);
 
 hANDI.analyze(hANDI.hiddenElements);
-andiBar.results(hANDI.hiddenElements, hANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(hANDI.hiddenElements, [], showStartUpSummaryText);
 hANDI.buildNewButton();
 
 }//end init

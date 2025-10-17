@@ -959,19 +959,14 @@ function Contrasts() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
     this.buttonTextList = ["Grayscale"];
 }
 
 cANDI.contrasts = new Contrasts();
-cANDI.tableInfo = new TableInfo();
 
 cANDI.contrasts = andiBar.createObjectValues(cANDI.contrasts, 3);
 
 cANDI.analyze(cANDI.contrasts);
-andiBar.results(cANDI.contrasts, cANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(cANDI.contrasts, [], showStartUpSummaryText);
 
 }//end init

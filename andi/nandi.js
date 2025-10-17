@@ -240,20 +240,15 @@ function Buttons(){
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
+    this.buttonTextList = ["Highlight Non Unique Buttons"];
     this.nonUniqueIndex = 0;
 }
 
-// This object class is used to keep track of the table information
-function TableInfo() {
-    this.buttonTextList = ["Highlight Non Unique Buttons"];
-}
-
 nANDI.buttons = new Buttons();
-nANDI.tableInfo = new TableInfo();
 
 nANDI.buttons = andiBar.createObjectValues(nANDI.buttons, 2);
 
 nANDI.analyze(nANDI.buttons);
-andiBar.results(nANDI.buttons, nANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(nANDI.buttons, [], showStartUpSummaryText);
 
 }//end init

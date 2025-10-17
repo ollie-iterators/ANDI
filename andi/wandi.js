@@ -1433,21 +1433,16 @@ function DataTables() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
     this.buttonTextList = ["Table Markup"];
 }
 
 wANDI.dataTables = new DataTables();
-wANDI.tableInfo = new TableInfo();
 
 wANDI.dataTables = andiBar.createObjectValues(wANDI.dataTables, 1);
 
 //analyze tables
 wANDI.analyze(wANDI.dataTables);
-andiBar.results(wANDI.dataTables, wANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(wANDI.dataTables, [], showStartUpSummaryText);
 
 AndiModule.engageActiveActionButtons([
     "markup"

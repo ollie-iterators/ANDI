@@ -161,20 +161,15 @@ function StrangeTables() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
     this.buttonTextList = [];
 }
 
 uANDI.strangeTables = new StrangeTables();
-uANDI.tableInfo = new TableInfo();
 
 uANDI.strangeTables = andiBar.createObjectValues(uANDI.strangeTables, 1);
 
 //analyze tables
 uANDI.analyze(uANDI.strangeTables);
-andiBar.results(uANDI.strangeTables, uANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(uANDI.strangeTables, [], showStartUpSummaryText);
 
 }//end init

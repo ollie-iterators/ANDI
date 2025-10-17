@@ -4166,7 +4166,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     var andiResults = new AndiResults();
 
     //Inserts some counter totals, displays the accesskey list
-    andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
+    andiBar.results = function (moduleList, attributesAdded, startUpSummaryText) {
         buttonClass = "#ANDI508-moduleMenu-button-" + AndiModule.module;
         var tableModeString = $(buttonClass).attr("aria-label");
         var tableModeSplit = tableModeString.split(" ");
@@ -4198,13 +4198,13 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
         andiResults.buildResultsDetails(moduleList);
 
-        for (var b = 0; b < tableModule.buttonTextList.length; b += 1) {
-            andiResults.addButton(tableModule.buttonTextList[b]);
+        for (var b = 0; b < moduleList.buttonTextList.length; b += 1) {
+            andiResults.addButton(moduleList.buttonTextList[b]);
         }
 
         andiResults.addElementListButton(tableMode);
 
-        andiResults.addElementListButtonLogic(moduleList, tableModule, tableMode, rowClasses, attributesAdded);
+        andiResults.addElementListButtonLogic(moduleList, tableMode, rowClasses, attributesAdded);
 
         //Show Startup Summary
         if(!andiBar.focusIsOnInspectableElement()){
@@ -4322,11 +4322,11 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
             $(pageClass).append(button);
         }
-        this.addElementListButtonLogic = function (moduleList, tableModule, tableMode, rowClasses, attributesAdded) {
+        this.addElementListButtonLogic = function (moduleList, tableMode, rowClasses, attributesAdded) {
             //View Elements List Button
             $("#ANDI508-viewElementsList-button").click(function () {
                 if ($(this).attr("aria-expanded") === "false") {
-                    andiResults.viewList_buildTable(moduleList, tableModule, tableMode, rowClasses, attributesAdded);
+                    andiResults.viewList_buildTable(moduleList, tableMode, rowClasses, attributesAdded);
                     andiResults.viewList_attachFocusEvents();
                     andiResults.viewList_attachSortEvent();
                     andiResults.viewList_attachButtonEvents();
@@ -4339,7 +4339,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         //This function builds the table for the view list
         // TODO: Make the code so that it works even if there are no elements found
         //       on the website being tested.
-        this.viewList_buildTable = function (moduleList, tableModule, tableMode, rowClasses, attributesAdded = [], tableHeaderValue = "", moduleClass = "viewList") {
+        this.viewList_buildTable = function (moduleList, tableMode, rowClasses, attributesAdded = [], tableHeaderValue = "", moduleClass = "viewList") {
             var tableHeader = "";
             var mode = tableMode;
 

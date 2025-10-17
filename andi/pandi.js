@@ -196,21 +196,16 @@ function PossibleHeaders() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
+    this.buttonTextList = [];
     this.outlineReady   = false;
 }
 
-// This object class is used to keep track of the table information
-function TableInfo() {
-    this.buttonTextList = [];
-}
-
 pANDI.possibleHeaders = new PossibleHeaders();
-pANDI.tableInfo = new TableInfo();
 
 pANDI.possibleHeaders = andiBar.createObjectValues(pANDI.possibleHeaders, 3);
 
 pANDI.analyze(pANDI.possibleHeaders);
 pANDI.results(pANDI.possibleHeaders);
-andiBar.results(pANDI.possibleHeaders, pANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(pANDI.possibleHeaders, [], showStartUpSummaryText);
 
 }//end init

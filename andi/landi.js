@@ -414,20 +414,15 @@ function CertainLinks(){
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
+    this.buttonTextList = ["Highlight Ambiguous Links"];
     this.ambiguousIndex = 0;
 }
 
-// This object class is used to keep track of the table information
-function TableInfo() {
-    this.buttonTextList = ["Highlight Ambiguous Links"];
-}
-
 lANDI.links = new CertainLinks();
-lANDI.tableInfo = new TableInfo();
 
 lANDI.links = andiBar.createObjectValues(lANDI.links, 4);
 
 lANDI.analyze(lANDI.links);
-andiBar.results(lANDI.links, lANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(lANDI.links, [], showStartUpSummaryText);
 
 }//end init

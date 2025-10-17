@@ -323,19 +323,14 @@ function Images() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
     this.buttonTextList = ["Fade Inline Images", "Hide Background Images", "Highlight Background Images", "Highlight Decorative Images", "Highlight Font Icons"];
 }
 
 gANDI.images = new Images();
-gANDI.tableInfo = new TableInfo();
 
 gANDI.images = andiBar.createObjectValues(gANDI.images, 7);
 
 gANDI.analyze(gANDI.images);
-andiBar.results(gANDI.images, gANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(gANDI.images, [], showStartUpSummaryText);
 
 }//end init

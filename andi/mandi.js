@@ -116,20 +116,15 @@ function PossibleLinks(){
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
+    this.buttonTextList = [];
     this.ambiguousIndex = 0;
 }
 
-// This object class is used to keep track of the table information
-function TableInfo() {
-    this.buttonTextList = [];
-}
-
 mANDI.links = new PossibleLinks();
-mANDI.tableInfo = new TableInfo();
 
 mANDI.links = andiBar.createObjectValues(mANDI.links, 1);
 
 mANDI.analyze(mANDI.links);
-andiBar.results(mANDI.links, mANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(mANDI.links, [], showStartUpSummaryText);
 
 }//end init

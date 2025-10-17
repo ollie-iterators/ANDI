@@ -119,19 +119,14 @@ function LiveRegions() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
     this.buttonTextList = [];
 }
 
 sANDI.liveRegions = new LiveRegions();
-sANDI.tableInfo = new TableInfo();
 
 sANDI.liveRegions = andiBar.createObjectValues(sANDI.liveRegions, 3);
 
 sANDI.analyze(sANDI.liveRegions);
-andiBar.results(sANDI.liveRegions, sANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(sANDI.liveRegions, [], showStartUpSummaryText);
 
 }//end init

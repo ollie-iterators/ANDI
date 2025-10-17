@@ -194,20 +194,15 @@ function PresentationTables() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
     this.buttonTextList = [];
 }
 
 tANDI.presentationTables = new PresentationTables();
-tANDI.tableInfo = new TableInfo();
 
 tANDI.presentationTables = andiBar.createObjectValues(tANDI.presentationTables, 1);
 
 //analyze tables
 tANDI.analyze(tANDI.presentationTables);
-andiBar.results(tANDI.presentationTables, tANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(tANDI.presentationTables, [], showStartUpSummaryText);
 
 }//end init

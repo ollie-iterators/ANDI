@@ -86,20 +86,15 @@ function iFrames() {
     this.elementNums    = [];
     this.elementStrings = [];
     this.columnNames    = ["elementList", "index", "nameDescription", "alerts"];
-}
-
-// This object class is used to keep track of the table information
-function TableInfo() {
     this.buttonTextList = [];
 }
 
 iANDI.iFrames = new iFrames();
-iANDI.tableInfo = new TableInfo();
 
 iANDI.iFrames = andiBar.createObjectValues(iANDI.iFrames, 1);
 
 iANDI.analyze(iANDI.iFrames);
-andiBar.results(iANDI.iFrames, iANDI.tableInfo, [], showStartUpSummaryText);
+andiBar.results(iANDI.iFrames, [], showStartUpSummaryText);
 iANDI.iFrameOpen();
 
 }//end init
