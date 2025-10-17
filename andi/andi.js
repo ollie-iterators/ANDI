@@ -4168,7 +4168,14 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
     //Inserts some counter totals, displays the accesskey list
     andiBar.results = function (moduleList, tableModule, attributesAdded, startUpSummaryText) {
         buttonClass = "#ANDI508-moduleMenu-button-" + AndiModule.module;
-        tableMode = $(buttonClass).attr("aria-label");
+        tableModeString = $(buttonClass).attr("aria-label");
+        tableModeSplit = tableModeString.split(" ");
+        tableMode = ""
+        for (var t = 0; t < tableModeSplit.lenth; t += 1) {
+            tableMode += tableModeSplit[t][0].toUpperCase() + tableModeSplit[t].slice(1) + " ";
+        }
+        tableMode = tableMode.trim();
+
         $("#ANDI508-resultsSummary-heading").html(tableMode + " Found: " + moduleList.elementNums[0]);
 
         andiResults.buildResultsDetails(moduleList);
@@ -4177,9 +4184,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             andiResults.addButton(tableModule.buttonTextList[b]);
         }
 
-        andiResults.addElementListButton(tableModule.tableMode);
+        andiResults.addElementListButton(tableMode);
 
-        andiResults.addElementListButtonLogic(moduleList, tableModule, attributesAdded);
+        andiResults.addElementListButtonLogic(moduleList, tableModule, tableMode, attributesAdded);
 
         //Show Startup Summary
         if(!andiBar.focusIsOnInspectableElement()){
@@ -4298,18 +4305,18 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
             $(pageClass).append(button);
         }
-        this.addElementListButtonLogic = function (moduleList, tableModule, attributesAdded) {
-            var elementListString = tableModule.tableMode.replace(" ", "");
+        this.addElementListButtonLogic = function (moduleList, tableModule, tableMode, attributesAdded) {
+            var elementListString = tableMode.replace(" ", "");
 
             //View Elements List Button
             $("#ANDI508-view" + elementListString + "List-button").click(function () {
                 if ($(this).attr("aria-expanded") === "false") {
-                    andiResults.viewList_buildTable(moduleList, tableModule, attributesAdded);
+                    andiResults.viewList_buildTable(moduleList, tableModule, tableMode, attributesAdded);
                     andiResults.viewList_attachFocusEvents();
                     andiResults.viewList_attachSortEvent();
                     andiResults.viewList_attachButtonEvents();
                 }
-                andiBar.viewList_toggle(tableModule.tableMode, this, "viewList");
+                andiBar.viewList_toggle(tableMode, this, "viewList");
                 andiResetter.resizeHeights();
                 return false;
             });
@@ -4317,9 +4324,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         //This function builds the table for the view list
         // TODO: Make the code so that it works even if there are no elements found
         //       on the website being tested.
-        this.viewList_buildTable = function (moduleList, tableModule, attributesAdded = [], tableHeaderValue = "", moduleClass = "viewList") {
+        this.viewList_buildTable = function (moduleList, tableModule, tableMode, attributesAdded = [], tableHeaderValue = "", moduleClass = "viewList") {
             var tableHeader = "";
-            var mode = tableModule.tableMode;
+            var mode = tableMode;
 
             // NOTE: The function andiBar.findEvents can probably be used to get events.
 
@@ -4377,7 +4384,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
                 var tableHTML = andiResults.addValuesToTable(moduleList, tableModule, attributesToAdd);
 
-                var tabsHTML = andiResults.addTabsButtons(tableModule, rowClasses);
+                var tabsHTML = andiResults.addTabsButtons(tableModule, tableMode, rowClasses);
 
                 if (tabsHTML != "") {
                     appendHTML += tabsHTML;
@@ -4389,7 +4396,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 $("#ANDI508-additionalPageResults").append(appendHTML + "</tr></thead><tbody>" + tableHTML + "</tbody></table></div></div>");
 
                 for (var x = 0; x < tableModule.tabsTextList.length; x += 1) {
-                    andiResults.addTabsButtonLogic(AndiModule.module + "ANDI", tableModule.tabsTextList[x], tableModule.tableMode, "viewList", tableModule.tabsTextList[x])
+                    andiResults.addTabsButtonLogic(AndiModule.module + "ANDI", tableModule.tabsTextList[x], tableMode, "viewList", tableModule.tabsTextList[x])
                 }
 
                 andiResults.addNextTabButtonLogic();
@@ -4789,9 +4796,9 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
                 return false;
             });
         }
-        this.addTabsButtons = function(tableModule, rowClasses) {
+        this.addTabsButtons = function(tableModule, tableMode, rowClasses) {
             var tabsHTML = "";
-            var buttonMode = tableModule.tableMode;
+            var buttonMode = tableMode;
             if (rowClasses.length > 1) {
                 for (var x = 0; x < rowClasses.length; x += 1) {
                     tabsHTML += '<button id="ANDI508-list' + buttonMode + "-tab-" + rowClasses[x].toLowerCase();
