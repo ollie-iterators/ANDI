@@ -4310,7 +4310,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
             //View Elements List Button
             $("#ANDI508-view" + elementListString + "List-button").click(function () {
                 if ($(this).attr("aria-expanded") === "false") {
-                    andiResults.viewList_buildTable(moduleList, tableModule, tableMode, attributesAdded);
+                    andiResults.viewList_buildTable(moduleList, tableModule, tableMode, rowClasses, attributesAdded);
                     andiResults.viewList_attachFocusEvents();
                     andiResults.viewList_attachSortEvent();
                     andiResults.viewList_attachButtonEvents();
@@ -4323,7 +4323,7 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         //This function builds the table for the view list
         // TODO: Make the code so that it works even if there are no elements found
         //       on the website being tested.
-        this.viewList_buildTable = function (moduleList, tableModule, tableMode, attributesAdded = [], tableHeaderValue = "", moduleClass = "viewList") {
+        this.viewList_buildTable = function (moduleList, tableModule, tableMode, rowClasses, attributesAdded = [], tableHeaderValue = "", moduleClass = "viewList") {
             var tableHeader = "";
             var mode = tableMode;
 
@@ -4394,8 +4394,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
 
                 $("#ANDI508-additionalPageResults").append(appendHTML + "</tr></thead><tbody>" + tableHTML + "</tbody></table></div></div>");
 
-                for (var x = 0; x < tableModule.tabsTextList.length; x += 1) {
-                    andiResults.addTabsButtonLogic(AndiModule.module + "ANDI", tableModule.tabsTextList[x], tableMode, "viewList", tableModule.tabsTextList[x])
+                for (var x = 0; x < rowClasses.length; x += 1) {
+                    andiResults.addTabsButtonLogic(AndiModule.module + "ANDI", rowClasses[x], tableMode, "viewList", rowClasses[x])
                 }
 
                 andiResults.addNextTabButtonLogic();
