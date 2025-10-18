@@ -21,7 +21,7 @@ bANDI.analyze = function(objectClass){
             andiCheck.commonNonFocusableElementChecks(andiData, $(this));
             objectClass.list.push(new Attribute([this], objectClass.list.length + 1, "", "", ""));
             objectClass.elementNums[0] += 1;
-            objectClass.elementStrings[0] = "list elements";
+            objectClass.elementStrings[0] = "elements";
             AndiData.attachDataToElement(this);
         }
 
