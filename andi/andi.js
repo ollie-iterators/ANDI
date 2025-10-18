@@ -4183,6 +4183,8 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         var rowClasses = ["All"];
         if (moduleList.list.length > 0) {
             for (var i = 0; i < moduleList.list.length; i += 1) {
+                var classes = moduleList.list[i].elementList[0].getAttribute("class");
+                // TODO: Think about using class attribute to determine rowClass
                 if (moduleList.list[i].rowClass != "" && !rowClasses.includes(moduleList.list[i].rowClass)) {
                     rowClassToAdd = moduleList.list[i].rowClass;
                     if (rowClassToAdd.includes("ANDI508-listLinks")) {
