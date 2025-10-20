@@ -4184,19 +4184,30 @@ var jqueryDownloadSource = "https://ajax.googleapis.com/ajax/libs/jquery/"; //wh
         if (moduleList.list.length > 0) {
             for (var i = 0; i < moduleList.list.length; i += 1) {
                 var classes = moduleList.list[i].elementList[0].getAttribute("class");
-                // TODO: Think about using class attribute to determine rowClass
-                if (moduleList.list[i].rowClass != "" && !rowClasses.includes(moduleList.list[i].rowClass)) {
-                    rowClassToAdd = moduleList.list[i].rowClass;
-                    if (rowClassToAdd.includes("ANDI508-listLinks")) {
-                        // TODO: Think about making this more generic.
-                        stringPosition = moduleList.list[i].rowClass.indexOf("ANDI508-listLinks-");
-                        classFixed = rowClassToAdd.slice(stringPosition + 18, rowClassToAdd.length);
+                var classesSplit = classes.split(" ");
+                for (var classValue of classesSplit) {
+                    if (classValue.includes("ANDI508-listLinks")) {
+                        stringPosition = classValue.indexOf("ANDI508-listLinks-");
+                        classFixed = classValue.slice(stringPosition + 18, classValue.length);
                         classToAdd = classFixed[0].toUpperCase() + classFixed.slice(1);
                         if (!rowClasses.includes(classToAdd)) {
                             rowClasses.push(classToAdd);
                         }
                     }
                 }
+                // TODO: Think about using class attribute to determine rowClass
+                // if (moduleList.list[i].rowClass != "" && !rowClasses.includes(moduleList.list[i].rowClass)) {
+                //     rowClassToAdd = moduleList.list[i].rowClass;
+                //     if (rowClassToAdd.includes("ANDI508-listLinks")) {
+                //         // TODO: Think about making this more generic.
+                //         stringPosition = moduleList.list[i].rowClass.indexOf("ANDI508-listLinks-");
+                //         classFixed = rowClassToAdd.slice(stringPosition + 18, rowClassToAdd.length);
+                //         classToAdd = classFixed[0].toUpperCase() + classFixed.slice(1);
+                //         if (!rowClasses.includes(classToAdd)) {
+                //             rowClasses.push(classToAdd);
+                //         }
+                //     }
+                // }
 
             }
         }
