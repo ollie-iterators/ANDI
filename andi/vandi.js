@@ -141,9 +141,9 @@ vANDI.analyze = function(objectClass){
 
         $("#ANDI508-module-actions").html(moduleActionButtons);
 
-        if(!activeElementFound)
-             activeTableIndex = 0;//Analyze first table
-        analyzeTable(activeTableIndex);
+        // if(!activeElementFound)
+        //      activeTableIndex = 0;//Analyze first table
+        // analyzeTable(activeTableIndex);
 
 
         //If there are more than one table and prevTable/nextTable buttons haven't yet been added
@@ -551,11 +551,11 @@ function analyzeTable(table){
     var role = $(table).getValidRole();
 
     //temporarily hide any nested tables so they don't interfere with analysis
-    // $(table).find("table,[role=table],[role=grid],[role=treegrid]").each(function(){
-    //     $(this)
-    //         .attr("andi508-temporaryhide", $(this).css("display"))
-    //         .css("display","none");
-    // });
+    $(table).find("table,[role=table],[role=grid],[role=treegrid]").each(function(){
+        $(this)
+            .attr("andi508-temporaryhide", $(this).css("display"))
+            .css("display","none");
+    });
 
     rowCount = 0;
     colCount = 0;
