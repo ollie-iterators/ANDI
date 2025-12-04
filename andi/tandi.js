@@ -974,16 +974,14 @@ function analyzeTable(table){
 					andiCheck.commonNonFocusableElementChecks(andiData, $(cell));
 
 				if(scope){
-					if(AndiModule.activeActionButtons.scopeMode){
-						//Only throw scope alerts if in "scope mode"
-						if(tooManyScopeRowLevels)
-							andiAlerter.throwAlert(alert_0043,[tANDI.scopeLevelLimit,"row"]);
-						if(tooManyScopeColLevels)
-							andiAlerter.throwAlert(alert_0043,[tANDI.scopeLevelLimit,"col"]);
-						andiCheck.detectDeprecatedHTML($(cell));
-						if(scope !== "col" && scope !== "row" && scope !== "colgroup" && scope !== "rowgroup")//scope value is invalid
-							andiAlerter.throwAlert(alert_007C,[scope]);
-					}
+                    //Only throw scope alerts if in "scope mode"
+                    if(tooManyScopeRowLevels)
+                        andiAlerter.throwAlert(alert_0043,[tANDI.scopeLevelLimit,"row"]);
+                    if(tooManyScopeColLevels)
+                        andiAlerter.throwAlert(alert_0043,[tANDI.scopeLevelLimit,"col"]);
+                    andiCheck.detectDeprecatedHTML($(cell));
+                    if(scope !== "col" && scope !== "row" && scope !== "colgroup" && scope !== "rowgroup")//scope value is invalid
+                        andiAlerter.throwAlert(alert_007C,[scope]);
 				}
 
 				if(headers)
@@ -1032,57 +1030,55 @@ function analyzeTable(table){
 			}
 			else{
 				//Has th cells
-				if(AndiModule.activeActionButtons.scopeMode){
-					if(hasThRow && hasThCol)
-						scopeRequired = true;
+                if(hasThRow && hasThCol)
+                    scopeRequired = true;
 
-					if(!tableHasScopes){
-						//Table Has No Scopes
-						if(tableHasHeaders)//No Scope, Has Headers
-							andiAlerter.throwAlert(alert_004B);
-						else//No Scope, No Headers
-							andiAlerter.throwAlert(alert_0048);
-					}
+                if(!tableHasScopes){
+                    //Table Has No Scopes
+                    if(tableHasHeaders)//No Scope, Has Headers
+                        andiAlerter.throwAlert(alert_004B);
+                    else//No Scope, No Headers
+                        andiAlerter.throwAlert(alert_0048);
+                }
 
-					if(scopeRequired){
-						//Check intersections for scope
-						var xDirectionHasTh, yDirectionHasTh;
-						$(all_th).each(function(){
-							//if this th does not have scope
-							xDirectionHasTh = false;
-							yDirectionHasTh = false;
-							rowIndex = $(this).attr("data-tandi508-rowindex");
-							colIndex = $(this).attr("data-tandi508-colindex");
-							cell = $(this);
-							if(!$(this).attr("scope")){
-								//determine if this is at an intersection of th
-								var xDirectionThCount = 0;
-								var yDirectionThCount = 0;
-								$(all_th).each(function(){
-									//determine if x direction multiple th at this rowindex
-									if(rowIndex == $(this).attr("data-tandi508-rowindex"))
-										xDirectionThCount++;
-									if(colIndex == $(this).attr("data-tandi508-colindex"))
-										yDirectionThCount++;
+                if(scopeRequired){
+                    //Check intersections for scope
+                    var xDirectionHasTh, yDirectionHasTh;
+                    $(all_th).each(function(){
+                        //if this th does not have scope
+                        xDirectionHasTh = false;
+                        yDirectionHasTh = false;
+                        rowIndex = $(this).attr("data-tandi508-rowindex");
+                        colIndex = $(this).attr("data-tandi508-colindex");
+                        cell = $(this);
+                        if(!$(this).attr("scope")){
+                            //determine if this is at an intersection of th
+                            var xDirectionThCount = 0;
+                            var yDirectionThCount = 0;
+                            $(all_th).each(function(){
+                                //determine if x direction multiple th at this rowindex
+                                if(rowIndex == $(this).attr("data-tandi508-rowindex"))
+                                    xDirectionThCount++;
+                                if(colIndex == $(this).attr("data-tandi508-colindex"))
+                                    yDirectionThCount++;
 
-									if(xDirectionThCount>1)
-										xDirectionHasTh = true;
-									if(yDirectionThCount>1)
-										yDirectionHasTh = true;
+                                if(xDirectionThCount>1)
+                                    xDirectionHasTh = true;
+                                if(yDirectionThCount>1)
+                                    yDirectionHasTh = true;
 
-									if(xDirectionHasTh && yDirectionHasTh){
-										//This cell is at th intersection and doesn't have scope
-										if(!$(cell).hasClass("ANDI508-element-danger"))
-											$(cell).addClass("ANDI508-element-danger");
-										andiAlerter.throwAlertOnOtherElement($(cell).attr("data-andi508-index"),alert_0047);
-										return false; //breaks out of the loop
-									}
-								});
-							}
-						});
-					}
-				}
-				else if(!AndiModule.activeActionButtons.scopeMode){
+                                if(xDirectionHasTh && yDirectionHasTh){
+                                    //This cell is at th intersection and doesn't have scope
+                                    if(!$(cell).hasClass("ANDI508-element-danger"))
+                                        $(cell).addClass("ANDI508-element-danger");
+                                    andiAlerter.throwAlertOnOtherElement($(cell).attr("data-andi508-index"),alert_0047);
+                                    return false; //breaks out of the loop
+                                }
+                            });
+                        }
+                    });
+                }
+				if(!AndiModule.activeActionButtons.scopeMode){
 					if(!tableHasHeaders){
 						//Table Has No Headers
 						if(tableHasScopes)
