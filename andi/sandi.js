@@ -135,6 +135,7 @@ sANDI.analyze = function(){
 			//Since sANDI has not found a heading yet, check if this element is a fake heading
 
 			if(sANDI.isFakeHeading(this)){
+                headingsArray.push($(this));
 				structureExists = true;
 
 				andiData = new AndiData(this);
